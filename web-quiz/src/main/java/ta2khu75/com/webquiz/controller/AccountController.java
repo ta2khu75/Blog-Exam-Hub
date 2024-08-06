@@ -5,12 +5,12 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ta2khu75.com.webquiz.entity.request.AccountRequest;
 import ta2khu75.com.webquiz.entity.response.AccountResponse;
+import ta2khu75.com.webquiz.entity.response.PageResponse;
 import ta2khu75.com.webquiz.service.AccountService;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -26,7 +26,8 @@ public class AccountController {
         return ResponseEntity.ok(service.create(request));
     }
     @GetMapping
-    public ResponseEntity<Page<AccountResponse>> getMethodName(Pageable pageable) {
+    public ResponseEntity<PageResponse<AccountResponse>> getMethodName(Pageable pageable) {
+
         return ResponseEntity.ok(service.readPage(pageable));
     }
     

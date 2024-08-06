@@ -1,6 +1,4 @@
-import React from 'react'
-
-const HomeComponent = () => {
+const HomePage = () => {
   return (
     <>
   <section className="hero-section d-flex justify-content-center align-items-center" id="section_1">
@@ -469,4 +467,4 @@ const HomeComponent = () => {
   )
 }
 
-export default HomeComponent
+export default HomePage

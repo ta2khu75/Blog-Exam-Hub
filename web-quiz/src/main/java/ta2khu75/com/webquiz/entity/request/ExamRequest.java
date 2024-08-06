@@ -6,5 +6,5 @@ import jakarta.validation.constraints.NotNull;
 import ta2khu75.com.webquiz.entity.ExamLevel;
 import ta2khu75.com.webquiz.entity.ExamType;
 
-public record ExamRequest(@NotBlank  String title, @NotNull @JsonProperty("exam_type") ExamType examType, @JsonProperty("exam_level") @NotNull ExamLevel examLevel) {
+public record ExamRequest(@NotBlank  String title, @NotBlank String description, @NotNull @JsonProperty("exam_type") ExamType examType, @JsonProperty("exam_level") @NotNull ExamLevel examLevel) {
 }

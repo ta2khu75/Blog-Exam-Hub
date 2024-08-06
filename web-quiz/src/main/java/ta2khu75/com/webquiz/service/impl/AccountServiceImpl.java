@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ta2khu75.com.webquiz.entity.Account;
 import ta2khu75.com.webquiz.entity.request.AccountRequest;
 import ta2khu75.com.webquiz.entity.response.AccountResponse;
+import ta2khu75.com.webquiz.entity.response.PageResponse;
 import ta2khu75.com.webquiz.exception.NotFoundException;
 import ta2khu75.com.webquiz.exception.NotMatchesException;
 import ta2khu75.com.webquiz.mapper.AccountMapper;
@@ -52,7 +53,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Page<AccountResponse> readPage(Pageable pageable) {
-        return repository.findAll(pageable).map((account)->mapper.toResponse(account));
+    public PageResponse<AccountResponse> readPage(Pageable pageable) {
+        return mapper.toPageResponse(repository.findAll(pageable).map((account)->mapper.toResponse(account)));
     }
 }

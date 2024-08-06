@@ -18,6 +18,7 @@ public class Exam {
     Long id;
     @Column(nullable = false)
     String title;
+    String description;
     @Column(nullable = false)
     String imagePath;
     @Column(nullable = false)

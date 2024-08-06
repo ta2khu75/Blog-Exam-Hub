@@ -1,18 +1,10 @@
 package ta2khu75.com.webquiz.entity.response;
 
-public record AnswerResponse(Long id, String ans) {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import ta2khu75.com.webquiz.entity.AnswerType;
+
+public record AnswerResponse(Long id, @JsonProperty("answer") String answerString, boolean correct, @JsonProperty("quiz_id") Long quizId
+//  @JsonProperty("answer_type") AnswerType answerType
+ ) {
 }
-// public class Answer {
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     Long id;
-//     @Column(nullable = false)
-//     String answerString;
-//     @Column(nullable = false)
-//     Boolean correct;
-//     @Column(nullable = false)
-//     @Enumerated(EnumType.STRING)
-//     AnswerType answerType;
-//     @ManyToOne
-//     Quiz quiz;
-// }

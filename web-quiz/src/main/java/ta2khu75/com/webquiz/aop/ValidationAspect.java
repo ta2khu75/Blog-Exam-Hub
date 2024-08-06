@@ -23,7 +23,6 @@ public class ValidationAspect {
                 validator.validate(arg, bindingResult);
                 if (bindingResult.hasErrors()) {
                     StringBuilder errors = new StringBuilder();
-
                     // Collect field errors
                     for (FieldError fieldError : bindingResult.getFieldErrors()) {
                         errors.append(fieldError.getField()+": ").append(fieldError.getDefaultMessage())

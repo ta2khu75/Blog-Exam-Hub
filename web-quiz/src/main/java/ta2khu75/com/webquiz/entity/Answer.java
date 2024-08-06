@@ -17,9 +17,9 @@ public class Answer {
     String answerString;
     @Column(nullable = false)
     Boolean correct;
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    AnswerType answerType;
+    // @Column(nullable = false)
+    // @Enumerated(EnumType.STRING)
+    // AnswerType answerType;
     @ManyToOne
     Quiz quiz;
 }
