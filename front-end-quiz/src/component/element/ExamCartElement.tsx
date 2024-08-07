@@ -1,5 +1,6 @@
 import { Button } from "antd";
 import ExamResponse from "../../response/ExamResponse"
+import { Link } from "react-router-dom";
 
 type Props = {
     examResponse: ExamResponse;
@@ -12,7 +13,7 @@ const ExamCartElement = ({ examResponse, className, handleViewClick, handleDelet
     return (
         <div className={`col-lg-4 col-md-6 col-12 mb-4 mb-lg-0 ${className}`} >
             <div className="custom-block bg-white shadow-lg">
-                <a href="topics-detail.html">
+                    <Link to={"/exam-details"}>
                     <div className="d-flex">
                         <div>
                             <h6 className="mb-2">{examResponse.title}</h6>
@@ -22,7 +23,7 @@ const ExamCartElement = ({ examResponse, className, handleViewClick, handleDelet
                     </div>
                     <span className={`badge bg-design rounded ms-auto ${examResponse.exam_level == "EASY" ? "bg-success" : examResponse.exam_level == "HARD" ? "bg-danger" : "bg-warning"}`}>{examResponse.exam_type}</span>
                     <img src={examResponse.image_path} width={"356px"} height={"200px"} className="custom-block-image img-fluid" />
-                </a>
+                    </Link>
                 <div className="d-flex justify-content-around mt-4">
                 {handleViewClick && 
                     <Button onClick={()=>handleViewClick(examResponse)} type='primary'>View</Button>

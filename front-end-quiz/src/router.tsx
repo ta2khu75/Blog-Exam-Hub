@@ -6,6 +6,8 @@ import HomePage from "./component/page/HomePage";
 import AccountCrud from "./component/page/admin/crud/AccountCrud";
 import ExamCrud from "./component/page/admin/crud/ExamCrud";
 import ExamView from "./component/page/admin/view/ExamView";
+import RegisterPage from "./component/page/RegisterPage";
+import ExamDetailPage from "./component/page/ExamDetailPage";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +19,12 @@ const router = createBrowserRouter([
     },{
       path:"login",
       element: <LoginPage/>
+    },{
+      path:"register",
+      element: <RegisterPage/>
+    },{
+      path:"exam-details",
+      element: <ExamDetailPage/>
     }]
   },{
     path: "/admin",
