@@ -32,6 +32,7 @@ public class ApplicationConfig {
 		configuration.addAllowedOrigin("http://localhost:5173");
 		configuration.addAllowedHeader("*");
 		configuration.addAllowedMethod("*");
+		configuration.setAllowCredentials(true);
 		UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
 		urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
 		return new CorsFilter(urlBasedCorsConfigurationSource);

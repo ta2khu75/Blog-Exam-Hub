@@ -25,5 +25,7 @@ public class Quiz {
     @ManyToOne
     Exam exam;
     @OneToMany(mappedBy = "quiz")
-    List<Answer> listAnswer;
+    List<Answer> answers;
+    @OneToMany(mappedBy = "quiz")
+    List<UserAnswer> userAnswers;
 }

@@ -13,8 +13,8 @@ const ActionElement = <T,>({
 }: Props<T>) => {
   return (
     <div>
-      {handleViewClick && (
-        <Button type="primary" onClick={() => handleViewClick(data)}>
+      {handleDeleteClick && (
+        <Button danger type="primary" onClick={() => handleDeleteClick(data)}>
           Delete
         </Button>
       )}
@@ -23,8 +23,8 @@ const ActionElement = <T,>({
           Edit
         </Button>
       )}
-      {handleDeleteClick && (
-        <Button danger type="primary" onClick={() => handleDeleteClick(data)}>
+      {handleViewClick && (
+        <Button type="primary" onClick={() => handleViewClick(data)}>
           Delete
         </Button>
       )}

@@ -1,4 +1,4 @@
 export default interface AnswerUserRequest{
     quiz_id:number;
-    answers:number[]
+    answer_ids:number[]
 }

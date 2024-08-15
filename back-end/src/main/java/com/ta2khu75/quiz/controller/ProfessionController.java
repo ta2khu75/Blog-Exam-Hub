@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ta2khu75.quiz.entity.request.AnswerUserRequest;
+import com.ta2khu75.quiz.entity.request.UserAnswerRequest;
 import com.ta2khu75.quiz.service.ProfessionService;
 
 import lombok.AccessLevel;
@@ -21,8 +21,8 @@ import lombok.experimental.FieldDefaults;
 public class ProfessionController {
 	ProfessionService service;
 	@PostMapping("/answer-user/{quizId}")
-	public ResponseEntity<Double> getname(@PathVariable("quizId") Long quizId, @RequestBody AnswerUserRequest[] answerUserRequest) {
-		double score = service.score(quizId, answerUserRequest);
-		return ResponseEntity.ok(score);
+	public ResponseEntity<Double> getname(@PathVariable("quizId") Long quizId, @RequestBody UserAnswerRequest[] answerUserRequest) {
+//		double score = service.score(quizId, answerUserRequest);
+		return ResponseEntity.ok(null);
 	}
 }

@@ -6,5 +6,6 @@ public class FolderEnvironment {
     }
     public static final String USER_FOLDER = "user";
     public static final String EXAM_FOLDER = "exam";
+	public static final String QUIZ_FOLDER = "quiz";
     public static final String ANSWER_FOLDER = "answer";
 }

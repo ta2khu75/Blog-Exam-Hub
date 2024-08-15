@@ -3,6 +3,8 @@ import { Button, Form, Input } from "antd";
 import AuthService from "../../service/AuthService";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../redux/hooks";
+import { setAccount } from "../../redux/slice/accountSlice";
 
 export type AuthRequest = {
   email?: string;
@@ -10,12 +12,13 @@ export type AuthRequest = {
 };
 
 const LoginPage = () => {
+  const dispatch=useAppDispatch()
   const navigate=useNavigate();
   const onFinish: FormProps<AuthRequest>["onFinish"] = (values) => {
     AuthService.login(values).then((d) => {
         if(d.success){
+          dispatch(setAccount(d.data))
             toast.success("login successful");
-            console.log(d.data)
             navigate("/")
         }else{
             toast.error(d.message_error);

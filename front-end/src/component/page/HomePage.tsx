@@ -34,7 +34,7 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-      <section className="featured-section">
+      {/* <section className="featured-section">
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-lg-4 col-12 mb-4 mb-lg-0">
@@ -79,9 +79,9 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
       <section className="explore-section section-padding" id="section_2">
-        <div className="container">Design
+        <div className="container">
           <div className="col-12 text-center">
             <h2 className="mb-4">Browse Topics</h2>
           </div>
@@ -323,7 +323,7 @@ const HomePage = () => {
             </div>
           </div>
         </div></section>
-      <section className="timeline-section section-padding" id="section_3">
+      {/* <section className="timeline-section section-padding" id="section_3">
         <div className="section-overlay" />
         <div className="container">
           <div className="row">
@@ -467,7 +467,7 @@ const HomePage = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   )
 }

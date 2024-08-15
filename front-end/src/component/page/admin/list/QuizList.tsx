@@ -4,7 +4,7 @@ import ExamService from "../../../../service/ExamService";
 import ExamResponse from "../../../../response/ExamResponse";
 import QuizResponse from "../../../../response/QuizResponse";
 import QuizService from "../../../../service/QuizService";
-import { Button} from "antd";
+import { Button } from "antd";
 import ModalElement from "../../../element/ModalElement";
 import QuizForm from "../form/QuizForm";
 import { toast } from "react-toastify";
@@ -63,10 +63,12 @@ const QuizList = () => {
           <>
             <PopoverActionElement
               data={quizResponse}
+              title="Action Quiz"
               handleDeleteClick={handleDeleteClick}
               handleEditClick={handleEditClick}
-              children={<li>{quizResponse.question}</li>}
-            />
+            >
+              <li>{quizResponse.question}</li>
+            </PopoverActionElement>
             <AnswerList quizResponse={quizResponse} />
           </>
         ))}
@@ -74,18 +76,13 @@ const QuizList = () => {
         <Button onClick={() => handleAddClick()}>Add Quiz</Button>
       </ol>
       {examResponse && (
-        <ModalElement
-          title="Modal Quiz"
-          open={open}
-          setOpen={setOpen}
-          children={
-            <QuizForm
-              quizResponse={quizResponse}
-              refresh={fetchListQuiz}
-              examResponse={examResponse}
-            />
-          }
-        />
+        <ModalElement title="Modal Quiz" open={open} setOpen={setOpen}>
+          <QuizForm
+            quizResponse={quizResponse}
+            refresh={fetchListQuiz}
+            examResponse={examResponse}
+          />
+        </ModalElement>
       )}
     </>
   );

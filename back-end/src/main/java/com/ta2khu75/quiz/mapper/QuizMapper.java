@@ -18,5 +18,4 @@ public interface QuizMapper {
     default Long convertExam(Exam exam){
         return exam.getId();
     }
-    
 }

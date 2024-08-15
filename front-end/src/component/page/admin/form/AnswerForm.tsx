@@ -80,14 +80,6 @@ const AnswerForm = ({ answerResponse, quizResponse, refresh }: Props) => {
                     <Radio value={false}> False</Radio>
                 </Radio.Group>
             </Form.Item>
-            {/* <Form.Item<AnswerRequest> label="Quiz Type" name={"correct"} rules={[
-                { required: true, message: "please select quiz type" }
-            ]} >
-                <Radio.Group onChange={onChange} value={value}>
-                    <Radio value={1}>A</Radio>
-                    <Radio value={2}>B</Radio>
-                </Radio.Group>
-            </Form.Item> */}
             <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                 <Button type="primary" htmlType="submit">
                     Submit

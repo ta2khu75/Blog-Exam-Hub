@@ -15,10 +15,13 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+
+import com.ta2khu75.quiz.entity.Exam;
 import com.ta2khu75.quiz.entity.ExamLevel;
 import com.ta2khu75.quiz.entity.ExamType;
 import com.ta2khu75.quiz.entity.request.ExamRequest;
 import com.ta2khu75.quiz.entity.response.ExamResponse;
+import com.ta2khu75.quiz.entity.response.details.ExamDetailsResponse;
 import com.ta2khu75.quiz.service.ExamService;
 import com.ta2khu75.quiz.util.ObjectUtil;
 
@@ -50,6 +53,10 @@ public class ExamController {
     @GetMapping("{id}")
     public ResponseEntity<ExamResponse> getMethodName(@PathVariable("id") Long id) {
         return ResponseEntity.ok(service.read(id));
+    }
+    @GetMapping("details/{id}")
+    public ResponseEntity<ExamDetailsResponse> getMethod(@PathVariable("id") Long id) {
+	    return ResponseEntity.ok(service.readDetail(id));
     }
     @PutMapping(path = "{id}", consumes = "multipart/form-data")
     public ResponseEntity<ExamResponse> putMethodName(@PathVariable(name = "id") Long id, @RequestPart("exam_request") String examRequestString, @RequestPart(name="image", required = false) MultipartFile image) throws IOException {

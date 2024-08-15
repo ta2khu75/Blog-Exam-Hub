@@ -1,4 +1,4 @@
-import { Button, Form, FormProps, Input, Select } from "antd";
+import { Button, Form, FormProps, Input, InputNumber, Select } from "antd";
 import ExamService from "../../../../service/ExamService";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
@@ -11,6 +11,7 @@ import ExamCartElement from "../../../element/ExamCartElement";
 export type ExamRequest = {
   id?: number;
   title?: string;
+  time?: number;
   description?: string;
   exam_type?: string;
   exam_level?: string;
@@ -113,6 +114,12 @@ const ExamCrud = () => {
           { required: true, message: "please input title" }
         ]} >
           <Input />
+        </Form.Item>
+        <Form.Item<ExamRequest> label="Time" name={"time"} 
+        rules={[
+          { required: true, message: "please input time" }
+        ]} >
+          <InputNumber addonAfter="minutes"/>
         </Form.Item>
         <Form.Item<ExamRequest> label="Exam Level" name={"exam_level"} rules={[
           { required: true, message: "please select exam level" }

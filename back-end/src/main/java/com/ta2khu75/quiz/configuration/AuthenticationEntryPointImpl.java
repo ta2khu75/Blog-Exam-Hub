@@ -17,18 +17,28 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+
 @Component
 @RequiredArgsConstructor
 public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
-	private final AuthenticationEntryPoint delegate=new BearerTokenAuthenticationEntryPoint();
-	private final ObjectMapper objectMapper;	
+	private final AuthenticationEntryPoint delegate = new BearerTokenAuthenticationEntryPoint();
+	private final ObjectMapper objectMapper;
+
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
 		delegate.commence(request, response, authException);
-		AdviceException.ApiResponse apiResponse=AdviceException.ApiResponse.builder().statusCode(HttpStatus.SC_UNAUTHORIZED).success(false).messageError(authException.getMessage()).build();
+		String exceptionString = authException.getMessage();
+		AdviceException.ApiResponse apiResponse;
+		if (exceptionString.contains("Jwt expired at")) {
+			apiResponse = AdviceException.ApiResponse.builder().statusCode(444).success(false)
+					.messageError(authException.getMessage()).build();
+		} else {
+			apiResponse = AdviceException.ApiResponse.builder().statusCode(HttpStatus.SC_UNAUTHORIZED).success(false)
+					.messageError(authException.getMessage()).build();
+		}
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		response.setStatus(444);
 		objectMapper.writeValue(response.getWriter(), apiResponse);
 	}
 

@@ -9,7 +9,6 @@ import AnswerForm from "../form/AnswerForm";
 import PopoverActionElement from "../../../element/PopoverActionElement";
 type Props = {
   quizResponse: QuizResponse;
-  handleAddAnswerClick?: () => void;
 };
 const AnswerList = ({ quizResponse }: Props) => {
   const [answerResponseList, setAnswerResponseList] = useState<
@@ -51,21 +50,21 @@ const AnswerList = ({ quizResponse }: Props) => {
           <Space direction="vertical">
             {answerResponseList.map((answer) => (
               <PopoverActionElement
+                title="Action Answer"
                 key={`popover-radio-${answer.id}`}
                 data={answer}
                 handleDeleteClick={handleDeleteClick}
                 handleEditClick={handleEditClick}
-                children={
-                  <Radio
-                    disabled
-                    className="d-block"
-                    defaultChecked={answer.correct}
-                    value={answer.correct}
-                  >
-                    {answer.answer}
-                  </Radio>
-                }
-              />
+              >
+                <Radio
+                  disabled
+                  className="d-block"
+                  defaultChecked={answer.correct}
+                  value={answer.correct}
+                >
+                  {answer.answer}
+                </Radio>
+              </PopoverActionElement>
             ))}
           </Space>
         </Radio.Group>
@@ -78,29 +77,25 @@ const AnswerList = ({ quizResponse }: Props) => {
               data={answer}
               handleDeleteClick={handleDeleteClick}
               handleEditClick={handleEditClick}
-              children={
-                <Checkbox disabled checked={answer.correct} value={answer.id}>
-                  {answer.answer}
-                </Checkbox>
-              }
-            />
+              title="Action Answer"
+            >
+              <Checkbox disabled checked={answer.correct} value={answer.id}>
+                {answer.answer}
+              </Checkbox>
+            </PopoverActionElement>
           ))}
         </Space>
       )}
       <Button className="d-block" onClick={() => handleAddClick()}>
         Add Answer
       </Button>
-      <ModalElement
-        open={open}
-        setOpen={setOpen}
-        children={
-          <AnswerForm
-            answerResponse={answerResponse}
-            quizResponse={quizResponse}
-            refresh={fetchAnswerByQuizId}
-          />
-        }
-      />
+      <ModalElement open={open} setOpen={setOpen}>
+        <AnswerForm
+          answerResponse={answerResponse}
+          quizResponse={quizResponse}
+          refresh={fetchAnswerByQuizId}
+        />
+      </ModalElement>
     </>
   );
 };

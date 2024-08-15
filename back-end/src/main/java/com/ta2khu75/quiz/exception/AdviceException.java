@@ -15,6 +15,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
@@ -35,6 +36,10 @@ public class AdviceException implements ResponseBodyAdvice<Object> {
     public ResponseEntity<ExceptionResponse> handleInValidDataException(InValidDataException ex) {
         return ResponseEntity.badRequest().body(new ExceptionResponse(ex.getMessage()));
     }
+    @ExceptionHandler(MissingRequestCookieException.class)
+	public ResponseEntity<ExceptionResponse> handleMissingRequestCookieException(MissingRequestCookieException ex) {
+    	return ResponseEntity.badRequest().body(new ExceptionResponse(ex.getMessage()));
+	}
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception ex) {

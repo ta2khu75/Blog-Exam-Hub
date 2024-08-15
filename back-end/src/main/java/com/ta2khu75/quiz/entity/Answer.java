@@ -1,5 +1,7 @@
 package com.ta2khu75.quiz.entity;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,4 +24,4 @@ public class Answer {
     // AnswerType answerType;
     @ManyToOne
     Quiz quiz;
-}
+	}

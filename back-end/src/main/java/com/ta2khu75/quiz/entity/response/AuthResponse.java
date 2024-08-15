@@ -5,5 +5,5 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record AuthResponse(AccountResponse account, @JsonProperty("access_token") String accessToken,
-		String refreshToken, boolean authenticated) {
+	@JsonProperty("refresh_token")	String refreshToken, boolean authenticated) {
 }

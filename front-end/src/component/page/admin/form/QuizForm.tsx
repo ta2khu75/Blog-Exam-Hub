@@ -83,7 +83,7 @@ const QuizForm = ({ examResponse, refresh, quizResponse }: Props) => {
         <Input />
       </Form.Item>
       <Form.Item<QuizRequest>
-        label="Questiton"
+        label="Question"
         name={"question"}
         rules={[{ required: true, message: "please input title" }]}
       >

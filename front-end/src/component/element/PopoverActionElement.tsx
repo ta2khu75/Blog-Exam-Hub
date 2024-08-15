@@ -2,13 +2,15 @@ import { Popover } from "antd";
 import ActionElement from "./ActionElement";
 type Props<T> = {
   data: T;
-  children: JSX.Element;
+  title?: string;
+  children: React.ReactNode
   handleEditClick?: (data: T) => void;
   handleDeleteClick?: (data: T) => void;
   handleViewClick?: (data: T) => void;
 };
 const PopoverActionElement = <T,>({
   data,
+  title,
   children,
   handleDeleteClick,
   handleEditClick,
@@ -17,13 +19,13 @@ const PopoverActionElement = <T,>({
   return (
     <Popover
       placement="left"
-      title={"Action Answer"}
+      title={title}
       content={
         <ActionElement
           data={data}
-          handleDeleteClick={handleDeleteClick}
-          handleEditClick={handleEditClick}
           handleViewClick={handleViewClick}
+          handleEditClick={handleEditClick}
+          handleDeleteClick={handleDeleteClick}
         />
       }
     >

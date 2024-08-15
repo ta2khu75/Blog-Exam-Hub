@@ -1,37 +1,34 @@
-import { useEffect, useState } from "react";
 import { Checkbox, Radio, Space } from "antd";
 import QuizResponse from "../../response/QuizResponse";
 import AnswerResponse from "../../response/AnswerResponse";
-import AnswerService from "../../service/AnswerService";
-import RandomUtil from "../../util/RandomUtil";
+import { useAppSelector } from "../../redux/hooks";
 type Props = {
+  examId: number;
   quizResponse: QuizResponse;
-  handleAnswerClick: (quizResponse: QuizResponse, answer_id: number) => void;
+  answerResponseList: AnswerResponse[];
+  handleAnswerClick: (quizResponse: QuizResponse, answers: number[]) => void;
 };
-const AnswerListElement = ({ quizResponse, handleAnswerClick }: Props) => {
-  const [answerResponseList, setAnswerResponseList] = useState<
-    AnswerResponse[]
-  >([]);
-  useEffect(() => {
-    fetchAnswerByQuizId();
-  }, []);
-  const fetchAnswerByQuizId = () => {
-    AnswerService.readByQuizId(quizResponse.id).then((d) => {
-      setAnswerResponseList(RandomUtil.shuffleArray(d.data));
-    });
-  };
+const AnswerListElement = ({
+  examId,
+  quizResponse,
+  answerResponseList,
+  handleAnswerClick,
+}: Props) => {
+  const value = useAppSelector(
+    (state) => state.userExams?.[examId]?.[quizResponse.id]
+  );
   return (
     <>
       {quizResponse.quiz_type == "SINGLE_CHOICE" && (
-        <Radio.Group>
+        <Radio.Group
+          value={value?.[0] ?? -1}
+          onChange={(e) => handleAnswerClick(quizResponse, [e.target.value])}
+        >
           <Space direction="vertical">
             {answerResponseList.map((answer) => (
               <Radio
-              key={`answer-radio-${answer.id}`}
+                key={`answer-radio-${answer.id}`}
                 className="d-block"
-                onChange={(e) =>
-                  handleAnswerClick(quizResponse, e.target.value)
-                }
                 value={answer.id}
               >
                 {answer.answer}
@@ -41,17 +38,18 @@ const AnswerListElement = ({ quizResponse, handleAnswerClick }: Props) => {
         </Radio.Group>
       )}
       {quizResponse.quiz_type == "MULTIPLE_CHOICE" && (
-        <Space direction="vertical">
-          {answerResponseList.map((answer) => (
-            <Checkbox
-            key={`answer-checkbox-${answer.id}`}
-              value={answer.id}
-              onChange={(e) => handleAnswerClick(quizResponse, e.target.value)}
-            >
-              {answer.answer}
-            </Checkbox>
-          ))}
-        </Space>
+        <Checkbox.Group
+          value={value}
+          onChange={(e) => handleAnswerClick(quizResponse, e)}
+        >
+          <Space direction="vertical">
+            {answerResponseList.map((answer) => (
+              <Checkbox key={`answer-checkbox-${answer.id}`} value={answer.id}>
+                {answer.answer}
+              </Checkbox>
+            ))}
+          </Space>
+        </Checkbox.Group>
       )}
     </>
   );

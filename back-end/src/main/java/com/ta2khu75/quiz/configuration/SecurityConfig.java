@@ -28,8 +28,8 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	@Value("${app.api-prefix}")
 	private String apiPrefix;
-	private final String[] PUBLIC_POST_ENDPOINT = { "/account", "/auth/login", "/auth/refresh" };
-	private final String[] PUBLIC_GET_ENDPOINT = { "/auth/**", "/category/**", "/brand", "/brand/image/*", "/product",
+	private final String[] PUBLIC_POST_ENDPOINT = { "/account", "/auth/login" };
+	private final String[] PUBLIC_GET_ENDPOINT = { "/auth/refresh-token", "/auth/logout", "/exam", "/exam/*", "/brand", "/brand/image/*", "/product",
 			"/product/*", "/product/image/*" };
 	private final AuthenticationEntryPoint authenticationEntryPoint;
 	@Bean
@@ -55,8 +55,6 @@ public class SecurityConfig {
 //		return jwtAuthenticationConverter;
 	}
 
-	
-
 	@Bean
 	SecurityFilterChain securityFilter(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable()).cors(Customizer.withDefaults())
@@ -73,7 +71,7 @@ public class SecurityConfig {
 												.toArray(String[]::new))
 								.permitAll().anyRequest().authenticated())
 				.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()).authenticationEntryPoint(authenticationEntryPoint))///.authenticationEntryPoint(authenticationEntryPoint))
-				.exceptionHandling(exception -> exception.authenticationEntryPoint(null).accessDeniedHandler(null))
+//				.exceptionHandling(exception -> exception.authenticationEntryPoint(null).accessDeniedHandler(null))
 				.formLogin(login -> login.disable());
 		return http.build();
 	}
