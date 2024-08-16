@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ta2khu75.quiz.entity.Account;
@@ -16,6 +18,7 @@ import com.ta2khu75.quiz.entity.Exam;
 import com.ta2khu75.quiz.entity.ExamHistory;
 import com.ta2khu75.quiz.entity.request.UserAnswerRequest;
 import com.ta2khu75.quiz.entity.response.ExamHistoryResponse;
+import com.ta2khu75.quiz.entity.response.PageResponse;
 import com.ta2khu75.quiz.entity.response.details.ExamHistoryDetailsResponse;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.ExamHistoryMapper;
@@ -60,14 +63,22 @@ public class ExamHistoryServiceImpl implements ExamHistoryService {
 	@Override
 	public ExamHistoryDetailsResponse scoreByExamId(Long id, Long examId, UserAnswerRequest[] answerUserRequest) {
 		ExamHistory examHistory = repository.findById(id).orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id));
-//		userAnswerRepository.saveAll(
-//				Arrays.stream(answerUserRequest).map(t -> {
-//			Quiz quiz=quizRepository.findById(t.quizId()).orElseThrow(() -> new NotFoundException("Could not found quiz with id: " + t.quizId()));
-//			System.out.println(t.answerIds());
-//			List<Answer> answer=answerRepository.findAllById(Arrays.asList(t.answerIds()));
-//			return UserAnswer.builder().quiz(quiz).answers(answer).build();
-//		}).toList());	
+		if(answerUserRequest.length==0) {
+			examHistory.setLastModifiedDate(LocalDateTime.now());
+		}else {
 			examHistory.setPoint(professionService.score(examHistory, examId, answerUserRequest));
+		}
 		return mapper.toDetailsResponse(repository.save(examHistory));
+	}
+
+	@Override
+	public PageResponse<ExamHistoryResponse> readPage(Pageable pageable) {
+		String email=SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new NotFoundException("Could not find email"));
+		return mapper.toPageResponse(repository.findByAccountEmailAndLastModifiedDateIsNotNull(email,pageable));
+	}
+
+	@Override
+	public ExamHistoryDetailsResponse read(Long id) {
+		return mapper.toDetailsResponse(repository.findById(id).orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id)));
 	}
 }

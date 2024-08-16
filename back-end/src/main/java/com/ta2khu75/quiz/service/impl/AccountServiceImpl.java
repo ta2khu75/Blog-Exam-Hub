@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.ta2khu75.quiz.entity.Account;
 import com.ta2khu75.quiz.entity.request.AccountRequest;
+import com.ta2khu75.quiz.entity.request.update.AccountPasswordRequest;
 import com.ta2khu75.quiz.entity.response.AccountResponse;
 import com.ta2khu75.quiz.entity.response.PageResponse;
 import com.ta2khu75.quiz.exception.NotFoundException;
@@ -16,6 +17,7 @@ import com.ta2khu75.quiz.exception.NotMatchesException;
 import com.ta2khu75.quiz.mapper.AccountMapper;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.service.AccountService;
+import com.ta2khu75.quiz.util.SecurityUtil;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -58,4 +60,18 @@ public class AccountServiceImpl implements AccountService {
     public PageResponse<AccountResponse> readPage(Pageable pageable) {
         return mapper.toPageResponse(repository.findAll(pageable).map((account)->mapper.toResponse(account)));
     }
+
+	@Override
+	public AccountResponse changePassword(AccountPasswordRequest request) {
+		String email=SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new NotFoundException("Could not find email"));
+		Account account=repository.findByEmail(email).orElseThrow(()->new NotFoundException("Could not find account with email: "+email));
+		if(passwordEncoder.matches(request.password(), account.getPassword())){
+			if(request.newPassword().equals(request.confirmPassword())) {
+			account.setPassword(passwordEncoder.encode(request.newPassword()));
+			return mapper.toResponse(repository.save(account));
+			}
+			throw new NotMatchesException("New password and confirm password not matches");
+		}
+		throw new NotMatchesException("Password not matches");	
+	}
 }

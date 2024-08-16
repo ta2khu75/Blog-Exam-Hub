@@ -71,7 +71,8 @@ public class ProfessionServiceImpl implements ProfessionService {
 			}
 		}
 
-		return score * 10 / quizzes.size();
+		double num = score / quizzes.size();
+		return Math.round(num * 100.0) / 100.0;//	score * 10 / quizzes.size();
 	}
 
 	private void saveUserAnswer(ExamHistory examHistory, Quiz quiz, List<Answer> answers, Set<Long> answerIds) {
@@ -99,12 +100,13 @@ public class ProfessionServiceImpl implements ProfessionService {
 		if (correctSelected == correctAnswers.size() && incorrectSelected == 0) {
 			return 1; // Điểm tối đa cho câu hỏi
 		} else {
-			double fractionCorrect = (double) correctSelected / correctAnswers.size();
-			double fractionIncorrect = (double) incorrectSelected / (correctAnswers.size() + 1);
-			double maxPoints = 1;
-			double points = maxPoints * fractionCorrect - (fractionIncorrect * 0.5);
-			points = Math.max(points, 0);
-			return points;
+			return 0;
+//			double fractionCorrect = (double) correctSelected / correctAnswers.size();
+//			double fractionIncorrect = (double) incorrectSelected / (correctAnswers.size() + 1);
+//			double maxPoints = 1;
+//			double points = maxPoints * fractionCorrect - (fractionIncorrect * 0.5);
+//			points = Math.max(points, 0);
+//			return points;
 		}
 	}
 }

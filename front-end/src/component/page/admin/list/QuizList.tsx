@@ -67,7 +67,17 @@ const QuizList = () => {
               handleDeleteClick={handleDeleteClick}
               handleEditClick={handleEditClick}
             >
-              <li>{quizResponse.question}</li>
+              <>
+                <li>{quizResponse.question}</li>
+                {quizResponse.file_path && (
+                  <img
+                    className="d-block"
+                    width={"300px"}
+                    height={"200px"}
+                    src={quizResponse.file_path}
+                  />
+                )}
+              </>
             </PopoverActionElement>
             <AnswerList quizResponse={quizResponse} />
           </>

@@ -19,6 +19,7 @@ public class Quiz {
     Long id;
     @Column(nullable = false)
     String question;
+    String filePath;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     QuizType quizType;

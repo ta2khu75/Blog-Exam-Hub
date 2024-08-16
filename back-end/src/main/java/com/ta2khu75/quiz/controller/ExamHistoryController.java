@@ -1,5 +1,12 @@
 package com.ta2khu75.quiz.controller;
 
+import java.util.List;
+
+import org.hibernate.annotations.Filter;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -9,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ta2khu75.quiz.entity.ExamHistory;
 import com.ta2khu75.quiz.entity.request.UserAnswerRequest;
 import com.ta2khu75.quiz.entity.response.ExamHistoryResponse;
+import com.ta2khu75.quiz.entity.response.PageResponse;
 import com.ta2khu75.quiz.entity.response.details.ExamHistoryDetailsResponse;
-import com.ta2khu75.quiz.repository.ExamRepository;
 import com.ta2khu75.quiz.service.ExamHistoryService;
-import com.ta2khu75.quiz.service.ProfessionService;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +40,15 @@ public class ExamHistoryController {
 	@PostMapping("{id}")	
 	public ResponseEntity<ExamHistoryDetailsResponse> getname(@PathVariable("id") Long examHistoryId, @RequestParam("exam_id") Long examId, @RequestBody UserAnswerRequest[] answerUserRequest) {
 		return ResponseEntity.ok(service.scoreByExamId(examHistoryId, examId, answerUserRequest));
+	}
+	@GetMapping
+	public ResponseEntity<PageResponse<ExamHistoryResponse>> getMethodName(@RequestParam(name="size", required = false, defaultValue = "5") int size, @RequestParam(name="page", required = false, defaultValue = "0") int page) {
+		Sort sort = Sort.by(Sort.Direction.DESC, "lastModifiedDate");
+		Pageable pageable = PageRequest.of(page, size, sort);
+		return ResponseEntity.ok(service.readPage(pageable));
+	}
+	@GetMapping("{id}")
+	public ResponseEntity<ExamHistoryDetailsResponse> getMethodNam(@PathVariable("id") Long id) {
+		return ResponseEntity.ok(service.read(id));
 	}
 }

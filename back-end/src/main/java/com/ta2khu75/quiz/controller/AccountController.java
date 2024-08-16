@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.ta2khu75.quiz.entity.request.AccountRequest;
+import com.ta2khu75.quiz.entity.request.update.AccountPasswordRequest;
 import com.ta2khu75.quiz.entity.response.AccountResponse;
 import com.ta2khu75.quiz.entity.response.PageResponse;
 import com.ta2khu75.quiz.service.AccountService;
@@ -28,7 +29,6 @@ public class AccountController {
     }
     @GetMapping
     public ResponseEntity<PageResponse<AccountResponse>> getMethodName(Pageable pageable) {
-
         return ResponseEntity.ok(service.readPage(pageable));
     }
     
@@ -45,4 +45,8 @@ public class AccountController {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
+    @PutMapping("/change-password")
+    public ResponseEntity<AccountResponse> changePassword(@RequestBody AccountPasswordRequest request) {
+		return ResponseEntity.ok(service.changePassword(request));
+	}
 }

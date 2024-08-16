@@ -13,7 +13,7 @@ const ExamCartElement = ({ examResponse, className, handleViewClick, handleDelet
     return (
         <div className={`col-lg-4 col-md-6 col-12 mb-4 mb-lg-0 ${className}`} >
             <div className="custom-block bg-white shadow-lg">
-                    <Link to={"/exam-about/"+examResponse.id}>
+                    <Link to={`/exam-about/${examResponse.id}`} >
                     <div className="d-flex">
                         <div>
                             <h6 className="mb-2">{examResponse.title}</h6>

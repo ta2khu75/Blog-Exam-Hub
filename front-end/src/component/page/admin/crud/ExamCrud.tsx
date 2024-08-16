@@ -153,7 +153,7 @@ const ExamCrud = () => {
         </Form.Item>
       </Form>
         <div className="row">
-          {examResponsePage?.content?.map((examResponse) => <ExamCartElement handleDeleteClick={handleDeleteClick} handleEditClick={handleEditClick} handleViewClick={handleViewClick} examResponse={examResponse} className="mt-4" />)}
+          {examResponsePage?.content?.map((examResponse) => <ExamCartElement key={`exam-cart-${examResponse.id}`} handleDeleteClick={handleDeleteClick} handleEditClick={handleEditClick} handleViewClick={handleViewClick} examResponse={examResponse} className="mt-4" />)}
         </div>
     </>
   )

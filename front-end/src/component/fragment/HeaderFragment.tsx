@@ -129,14 +129,14 @@ const HeaderFragment = () => {
                 aria-labelledby="account-action"
               >
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <NavLink className="dropdown-item" to="/profile">
                     Profile
-                  </a>
+                  </NavLink>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
+                  <NavLink className="dropdown-item" to="/change-password">
                     Change Password
-                  </a>
+                  </NavLink>
                 </li>
                 <li>
                   <button

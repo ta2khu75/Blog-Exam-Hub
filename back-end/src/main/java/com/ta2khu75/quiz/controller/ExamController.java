@@ -16,14 +16,13 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import com.ta2khu75.quiz.entity.Exam;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ta2khu75.quiz.entity.ExamLevel;
 import com.ta2khu75.quiz.entity.ExamType;
 import com.ta2khu75.quiz.entity.request.ExamRequest;
 import com.ta2khu75.quiz.entity.response.ExamResponse;
 import com.ta2khu75.quiz.entity.response.details.ExamDetailsResponse;
 import com.ta2khu75.quiz.service.ExamService;
-import com.ta2khu75.quiz.util.ObjectUtil;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +35,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExamController {
     ExamService service;
+    ObjectMapper objectMapper;
     @GetMapping("exam-type")
     public ResponseEntity<ExamType[]> getMethodName() {
         return ResponseEntity.ok(ExamType.values());
@@ -47,7 +47,7 @@ public class ExamController {
     
     @PostMapping(consumes="multipart/form-data")
     public ResponseEntity<ExamResponse> create(@RequestPart("exam_request") String examRequestString, @RequestPart(name = "image", required = true) MultipartFile image) throws IOException {
-        ExamRequest examRequest= ObjectUtil.toObject(examRequestString, ExamRequest.class);
+        ExamRequest examRequest= objectMapper.readValue(examRequestString, ExamRequest.class); //(examRequestString, ExamRequest.class);
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(examRequest, image));
     }
     @GetMapping("{id}")
@@ -60,7 +60,7 @@ public class ExamController {
     }
     @PutMapping(path = "{id}", consumes = "multipart/form-data")
     public ResponseEntity<ExamResponse> putMethodName(@PathVariable(name = "id") Long id, @RequestPart("exam_request") String examRequestString, @RequestPart(name="image", required = false) MultipartFile image) throws IOException {
-        ExamRequest examRequest= ObjectUtil.toObject(examRequestString, ExamRequest.class);
+        ExamRequest examRequest= objectMapper.readValue(examRequestString, ExamRequest.class);
         return ResponseEntity.ok(service.update(id, examRequest, image));
     }
     @DeleteMapping("{id}")

@@ -10,6 +10,9 @@ import ExamAboutPage from "./component/page/ExamAboutPage";
 import ExamDetailPage from "./component/page/ExamDetailPage";
 import QuizList from "./component/page/admin/list/QuizList";
 import PrivateRouterElement from "./component/element/PrivateRouterElement";
+import ProfilePage from "./component/page/ProfilePage";
+import ExamHistoryPage from "./component/page/ExamHistoryPage";
+import ChangePasswordPage from "./component/page/ChangePasswordPage";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +28,10 @@ const router = createBrowserRouter([
         element: <LoginPage />,
       },
       {
+        path: "change-password",
+        element: <ChangePasswordPage />,
+      },
+      {
         path: "register",
         element: <RegisterPage />,
       },
@@ -33,10 +40,26 @@ const router = createBrowserRouter([
         element: <ExamAboutPage />,
       },
       {
+        path: "profile",
+        element: (
+          <PrivateRouterElement>
+            <ProfilePage />
+          </PrivateRouterElement>
+        ),
+      },
+      {
         path: "exam-details/:examId",
         element: (
           <PrivateRouterElement>
             <ExamDetailPage />
+          </PrivateRouterElement>
+        ),
+      },
+      {
+        path: "exam-history/:examHistoryId",
+        element: (
+          <PrivateRouterElement>
+            <ExamHistoryPage />
           </PrivateRouterElement>
         ),
       },

@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { MutableRefObject, useEffect, useRef, useState } from "react";
 import QuizResponse from "../../response/QuizResponse";
 import AnswerListElement from "../element/AnswerListElement";
 import RandomUtil from "../../util/RandomUtil";
@@ -13,9 +13,13 @@ import { toast } from "react-toastify";
 import ModalElement from "../element/ModalElement";
 
 const ExamDetailPage = () => {
+  const stopTimerRef = useRef<(() => void) | null>(null) as MutableRefObject<
+    (() => void) | null
+  >;
   const { examId } = useParams();
   const [openResult, setOpenResult] = useState(false);
-  const navigate=useNavigate()
+  const [showAnswer, setShowAnswer]=useState(false);
+  const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState({
     minutes: 0,
     seconds: 0,
@@ -54,7 +58,7 @@ const ExamDetailPage = () => {
     ExamHistoryService.readByExamId(Number(examId)).then((d) => {
       if (d.success) {
         setExamHistoryResponse(d.data);
-        calculatorTime(new Date(d.data.end_time));
+        stopTimerRef.current = calculatorTime(new Date(d.data.end_time));
         const quizzes = d.data.exam.quizzes.map((quiz) => {
           quiz.answers = RandomUtil.shuffleArray(quiz.answers);
           return quiz;
@@ -83,14 +87,15 @@ const ExamDetailPage = () => {
     );
   };
   const handleSubmitAnswer = () => {
-    const answerUser = Object.entries(answerListUser).map(
-      ([quiz_id, answer_ids]) => ({
-        quiz_id: Number(quiz_id),
-        answer_ids,
-      })
-    );
+    const answerUser =
+      answerListUser === undefined
+        ? []
+        : Object.entries(answerListUser).map(([quiz_id, answer_ids]) => ({
+            quiz_id: Number(quiz_id),
+            answer_ids,
+          }));
     if (examHistoryResponse?.id && examId)
-      ExamHistoryService.scoreByExamHistoryId(
+      ExamHistoryService.readById(
         examHistoryResponse?.id,
         Number(examId),
         answerUser
@@ -98,6 +103,7 @@ const ExamDetailPage = () => {
         console.log(d.data);
 
         if (d.success) {
+          if (stopTimerRef.current) stopTimerRef.current();
           setExamHistoryResponse(d.data);
           toast.success(d.data.point);
           setOpenResult(true);
@@ -108,7 +114,7 @@ const ExamDetailPage = () => {
     dispatch(deleteUserExam(Number(examId)));
     dispatch(deleteQuizExam(Number(examId)));
     dispatch(deleteExam(Number(examId)));
-    navigate("/")
+    navigate("/");
     toast.success("Successfully finished the exam");
   };
   return (
@@ -116,16 +122,17 @@ const ExamDetailPage = () => {
       <div style={{ height: "100px" }}></div>
       <div className="container">
         <div className="row">
-          <div className="col-lg-8">
+          <div className="col-lg-7 p-4 mx-4 border border-4 rounded-4" style={{height: "80vh"}}>
             <div className="col-4"></div>
             <div>
-              <h2>
+              <h4>
                 {quizExam + 1}. {quizResponseList?.[quizExam]?.question}
-              </h2>
+              </h4>
               <div className="row">
                 <AnswerListElement
                   handleAnswerClick={handleAnswerClick}
                   examId={Number(examId)}
+                  showAnswer={showAnswer}
                   answerResponseList={
                     quizResponseList?.[quizExam]?.answers ?? []
                   }
@@ -162,44 +169,34 @@ const ExamDetailPage = () => {
               >
                 Next
               </button>
-              {!examHistoryResponse?.last_modified_date && (
-                <button
-                  className="btn btn-primary"
-                  onClick={() => handleSubmitAnswer()}
-                >
-                  Submit
-                </button>
-              )}
-              {examHistoryResponse?.last_modified_date && (
-                <button
-                  className="btn btn-primary"
-                  onClick={() => handleFinishClick()}
-                >
-                  Finish
-                </button>
-              )}
             </div>
           </div>
-          <div className="col-lg-4" style={{ marginTop: "40px" }}>
-            <h3>
-              {timeLeft.minutes} phút {timeLeft.seconds} giây
-            </h3>
-            <div>
+          <div className="col-lg-4 border border-1 rounded-4 p-0 mx-2 ">
+            <div className="d-flex justify-content-between align-items-center bg-primary rounded-2">
+              <button className="btn btn-primary" onClick={()=>handleSubmitAnswer()}>Submit</button>
+              <div className="text-light">
+                {timeLeft.minutes} phút {timeLeft.seconds} giây
+              </div>
+              <button className="btn btn-primary" onClick={()=>handleFinishClick()}>Finish</button>
+            </div>
+            <div className="px-5">
               {quizResponseList?.map((quiz, index) => (
                 <button
                   onClick={() =>
                     dispatch(setQuizExam({ id: Number(examId), value: index }))
                   }
-                  className={`d-inline-block btn 
+                  className={`
                   ${
                     answerListUser?.[quiz.id] !== undefined &&
                     quizExam !== index
                       ? "btn-success"
                       : ""
-                  } 
+                  }
                   ${quizExam === index ? "btn-primary" : ""} 
-                  border py-2 px-3 m-2 border-3 rounded-circle`}
+                  d-inline-block btn 
+                  border m-2 border-2 rounded-circle`}
                   key={quiz.id}
+                  style={{width:"45px", height:"45px"}}
                 >
                   {index + 1}
                 </button>
@@ -209,16 +206,20 @@ const ExamDetailPage = () => {
         </div>
       </div>
       <ModalElement open={openResult} setOpen={setOpenResult}>
+        <>
         <ul>
           <li>
             Tổng điểm: <span className="">{examHistoryResponse?.point}</span>
           </li>
           <li>
             Đúng sai: <span className="">0/{quizResponseList.length}</span>
-          </li>
-          <li></li>
-          <li></li>
+          </li> 
         </ul>
+        <div className="d-flex justify-content-between">
+        <button className="btn btn-primary" onClick={()=>handleFinishClick()}>Finish</button>
+        <button className="btn btn-primary" onClick={()=>{setShowAnswer(true);setOpenResult(false)}}>Show answer</button>
+        </div>
+        </>
       </ModalElement>
     </>
   );

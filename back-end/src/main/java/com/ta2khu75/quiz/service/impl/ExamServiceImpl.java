@@ -55,7 +55,7 @@ public class ExamServiceImpl implements ExamService {
 		Exam exam = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));
 		mapper.update(examRequest, exam);
-		if (file != null && file.isEmpty()) {
+		if (file != null && !file.isEmpty()) {
 			Map map = cloudinaryService.uploadFile(file, FolderEnvironment.EXAM_FOLDER);
 			exam.setImagePath((String) map.get("url"));
 		}

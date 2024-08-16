@@ -3,13 +3,15 @@ import QuizResponse from "../../response/QuizResponse";
 import AnswerResponse from "../../response/AnswerResponse";
 import { useAppSelector } from "../../redux/hooks";
 type Props = {
+  showAnswer: boolean;
   examId: number;
   quizResponse: QuizResponse;
   answerResponseList: AnswerResponse[];
-  handleAnswerClick: (quizResponse: QuizResponse, answers: number[]) => void;
+  handleAnswerClick?: (quizResponse: QuizResponse, answers: number[]) => void;
 };
 const AnswerListElement = ({
   examId,
+  showAnswer,
   quizResponse,
   answerResponseList,
   handleAnswerClick,
@@ -22,7 +24,12 @@ const AnswerListElement = ({
       {quizResponse.quiz_type == "SINGLE_CHOICE" && (
         <Radio.Group
           value={value?.[0] ?? -1}
-          onChange={(e) => handleAnswerClick(quizResponse, [e.target.value])}
+          disabled={showAnswer}
+          onChange={(e) =>
+            handleAnswerClick
+              ? handleAnswerClick(quizResponse, [e.target.value])
+              : {}
+          }
         >
           <Space direction="vertical">
             {answerResponseList.map((answer) => (
@@ -31,7 +38,17 @@ const AnswerListElement = ({
                 className="d-block"
                 value={answer.id}
               >
-                {answer.answer}
+                <span className="fs-5">{answer.answer}</span>
+                {showAnswer && (
+                  <>
+                    {answer.correct && (
+                      <i className="text-success bi bi-check-circle-fill"></i>
+                    )}
+                    {/* {!answer.correct && (
+                      <i className="text-danger bi bi-x-circle-fill"></i>
+                    )} */}
+                  </>
+                )}
               </Radio>
             ))}
           </Space>
@@ -40,12 +57,23 @@ const AnswerListElement = ({
       {quizResponse.quiz_type == "MULTIPLE_CHOICE" && (
         <Checkbox.Group
           value={value}
-          onChange={(e) => handleAnswerClick(quizResponse, e)}
+          disabled={showAnswer}
+          onChange={(e) => handleAnswerClick?handleAnswerClick(quizResponse, e):{}}
         >
           <Space direction="vertical">
             {answerResponseList.map((answer) => (
               <Checkbox key={`answer-checkbox-${answer.id}`} value={answer.id}>
-                {answer.answer}
+                <span className="fs-5">{answer.answer}</span>
+                {showAnswer && (
+                  <>
+                    {answer.correct && (
+                      <i className="text-success bi bi-check-circle-fill"></i>
+                    )}
+                    {/* {!answer.correct && (
+                      <i className="text-danger bi bi-x-circle-fill"></i>
+                    )} */}
+                  </>
+                )}
               </Checkbox>
             ))}
           </Space>

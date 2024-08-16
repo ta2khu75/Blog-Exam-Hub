@@ -114,7 +114,7 @@ const HomePage = () => {
                 <div className="tab-pane fade show active" id="design-tab-pane" role="tabpanel" aria-labelledby="design-tab" tabIndex={0}>
                   <div className="row">
                     {examResponsePage?.content.map(examResponse => (
-                      <ExamCartElement examResponse={examResponse} className="mt-4"/>
+                      <ExamCartElement key={`exam-cart-${examResponse.id}`} examResponse={examResponse} className="mt-4"/>
                     ))}
 
                     <div className="col-lg-4 col-md-6 col-12 mb-4 mb-lg-0">

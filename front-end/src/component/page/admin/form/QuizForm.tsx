@@ -16,6 +16,7 @@ type Props = {
   quizResponse?: QuizResponse;
 };
 const QuizForm = ({ examResponse, refresh, quizResponse }: Props) => {
+  const [file, setFile] = useState<File>();
   const [form] = Form.useForm<QuizRequest>();
   const [quizTypes, setQuizTypes] = useState<string[]>([]);
   useEffect(() => {
@@ -34,6 +35,11 @@ const QuizForm = ({ examResponse, refresh, quizResponse }: Props) => {
     form.resetFields();
     form.setFieldValue("exam_id", examResponse.id);
   };
+  const handleUploadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+    }
+  };
   const fetchReadAllQuizTypes = () => {
     QuizService.readAllQuizType().then((data) => {
       if (data.success) {
@@ -43,7 +49,7 @@ const QuizForm = ({ examResponse, refresh, quizResponse }: Props) => {
   };
   const onFinish: FormProps<QuizRequest>["onFinish"] = (values) => {
     if (!values.id) {
-      QuizService.create(values).then((data) => {
+      QuizService.create(values, file).then((data) => {
         if (data.success) {
           toast.success("Successfully to create");
           resetFields();
@@ -52,7 +58,7 @@ const QuizForm = ({ examResponse, refresh, quizResponse }: Props) => {
         }
       });
     } else {
-      QuizService.update(values.id, values).then((data) => {
+      QuizService.update(values.id, values, file).then((data) => {
         if (data.success) {
           toast.success("successfully");
           refresh();
@@ -101,6 +107,7 @@ const QuizForm = ({ examResponse, refresh, quizResponse }: Props) => {
           }))}
         />
       </Form.Item>
+      <Input type="file" onChange={(e) => handleUploadChange(e)} />
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         <Button type="primary" htmlType="submit">
           Submit
