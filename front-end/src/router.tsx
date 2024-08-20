@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
 import App from "./App";
 import AdminComponent from "./component/AdminComponent";
 import LoginPage from "./component/page/LoginPage";
@@ -13,85 +13,53 @@ import PrivateRouterElement from "./component/element/PrivateRouterElement";
 import ProfilePage from "./component/page/ProfilePage";
 import ExamHistoryPage from "./component/page/ExamHistoryPage";
 import ChangePasswordPage from "./component/page/ChangePasswordPage";
+// const route=createBrowserRouter(
+//   createRoutesFromElements(
+//     <Route path="/" element={<Ap[]}>
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    children: [
-      {
-        index: true,
-        element: <HomePage />,
-      },
-      {
-        path: "login",
-        element: <LoginPage />,
-      },
-      {
-        path: "change-password",
-        element: <ChangePasswordPage />,
-      },
-      {
-        path: "register",
-        element: <RegisterPage />,
-      },
-      {
-        path: "exam-about/:id",
-        element: <ExamAboutPage />,
-      },
-      {
-        path: "profile",
-        element: (
+//     </Route>
+//   )
+// )
+// import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <>
+      <Route path="/" element={<App />}>
+        <Route index element={<HomePage />} />
+        <Route path="login" element={<LoginPage />} />
+        <Route path="change-password" element={<ChangePasswordPage />} />
+        <Route path="register" element={<RegisterPage />} />
+        <Route path="exam-about/:id" element={<ExamAboutPage />} />
+        <Route path="profile" element={
           <PrivateRouterElement>
             <ProfilePage />
           </PrivateRouterElement>
-        ),
-      },
-      {
-        path: "exam-details/:examId",
-        element: (
+        } />
+        <Route path="exam-details/:examId" element={
           <PrivateRouterElement>
             <ExamDetailPage />
           </PrivateRouterElement>
-        ),
-      },
-      {
-        path: "exam-history/:examHistoryId",
-        element: (
+        } />
+        <Route path="exam-history/:examHistoryId" element={
           <PrivateRouterElement>
             <ExamHistoryPage />
           </PrivateRouterElement>
-        ),
-      },
-    ],
-  },
-  {
-    path: "/admin",
-    element: (
-      <PrivateRouterElement>
-        <AdminComponent />
-      </PrivateRouterElement>
-    ),
-    children: [
-      {
-        path: "account",
-        element: <AccountCrud />,
-      },
-      {
-        path: "exam",
-        element: <ExamCrud />,
-        children: [
-          {
-            path: ":id",
-            element: <QuizList />,
-          },
-        ],
-      },
-      {
-        path: "exam-view/:id",
-        element: <QuizList />,
-      },
-    ],
-  },
-]);
+        } />
+      </Route>
+      <Route path="/admin" element={
+        <PrivateRouterElement>
+          <AdminComponent />
+        </PrivateRouterElement>
+      }>
+        <Route path="account" element={<AccountCrud />} />
+        <Route path="exam" element={<ExamCrud />}>
+          <Route path=":id" element={<QuizList />} />
+        </Route>
+        <Route path="exam-view/:id" element={<QuizList />} />
+      </Route>
+    </>
+  )
+);
+
 export default router;

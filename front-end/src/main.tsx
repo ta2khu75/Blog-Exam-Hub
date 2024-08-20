@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { RouterProvider } from "react-router-dom";
+import { RouterProvider} from "react-router-dom";
 import router from "./router.tsx";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
@@ -11,7 +11,7 @@ import { persistor, store } from "./redux/store.ts";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      {/* <React.StrictMode> */}
+      <React.StrictMode>
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -24,8 +24,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           pauseOnHover
           theme="light"
         />
-        <RouterProvider router={router} />
-      {/* </React.StrictMode> */}
+        <RouterProvider router={router}/>
+      </React.StrictMode>
     </PersistGate>
   </Provider>
 );

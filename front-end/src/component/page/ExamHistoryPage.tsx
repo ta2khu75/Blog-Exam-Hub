@@ -1,48 +1,23 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import AnswerListElement from "../element/AnswerListElement";
-import RandomUtil from "../../util/RandomUtil";
 import ExamHistoryService from "../../service/ExamHistoryService";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { setExam } from "../../redux/slice/examSlice";
-import { setQuizExam } from "../../redux/slice/quizExamSlice";
-import AnswerUserRequest from "../../request/AnswerUserRequest";
-import ExamHistoryDetailsResponse from "../../response/details/ExamHistoryDetailResponse";
+import UserAnswerResponse from "../../response/UserAnswerResponse";
+import QuizDetailsResponse from "../../response/details/QuizDetailsResponse";
+import AnswerHistoryListElement from "../element/AnswerHistoryListElement";
 const ExamHistoryPage = () => {
   const { examHistoryId } = useParams();
   const [showAnswer, setShowAnswer] = useState(false);
-  const quizResponseList = useAppSelector(
-    (state) => state.exams[Number(examHistoryId)] ?? []
-  );
-  const [answerListUser, setAnswerListUser]=useState<AnswerUserRequest[]>([])
-  const [examHistoryResponse, setExamHistoryResponse] =
-    useState<ExamHistoryDetailsResponse>();
-  // const answerListUser = useAppSelector(
-  //   (state) => state.userExams[Number(examHistoryId)]
-  // );
-  const quizExam = useAppSelector(
-    (state) => state.quizExam?.[Number(examHistoryId)] ?? 0
-  );
-  const dispatch = useAppDispatch();
+  const [quizExam, setQuizExam] = useState(0);
+  const [userAnswerResponses, setUserAnswerResponses] = useState<UserAnswerResponse[]>([])
+  const [quizResponses, setQuizResponses] = useState<QuizDetailsResponse[]>([])
   useEffect(() => {
     fetchExamHistoryResponse();
   }, []);
   const fetchExamHistoryResponse = () => {
     ExamHistoryService.readDetailsById(Number(examHistoryId)).then((d) => {
       if (d.success) {
-        setExamHistoryResponse(d.data);
-        const quizzes = d.data.exam.quizzes.map((quiz) => {
-          quiz.answers = RandomUtil.shuffleArray(quiz.answers);
-          return quiz;
-        });
-        if (quizResponseList.length == 0) {
-          dispatch(
-            setExam({
-              id: Number(examHistoryId),
-              value: RandomUtil.shuffleArray(quizzes),
-            })
-          );
-        }
+        setUserAnswerResponses(d.data.user_answers);
+        setQuizResponses(d.data.exam.quizzes);
       }
     });
   };
@@ -58,51 +33,41 @@ const ExamHistoryPage = () => {
             <div className="col-4"></div>
             <div>
               <h4>
-                {quizExam + 1}. {quizResponseList?.[quizExam]?.question}
+                {quizExam + 1}.
+                {quizResponses?.[quizExam]?.question}
+                {quizResponses?.[quizExam]?.file_path && <img className="d-block mx-auto" width={"400px"} height={"300px"} alt={`image-quiz-${quizExam}`} src={quizResponses?.[quizExam]?.file_path} />}
               </h4>
+
               <div className="row">
-                <AnswerListElement
-                  examId={Number(examHistoryId)}
+                <AnswerHistoryListElement
+                  value={userAnswerResponses.filter((quiz) => quiz.quiz.id === quizResponses?.[quizExam]?.id
+                  )?.flatMap(quiz => { return quiz.answers.map((answer) => answer.id) }) ?? []}
                   showAnswer={showAnswer}
                   answerResponseList={
-                    quizResponseList?.[quizExam]?.answers ?? []
+                    quizResponses?.[quizExam]?.answers ?? []
                   }
-                  quizResponse={quizResponseList?.[quizExam] ?? {}}
+                  quizResponse={quizResponses?.[quizExam] ?? {}}
                 />
               </div>
             </div>
             <div className="my-4 d-flex justify-content-around">
               <button
                 disabled={quizExam === 0}
-                onClick={() =>
-                  dispatch(
-                    setQuizExam({
-                      id: Number(examHistoryId),
-                      value: quizExam - 1,
-                    })
-                  )
+                onClick={() => setQuizExam(q => q - 1)
                 }
-                className={`btn ${
-                  quizExam === 0 ? "btn-secondary" : "btn-info"
-                }`}
+                className={`btn ${quizExam === 0 ? "btn-secondary" : "btn-info"
+                  }`}
               >
                 Back
               </button>
               <button
-                disabled={quizExam === quizResponseList.length - 1}
-                onClick={() =>
-                  dispatch(
-                    setQuizExam({
-                      id: Number(examHistoryId),
-                      value: quizExam + 1,
-                    })
-                  )
+                disabled={quizExam === quizResponses.length - 1}
+                onClick={() => setQuizExam(q => q + 1)
                 }
-                className={`btn ${
-                  quizExam === quizResponseList.length - 1
-                    ? "btn-secondary"
-                    : "btn-info"
-                }`}
+                className={`btn ${quizExam === quizResponses.length - 1
+                  ? "btn-secondary"
+                  : "btn-info"
+                  }`}
               >
                 Next
               </button>
@@ -116,22 +81,17 @@ const ExamHistoryPage = () => {
           </div>
           <div className="col-lg-4 border border-1 rounded-4 p-0 mx-2 ">
             <div className="px-5">
-              {quizResponseList?.map((quiz, index) => (
+              {quizResponses?.map((quiz, index) => (
                 <button
-                  onClick={() =>
-                    dispatch(
-                      setQuizExam({ id: Number(examHistoryId), value: index })
-                    )
-                  }
+                  onClick={() => setQuizExam(index)}
                   className={`
-                  ${
-                    answerListUser?.[quiz.id] !== undefined &&
-                    quizExam !== index
+                  ${userAnswerResponses.filter((answerQuiz) => answerQuiz.quiz.id === quiz.id).length === 1 &&
+                      quizExam !== index
                       ? "btn-success"
                       : ""
-                  }
-                  ${quizExam === index ? "btn-primary" : ""} 
-                  d-inline-block btn 
+                    }
+                  ${quizExam === index ? "btn-primary" : ""}
+                  d-inline-block btn
                   border m-2 border-2 rounded-circle`}
                   key={quiz.id}
                   style={{ width: "45px", height: "45px" }}
@@ -142,7 +102,7 @@ const ExamHistoryPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 };

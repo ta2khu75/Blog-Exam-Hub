@@ -42,12 +42,13 @@ public class ExamHistoryServiceImpl implements ExamHistoryService {
 	ExamRepository examRepository;
 	AccountRepository accountRepository;
 	ProfessionService professionService;
+
 	@Override
 	public ExamHistoryResponse readByExamId(Long id) {
 		String email = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new NotFoundException("Could not find email"));
-		Optional<ExamHistory> history = repository.findByAccountEmailAndExamIdAndEndTimeAfterAndLastModifiedDateIsNull(email, id,
-				LocalDateTime.now());
+		Optional<ExamHistory> history = repository
+				.findByAccountEmailAndExamIdAndEndTimeAfterAndLastModifiedDateIsNull(email, id, LocalDateTime.now());
 		if (history.isPresent()) {
 			return mapper.toResponse(history.get());
 		}
@@ -62,23 +63,25 @@ public class ExamHistoryServiceImpl implements ExamHistoryService {
 
 	@Override
 	public ExamHistoryDetailsResponse scoreByExamId(Long id, Long examId, UserAnswerRequest[] answerUserRequest) {
-		ExamHistory examHistory = repository.findById(id).orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id));
-		if(answerUserRequest.length==0) {
-			examHistory.setLastModifiedDate(LocalDateTime.now());
-		}else {
-			examHistory.setPoint(professionService.score(examHistory, examId, answerUserRequest));
+		ExamHistory examHistory = repository.findById(id)
+				.orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id));
+		examHistory.setLastModifiedDate(LocalDateTime.now());
+		if (answerUserRequest.length != 0) {
+			professionService.score(examHistory, examId, answerUserRequest);
 		}
 		return mapper.toDetailsResponse(repository.save(examHistory));
 	}
 
 	@Override
 	public PageResponse<ExamHistoryResponse> readPage(Pageable pageable) {
-		String email=SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new NotFoundException("Could not find email"));
-		return mapper.toPageResponse(repository.findByAccountEmailAndLastModifiedDateIsNotNull(email,pageable));
+		String email = SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new NotFoundException("Could not find email"));
+		return mapper.toPageResponse(repository.findByAccountEmailAndLastModifiedDateIsNotNull(email, pageable));
 	}
 
 	@Override
 	public ExamHistoryDetailsResponse read(Long id) {
-		return mapper.toDetailsResponse(repository.findById(id).orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id)));
+		return mapper.toDetailsResponse(repository.findById(id)
+				.orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id)));
 	}
 }

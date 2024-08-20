@@ -34,8 +34,8 @@ public class ProfessionServiceImpl implements ProfessionService {
 	UserAnswerRepository userAnswerRepository;
 
 	@Override
-	public Double score(ExamHistory examHistory, Long examId, UserAnswerRequest[] answerUserRequests) {
-		double score = 0;
+	public void score(ExamHistory examHistory, Long examId, UserAnswerRequest[] answerUserRequests) {
+		float score = 0;
 
 		// Truy xuất tất cả câu hỏi và đáp án một lần
 		List<Quiz> quizzes = quizRepository.findByExamId(examId);
@@ -71,8 +71,10 @@ public class ProfessionServiceImpl implements ProfessionService {
 			}
 		}
 
-		double num = score / quizzes.size();
-		return Math.round(num * 100.0) / 100.0;//	score * 10 / quizzes.size();
+		examHistory.setCorrectCount((int) score);
+		// Tính điểm cho một lần
+		float num = score / quizzes.size();
+		examHistory.setPoint((float) (Math.round(num * 100) / 10));
 	}
 
 	private void saveUserAnswer(ExamHistory examHistory, Quiz quiz, List<Answer> answers, Set<Long> answerIds) {
@@ -85,9 +87,9 @@ public class ProfessionServiceImpl implements ProfessionService {
 	}
 
 	private double caculateScoreQuizSingleChoice(List<Answer> answers, Set<Long> answerIds) {
-		Long answerId= answerIds.iterator().next();
-		return answers.stream().filter(answer -> answer.getId().equals(answerId) && answer.getCorrect())
-				.findFirst().map(answer -> 1.0).orElse(0.0);
+		Long answerId = answerIds.iterator().next();
+		return answers.stream().filter(answer -> answer.getId().equals(answerId) && answer.getCorrect()).findFirst()
+				.map(answer -> 1.0).orElse(0.0);
 	}
 
 	private double caculateScoreQuizMultiChoice(List<Answer> answers, Set<Long> answerIds) {

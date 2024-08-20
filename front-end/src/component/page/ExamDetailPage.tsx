@@ -18,7 +18,6 @@ const ExamDetailPage = () => {
   >;
   const { examId } = useParams();
   const [openResult, setOpenResult] = useState(false);
-  const [showAnswer, setShowAnswer]=useState(false);
   const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState({
     minutes: 0,
@@ -91,9 +90,9 @@ const ExamDetailPage = () => {
       answerListUser === undefined
         ? []
         : Object.entries(answerListUser).map(([quiz_id, answer_ids]) => ({
-            quiz_id: Number(quiz_id),
-            answer_ids,
-          }));
+          quiz_id: Number(quiz_id),
+          answer_ids,
+        }));
     if (examHistoryResponse?.id && examId)
       ExamHistoryService.readById(
         examHistoryResponse?.id,
@@ -110,11 +109,11 @@ const ExamDetailPage = () => {
         }
       });
   };
-  const handleFinishClick = () => {
+  const handleCancel = () => {
     dispatch(deleteUserExam(Number(examId)));
     dispatch(deleteQuizExam(Number(examId)));
     dispatch(deleteExam(Number(examId)));
-    navigate("/");
+    navigate("/profile");
     toast.success("Successfully finished the exam");
   };
   return (
@@ -122,17 +121,17 @@ const ExamDetailPage = () => {
       <div style={{ height: "100px" }}></div>
       <div className="container">
         <div className="row">
-          <div className="col-lg-7 p-4 mx-4 border border-4 rounded-4" style={{height: "80vh"}}>
+          <div className="col-lg-7 p-4 mx-4 border border-4 rounded-4" style={{ height: "80vh" }}>
             <div className="col-4"></div>
             <div>
               <h4>
                 {quizExam + 1}. {quizResponseList?.[quizExam]?.question}
               </h4>
+              {quizResponseList?.[quizExam]?.file_path && <img className="d-block mx-auto" width={"400px"} height={"300px"} alt={`image-quiz-${quizExam}`} src={quizResponseList?.[quizExam]?.file_path} />}
               <div className="row">
                 <AnswerListElement
                   handleAnswerClick={handleAnswerClick}
                   examId={Number(examId)}
-                  showAnswer={showAnswer}
                   answerResponseList={
                     quizResponseList?.[quizExam]?.answers ?? []
                   }
@@ -148,9 +147,8 @@ const ExamDetailPage = () => {
                     setQuizExam({ id: Number(examId), value: quizExam - 1 })
                   )
                 }
-                className={`btn ${
-                  quizExam === 0 ? "btn-secondary" : "btn-info"
-                }`}
+                className={`btn ${quizExam === 0 ? "btn-secondary" : "btn-info"
+                  }`}
               >
                 Back
               </button>
@@ -161,11 +159,10 @@ const ExamDetailPage = () => {
                     setQuizExam({ id: Number(examId), value: quizExam + 1 })
                   )
                 }
-                className={`btn ${
-                  quizExam === quizResponseList.length - 1
+                className={`btn ${quizExam === quizResponseList.length - 1
                     ? "btn-secondary"
                     : "btn-info"
-                }`}
+                  }`}
               >
                 Next
               </button>
@@ -173,11 +170,10 @@ const ExamDetailPage = () => {
           </div>
           <div className="col-lg-4 border border-1 rounded-4 p-0 mx-2 ">
             <div className="d-flex justify-content-between align-items-center bg-primary rounded-2">
-              <button className="btn btn-primary" onClick={()=>handleSubmitAnswer()}>Submit</button>
+              <button className="btn btn-primary" onClick={() => handleSubmitAnswer()}>Submit</button>
               <div className="text-light">
                 {timeLeft.minutes} phút {timeLeft.seconds} giây
               </div>
-              <button className="btn btn-primary" onClick={()=>handleFinishClick()}>Finish</button>
             </div>
             <div className="px-5">
               {quizResponseList?.map((quiz, index) => (
@@ -186,17 +182,16 @@ const ExamDetailPage = () => {
                     dispatch(setQuizExam({ id: Number(examId), value: index }))
                   }
                   className={`
-                  ${
-                    answerListUser?.[quiz.id] !== undefined &&
-                    quizExam !== index
+                  ${answerListUser?.[quiz.id] !== undefined &&
+                      quizExam !== index
                       ? "btn-success"
                       : ""
-                  }
-                  ${quizExam === index ? "btn-primary" : ""} 
-                  d-inline-block btn 
+                    }
+                  ${quizExam === index ? "btn-primary" : ""}
+                  d-inline-block btn
                   border m-2 border-2 rounded-circle`}
                   key={quiz.id}
-                  style={{width:"45px", height:"45px"}}
+                  style={{ width: "45px", height: "45px" }}
                 >
                   {index + 1}
                 </button>
@@ -205,21 +200,15 @@ const ExamDetailPage = () => {
           </div>
         </div>
       </div>
-      <ModalElement open={openResult} setOpen={setOpenResult}>
-        <>
+      <ModalElement open={openResult} handleCancel={handleCancel} setOpen={setOpenResult}>
         <ul>
           <li>
             Tổng điểm: <span className="">{examHistoryResponse?.point}</span>
           </li>
           <li>
-            Đúng sai: <span className="">0/{quizResponseList.length}</span>
-          </li> 
+            Đúng sai: <span className="">{examHistoryResponse?.correct_count}/{quizResponseList.length}</span>
+          </li>
         </ul>
-        <div className="d-flex justify-content-between">
-        <button className="btn btn-primary" onClick={()=>handleFinishClick()}>Finish</button>
-        <button className="btn btn-primary" onClick={()=>{setShowAnswer(true);setOpenResult(false)}}>Show answer</button>
-        </div>
-        </>
       </ModalElement>
     </>
   );

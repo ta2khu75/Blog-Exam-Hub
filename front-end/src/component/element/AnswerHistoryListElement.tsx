@@ -1,24 +1,20 @@
 import { Checkbox, Radio, Space } from "antd";
 import QuizResponse from "../../response/QuizResponse";
 import AnswerResponse from "../../response/AnswerResponse";
-import { useAppSelector } from "../../redux/hooks";
 type Props = {
+  value:number[]
   showAnswer: boolean;
-  examId: number;
   quizResponse: QuizResponse;
   answerResponseList: AnswerResponse[];
   handleAnswerClick?: (quizResponse: QuizResponse, answers: number[]) => void;
 };
-const AnswerListElement = ({
-  examId,
+const AnswerHistoryListElement = ({
+  value,
   showAnswer,
   quizResponse,
   answerResponseList,
   handleAnswerClick,
 }: Props) => {
-  const value = useAppSelector(
-    (state) => state.userExams?.[examId]?.[quizResponse.id]
-  );
   return (
     <>
       {quizResponse.quiz_type == "SINGLE_CHOICE" && (
@@ -83,4 +79,4 @@ const AnswerListElement = ({
   );
 };
 
-export default AnswerListElement;
+export default AnswerHistoryListElement;

@@ -1,14 +1,14 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom"
 import ExamResponse from "../../response/ExamResponse";
 import ExamService from "../../service/ExamService";
 
 const ExamAboutPage = () => {
-    const {id}=useParams();
-    const [examResponse, setExamResponse]=useState<ExamResponse>();
-    useEffect(() =>{
+    const { id } = useParams();
+    const [examResponse, setExamResponse] = useState<ExamResponse>();
+    useEffect(() => {
         fetchExam();
-    },[])
+    }, [])
     const fetchExam = () => {
         if (id && !isNaN(Number(id))) {
             ExamService.readById(Number(id)).then((d) => {
@@ -28,9 +28,9 @@ const ExamAboutPage = () => {
                                     <li className="breadcrumb-item active" aria-current="page">{examResponse?.title}</li>
                                 </ol>
                             </nav>
-                            <h2 className="text-white">Introduction to <br/>{examResponse?.title}</h2>
+                            <h2 className="text-white">Introduction to <br />{examResponse?.title}</h2>
                             <div className="d-flex align-items-center mt-5">
-                                <Link to={"/exam-details/"+examResponse?.id} className="btn custom-btn custom-border-btn smoothscroll me-4">Test</Link>
+                                <Link to={"/exam-details/" + examResponse?.id} className="btn custom-btn custom-border-btn smoothscroll me-4">Test</Link>
                                 <a href="#top" className="custom-icon bi-bookmark smoothscroll" />
                             </div>
                         </div>

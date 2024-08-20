@@ -3,7 +3,7 @@ import QuizResponse from "../../response/QuizResponse";
 import AnswerResponse from "../../response/AnswerResponse";
 import { useAppSelector } from "../../redux/hooks";
 type Props = {
-  showAnswer: boolean;
+  showAnswer?: boolean;
   examId: number;
   quizResponse: QuizResponse;
   answerResponseList: AnswerResponse[];

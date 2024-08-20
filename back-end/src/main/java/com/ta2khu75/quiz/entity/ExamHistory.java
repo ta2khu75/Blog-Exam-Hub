@@ -23,7 +23,8 @@ public class ExamHistory {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @Column(nullable = false)
-    double point;
+    float point;
+    int correctCount;
     @ManyToOne
     Account account;
     @ManyToOne

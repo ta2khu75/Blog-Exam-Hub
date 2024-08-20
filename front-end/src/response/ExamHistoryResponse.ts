@@ -4,6 +4,7 @@ import ExamDetailsResponse from "./details/ExamDetailsResponse";
 export default interface ExamHistoryResponse{
     id: number;
     point: number;
+    correct_count:number;
     exam: ExamDetailsResponse;
     account: AccountResponse;
     end_time: Date;

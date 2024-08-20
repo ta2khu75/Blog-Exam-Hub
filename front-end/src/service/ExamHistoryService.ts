@@ -1,5 +1,6 @@
 import AnswerUserRequest from "../request/AnswerUserRequest";
 import ApiResponse from "../response/ApiResponse";
+import ExamHistoryDetailsResponse from "../response/details/ExamHistoryDetailResponse";
 import ExamHistoryResponse from "../response/ExamHistoryResponse";
 import PageResponse from "../response/PageResponse";
 import instance from "../util/apiInstance";
@@ -19,7 +20,7 @@ export default class ExamHistoryService {
   }
   static readDetailsById(
     id: number
-  ): Promise<ApiResponse<ExamHistoryResponse>> {
+  ): Promise<ApiResponse<ExamHistoryDetailsResponse>> {
     return instance.get(`${basePath}/${id}`);
   }
   static readPage(): Promise<ApiResponse<PageResponse<ExamHistoryResponse>>> {

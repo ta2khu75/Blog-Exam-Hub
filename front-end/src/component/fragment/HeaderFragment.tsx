@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import AuthService from "../../service/AuthService";
 import { resetAccount } from "../../redux/slice/accountSlice";
@@ -6,8 +6,16 @@ import { toast } from "react-toastify";
 import { resetExam } from "../../redux/slice/examSlice";
 import { resetUserExam } from "../../redux/slice/useExamSlice";
 import { resetQuizExam } from "../../redux/slice/quizExamSlice";
+import { useEffect } from "react";
 
 const HeaderFragment = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    const element = document.getElementById('top');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [pathname]);
   const authenticated = useAppSelector((state) => state.account.authenticated);
   const dispatch = useAppDispatch();
   const handleLogoutClick = () => {
@@ -23,7 +31,7 @@ const HeaderFragment = () => {
     });
   };
   return (
-    <nav className="navbar navbar-expand-lg" style={{ background: "#4f98a4" }}>
+    <nav className="navbar navbar-expand-lg" id="top" style={{ background: "#4f98a4" }}>
       <div className="container">
         <Link className="navbar-brand" to="/">
           <i className="bi-back" />

@@ -4,16 +4,17 @@ type Props = {
     title?: string;
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    handleCancel?: ()=>void;
     children?: JSX.Element
     width?:number
 }
-const ModalElement = ({ title, open, setOpen,  children, width }: Props) => {
+const ModalElement = ({ title, open, setOpen, handleCancel,  children, width }: Props) => {
     return (
         <Modal title={title} open={open}
         centered
         width={width}
             footer={[]}
-        onCancel={()=>setOpen(false)}
+        onCancel={()=>handleCancel?handleCancel():setOpen(false)}
         >
             <div className="m-5">
                 {children}
