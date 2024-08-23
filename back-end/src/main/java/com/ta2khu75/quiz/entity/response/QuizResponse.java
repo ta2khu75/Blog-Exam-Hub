@@ -1,6 +1,20 @@
 package com.ta2khu75.quiz.entity.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ta2khu75.quiz.entity.request.QuizRequest;
 
-public record QuizResponse(Long id, String question, @JsonProperty("file_path") String filePath, @JsonProperty("quiz_type") String quizType,@JsonProperty("exam_id") Long examId) {
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@FieldDefaults(level = AccessLevel.PROTECTED)
+public class QuizResponse extends QuizRequest{
+	Long id;
+	String filePath;
 }

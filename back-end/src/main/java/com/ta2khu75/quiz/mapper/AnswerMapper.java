@@ -14,10 +14,10 @@ import com.ta2khu75.quiz.entity.response.AnswerResponse;
 public interface AnswerMapper {
     @Mapping(source = "quiz", target = "quizId", qualifiedByName = "convertQuizToId")
     AnswerResponse toResponse(Answer answer);
-    @Mapping(target = "id", ignore = true)
+	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "quiz", ignore = true)
 	Answer toEntity(AnswerRequest request);
-    @Mapping(target = "id", ignore = true)
+	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "quiz", ignore = true)
 	void update(AnswerRequest request, @MappingTarget Answer answer);
     @Named("convertQuizToId")

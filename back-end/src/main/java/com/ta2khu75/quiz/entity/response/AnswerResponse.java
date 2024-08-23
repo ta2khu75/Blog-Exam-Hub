@@ -1,10 +1,19 @@
 package com.ta2khu75.quiz.entity.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ta2khu75.quiz.entity.request.AnswerRequest;
 
-//import ta2khu75.com.webquiz.entity.AnswerType;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
-public record AnswerResponse(Long id, @JsonProperty("answer") String answerString, boolean correct, @JsonProperty("quiz_id") Long quizId
-//  @JsonProperty("answer_type") AnswerType answerType
- ) {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class AnswerResponse extends AnswerRequest {
+	Long id;
 }

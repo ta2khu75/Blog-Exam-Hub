@@ -1,11 +1,17 @@
 package com.ta2khu75.quiz.entity.response.details;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ta2khu75.quiz.entity.response.AccountResponse;
+import com.ta2khu75.quiz.entity.response.ExamHistoryResponse;
 
-public record ExamHistoryDetailsResponse(Long id, float point, int correctCount, ExamDetailsResponse exam, AccountResponse account,
-		@JsonProperty("end_time") LocalDateTime endTime, @JsonProperty("created_date") LocalDateTime createdDate, @JsonProperty("last_modified_date") LocalDateTime lastModifiedDate, @JsonProperty("user_answers") List<UserAnswerResponse> userAnswers) {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class ExamHistoryDetailsResponse extends ExamHistoryResponse {
+	private List<UserAnswerResponse> userAnswers;
 }

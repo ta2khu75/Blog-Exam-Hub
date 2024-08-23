@@ -11,7 +11,7 @@ import { persistor, store } from "./redux/store.ts";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <React.StrictMode>
+      {/* <React.StrictMode> */}
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -25,7 +25,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           theme="light"
         />
         <RouterProvider router={router}/>
-      </React.StrictMode>
+      {/* </React.StrictMode> */}
     </PersistGate>
   </Provider>
 );

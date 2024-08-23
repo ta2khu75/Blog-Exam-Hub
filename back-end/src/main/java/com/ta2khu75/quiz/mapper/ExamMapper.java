@@ -1,17 +1,13 @@
 package com.ta2khu75.quiz.mapper;
 
-import java.util.List;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
 
 import com.ta2khu75.quiz.entity.Exam;
-import com.ta2khu75.quiz.entity.Quiz;
 import com.ta2khu75.quiz.entity.request.ExamRequest;
 import com.ta2khu75.quiz.entity.response.ExamResponse;
 import com.ta2khu75.quiz.entity.response.details.ExamDetailsResponse;
-import com.ta2khu75.quiz.entity.response.details.QuizDetaislResponse;
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")

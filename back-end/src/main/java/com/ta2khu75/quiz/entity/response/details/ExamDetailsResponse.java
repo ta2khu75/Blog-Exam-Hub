@@ -2,8 +2,17 @@ package com.ta2khu75.quiz.entity.response.details;
 
 import java.util.List;
 
-import com.ta2khu75.quiz.entity.response.QuizResponse;
+import com.ta2khu75.quiz.entity.response.ExamResponse;
 
-public record ExamDetailsResponse(Long id, String title, Integer time, String description, String imagePath, String examType, String examLevel, List<QuizDetaislResponse> quizzes) {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class ExamDetailsResponse extends ExamResponse {
+	private List<QuizDetaislResponse> quizzes;
 
 }

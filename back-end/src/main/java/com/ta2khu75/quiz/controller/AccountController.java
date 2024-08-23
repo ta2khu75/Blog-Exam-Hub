@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,7 @@ public class AccountController {
     AccountService service;
     @PostMapping
     public ResponseEntity<AccountResponse> create(@Valid @RequestBody AccountRequest request) {
-        return ResponseEntity.ok(service.create(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
     }
     @GetMapping
     public ResponseEntity<PageResponse<AccountResponse>> getMethodName(Pageable pageable) {

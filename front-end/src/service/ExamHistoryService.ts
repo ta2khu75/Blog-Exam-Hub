@@ -26,4 +26,5 @@ export default class ExamHistoryService {
   static readPage(): Promise<ApiResponse<PageResponse<ExamHistoryResponse>>> {
     return instance.get(`${basePath}`);
   }
+
 }

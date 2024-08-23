@@ -17,15 +17,20 @@ public class ApplicationConfig {
 	@Bean
 	CommandLineRunner init(AccountRepository accountRepository, PasswordEncoder passwordEncoder) {
 		return args -> {
-			if (accountRepository.count() == 0)
-				accountRepository.save(Account.builder().email("admin").password(passwordEncoder.encode("123"))
-						.role(Role.ADMIN).build());
+			if (accountRepository.count() == 0) {
+				Account account = new Account();
+				account.setEmail("admin");
+				account.setPassword(passwordEncoder.encode("123"));
+				account.setRole(Role.ADMIN);
+				accountRepository.save(account);
+			}
 //			else accountRepository.findAll().forEach(account -> {
 //				account.setPassword(passwordEncoder().encode(account.getPassword()));
 //				accountRepository.save(account);
 //			});
 		};
 	}
+
 	@Bean
 	CorsFilter corsFilter() {
 		CorsConfiguration configuration = new CorsConfiguration();

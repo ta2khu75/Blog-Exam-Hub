@@ -1,8 +1,6 @@
 package com.ta2khu75.quiz.service.impl;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -42,7 +40,7 @@ public class ProfessionServiceImpl implements ProfessionService {
 		Map<Long, Quiz> quizMap = quizzes.stream().collect(Collectors.toMap(Quiz::getId, q -> q));
 
 		// Lấy danh sách quizId từ các yêu cầu trả lời
-		Set<Long> quizIds = Arrays.stream(answerUserRequests).map(UserAnswerRequest::quizId)
+		Set<Long> quizIds = Arrays.stream(answerUserRequests).map(UserAnswerRequest::getQuizId)
 				.collect(Collectors.toSet());
 
 		// Truy xuất tất cả các đáp án cho các quizId
@@ -52,7 +50,7 @@ public class ProfessionServiceImpl implements ProfessionService {
 
 		// Tạo Map từ quizId đến AnswerUserRequest
 		Map<Long, UserAnswerRequest> answerUserRequestMap = Arrays.stream(answerUserRequests)
-				.collect(Collectors.toMap(UserAnswerRequest::quizId, ar -> ar));
+				.collect(Collectors.toMap(UserAnswerRequest::getQuizId, ar -> ar));
 
 		// Tính điểm cho từng quiz
 		for (Quiz quiz : quizzes) {
@@ -62,11 +60,11 @@ public class ProfessionServiceImpl implements ProfessionService {
 				if (quizAnswers == null) {
 					continue; // Nếu không có đáp án cho câu hỏi, bỏ qua
 				}
-				saveUserAnswer(examHistory, quiz, quizAnswers, answerUserRequest.answerIds());
+				saveUserAnswer(examHistory, quiz, quizAnswers, answerUserRequest.getAnswerIds());
 				if (quiz.getQuizType() == QuizType.SINGLE_CHOICE) {
-					score += caculateScoreQuizSingleChoice(quizAnswers, answerUserRequest.answerIds());
+					score += caculateScoreQuizSingleChoice(quizAnswers, answerUserRequest.getAnswerIds());
 				} else {
-					score += caculateScoreQuizMultiChoice(quizAnswers, answerUserRequest.answerIds());
+					score += caculateScoreQuizMultiChoice(quizAnswers, answerUserRequest.getAnswerIds());
 				}
 			}
 		}

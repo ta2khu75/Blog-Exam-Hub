@@ -1,4 +1,5 @@
 package com.ta2khu75.quiz.entity;
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -14,23 +15,27 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Exam {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    @Column(nullable = false)
-    String title;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	Long id;
+	@Column(nullable = false)
+	String title;
+	@Column(nullable = false)
 	Integer time;
-    String description;
-    @Column(nullable = false)
-    String imagePath;
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    ExamType examType;
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    ExamLevel examLevel;
-    @Column(nullable = false)
-    @OneToMany(mappedBy = "exam")
-    List<Quiz> quizzes;
-    @OneToMany(mappedBy = "exam")
-    List<ExamHistory> examHistories;
+	@Column(nullable = false)
+	String description;
+	@Column(nullable = false)
+	String imagePath;
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	ExamType examType;
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	ExamLevel examLevel;
+	@ManyToOne
+	Account account;
+	@OneToMany(mappedBy = "exam")
+	List<Quiz> quizzes;
+	@OneToMany(mappedBy = "exam")
+	List<ExamHistory> examHistories;
 }

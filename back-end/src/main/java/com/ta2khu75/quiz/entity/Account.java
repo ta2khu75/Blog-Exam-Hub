@@ -16,21 +16,23 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PROTECTED)
 public class Account implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
-	@Column(unique = true)
+	@Column(unique = true, nullable = false)
 	String email;
 	@Column(nullable = false)
-	String password;
-	String refreshToken;
+	private String password;
+	private String refreshToken;
 	@Enumerated(EnumType.STRING)
 	@Builder.Default
 	Role role = Role.USER;
 	@OneToMany(mappedBy = "account")
-	List<ExamHistory> examHistories;
+	private List<Exam> exams;
+	@OneToMany(mappedBy = "account")
+	private List<ExamHistory> examHistories;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

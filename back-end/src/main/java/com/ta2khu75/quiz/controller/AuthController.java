@@ -35,8 +35,8 @@ public class AuthController {
 	@PostMapping("login")
 	public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
 		AuthResponse response = service.login(request);
-		ResponseCookie cookie = createRefreshTokenCookie(response.refreshToken(), cookieExpiration);
-		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(response);
+		ResponseCookie cookie = createRefreshTokenCookie(response.getRefreshToken(), cookieExpiration);
+		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cookie.toString()).body(response);
 	}
 	@GetMapping("account")
 	public ResponseEntity<AccountResponse> getAccount(){
@@ -46,7 +46,7 @@ public class AuthController {
 	@GetMapping("refresh-token")
 	public ResponseEntity<AuthResponse> getRefreshToken(@CookieValue("refresh_token") String refreshToken) {
 		AuthResponse response = service.refreshToken(refreshToken);
-		ResponseCookie cookie =createRefreshTokenCookie(response.refreshToken(), cookieExpiration); 
+		ResponseCookie cookie =createRefreshTokenCookie(response.getRefreshToken(), cookieExpiration); 
 		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(response);
 	}
 	@GetMapping("logout")

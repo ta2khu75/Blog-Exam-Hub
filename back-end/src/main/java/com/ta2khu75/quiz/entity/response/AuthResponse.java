@@ -1,4 +1,15 @@
 package com.ta2khu75.quiz.entity.response;
 
-public record AuthResponse(AccountResponse account, String accessToken,	String refreshToken, boolean authenticated) {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AuthResponse {
+	AccountResponse account;
+	String accessToken;
+	String refreshToken;
+	boolean authenticated;
 }

@@ -3,6 +3,7 @@ package com.ta2khu75.quiz.service.impl;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +19,7 @@ import com.ta2khu75.quiz.mapper.AccountMapper;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.service.AccountService;
 import com.ta2khu75.quiz.util.SecurityUtil;
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -27,7 +29,8 @@ public class AccountServiceImpl implements AccountService {
     PasswordEncoder passwordEncoder;
     @Override
     public AccountResponse create(AccountRequest request) {
-        if(request.password().equals(request.confirmPassword())){
+    	log.info("create account: {}",request);
+        if(request.getPassword().equals(request.getConfirmPassword())){
                 Account account =mapper.toEntity(request);
                 account.setEmail(account.getEmail().toLowerCase());
                 account.setPassword(passwordEncoder.encode(account.getPassword()));
@@ -38,7 +41,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountResponse update(Long id, AccountRequest request) {
-        if(request.password().equals(request.confirmPassword())){
+        if(request.getPassword().equals(request.getConfirmPassword())){
             Account account =repository.findById(id).orElseThrow(()-> new NotFoundException("Could not found account with id: "+id));
             mapper.update(request,account);
             return mapper.toResponse(repository.save(account));

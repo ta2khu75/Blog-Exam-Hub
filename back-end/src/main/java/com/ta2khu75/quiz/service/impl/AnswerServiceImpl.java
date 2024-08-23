@@ -28,7 +28,7 @@ public class AnswerServiceImpl implements AnswerService{
     AnswerMapper mapper;
     @Override
     public AnswerResponse create(AnswerRequest request) {
-        Quiz quiz=findQuizById(request.quizId());
+        Quiz quiz=findQuizById(request.getQuizId());
         Answer answer=mapper.toEntity(request);
         answer.setQuiz(quiz);
         return this.save(answer);
@@ -46,8 +46,8 @@ public class AnswerServiceImpl implements AnswerService{
     public AnswerResponse update(Long id, AnswerRequest request) {
         Answer answer=findById(id);
         mapper.update(request, answer);
-        if(!answer.getQuiz().getId().equals(request.quizId())){
-            Quiz quiz=findQuizById(request.quizId());
+        if(!answer.getQuiz().getId().equals(request.getQuizId())){
+            Quiz quiz=findQuizById(request.getQuizId());
             answer.setQuiz(quiz);
         }
         return save(answer);

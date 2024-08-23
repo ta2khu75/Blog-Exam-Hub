@@ -20,23 +20,23 @@ import lombok.NoArgsConstructor;
 @Builder
 @EntityListeners(AuditingEntityListener.class)
 public class ExamHistory {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    @Column(nullable = false)
-    float point;
-    int correctCount;
-    @ManyToOne
-    Account account;
-    @ManyToOne
-    Exam exam;
-    @OneToMany(mappedBy = "examHistory")
-    List<UserAnswer> userAnswers;
-    @Column(nullable = false)
-    LocalDateTime endTime;
-    @CreatedDate
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	Long id;
+	Float point;
+	Integer correctCount;
+	@ManyToOne
+	Account account;
+	@ManyToOne
+	Exam exam;
+	@OneToMany(mappedBy = "examHistory")
+	List<UserAnswer> userAnswers;
+	@Column(nullable = false)
+	LocalDateTime endTime;
+	@CreatedDate
 	@Column(nullable = false, updatable = false)
 	LocalDateTime createdDate;
-    @LastModifiedDate
+	@LastModifiedDate
 	@Column(insertable = false)
-    LocalDateTime lastModifiedDate;
+	LocalDateTime lastModifiedDate;
 }

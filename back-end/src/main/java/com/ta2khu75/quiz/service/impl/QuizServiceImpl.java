@@ -45,7 +45,7 @@ public class QuizServiceImpl implements QuizSerivce{
     }
     @Override
     public QuizResponse create(@Valid QuizRequest request, MultipartFile file) throws IOException {
-        Exam exam= findExamById(request.examId());
+        Exam exam= findExamById(request.getExamId());
         Quiz quiz= mapper.toEntity(request);
 		saveFile(quiz, file);
         quiz.setExam(exam);
@@ -63,8 +63,8 @@ public class QuizServiceImpl implements QuizSerivce{
        Quiz quiz=findById(id);
        mapper.update(request, quiz);
 	   saveFile(quiz, file);
-       if(!quiz.getExam().getId().equals(request.examId())){
-        Exam exam= findExamById(request.examId());
+       if(!quiz.getExam().getId().equals(request.getExamId())){
+        Exam exam= findExamById(request.getExamId());
         quiz.setExam(exam);
        }
        return mapper.toResponse(repository.save(quiz));

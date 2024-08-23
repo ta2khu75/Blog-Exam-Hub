@@ -99,8 +99,6 @@ const ExamDetailPage = () => {
         Number(examId),
         answerUser
       ).then((d) => {
-        console.log(d.data);
-
         if (d.success) {
           if (stopTimerRef.current) stopTimerRef.current();
           setExamHistoryResponse(d.data);
