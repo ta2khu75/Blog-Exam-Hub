@@ -29,15 +29,14 @@ public class SecurityConfig {
 	@Value("${app.api-prefix}")
 	private String apiPrefix;
 	private final String[] PUBLIC_POST_ENDPOINT = { "/account", "/auth/login" };
-	private final String[] PUBLIC_GET_ENDPOINT = { "/auth/refresh-token", "/auth/logout", "/exam", "/exam/*", "/brand", "/brand/image/*", "/product",
-			"/product/*", "/product/image/*" };
+	private final String[] PUBLIC_GET_ENDPOINT = { "/auth/refresh-token", "/account/verify","/actuator/mappings", "/actuator/custommappings", "/auth/logout", "/exam", "/exam/*" };
 	private final AuthenticationEntryPoint authenticationEntryPoint;
+
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-
-	//config get auth on jwt
+	// config get auth on jwt
 	@Bean
 	JwtAuthenticationConverter jwtAuthenticationConverter() {
 		JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
@@ -46,7 +45,6 @@ public class SecurityConfig {
 		jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
 		return jwtAuthenticationConverter;
 
-		
 //		JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 //		jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
 //		jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("auth");
@@ -58,19 +56,14 @@ public class SecurityConfig {
 	@Bean
 	SecurityFilterChain securityFilter(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable()).cors(Customizer.withDefaults())
-				.sessionManagement(session -> session
-						.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(
-						authz -> authz
-								.requestMatchers(HttpMethod.POST,
-										Arrays.stream(PUBLIC_POST_ENDPOINT).map(t -> apiPrefix + t)
-												.toArray(String[]::new))
-								.permitAll().requestMatchers("/").permitAll()
-								.requestMatchers(HttpMethod.GET,
-										Arrays.stream(PUBLIC_GET_ENDPOINT).map(t -> apiPrefix + t)
-												.toArray(String[]::new))
-								.permitAll().anyRequest().authenticated())
-				.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()).authenticationEntryPoint(authenticationEntryPoint))///.authenticationEntryPoint(authenticationEntryPoint))
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authorizeHttpRequests(authz -> authz
+						.requestMatchers(HttpMethod.POST, this.getPrefixedEndpoints(PUBLIC_POST_ENDPOINT)).permitAll()
+						.requestMatchers(HttpMethod.GET, this.getPrefixedEndpoints(PUBLIC_GET_ENDPOINT)).permitAll()
+						.requestMatchers("/").permitAll()
+						.anyRequest().authenticated())
+				.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())
+						.authenticationEntryPoint(authenticationEntryPoint))/// .authenticationEntryPoint(authenticationEntryPoint))
 //				.exceptionHandling(exception -> exception.authenticationEntryPoint(null).accessDeniedHandler(null))
 				.formLogin(login -> login.disable());
 		return http.build();
@@ -83,4 +76,9 @@ public class SecurityConfig {
 					.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 		};
 	}
+
+	private String[] getPrefixedEndpoints(String[] endpoints) {
+		return Arrays.stream(endpoints).map(endpoint -> apiPrefix + endpoint).toArray(String[]::new);
+	}
+
 }

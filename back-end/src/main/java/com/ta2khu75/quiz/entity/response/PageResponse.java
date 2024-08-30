@@ -2,13 +2,12 @@ package com.ta2khu75.quiz.entity.response;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class PageResponse<T> {
 	int totalElements;
 	int totalPages;

@@ -7,13 +7,16 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+
 @Data
 @FieldDefaults(level = AccessLevel.PROTECTED)
 public class QuizRequest {
-	@NotBlank
+	@NotBlank(message = "Question must not be blank")
 	String question;
-	@NotNull
+
+	@NotNull(message = "Quiz type must not be null")
 	QuizType quizType;
-	@NotNull
+
+	@NotNull(message = "Exam ID must not be null")
 	Long examId;
 }

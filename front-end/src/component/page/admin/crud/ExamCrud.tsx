@@ -2,8 +2,8 @@ import { Button, Form, FormProps, Input, InputNumber, Select } from "antd";
 import ExamService from "../../../../service/ExamService";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import PageResponse from "../../../../response/PageResponse";
-import ExamResponse from "../../../../response/ExamResponse";
+import PageResponse from "../../../../model/response/PageResponse";
+import ExamResponse from "../../../../model/response/ExamResponse";
 import { useNavigate } from "react-router-dom";
 import TextArea from "antd/es/input/TextArea";
 import ExamCartElement from "../../../element/ExamCartElement";
@@ -115,7 +115,7 @@ const ExamCrud = () => {
         ]} >
           <Input />
         </Form.Item>
-        <Form.Item<ExamRequest> label="Time" name={"time"} 
+        <Form.Item<ExamRequest> label="Time" name={"time"}
         rules={[
           { required: true, message: "please input time" }
         ]} >
@@ -138,7 +138,7 @@ const ExamCrud = () => {
         </Form.Item>
         {errorImage && <p className="text-danger">Please upload image</p>}
         <input onChange={(e) => handleUploadChange(e)} ref={fileInputRef} type="file" /><br />
-        { imageUrl && 
+        { imageUrl &&
         <div className="d-flex justify-content-center">
           <img src={imageUrl} alt="" width={"300px"} height={"200px"} />
         </div>

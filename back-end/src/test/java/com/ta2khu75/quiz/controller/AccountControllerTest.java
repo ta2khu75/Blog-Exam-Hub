@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ta2khu75.quiz.entity.Role;
 import com.ta2khu75.quiz.entity.request.AccountRequest;
 import com.ta2khu75.quiz.entity.response.AccountResponse;
 import com.ta2khu75.quiz.service.AccountService;
@@ -37,7 +38,7 @@ public class AccountControllerTest {
 		accountRequest.setEmail("kien@gmail.com");
 		accountRequest.setPassword("123");
 		accountRequest.setConfirmPassword("123");
-		accountResponse = new AccountResponse(3L, "kien@gmail.com", "USER");
+		accountResponse = AccountResponse.builder().id(3L).email("kien@gmail.com").role(Role.USER).build(); // new AccountResponse(3L, "kien@gmail.com", "USER");
 	}
 
 	@Test

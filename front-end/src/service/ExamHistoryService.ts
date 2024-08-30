@@ -1,8 +1,8 @@
-import AnswerUserRequest from "../request/AnswerUserRequest";
-import ApiResponse from "../response/ApiResponse";
-import ExamHistoryDetailsResponse from "../response/details/ExamHistoryDetailResponse";
-import ExamHistoryResponse from "../response/ExamHistoryResponse";
-import PageResponse from "../response/PageResponse";
+import AnswerUserRequest from "../model/request/AnswerUserRequest";
+import ApiResponse from "../model/response/ApiResponse";
+import ExamHistoryDetailsResponse from "../model/response/details/ExamHistoryDetailResponse";
+import ExamHistoryResponse from "../model/response/ExamHistoryResponse";
+import PageResponse from "../model/response/PageResponse";
 import instance from "../util/apiInstance";
 const basePath = "exam-history";
 export default class ExamHistoryService {

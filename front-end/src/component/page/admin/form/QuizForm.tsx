@@ -2,8 +2,8 @@ import { Button, Form, FormProps, Input, Select } from "antd";
 import QuizService from "../../../../service/QuizService";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import ExamResponse from "../../../../response/ExamResponse";
-import QuizResponse from "../../../../response/QuizResponse";
+import ExamResponse from "../../../../model/response/ExamResponse";
+import QuizResponse from "../../../../model/response/QuizResponse";
 export type QuizRequest = {
   id?: number;
   question: string;

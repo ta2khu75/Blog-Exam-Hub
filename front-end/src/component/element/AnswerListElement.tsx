@@ -1,6 +1,6 @@
 import { Checkbox, Radio, Space } from "antd";
-import QuizResponse from "../../response/QuizResponse";
-import AnswerResponse from "../../response/AnswerResponse";
+import QuizResponse from "../../model/response/QuizResponse";
+import AnswerResponse from "../../model/response/AnswerResponse";
 import { useAppSelector } from "../../redux/hooks";
 type Props = {
   examId: number;

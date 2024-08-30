@@ -2,6 +2,7 @@ package com.ta2khu75.quiz.exception;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -13,47 +14,37 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpResponse;
-import org.springframework.validation.BindException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 public class AdviceException implements ResponseBodyAdvice<Object> {
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @SuppressWarnings("null")
+	@ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        return ResponseEntity.badRequest().body(new ExceptionResponse(ex.getBindingResult().getAllErrors().toString()));
+        return ResponseEntity.badRequest().body(new ExceptionResponse(ex.getBindingResult().getFieldError().getDefaultMessage()));
     }
-
-    @ExceptionHandler(BindException.class)
-    public ResponseEntity<ExceptionResponse> handleBindException(BindException ex) {
-        return ResponseEntity.badRequest().body(new ExceptionResponse(ex.getBindingResult().getAllErrors().toString()));
+    @ExceptionHandler(value = { NoResourceFoundException.class, NotFoundException.class})
+    public ResponseEntity<ExceptionResponse> handleInValidDataException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(ex.getMessage()));
     }
-
-    @ExceptionHandler(InValidDataException.class)
-    public ResponseEntity<ExceptionResponse> handleInValidDataException(InValidDataException ex) {
-        return ResponseEntity.badRequest().body(new ExceptionResponse(ex.getMessage()));
-    }
-    @ExceptionHandler(MissingRequestCookieException.class)
-	public ResponseEntity<ExceptionResponse> handleMissingRequestCookieException(MissingRequestCookieException ex) {
-    	return ResponseEntity.badRequest().body(new ExceptionResponse(ex.getMessage()));
-	}
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception ex) {
         ex.printStackTrace();
-        return ResponseEntity.internalServerError().body(new ExceptionResponse(ex.getMessage())); // ex.getMessage();
+        return ResponseEntity.internalServerError().body(new ExceptionResponse(ex.getMessage()));
     }
-
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleNotFoundException(NotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(ex.getMessage()));
-    }
-
-    @ExceptionHandler(NotMatchesException.class)
-    public ResponseEntity<ExceptionResponse> handleNotMatchesException(NotMatchesException ex) {
+    @ExceptionHandler(DisabledException.class)
+	public ResponseEntity<ExceptionResponse> handleDisabledException(Exception ex) {
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionResponse(ex.getMessage()));
+	}
+    @ExceptionHandler(value = {NotMatchesException.class, ExistingException.class, InValidDataException.class, MissingRequestCookieException.class})
+    public ResponseEntity<ExceptionResponse> handleNotMatchesException(Exception ex) {
         return ResponseEntity.badRequest().body(new ExceptionResponse(ex.getMessage()));
     }
 

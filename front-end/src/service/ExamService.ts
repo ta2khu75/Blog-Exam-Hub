@@ -1,7 +1,7 @@
 import { ExamRequest } from "../component/page/admin/crud/ExamCrud";
-import ApiResponse from "../response/ApiResponse";
-import ExamResponse from "../response/ExamResponse";
-import PageResponse from "../response/PageResponse";
+import ApiResponse from "../model/response/ApiResponse";
+import ExamResponse from "../model/response/ExamResponse";
+import PageResponse from "../model/response/PageResponse";
 import instance from "../util/apiInstance";
 const basePath = "exam";
 export default class ExamService {

@@ -4,6 +4,7 @@ const AdminComponent = () => {
   return (
 <div>
   {/*Main Navigation*/}
+  <div style={{height:"50px"}}></div>
   <header className="row mt-5">
     {/* Sidebar */}
     <nav id="sidebarMenu" className="collapse col-3 d-lg-block sidebar collapse bg-white">
@@ -17,6 +18,12 @@ const AdminComponent = () => {
           </NavLink>
           <NavLink to={"/admin/account"} className="list-group-item list-group-item-action py-2" data-mdb-ripple-init>
             <i className="fas fa-chart-area fa-fw me-3" /><span>Account</span>
+          </NavLink>
+          <NavLink to={"/admin/role"} className="list-group-item list-group-item-action py-2" data-mdb-ripple-init>
+            <i className="fas fa-chart-area fa-fw me-3" /><span>Role</span>
+          </NavLink>
+          <NavLink to={"/admin/permission"} className="list-group-item list-group-item-action py-2" data-mdb-ripple-init>
+            <i className="fas fa-chart-area fa-fw me-3" /><span>Permission</span>
           </NavLink>
           <a href="#" className="list-group-item list-group-item-action py-2" data-mdb-ripple-init><i className="fas fa-lock fa-fw me-3" /><span>Password</span></a>
           <a href="#" className="list-group-item list-group-item-action py-2" data-mdb-ripple-init><i className="fas fa-chart-line fa-fw me-3" /><span>Analytics</span></a>

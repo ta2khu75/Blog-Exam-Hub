@@ -17,7 +17,7 @@ import com.ta2khu75.quiz.entity.Exam;
 import com.ta2khu75.quiz.entity.Quiz;
 import com.ta2khu75.quiz.entity.request.QuizRequest;
 import com.ta2khu75.quiz.entity.response.QuizResponse;
-import com.ta2khu75.quiz.enviroment.FolderEnvironment;
+import com.ta2khu75.quiz.enviroment.FolderEnv;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.QuizMapper;
 import com.ta2khu75.quiz.repository.ExamRepository;
@@ -53,7 +53,7 @@ public class QuizServiceImpl implements QuizSerivce{
     }
     private void saveFile(Quiz quiz, MultipartFile file) throws IOException{
     	if (file != null && !file.isEmpty()) {
-			Map map = cloudinaryService.uploadFile(file, FolderEnvironment.QUIZ_FOLDER);
+			Map map = cloudinaryService.uploadFile(file, FolderEnv.QUIZ_FOLDER);
 			quiz.setFilePath((String) map.get("url"));
 		}
     }

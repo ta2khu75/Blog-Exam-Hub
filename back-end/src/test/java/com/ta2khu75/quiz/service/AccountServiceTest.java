@@ -35,7 +35,7 @@ public class AccountServiceTest {
 		accountRequest.setEmail("kien@gmail.com");
 		accountRequest.setPassword("123");
 		accountRequest.setConfirmPassword("123");
-		accountResponse = new AccountResponse(3L, "kien@gmail.com", "USER");
+		accountResponse = AccountResponse.builder().id(3L).email("kien@gmail.com").role(Role.USER).build(); // new AccountResponse(3L, "kien@gmail.com", "USER");
 	}
 	@Test
 	void create_validRequest_success() throws Exception {

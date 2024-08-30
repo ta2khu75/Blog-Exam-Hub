@@ -16,20 +16,22 @@ public class ValidationAspect {
 
     private final Validator validator;
 
-    @Before("execution(* ta2khu75.com.webquiz.service.impl.*.*(.., @jakarta.validation.Valid (*), ..))")
+    @SuppressWarnings("null")
+	@Before("execution(* ta2khu75.com.webquiz.service.impl.*.*(.., @jakarta.validation.Valid (*), ..))")
     public void validateMethodArgument(JoinPoint joinPoint) {
         for (Object arg : joinPoint.getArgs()) {
             if (arg != null) {
                 BindingResult bindingResult = new BeanPropertyBindingResult(arg, arg.getClass().getName());
                 validator.validate(arg, bindingResult);
                 if (bindingResult.hasErrors()) {
-                    StringBuilder errors = new StringBuilder();
-                    // Collect field errors
-                    for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                        errors.append(fieldError.getField()+": ").append(fieldError.getDefaultMessage())
-                                .append("\n");
-                    }
-                    throw new InValidDataException(errors.toString());
+                	throw new InValidDataException(bindingResult.getFieldError().getDefaultMessage());
+//                    StringBuilder errors = new StringBuilder();
+//                    // Collect field errors
+//                    for (FieldError fieldError : bindingResult.getFieldErrors()) {
+//                        errors.append(fieldError.getField()+": ").append(fieldError.getDefaultMessage())
+//                                .append("\n");
+//                    }
+//                    throw new InValidDataException(errors.toString());
                 }
             }
         }

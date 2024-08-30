@@ -1,6 +1,6 @@
 import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
 import App from "./App";
-import AdminComponent from "./component/AdminComponent";
+import AdminComponent from "./component/page/admin/AdminComponent";
 import LoginPage from "./component/page/LoginPage";
 import HomePage from "./component/page/HomePage";
 import AccountCrud from "./component/page/admin/crud/AccountCrud";
@@ -13,6 +13,7 @@ import PrivateRouterElement from "./component/element/PrivateRouterElement";
 import ProfilePage from "./component/page/ProfilePage";
 import ExamHistoryPage from "./component/page/ExamHistoryPage";
 import ChangePasswordPage from "./component/page/ChangePasswordPage";
+import PermissionCrud from "./component/page/admin/crud/PermissionCrud";
 // const route=createBrowserRouter(
 //   createRoutesFromElements(
 //     <Route path="/" element={<Ap[]}>
@@ -56,6 +57,7 @@ const router = createBrowserRouter(
         <Route path="exam" element={<ExamCrud />}>
           <Route path=":id" element={<QuizList />} />
         </Route>
+        <Route path="permission" element={<PermissionCrud/>} />
         <Route path="exam-view/:id" element={<QuizList />} />
       </Route>
     </>

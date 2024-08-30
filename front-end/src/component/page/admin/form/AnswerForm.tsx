@@ -2,8 +2,8 @@ import { Button, Form, FormProps, Input, Radio } from "antd"
 import AnswerService from "../../../../service/AnswerService";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import QuizResponse from "../../../../response/QuizResponse";
-import AnswerResponse from "../../../../response/AnswerResponse";
+import QuizResponse from "../../../../model/response/QuizResponse";
+import AnswerResponse from "../../../../model/response/AnswerResponse";
 export type AnswerRequest = {
     id?: number,
     answer?: string,
@@ -12,7 +12,7 @@ export type AnswerRequest = {
 }
 type Props = {
     quizResponse: QuizResponse
-    answerResponse?: AnswerResponse 
+    answerResponse?: AnswerResponse
     refresh: () => void
 }
 const AnswerForm = ({ answerResponse, quizResponse, refresh }: Props) => {

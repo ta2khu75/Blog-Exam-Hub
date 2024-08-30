@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.ta2khu75.quiz.entity.Account;
 import com.ta2khu75.quiz.entity.request.AuthRequest;
+import com.ta2khu75.quiz.entity.response.AccountAuthResponse;
 import com.ta2khu75.quiz.entity.response.AccountResponse;
 import com.ta2khu75.quiz.entity.response.AuthResponse;
 import com.ta2khu75.quiz.exception.NotFoundException;
@@ -22,8 +23,10 @@ import com.ta2khu75.quiz.util.SecurityUtil;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class AuthServiceImpl implements AuthService {
@@ -55,10 +58,10 @@ public class AuthServiceImpl implements AuthService {
 		return this.makeAuthResponse(account);
 	}
 	private AuthResponse makeAuthResponse(Account account) {
-		AccountResponse accountResponse = mapper.toResponse(account);
-		String refreshToken = jwtUtil.createRefreshToken(accountResponse);
+		AccountAuthResponse accountAuthResponse = mapper.toAuthResponse(account);
+		String refreshToken = jwtUtil.createRefreshToken(accountAuthResponse);
 		this.updateRefreshToken(account, refreshToken);
-		return new AuthResponse(accountResponse, jwtUtil.createToken(accountResponse), jwtUtil.createRefreshToken(accountResponse), true);
+		return new AuthResponse(accountAuthResponse, jwtUtil.createToken(accountAuthResponse), jwtUtil.createRefreshToken(accountAuthResponse), true);
 	}
 	private void updateRefreshToken(Account account, String refreshToken) {
 		account.setRefreshToken(refreshToken);

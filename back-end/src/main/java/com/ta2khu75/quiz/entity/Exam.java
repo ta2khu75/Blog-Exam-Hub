@@ -32,8 +32,13 @@ public class Exam {
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	ExamLevel examLevel;
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	AccessModifier accessModifier;
 	@ManyToOne
 	Account account;
+	@ManyToOne
+	ExamCategory examCategory;
 	@OneToMany(mappedBy = "exam")
 	List<Quiz> quizzes;
 	@OneToMany(mappedBy = "exam")

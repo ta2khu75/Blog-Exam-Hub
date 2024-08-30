@@ -1,6 +1,6 @@
 import { Button, Form, FormProps, Input } from "antd";
 import { AuthRequest } from "./LoginPage";
-import AccountPasswordRequest from "../../request/AccountPasswordRequest";
+import AccountPasswordRequest from "../../model/request/AccountPasswordRequest";
 import { toast } from "react-toastify";
 import AccountService from "../../service/AccountService";
 

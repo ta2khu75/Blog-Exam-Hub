@@ -3,8 +3,8 @@ import { Button,  Form, Input} from 'antd';
 import AccountService from '../../../../service/AccountService';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
-import AccountResponse from '../../../../response/AccountResponse';
-import PageResponse from '../../../../response/PageResponse';
+import AccountResponse from '../../../../model/response/AccountResponse';
+import PageResponse from '../../../../model/response/PageResponse';
 import TableElement from '../../../element/TableElement';
 
 export type AccountRequest = {
@@ -19,7 +19,7 @@ const AccountCrud = () => {
   useEffect(()=>{
     fetchReadPageAccount()
   },[])
-  
+
   const onFinish: FormProps<AccountRequest>['onFinish'] = (values) => {
     AccountService.create(values).then((data) => {
       if(data.success){
@@ -41,7 +41,7 @@ const AccountCrud = () => {
   }
   const handleEditClick=(data:AccountResponse)=>{
     form.setFieldsValue(data);
-    
+
   }
   return (
     <>

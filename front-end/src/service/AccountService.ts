@@ -1,8 +1,8 @@
 import { AccountRequest } from "../component/page/admin/crud/AccountCrud";
-import AccountPasswordRequest from "../request/AccountPasswordRequest";
-import AccountResponse from "../response/AccountResponse";
-import ApiResponse from "../response/ApiResponse";
-import PageResponse from "../response/PageResponse";
+import AccountPasswordRequest from "../model/request/AccountPasswordRequest";
+import AccountResponse from "../model/response/AccountResponse";
+import ApiResponse from "../model/response/ApiResponse";
+import PageResponse from "../model/response/PageResponse";
 import instance from "../util/apiInstance";
 
 export default class AccountService {

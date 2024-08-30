@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
-import QuizResponse from "../../response/QuizResponse";
+import QuizResponse from "../../model/response/QuizResponse";
 import AnswerListElement from "../element/AnswerListElement";
 import RandomUtil from "../../util/RandomUtil";
 import ExamHistoryService from "../../service/ExamHistoryService";
@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { deleteExam, setExam } from "../../redux/slice/examSlice";
 import { deleteUserExam, setUserExam } from "../../redux/slice/useExamSlice";
 import { deleteQuizExam, setQuizExam } from "../../redux/slice/quizExamSlice";
-import ExamHistoryResponse from "../../response/ExamHistoryResponse";
+import ExamHistoryResponse from "../../model/response/ExamHistoryResponse";
 import { toast } from "react-toastify";
 import ModalElement from "../element/ModalElement";
 

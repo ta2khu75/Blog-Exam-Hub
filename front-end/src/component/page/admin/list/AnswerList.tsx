@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Button, Checkbox, Radio, Space } from "antd";
 import { toast } from "react-toastify";
-import QuizResponse from "../../../../response/QuizResponse";
-import AnswerResponse from "../../../../response/AnswerResponse";
+import QuizResponse from "../../../../model/response/QuizResponse";
+import AnswerResponse from "../../../../model/response/AnswerResponse";
 import AnswerService from "../../../../service/AnswerService";
 import ModalElement from "../../../element/ModalElement";
 import AnswerForm from "../form/AnswerForm";

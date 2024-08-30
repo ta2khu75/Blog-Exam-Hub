@@ -1,5 +1,6 @@
 package com.ta2khu75.quiz.entity.request;
 
+import com.ta2khu75.quiz.entity.AccessModifier;
 import com.ta2khu75.quiz.entity.ExamLevel;
 import com.ta2khu75.quiz.entity.ExamType;
 
@@ -8,17 +9,25 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+
 @Data
 @FieldDefaults(level = AccessLevel.PROTECTED)
 public class ExamRequest {
-	@NotBlank
+	@NotBlank(message = "Title must not be blank")
 	String title;
-	@NotNull
+
+	@NotNull(message = "Time must not be null")
 	Integer time;
-	@NotBlank
+
+	@NotBlank(message = "Description must not be blank")
 	String description;
-	@NotNull
+
+	@NotNull(message = "Exam type must not be null")
 	ExamType examType;
-	@NotNull
+
+	@NotNull(message = "Exam level must not be null")
 	ExamLevel examLevel;
+
+	@NotNull(message = "Access modifier must not be null")
+	AccessModifier accessModifier;
 }
