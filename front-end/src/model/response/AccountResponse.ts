@@ -1,5 +1,6 @@
-export default interface AccountResponse{
-    id:number;
+import AccountInfoRequest from "../request/update/AccountInfoRequest";
+
+export default interface AccountResponse extends AccountInfoRequest{
+    id:string;
     email:string;
-    role:string;
 }

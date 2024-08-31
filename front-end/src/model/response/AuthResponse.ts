@@ -1,7 +1,7 @@
-import AccountResponse from "./AccountResponse";
+import AccountAuthResponse from "./AccountAuthResponse";
 
 export default interface AuthResponse{
-    account?:AccountResponse;
+    account?:AccountAuthResponse;
     access_token?:string;
     refresh_token?:string;
     authenticated:boolean;

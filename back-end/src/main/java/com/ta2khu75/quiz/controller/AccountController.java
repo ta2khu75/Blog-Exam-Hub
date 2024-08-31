@@ -16,8 +16,10 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.ta2khu75.quiz.entity.request.AccountRequest;
 import com.ta2khu75.quiz.entity.request.update.AccountInfoRequest;
 import com.ta2khu75.quiz.entity.request.update.AccountPasswordRequest;
+import com.ta2khu75.quiz.entity.request.update.AccountStatusRequest;
 import com.ta2khu75.quiz.entity.response.AccountResponse;
 import com.ta2khu75.quiz.entity.response.PageResponse;
+import com.ta2khu75.quiz.entity.response.details.AccountDetailsResponse;
 import com.ta2khu75.quiz.service.AccountService;
 
 @RestController
@@ -37,13 +39,14 @@ public class AccountController {
 	public ResponseEntity<AccountResponse> readMyAccount() {
 		return ResponseEntity.ok(service.readMyAccount());
 	}
+
 	@PutMapping
 	public ResponseEntity<AccountResponse> updateMyAccount(@Valid @RequestBody AccountInfoRequest request) {
 		return ResponseEntity.ok(service.update(request));
 	}
 
 	@GetMapping("/page")
-	public ResponseEntity<PageResponse<AccountResponse>> readPage(Pageable pageable) {
+	public ResponseEntity<PageResponse<AccountDetailsResponse>> readPage(Pageable pageable) {
 		return ResponseEntity.ok(service.readPage(pageable));
 	}
 
@@ -53,8 +56,8 @@ public class AccountController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<AccountResponse> updateStatusOtherAccount(@PathVariable String id,
-			@Valid @RequestBody AccountRequest request) {
+	public ResponseEntity<AccountDetailsResponse> updateStatusOtherAccount(@PathVariable("id") String id,
+			@Valid @RequestBody AccountStatusRequest request) {
 		return ResponseEntity.ok(service.update(id, request));
 	}
 
@@ -63,7 +66,6 @@ public class AccountController {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
-
 
 	@PutMapping("/change-password")
 	public ResponseEntity<AccountResponse> updatePasswordAccount(@RequestBody AccountPasswordRequest request) {

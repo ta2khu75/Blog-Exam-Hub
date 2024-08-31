@@ -3,6 +3,7 @@ import { NavLink, Outlet } from "react-router-dom"
 const AdminComponent = () => {
   return (
 <div>
+  
   {/*Main Navigation*/}
   <div style={{height:"50px"}}></div>
   <header className="row mt-5">

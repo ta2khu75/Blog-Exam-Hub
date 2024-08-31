@@ -25,7 +25,7 @@ public class UserAnswer {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 	@ManyToOne
-	ExamHistory examHistory;
+	ExamResult examResult;
 	@ManyToOne
 	Quiz quiz;
 	@ManyToMany

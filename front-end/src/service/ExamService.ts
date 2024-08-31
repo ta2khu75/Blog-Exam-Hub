@@ -1,4 +1,4 @@
-import { ExamRequest } from "../component/page/admin/crud/ExamCrud";
+import { ExamRequest } from "../component/page/admin/Manager/ExamCrud";
 import ApiResponse from "../model/response/ApiResponse";
 import ExamResponse from "../model/response/ExamResponse";
 import PageResponse from "../model/response/PageResponse";

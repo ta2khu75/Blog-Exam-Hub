@@ -8,17 +8,17 @@ import org.springframework.stereotype.Service;
 
 import com.ta2khu75.quiz.entity.Account;
 import com.ta2khu75.quiz.entity.Exam;
-import com.ta2khu75.quiz.entity.ExamHistory;
+import com.ta2khu75.quiz.entity.ExamResult;
 import com.ta2khu75.quiz.entity.request.UserAnswerRequest;
-import com.ta2khu75.quiz.entity.response.ExamHistoryResponse;
+import com.ta2khu75.quiz.entity.response.ExamResultResponse;
 import com.ta2khu75.quiz.entity.response.PageResponse;
-import com.ta2khu75.quiz.entity.response.details.ExamHistoryDetailsResponse;
+import com.ta2khu75.quiz.entity.response.details.ExamResultDetailsResponse;
 import com.ta2khu75.quiz.exception.NotFoundException;
-import com.ta2khu75.quiz.mapper.ExamHistoryMapper;
+import com.ta2khu75.quiz.mapper.ExamResultMapper;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.ExamHistoryRepository;
 import com.ta2khu75.quiz.repository.ExamRepository;
-import com.ta2khu75.quiz.service.ExamHistoryService;
+import com.ta2khu75.quiz.service.ExamResultService;
 import com.ta2khu75.quiz.service.ProfessionService;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
@@ -29,18 +29,18 @@ import lombok.experimental.FieldDefaults;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ExamHistoryServiceImpl implements ExamHistoryService {
-	ExamHistoryMapper mapper;
+public class ExamResultServiceImpl implements ExamResultService {
+	ExamResultMapper mapper;
 	ExamHistoryRepository repository;
 	ExamRepository examRepository;
 	AccountRepository accountRepository;
 	ProfessionService professionService;
 
 	@Override
-	public ExamHistoryResponse readByExamId(Long id) {
+	public ExamResultResponse readByExamId(Long id) {
 		String email = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new NotFoundException("Could not find email"));
-		Optional<ExamHistory> history = repository
+		Optional<ExamResult> history = repository
 				.findByAccountEmailAndExamIdAndEndTimeAfterAndLastModifiedDateIsNull(email, id, LocalDateTime.now());
 		if (history.isPresent()) {
 			return mapper.toResponse(history.get());
@@ -49,14 +49,14 @@ public class ExamHistoryServiceImpl implements ExamHistoryService {
 				.orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));
 		Account account = accountRepository.findByEmail(email)
 				.orElseThrow(() -> new NotFoundException("Could not find account with email: " + email));
-		ExamHistory examHistory = ExamHistory.builder().account(account).exam(exam)
+		ExamResult examHistory = ExamResult.builder().account(account).exam(exam)
 				.endTime(LocalDateTime.now().plusMinutes(exam.getTime()).plusSeconds(30)).build();
 		return mapper.toResponse(repository.save(examHistory));
 	}
 
 	@Override
-	public ExamHistoryDetailsResponse scoreByExamId(Long id, Long examId, UserAnswerRequest[] answerUserRequest) {
-		ExamHistory examHistory = repository.findById(id)
+	public ExamResultDetailsResponse scoreByExamId(Long id, Long examId, UserAnswerRequest[] answerUserRequest) {
+		ExamResult examHistory = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id));
 		examHistory.setLastModifiedDate(LocalDateTime.now());
 		if (answerUserRequest.length != 0) {
@@ -66,14 +66,14 @@ public class ExamHistoryServiceImpl implements ExamHistoryService {
 	}
 
 	@Override
-	public PageResponse<ExamHistoryResponse> readPage(Pageable pageable) {
+	public PageResponse<ExamResultResponse> readPage(Pageable pageable) {
 		String email = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new NotFoundException("Could not find email"));
 		return mapper.toPageResponse(repository.findByAccountEmailAndLastModifiedDateIsNotNull(email, pageable));
 	}
 
 	@Override
-	public ExamHistoryDetailsResponse read(Long id) {
+	public ExamResultDetailsResponse read(Long id) {
 		return mapper.toDetailsResponse(repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id)));
 	}

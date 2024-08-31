@@ -22,7 +22,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EntityListeners(AuditingEntityListener.class)
-public class ExamHistory {
+public class ExamResult {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
@@ -32,7 +32,7 @@ public class ExamHistory {
 	Account account;
 	@ManyToOne
 	Exam exam;
-	@OneToMany(mappedBy = "examHistory")
+	@OneToMany(mappedBy = "examResult")
 	List<UserAnswer> userAnswers;
 	@Column(nullable = false)
 	LocalDateTime endTime;

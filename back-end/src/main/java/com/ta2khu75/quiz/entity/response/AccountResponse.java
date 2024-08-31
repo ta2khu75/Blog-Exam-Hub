@@ -17,5 +17,4 @@ import lombok.experimental.FieldDefaults;
 public class AccountResponse extends AccountInfoRequest{
 	String id;
 	String email;
-	String role;
 }

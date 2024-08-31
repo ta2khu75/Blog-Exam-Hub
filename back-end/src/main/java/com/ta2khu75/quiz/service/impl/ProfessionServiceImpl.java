@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.ta2khu75.quiz.entity.Answer;
-import com.ta2khu75.quiz.entity.ExamHistory;
+import com.ta2khu75.quiz.entity.ExamResult;
 import com.ta2khu75.quiz.entity.Quiz;
 import com.ta2khu75.quiz.entity.QuizType;
 import com.ta2khu75.quiz.entity.UserAnswer;
@@ -32,7 +32,7 @@ public class ProfessionServiceImpl implements ProfessionService {
 	UserAnswerRepository userAnswerRepository;
 
 	@Override
-	public void score(ExamHistory examHistory, Long examId, UserAnswerRequest[] answerUserRequests) {
+	public void score(ExamResult examHistory, Long examId, UserAnswerRequest[] answerUserRequests) {
 		float score = 0;
 
 		// Truy xuất tất cả câu hỏi và đáp án một lần
@@ -75,9 +75,9 @@ public class ProfessionServiceImpl implements ProfessionService {
 		examHistory.setPoint((float) (Math.round(num * 100) / 10));
 	}
 
-	private void saveUserAnswer(ExamHistory examHistory, Quiz quiz, List<Answer> answers, Set<Long> answerIds) {
+	private void saveUserAnswer(ExamResult examHistory, Quiz quiz, List<Answer> answers, Set<Long> answerIds) {
 		UserAnswer userAnswer = new UserAnswer();
-		userAnswer.setExamHistory(examHistory);
+		userAnswer.setExamResult(examHistory);
 		userAnswer.setQuiz(quiz);
 		List<Answer> answe = answers.stream().filter(answer -> answerIds.contains(answer.getId())).toList();
 		userAnswer.setAnswers(answe);

@@ -11,5 +11,4 @@ public class AccountAuthResponse {
 	String username;
 	String email;
 	String role;
-	
 }

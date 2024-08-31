@@ -1,26 +1,31 @@
-import { AccountRequest } from "../component/page/admin/crud/AccountCrud";
-import AccountPasswordRequest from "../model/request/AccountPasswordRequest";
+import { AccountRequest } from "../component/page/RegisterPage";
+import AccountPasswordRequest from "../model/request/update/AccountPasswordRequest";
+import { AccountStatusRequest } from "../model/request/update/AccountStatusRequest";
 import AccountResponse from "../model/response/AccountResponse";
 import ApiResponse from "../model/response/ApiResponse";
+import AccountDetailsResponse from "../model/response/details/AccountDetailsResponse";
 import PageResponse from "../model/response/PageResponse";
 import instance from "../util/apiInstance";
 
+const basePath = "account";
 export default class AccountService {
-  static basePath = "account";
-  static readPage(): Promise<ApiResponse<PageResponse<AccountResponse>>> {
-    return instance.get(this.basePath);
+  static readPage(): Promise<ApiResponse<PageResponse<AccountDetailsResponse>>> {
+    return instance.get(`${basePath}/page`);
   }
   static create(
     account: AccountRequest
   ): Promise<ApiResponse<AccountResponse>> {
-    return instance.post(this.basePath, account);
+    return instance.post(basePath, account);
+  }
+  static update(id: string, account: AccountStatusRequest):Promise<ApiResponse<AccountDetailsResponse>>{
+    return instance.put(`${basePath}/${id}`, account);
   }
   static readById(id: number): Promise<ApiResponse<AccountResponse>> {
-    return instance.get(`${this.basePath}/${id}`);
+    return instance.get(`${basePath}/${id}`);
   }
   static changePassword(
     accountPassword: AccountPasswordRequest
   ): Promise<ApiResponse<AccountPasswordRequest>> {
-    return instance.put(`${this.basePath}/change-password`, accountPassword);
+    return instance.put(`${basePath}/change-password`, accountPassword);
   }
 }

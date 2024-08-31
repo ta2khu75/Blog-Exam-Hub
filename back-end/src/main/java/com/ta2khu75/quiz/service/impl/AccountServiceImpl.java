@@ -15,8 +15,10 @@ import com.ta2khu75.quiz.entity.Account;
 import com.ta2khu75.quiz.entity.request.AccountRequest;
 import com.ta2khu75.quiz.entity.request.update.AccountInfoRequest;
 import com.ta2khu75.quiz.entity.request.update.AccountPasswordRequest;
+import com.ta2khu75.quiz.entity.request.update.AccountStatusRequest;
 import com.ta2khu75.quiz.entity.response.AccountResponse;
 import com.ta2khu75.quiz.entity.response.PageResponse;
+import com.ta2khu75.quiz.entity.response.details.AccountDetailsResponse;
 import com.ta2khu75.quiz.exception.ExistingException;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.exception.NotMatchesException;
@@ -64,15 +66,12 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public AccountResponse update(String id, AccountRequest request) {
-		if (request.getPassword().equals(request.getConfirmPassword())) {
+	public AccountDetailsResponse update(String id, AccountStatusRequest request) {
 			Account account = repository.findById(id)
 					.orElseThrow(() -> new NotFoundException("Could not found account with id: " + id));
-			mapper.update(request, account);
-			return mapper.toResponse(repository.save(account));
-		}
-		throw new NotMatchesException("password and confirm password not matches");
-	}
+			mapper.update	(request, account);
+			return mapper.toDetailsResponse(repository.save(account));
+		}	
 
 	@Override
 	public void delete(String id) {
@@ -86,8 +85,8 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public PageResponse<AccountResponse> readPage(Pageable pageable) {
-		return mapper.toPageResponse(repository.findAll(pageable).map((account) -> mapper.toResponse(account)));
+	public PageResponse<AccountDetailsResponse> readPage(Pageable pageable) {
+		return mapper.toPageResponse(repository.findAll(pageable).map((account) -> mapper.toDetailsResponse(account)));
 	}
 
 	@Override

@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PROTECTED)
-public class ExamHistoryResponse {
+public class ExamResultResponse {
 	Long id;
 	float point;
 	int correctCount;

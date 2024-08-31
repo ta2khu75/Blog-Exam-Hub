@@ -42,5 +42,5 @@ public class Exam {
 	@OneToMany(mappedBy = "exam")
 	List<Quiz> quizzes;
 	@OneToMany(mappedBy = "exam")
-	List<ExamHistory> examHistories;
+	List<ExamResult> examResults;
 }

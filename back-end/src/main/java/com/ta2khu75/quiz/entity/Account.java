@@ -58,7 +58,7 @@ public class Account implements UserDetails {
 	@OneToMany(mappedBy = "account")
 	List<Exam> exams;
 	@OneToMany(mappedBy = "account")
-	List<ExamHistory> examHistories;
+	List<ExamResult> examResults;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

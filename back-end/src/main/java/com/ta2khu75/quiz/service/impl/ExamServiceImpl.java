@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ta2khu75.quiz.entity.Account;
 import com.ta2khu75.quiz.entity.Exam;
-import com.ta2khu75.quiz.entity.ExamHistory;
+import com.ta2khu75.quiz.entity.ExamResult;
 import com.ta2khu75.quiz.entity.request.ExamRequest;
 import com.ta2khu75.quiz.entity.response.ExamResponse;
 import com.ta2khu75.quiz.entity.response.details.ExamDetailsResponse;
@@ -92,7 +92,7 @@ public class ExamServiceImpl implements ExamService {
 		String email=SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new NotFoundException("Could not find email"));
 		Account account=accountRepository.findByEmail(email).orElseThrow(()->new NotFoundException("Could not find account with email: "+email));
 		Exam exam = repository.findById(id).orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));
-		ExamHistory examHistory = ExamHistory.builder().account(account).exam(exam).endTime(LocalDateTime.now().plusMinutes(exam.getTime()+1)).build();
+		ExamResult examHistory = ExamResult.builder().account(account).exam(exam).endTime(LocalDateTime.now().plusMinutes(exam.getTime()+1)).build();
 		examHistoryRepository.save(examHistory);
 		log.info(examHistory.toString());
 		return mapper.toDetailsResponse(exam);

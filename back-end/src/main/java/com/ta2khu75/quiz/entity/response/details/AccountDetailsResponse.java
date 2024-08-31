@@ -16,4 +16,5 @@ import lombok.experimental.FieldDefaults;
 public class AccountDetailsResponse extends AccountResponse {
 	boolean enabled;
 	boolean nonLocked;
+	String role;
 }

@@ -18,12 +18,13 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ExamMapper {
-	@Mapping(target = "author.role", source = "account.role.name")
+//	@Mapping(target = "author.role", source = "account.role.name")
+	@Mapping(target = "author", ignore = true)
 	ExamResponse toResponse(Exam exam);
 
 	@Mapping(target = "account", ignore = true)
 	@Mapping(target = "examCategory", ignore = true)
-	@Mapping(target = "examHistories", ignore = true)
+	@Mapping(target = "examResults", ignore = true)
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "imagePath", ignore = true)
 	@Mapping(target = "quizzes", ignore = true)
@@ -31,12 +32,12 @@ public interface ExamMapper {
 
 	@Mapping(target = "account", ignore = true)
 	@Mapping(target = "examCategory", ignore = true)
-	@Mapping(target = "examHistories", ignore = true)
+	@Mapping(target = "examResults", ignore = true)
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "imagePath", ignore = true)
 	@Mapping(target = "quizzes", ignore = true)
 	void update(ExamRequest request, @MappingTarget Exam exam);
-	@Mapping(target = "author.role", source = "account.role.name")
+//	@Mapping(target = "author.role", source = "account.role.name")
 	ExamDetailsResponse toDetailsResponse(Exam exam);
 	default QuizDetaislResponse toResponseDetails(Quiz quiz) {
 		QuizDetaislResponse quizDetaislResponse = new QuizDetaislResponse();
