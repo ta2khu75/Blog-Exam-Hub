@@ -21,7 +21,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ExamMapper {
-//	@Mapping(target = "author.role", source = "account.role.name")
 	@Named("toExamResponse")
 	@Mapping(target = "author", ignore = true)
 	ExamResponse toResponse(Exam exam);
@@ -45,9 +44,8 @@ public interface ExamMapper {
 	@Mapping(target = "content", qualifiedByName = "toExamResponse")
 	PageResponse<ExamResponse> toPageResponse(Page<Exam> page);
 
-//	@Mapping(target = "author.role", source = "account.role.name")
+	@Mapping(target = "author", source = "account")
 	ExamDetailsResponse toDetailsResponse(Exam exam);
-
 	default QuizDetaislResponse toResponseDetails(Quiz quiz) {
 		QuizDetaislResponse quizDetaislResponse = new QuizDetaislResponse();
 		quizDetaislResponse.setId(quiz.getId());

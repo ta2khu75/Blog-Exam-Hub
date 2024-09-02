@@ -9,6 +9,7 @@ import ModalElement from '../../../element/ModalElement';
 import { AccountStatusRequest } from '../../../../model/request/update/AccountStatusRequest';
 import AccountDetailsResponse from '../../../../model/response/details/AccountDetailsResponse';
 import useDebounce from '../../../../hook/useDebounce';
+import ManagerPermission from './ManagerPermission';
 
 export type AccountRequest = {
   id: number;
@@ -27,9 +28,6 @@ const AccountCrud = () => {
   useEffect(() => {
     fetchReadPageAccount()
   }, [page, debouncedSearch])
-  // useEffect(() => {
-  //   fetchReadPageAccount()
-  // }, [debouncedSearch])
   useEffect(() => {
     if (account) {
       form.setFieldsValue(account)
@@ -44,7 +42,7 @@ const AccountCrud = () => {
   }
   const onFinish: FormProps<AccountStatusRequest>['onFinish'] = (values) => {
     if (account) {
-      AccountService.update(account.id, values).then((data) => {
+      AccountService.updateStatus(account.id, values).then((data) => {
         if (data.success) {
           const updatedAccounts = accountResponsePage?.content.map((account) => {
             if (account.id === data.data.id) {
@@ -83,36 +81,39 @@ const AccountCrud = () => {
   return (
     <>
       <Input size='large' className='mb-5' placeholder='Search' value={search} type='text' onChange={(e) => handleSearchChange(e.target.value)} />
-      <ModalElement handleCancel={handleCancelClick} open={openEdit}>
-        <Form
-          form={form}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-        >
-          <Form.Item<AccountStatusRequest>
-            label="Enabled"
-            name={'enabled'}
+      <ModalElement width={1500}  handleCancel={handleCancelClick} open={openEdit}>
+        <>
+          <Form
+            form={form}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
           >
-            <Radio.Group>
-              <Radio value={true}>True</Radio>
-              <Radio value={false}>False</Radio>
-            </Radio.Group>
-          </Form.Item>
-          <Form.Item<AccountStatusRequest>
-            label="Non Locked"
-            name={'non_locked'}
-          >
-            <Radio.Group>
-              <Radio value={true}>True</Radio>
-              <Radio value={false}>False</Radio>
-            </Radio.Group>
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Update
-            </Button>
-          </Form.Item>
-        </Form>
+            <Form.Item<AccountStatusRequest>
+              label="Enabled"
+              name={'enabled'}
+            >
+              <Radio.Group>
+                <Radio value={true}>True</Radio>
+                <Radio value={false}>False</Radio>
+              </Radio.Group>
+            </Form.Item>
+            <Form.Item<AccountStatusRequest>
+              label="Non Locked"
+              name={'non_locked'}
+            >
+              <Radio.Group>
+                <Radio value={true}>True</Radio>
+                <Radio value={false}>False</Radio>
+              </Radio.Group>
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Update
+              </Button>
+            </Form.Item>
+          </Form>
+          <ManagerPermission account={account} />
+        </>
       </ModalElement>
       {accountResponsePage?.content && <>
         <TableElement visiableColumns={["username", "email", "enabled", "non_locked", "role"]} showIndex={true} array={accountResponsePage.content} handleEditClick={handleEditClick} />
