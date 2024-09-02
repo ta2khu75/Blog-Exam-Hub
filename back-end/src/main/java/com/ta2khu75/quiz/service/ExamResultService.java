@@ -8,10 +8,10 @@ import com.ta2khu75.quiz.entity.response.PageResponse;
 import com.ta2khu75.quiz.entity.response.details.ExamResultDetailsResponse;
 
 public interface ExamResultService {
-	ExamResultResponse readByExamId(Long id);
-
+	ExamResultResponse readByExamId(Long examId);
+	ExamResultResponse createByExamId(Long examId);
 	ExamResultDetailsResponse scoreByExamId(Long id, Long examId, UserAnswerRequest[] answerUserRequest);
-
+	
 	PageResponse<ExamResultResponse> readPage(Pageable pageable);
 
 	ExamResultDetailsResponse read(Long id);

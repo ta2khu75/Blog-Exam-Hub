@@ -13,7 +13,7 @@ import PrivateRouterElement from "./component/element/PrivateRouterElement";
 import ProfilePage from "./component/page/ProfilePage";
 import ExamHistoryPage from "./component/page/ExamHistoryPage";
 import ChangePasswordPage from "./component/page/ChangePasswordPage";
-import PermissionCrud from "./component/page/admin/Manager/PermissionCrud";
+import PermissionCrud from "./component/page/admin/Manager/ManagerPermission";
 import AdComponent from "./component/page/admin/ADComponent";
 // const route=createBrowserRouter(
 //   createRoutesFromElements(

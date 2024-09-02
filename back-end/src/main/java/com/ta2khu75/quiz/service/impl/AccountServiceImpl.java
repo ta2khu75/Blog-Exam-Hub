@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.UUID;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -67,11 +68,11 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public AccountDetailsResponse update(String id, AccountStatusRequest request) {
-			Account account = repository.findById(id)
-					.orElseThrow(() -> new NotFoundException("Could not found account with id: " + id));
-			mapper.update	(request, account);
-			return mapper.toDetailsResponse(repository.save(account));
-		}	
+		Account account = repository.findById(id)
+				.orElseThrow(() -> new NotFoundException("Could not found account with id: " + id));
+		mapper.update(request, account);
+		return mapper.toDetailsResponse(repository.save(account));
+	}
 
 	@Override
 	public void delete(String id) {
@@ -85,8 +86,11 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public PageResponse<AccountDetailsResponse> readPage(Pageable pageable) {
-		return mapper.toPageResponse(repository.findAll(pageable).map((account) -> mapper.toDetailsResponse(account)));
+	public PageResponse<AccountDetailsResponse> readPage(String search, Pageable pageable) {
+		PageResponse<AccountDetailsResponse> response = mapper
+				.toPageResponse(repository.searchByDisplayNameOrEmail(search, pageable));
+		response.setNumber(response.getNumber() + 1);
+		return response;
 	}
 
 	@Override

@@ -18,6 +18,7 @@ import com.ta2khu75.quiz.entity.Exam;
 import com.ta2khu75.quiz.entity.ExamResult;
 import com.ta2khu75.quiz.entity.request.ExamRequest;
 import com.ta2khu75.quiz.entity.response.ExamResponse;
+import com.ta2khu75.quiz.entity.response.PageResponse;
 import com.ta2khu75.quiz.entity.response.details.ExamDetailsResponse;
 import com.ta2khu75.quiz.enviroment.FolderEnv;
 import com.ta2khu75.quiz.exception.NotFoundException;
@@ -83,8 +84,8 @@ public class ExamServiceImpl implements ExamService {
 	}
 
 	@Override
-	public Page<ExamResponse> readPage(Pageable pageable) {
-		return repository.findAll(pageable).map((exam) -> mapper.toResponse(exam));
+	public PageResponse<ExamResponse> readPage(Pageable pageable) {
+		return mapper.toPageResponse(repository.findAll(pageable));
 	}
 
 	@Override

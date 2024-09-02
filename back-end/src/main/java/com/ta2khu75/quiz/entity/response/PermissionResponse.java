@@ -11,5 +11,5 @@ import lombok.experimental.FieldDefaults;
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PermissionResponse extends PermissionRequest {
-	long id;
+	String name;
 }

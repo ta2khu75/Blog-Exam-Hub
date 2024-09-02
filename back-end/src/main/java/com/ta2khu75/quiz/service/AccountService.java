@@ -18,7 +18,7 @@ public interface AccountService {
     AccountResponse changePassword(AccountPasswordRequest request);
     void delete(String id);
     AccountResponse read(String id);
-    PageResponse<AccountDetailsResponse> readPage(Pageable pageable);
+    PageResponse<AccountDetailsResponse> readPage(String search,Pageable pageable);
     AccountResponse update(AccountInfoRequest request);
     boolean verify(String code);
     AccountResponse readMyAccount();

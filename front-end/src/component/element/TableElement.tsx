@@ -23,7 +23,6 @@ const TableElement = <T extends object>({
     ? new Set(visiableColumns)
     : undefined, [visiableColumns])
   const getColumns = () => {
-
     let computedColumns: TableProps<T>["columns"] = [];
     if (array?.length) {
       computedColumns = Object.keys(array[0])
@@ -35,7 +34,7 @@ const TableElement = <T extends object>({
         })
         .map((key) => {
           return {
-            title: key.charAt(0).toUpperCase() + key.slice(1), // Capitalize the first letter of the key for the column title
+            title: key.charAt(0).toUpperCase() + key.slice(1),
             dataIndex: key,
             key: key,
             render: (value: ColumnValue) => {

@@ -81,5 +81,5 @@ public interface AccountMapper{
 	@Mapping(target = "role", source = "role.name")
 	@Mapping(target = "username", source = "displayName")
 	AccountDetailsResponse toDetailsResponse(Account account);
-    PageResponse<AccountDetailsResponse> toPageResponse(Page<AccountDetailsResponse> response);	
+    PageResponse<AccountDetailsResponse> toPageResponse(Page<Account> response);	
 	}

@@ -45,13 +45,7 @@ public class ExamResultServiceImpl implements ExamResultService {
 		if (history.isPresent()) {
 			return mapper.toResponse(history.get());
 		}
-		Exam exam = examRepository.findById(id)
-				.orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));
-		Account account = accountRepository.findByEmail(email)
-				.orElseThrow(() -> new NotFoundException("Could not find account with email: " + email));
-		ExamResult examHistory = ExamResult.builder().account(account).exam(exam)
-				.endTime(LocalDateTime.now().plusMinutes(exam.getTime()).plusSeconds(30)).build();
-		return mapper.toResponse(repository.save(examHistory));
+		return null;
 	}
 
 	@Override
@@ -76,5 +70,18 @@ public class ExamResultServiceImpl implements ExamResultService {
 	public ExamResultDetailsResponse read(Long id) {
 		return mapper.toDetailsResponse(repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id)));
+	}
+
+	@Override
+	public ExamResultResponse createByExamId(Long examId) {
+		String email = SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new NotFoundException("Could not find email"));
+		Exam exam = examRepository.findById(examId)
+				.orElseThrow(() -> new NotFoundException("Could not found exam with id: " + examId));
+		Account account = accountRepository.findByEmail(email)
+				.orElseThrow(() -> new NotFoundException("Could not find account with email: " + email));
+		ExamResult examResult = ExamResult.builder().account(account).exam(exam)
+				.endTime(LocalDateTime.now().plusMinutes(exam.getTime()).plusSeconds(30)).build();
+		return mapper.toResponse(examResult);
 	}
 }
