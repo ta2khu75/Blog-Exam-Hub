@@ -1,6 +1,20 @@
 package com.ta2khu75.quiz.entity.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ta2khu75.quiz.entity.ExamLevel;
+import com.ta2khu75.quiz.entity.ExamType;
 
-public record ExamResponse (Long id, String title, Integer time, String description, @JsonProperty("image_path") String imagePath, @JsonProperty("exam_type") String examType, @JsonProperty("exam_level") String examLevel){
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ExamResponse {
+	Long id;
+	String title;
+	Integer time;
+	String description;
+	String imagePath;
+	ExamType examType;
+	ExamLevel examLevel;
 }

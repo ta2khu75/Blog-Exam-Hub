@@ -27,7 +27,7 @@ public class AccountServiceImpl implements AccountService {
     PasswordEncoder passwordEncoder;
     @Override
     public AccountResponse create(AccountRequest request) {
-        if(request.password().equals(request.confirmPassword())){
+        if(request.getPassword().equals(request.getConfirmPassword())){
                 Account account =mapper.toEntity(request);
                 account.setEmail(account.getEmail().toLowerCase());
                 account.setPassword(passwordEncoder.encode(account.getPassword()));
@@ -38,7 +38,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountResponse update(Long id, AccountRequest request) {
-        if(request.password().equals(request.confirmPassword())){
+        if(request.getPassword().equals(request.getConfirmPassword())){
             Account account =repository.findById(id).orElseThrow(()-> new NotFoundException("Could not found account with id: "+id));
             mapper.update(request,account);
             return mapper.toResponse(repository.save(account));

@@ -1,6 +1,16 @@
 package com.ta2khu75.quiz.entity.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record QuizResponse(Long id, String question, @JsonProperty("file_path") String filePath, @JsonProperty("quiz_type") String quizType,@JsonProperty("exam_id") Long examId) {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class QuizResponse {
+	Long id;
+	String question;
+	String filePath;
+	String quizType;
+	Long examId;
 }

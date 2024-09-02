@@ -1,4 +1,14 @@
 package com.ta2khu75.quiz.entity.response;
 
-public record AccountResponse (Long id, String email,  String role){
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AccountResponse {
+	Long id;
+	String email;
+	String role;
 }

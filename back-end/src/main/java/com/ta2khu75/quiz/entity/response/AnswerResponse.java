@@ -1,10 +1,15 @@
 package com.ta2khu75.quiz.entity.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-//import ta2khu75.com.webquiz.entity.AnswerType;
-
-public record AnswerResponse(Long id, @JsonProperty("answer") String answerString, boolean correct, @JsonProperty("quiz_id") Long quizId
-//  @JsonProperty("answer_type") AnswerType answerType
- ) {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class AnswerResponse {
+	Long id;
+	String answer;
+	boolean correct;
+	Long quizId;
 }
