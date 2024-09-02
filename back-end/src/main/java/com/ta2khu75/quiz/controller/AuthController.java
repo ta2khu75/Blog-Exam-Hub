@@ -30,37 +30,36 @@ public class AuthController {
 	@Value("${jwt.refresh.expiration}")
 	@NonFinal
 	long cookieExpiration;
-	
+
 	AuthService service;
+
 	@PostMapping("login")
 	public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
 		AuthResponse response = service.login(request);
 		ResponseCookie cookie = createRefreshTokenCookie(response.getRefreshToken(), cookieExpiration);
-		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,cookie.toString()).body(response);
+		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(response);
 	}
+
 	@GetMapping("account")
-	public ResponseEntity<AccountResponse> getAccount(){
+	public ResponseEntity<AccountResponse> readMyAccount() {
 		return ResponseEntity.ok(service.getAccount());
 	}
 
 	@GetMapping("refresh-token")
-	public ResponseEntity<AuthResponse> getRefreshToken(@CookieValue("refresh_token") String refreshToken) {
+	public ResponseEntity<AuthResponse> createRefreshToken(@CookieValue("refresh_token") String refreshToken) {
 		AuthResponse response = service.refreshToken(refreshToken);
-		ResponseCookie cookie =createRefreshTokenCookie(response.getRefreshToken(), cookieExpiration); 
+		ResponseCookie cookie = createRefreshTokenCookie(response.getRefreshToken(), cookieExpiration);
 		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(response);
 	}
+
 	@GetMapping("logout")
 	public ResponseEntity<Void> logout() {
 		ResponseCookie cookie = createRefreshTokenCookie(null, 0);
 		return ResponseEntity.noContent().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
 	}
+
 	private ResponseCookie createRefreshTokenCookie(String refreshToken, long cookieExpiration) {
-		return ResponseCookie.from("refresh_token", refreshToken)
-				.httpOnly(true)
-				.secure(true)
-				.sameSite("None")
-				.maxAge(cookieExpiration)
-				.path("/")
-				.build();
+		return ResponseCookie.from("refresh_token", refreshToken).httpOnly(true).secure(true).sameSite("None")
+				.maxAge(cookieExpiration).path("/").build();
 	}
 }

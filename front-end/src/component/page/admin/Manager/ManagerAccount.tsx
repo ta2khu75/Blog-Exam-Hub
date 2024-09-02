@@ -1,13 +1,14 @@
 import type { FormProps } from 'antd';
-import { Button, Form, Radio } from 'antd';
+import { Button, Form, Input, Pagination, Radio } from 'antd';
 import AccountService from '../../../../service/AccountService';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import PageResponse from '../../../../model/response/PageResponse';
 import TableElement from '../../../element/TableElement';
 import ModalElement from '../../../element/ModalElement';
-import AccountDetailsResponse from '../../../../model/response/details/AccountDetailsResponse';
 import { AccountStatusRequest } from '../../../../model/request/update/AccountStatusRequest';
+import AccountDetailsResponse from '../../../../model/response/details/AccountDetailsResponse';
+import useDebounce from '../../../../hook/useDebounce';
 
 export type AccountRequest = {
   id: number;
@@ -19,24 +20,41 @@ const AccountCrud = () => {
   const [form] = Form.useForm<AccountStatusRequest>();
   const [openEdit, setOpenEdit] = useState(false);
   const [account, setAccount] = useState<AccountDetailsResponse>()
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search);
   const [accountResponsePage, setAccountResponsePage] = useState<PageResponse<AccountDetailsResponse>>();
   useEffect(() => {
     fetchReadPageAccount()
-  }, [])
+  }, [page, debouncedSearch])
+  // useEffect(() => {
+  //   fetchReadPageAccount()
+  // }, [debouncedSearch])
   useEffect(() => {
     if (account) {
       form.setFieldsValue(account)
     }
-  }, [account]);
+  }, [account, form]);
+  const fetchReadPageAccount = () => {
+    AccountService.readPage(search, page).then((d) => {
+      if (d.success) {
+        setAccountResponsePage(d.data)
+      }
+    })
+  }
   const onFinish: FormProps<AccountStatusRequest>['onFinish'] = (values) => {
     if (account) {
       AccountService.update(account.id, values).then((data) => {
         if (data.success) {
-          accountResponsePage?.content.map((account) => {
+          const updatedAccounts = accountResponsePage?.content.map((account) => {
             if (account.id === data.data.id) {
               return data.data
             } return account;
           })
+          setAccountResponsePage((prev) => {
+            if (!prev) return prev;
+            return { ...prev, content: updatedAccounts || [] };
+          });
           toast.info("successfully")
         }
       })
@@ -47,13 +65,6 @@ const AccountCrud = () => {
     console.log('Failed:', errorInfo);
   };
 
-  const fetchReadPageAccount = () => {
-    AccountService.readPage().then((d) => {
-      if (d.success) {
-        setAccountResponsePage(d.data)
-      }
-    })
-  }
   const handleEditClick = (data: AccountDetailsResponse) => {
     setAccount(data)
     setOpenEdit(true);
@@ -61,9 +72,17 @@ const AccountCrud = () => {
   const handleCancelClick = () => {
     setOpenEdit(false);
   }
+  const handlePageChange = (page: number) => {
+    setPage(page)
+    fetchReadPageAccount();
+  }
+  const handleSearchChange = (e: string) => {
+    setSearch(e);
+    setPage(1)
+  }
   return (
     <>
-
+      <Input size='large' className='mb-5' placeholder='Search' value={search} type='text' onChange={(e) => handleSearchChange(e.target.value)} />
       <ModalElement handleCancel={handleCancelClick} open={openEdit}>
         <Form
           form={form}
@@ -95,7 +114,9 @@ const AccountCrud = () => {
           </Form.Item>
         </Form>
       </ModalElement>
-      {accountResponsePage?.content && <TableElement visiableColumns={["username", "email", "enabled", "non_locked", "role"]} showIndex={true} array={accountResponsePage.content} handleEditClick={handleEditClick} />}
+      {accountResponsePage?.content && <>
+        <TableElement visiableColumns={["username", "email", "enabled", "non_locked", "role"]} showIndex={true} array={accountResponsePage.content} handleEditClick={handleEditClick} />
+        <Pagination align="center" onChange={(e) => handlePageChange(e)} defaultCurrent={page} defaultPageSize={10} total={accountResponsePage.total_elements} /></>}
     </>
   )
 }

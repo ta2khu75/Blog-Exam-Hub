@@ -1,4 +1,4 @@
-import { AccountRequest } from "../component/page/RegisterPage";
+import { AccountRequest } from "../model/request/AccountRequest";
 import AccountPasswordRequest from "../model/request/update/AccountPasswordRequest";
 import { AccountStatusRequest } from "../model/request/update/AccountStatusRequest";
 import AccountResponse from "../model/response/AccountResponse";
@@ -9,15 +9,15 @@ import instance from "../util/apiInstance";
 
 const basePath = "account";
 export default class AccountService {
-  static readPage(): Promise<ApiResponse<PageResponse<AccountDetailsResponse>>> {
-    return instance.get(`${basePath}/page`);
+  static readPage(search = "", page = 0, size = 10): Promise<ApiResponse<PageResponse<AccountDetailsResponse>>> {
+    return instance.get(`${basePath}/page`, { params: { search, page, size } });
   }
   static create(
     account: AccountRequest
   ): Promise<ApiResponse<AccountResponse>> {
     return instance.post(basePath, account);
   }
-  static update(id: string, account: AccountStatusRequest):Promise<ApiResponse<AccountDetailsResponse>>{
+  static update(id: string, account: AccountStatusRequest): Promise<ApiResponse<AccountDetailsResponse>> {
     return instance.put(`${basePath}/${id}`, account);
   }
   static readById(id: number): Promise<ApiResponse<AccountResponse>> {

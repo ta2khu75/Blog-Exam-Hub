@@ -1,5 +1,6 @@
 package com.ta2khu75.quiz.interceptor;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -13,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class InterceptorAuthorization implements HandlerInterceptor {
 	@Override
-	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+	public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler)
 			throws Exception {
 		log.info(SecurityUtil.getCurrentUserLogin().orElse("null"));
 		log.info(request.getRequestURI());

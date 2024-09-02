@@ -4,7 +4,7 @@ import { Select } from "antd";
 import EndpointResponse from "../../../../model/response/EndpointResponse";
 import { Method } from "../../../../model/Method";
 
-const PermissionCrud = () => {
+const ManagerPermission= () => {
     const [endpoints, setEndpoints] = useState<EndpointResponse[]>([])
     useEffect(() => {
         fetchMappings();
@@ -50,4 +50,4 @@ const PermissionCrud = () => {
     )
 }
 
-export default PermissionCrud
+export default ManagerPermission

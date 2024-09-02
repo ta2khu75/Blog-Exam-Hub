@@ -35,19 +35,20 @@ public class AccountController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
 	}
 
-	@GetMapping
-	public ResponseEntity<AccountResponse> readMyAccount() {
-		return ResponseEntity.ok(service.readMyAccount());
-	}
+//	@GetMapping
+//	public ResponseEntity<AccountResponse> readMyAccount() {
+//		return ResponseEntity.ok(service.readMyAccount());
+//	}
 
 	@PutMapping
 	public ResponseEntity<AccountResponse> updateMyAccount(@Valid @RequestBody AccountInfoRequest request) {
 		return ResponseEntity.ok(service.update(request));
 	}
 
-	@GetMapping("/page")
-	public ResponseEntity<PageResponse<AccountDetailsResponse>> readPage(Pageable pageable) {
-		return ResponseEntity.ok(service.readPage(pageable));
+	@GetMapping
+	public ResponseEntity<PageResponse<AccountDetailsResponse>> readPage(@RequestParam(name = "search", required = false, defaultValue = "") String search ,@RequestParam(name = "size", required = false, defaultValue = "5") int size, @RequestParam(name="page", required = false, defaultValue = "1") int page) {
+		Pageable pageable = Pageable.ofSize(size).withPage(page-1);
+		return ResponseEntity.ok(service.readPage(search,pageable));
 	}
 
 	@GetMapping("/{id}")

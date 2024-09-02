@@ -4,6 +4,7 @@ package com.ta2khu75.quiz.controller;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,21 +31,25 @@ import lombok.experimental.FieldDefaults;
 public class ExamResultController {
 	ExamResultService service;
 	@GetMapping("exam/{id}")
-	public ResponseEntity<ExamResultResponse> getMethodName(@PathVariable("id") Long id) {
+	public ResponseEntity<ExamResultResponse> takeExam(@PathVariable("id") Long id) {
+		ExamResultResponse response = service.readByExamId(id);
+		if (response == null) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(service.createByExamId(id));
+		}
 		return ResponseEntity.ok(service.readByExamId(id));
 	}
 	@PostMapping("{id}")	
-	public ResponseEntity<ExamResultDetailsResponse> getname(@PathVariable("id") Long examHistoryId, @RequestParam("exam_id") Long examId, @RequestBody UserAnswerRequest[] answerUserRequest) {
+	public ResponseEntity<ExamResultDetailsResponse> updateExamResult(@PathVariable("id") Long examHistoryId, @RequestParam("exam_id") Long examId, @RequestBody UserAnswerRequest[] answerUserRequest) {
 		return ResponseEntity.ok(service.scoreByExamId(examHistoryId, examId, answerUserRequest));
 	}
-	@GetMapping
-	public ResponseEntity<PageResponse<ExamResultResponse>> getMethodName(@RequestParam(name="size", required = false, defaultValue = "5") int size, @RequestParam(name="page", required = false, defaultValue = "0") int page) {
+	@GetMapping("/page")
+	public ResponseEntity<PageResponse<ExamResultResponse>> readPageExamResult(@RequestParam(name="size", required = false, defaultValue = "5") int size, @RequestParam(name="page", required = false, defaultValue = "0") int page) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "lastModifiedDate");
 		Pageable pageable = PageRequest.of(page, size, sort);
 		return ResponseEntity.ok(service.readPage(pageable));
 	}
 	@GetMapping("{id}")
-	public ResponseEntity<ExamResultDetailsResponse> getMethodNam(@PathVariable("id") Long id) {
+	public ResponseEntity<ExamResultDetailsResponse> readExamResult(@PathVariable("id") Long id) {
 		return ResponseEntity.ok(service.read(id));
 	}
 }

@@ -7,10 +7,8 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
-public class PageResponse<T> {
-	int number;
-	int totalElements;
-	int totalPages;
-	List<T> content;
+@FieldDefaults(level = AccessLevel.PROTECTED)
+public class PermissionGroupResponse {
+	String name;
+	List<PermissionResponse> permissions;
 }
