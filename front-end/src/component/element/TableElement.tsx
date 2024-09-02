@@ -2,7 +2,7 @@ import { Button, Space, Table } from "antd";
 import type { TableProps } from "antd";
 import { CloseOutlined, CheckOutlined } from '@ant-design/icons';
 import { useMemo } from "react";
-type ColumnValue = boolean | string | number;
+type ColumnValue = boolean | string | number| { name: string };
 type Props<T> = {
   array: T[];
   showIndex?: boolean;
@@ -39,8 +39,11 @@ const TableElement = <T extends object>({
             key: key,
             render: (value: ColumnValue) => {
               if (typeof value === 'boolean') {
-                return <span>{value ? <CheckOutlined className="text-success fw-bold" /> : <CloseOutlined className="text-danger" />}</span> // Render 'Yes' for true and 'No' for false
-              } else {
+                return <span>{value ? <CheckOutlined className="text-success fw-bold" /> : <CloseOutlined className="text-danger" />}</span>
+              } else if (typeof value === 'object' && value !== null && 'name' in value) {
+                return <span>{value?.name}</span>;
+              }
+              else {
                 return <span>{value}</span>
               }
             }

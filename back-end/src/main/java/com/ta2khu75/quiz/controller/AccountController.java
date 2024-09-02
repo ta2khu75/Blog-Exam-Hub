@@ -29,16 +29,11 @@ import com.ta2khu75.quiz.service.AccountService;
 public class AccountController {
 	AccountService service;
 
-	@PostMapping
+	@PostMapping()
 	public ResponseEntity<AccountResponse> createAccount(@Valid @RequestBody AccountRequest request)
 			throws MessagingException {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
 	}
-
-//	@GetMapping
-//	public ResponseEntity<AccountResponse> readMyAccount() {
-//		return ResponseEntity.ok(service.readMyAccount());
-//	}
 
 	@PutMapping
 	public ResponseEntity<AccountResponse> updateMyAccount(@Valid @RequestBody AccountInfoRequest request) {
@@ -46,9 +41,12 @@ public class AccountController {
 	}
 
 	@GetMapping
-	public ResponseEntity<PageResponse<AccountDetailsResponse>> readPage(@RequestParam(name = "search", required = false, defaultValue = "") String search ,@RequestParam(name = "size", required = false, defaultValue = "5") int size, @RequestParam(name="page", required = false, defaultValue = "1") int page) {
-		Pageable pageable = Pageable.ofSize(size).withPage(page-1);
-		return ResponseEntity.ok(service.readPage(search,pageable));
+	public ResponseEntity<PageResponse<AccountDetailsResponse>> readPage(
+			@RequestParam(name = "search", required = false, defaultValue = "") String search,
+			@RequestParam(name = "size", required = false, defaultValue = "5") int size,
+			@RequestParam(name = "page", required = false, defaultValue = "1") int page) {
+		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
+		return ResponseEntity.ok(service.readPage(search, pageable));
 	}
 
 	@GetMapping("/{id}")
@@ -61,6 +59,11 @@ public class AccountController {
 			@Valid @RequestBody AccountStatusRequest request) {
 		return ResponseEntity.ok(service.update(id, request));
 	}
+//	@PutMapping("/{id}/permission")
+//	public ResponseEntity<AccountDetailsResponse> updatePermissionOtherAccount(@PathVariable("id") String id,
+//			@Valid @RequestBody AccountPermissionRequest request) {
+//		return ResponseEntity.ok(service.update(id, request));
+//	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteOtherAccount(@PathVariable String id) {

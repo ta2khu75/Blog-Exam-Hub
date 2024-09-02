@@ -78,8 +78,20 @@ public interface AccountMapper{
 	@Mapping(target="role", source="role.name")
     @Mapping(target="username", source="displayName")
 	AccountAuthResponse toAuthResponse(Account account);	
-	@Mapping(target = "role", source = "role.name")
 	@Mapping(target = "username", source = "displayName")
 	AccountDetailsResponse toDetailsResponse(Account account);
     PageResponse<AccountDetailsResponse> toPageResponse(Page<Account> response);	
+//	default PermissionResponse toPermissionResponse(Permission permission) {
+//		if(permission == null) {
+//			return null;
+//		}
+//		PermissionResponse permissionResponse = new PermissionResponse();
+//		permissionResponse.setId(permission.getId());
+//		permissionResponse.setName(permission.getName());
+//		return permissionResponse;
+//		//return PermissionResponse.builder()
+////				.id(permission.getId())
+////				.name(permission.getName())
+////				.build();
+//	}
 	}

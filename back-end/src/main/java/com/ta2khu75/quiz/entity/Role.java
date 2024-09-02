@@ -1,5 +1,6 @@
 package com.ta2khu75.quiz.entity;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,9 +32,9 @@ public class Role {
 	@Column(unique = true, nullable = false)
 	String name;
 	@OneToMany(mappedBy = "role")
-	@ToString.Exclude
+//	@ToString.Exclude
 	List<Account> accounts;
-	@ManyToMany(fetch = FetchType.EAGER)
-	@ToString.Exclude
-	Set<Permission> permissions;
+	@ManyToMany //(fetch = FetchType.EAGER)
+//	@ToString.Exclude
+	Set<Permission> permissions=new HashSet<>();
 }

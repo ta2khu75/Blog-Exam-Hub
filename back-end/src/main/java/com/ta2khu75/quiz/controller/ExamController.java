@@ -34,42 +34,52 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RequestMapping("${app.api-prefix}/exam")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExamController {
-    ExamService service;
-    ObjectMapper objectMapper;
-    @GetMapping("exam-type")
-    public ResponseEntity<ExamType[]> readAllExamType() {
-        return ResponseEntity.ok(ExamType.values());
-    }
-    @GetMapping("exam-level")
-    public ResponseEntity<ExamLevel[]> readAllExamLevel() {
-        return ResponseEntity.ok(ExamLevel.values());
-    }
-    
-    @PostMapping(consumes="multipart/form-data")
-    public ResponseEntity<ExamResponse> createExam(@RequestPart("exam_request") String examRequestString, @RequestPart(name = "image", required = true) MultipartFile image) throws IOException {
-        ExamRequest examRequest= objectMapper.readValue(examRequestString, ExamRequest.class); //(examRequestString, ExamRequest.class);
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.create(examRequest, image));
-    }
-    @GetMapping("{id}")
-    public ResponseEntity<ExamResponse> readExam(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(service.read(id));
-    }
-    @GetMapping("details/{id}")
-    public ResponseEntity<ExamDetailsResponse> readDetailExam(@PathVariable("id") Long id) {
-	    return ResponseEntity.ok(service.readDetail(id));
-    }
-    @PutMapping(path = "{id}", consumes = "multipart/form-data")
-    public ResponseEntity<ExamResponse> updateExam(@PathVariable(name = "id") Long id, @RequestPart("exam_request") String examRequestString, @RequestPart(name="image", required = false) MultipartFile image) throws IOException {
-        ExamRequest examRequest= objectMapper.readValue(examRequestString, ExamRequest.class);
-        return ResponseEntity.ok(service.update(id, examRequest, image));
-    }
-    @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteExam(@PathVariable("id") Long id){
-        service.delete(id);
-        return ResponseEntity.noContent().build();
-    }
-    @GetMapping
-    public ResponseEntity<PageResponse<ExamResponse>> readAllExam(Pageable pageable) {
-        return ResponseEntity.ok(service.readPage(pageable));
-    }
+	ExamService service;
+	ObjectMapper objectMapper;
+
+	@GetMapping("exam-type")
+	public ResponseEntity<ExamType[]> readAllExamType() {
+		return ResponseEntity.ok(ExamType.values());
+	}
+
+	@GetMapping("exam-level")
+	public ResponseEntity<ExamLevel[]> readAllExamLevel() {
+		return ResponseEntity.ok(ExamLevel.values());
+	}
+
+	@PostMapping(consumes = "multipart/form-data")
+	public ResponseEntity<ExamResponse> createExam(@RequestPart("exam_request") String examRequestString,
+			@RequestPart(name = "image", required = true) MultipartFile image) throws IOException {
+		ExamRequest examRequest = objectMapper.readValue(examRequestString, ExamRequest.class); 
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(examRequest, image));
+	}
+
+	@GetMapping("{id}")
+	public ResponseEntity<ExamResponse> readExam(@PathVariable("id") Long id) {
+		return ResponseEntity.ok(service.read(id));
+	}
+
+	@GetMapping("details/{id}")
+	public ResponseEntity<ExamDetailsResponse> readDetailExam(@PathVariable("id") Long id) {
+		return ResponseEntity.ok(service.readDetail(id));
+	}
+
+	@PutMapping(path = "{id}", consumes = "multipart/form-data")
+	public ResponseEntity<ExamResponse> updateExam(@PathVariable(name = "id") Long id,
+			@RequestPart("exam_request") String examRequestString,
+			@RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
+		ExamRequest examRequest = objectMapper.readValue(examRequestString, ExamRequest.class);
+		return ResponseEntity.ok(service.update(id, examRequest, image));
+	}
+
+	@DeleteMapping("{id}")
+	public ResponseEntity<Void> deleteExam(@PathVariable("id") Long id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();
+	}
+
+	@GetMapping
+	public ResponseEntity<PageResponse<ExamResponse>> readAllExam(Pageable pageable) {
+		return ResponseEntity.ok(service.readPage(pageable));
+	}
 }

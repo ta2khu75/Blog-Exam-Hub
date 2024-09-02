@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import com.ta2khu75.quiz.entity.request.AccountRequest;
 import com.ta2khu75.quiz.entity.request.update.AccountInfoRequest;
 import com.ta2khu75.quiz.entity.request.update.AccountPasswordRequest;
+//import com.ta2khu75.quiz.entity.request.update.AccountPermissionRequest;
 import com.ta2khu75.quiz.entity.request.update.AccountStatusRequest;
 import com.ta2khu75.quiz.entity.response.AccountResponse;
 import com.ta2khu75.quiz.entity.response.PageResponse;
@@ -22,4 +23,5 @@ public interface AccountService {
     AccountResponse update(AccountInfoRequest request);
     boolean verify(String code);
     AccountResponse readMyAccount();
+//    AccountDetailsResponse update(String id,AccountPermissionRequest request);
 }

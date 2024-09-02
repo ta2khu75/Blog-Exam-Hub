@@ -25,8 +25,17 @@ const items: ItemType<MenuItemType>[] = [
     label: 'Data',
     children: [{
       key: '1-1',
-      icon: <UserOutlined/>,
+      icon: <UserOutlined />,
       label: <Link to={"/admin/account"}>Account</Link>,
+    }, {
+      key: "1-2",
+      icon: <TableOutlined />,
+      label: <Link to={"/admin/role"}>Role</Link>,
+    }, {
+      key: "1-3",
+      icon: <TableOutlined />,
+      label: <Link to={"/admin/permission"}>Permission</Link>,
+
     }]
   },
   {
@@ -48,7 +57,7 @@ const App: React.FC = () => {
 
   return (
     <Layout>
-      <Sider trigger={null} style={{height:"100vh"}} collapsible collapsed={collapsed}>
+      <Sider trigger={null} style={{ height: "100vh" }} collapsible collapsed={collapsed}>
         <div className="demo-logo-vertical" />
         <Menu
           theme="dark"
@@ -79,7 +88,7 @@ const App: React.FC = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-          <Outlet/>
+          <Outlet />
         </Content>
       </Layout>
     </Layout>

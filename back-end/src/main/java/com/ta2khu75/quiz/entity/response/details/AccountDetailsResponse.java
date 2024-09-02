@@ -1,6 +1,7 @@
 package com.ta2khu75.quiz.entity.response.details;
 
 import com.ta2khu75.quiz.entity.response.AccountResponse;
+import com.ta2khu75.quiz.entity.response.RoleResponse;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -16,5 +17,5 @@ import lombok.experimental.FieldDefaults;
 public class AccountDetailsResponse extends AccountResponse {
 	boolean enabled;
 	boolean nonLocked;
-	String role;
+	RoleResponse role;
 }

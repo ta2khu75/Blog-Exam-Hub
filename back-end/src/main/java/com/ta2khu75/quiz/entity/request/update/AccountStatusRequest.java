@@ -12,4 +12,5 @@ public class AccountStatusRequest {
 	Boolean enabled;
 	@NotNull
 	Boolean nonLocked;
+	Long roleId;
 }

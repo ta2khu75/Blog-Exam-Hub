@@ -1,52 +1,40 @@
 import { useEffect, useState } from "react"
-import ActuatorService from "../../../../service/ActuatorService"
-import { Select } from "antd";
-import EndpointResponse from "../../../../model/response/EndpointResponse";
-import { Method } from "../../../../model/Method";
-
-const ManagerPermission= () => {
-    const [endpoints, setEndpoints] = useState<EndpointResponse[]>([])
+import { Button, Checkbox } from "antd";
+import PermissionGroupResponse from "../../../../model/response/PermissionGroupResponse";
+import PermissionGroupService from "../../../../service/PermissionGroupService";
+import AccountDetailsResponse from "../../../../model/response/details/AccountDetailsResponse";
+import AccountService from "../../../../service/AccountService";
+type Props = {
+    account?: AccountDetailsResponse
+}
+const ManagerPermission = ({ account }: Props) => {
+    const [permissionIds, setPermissionIds] = useState<number[]>([])
+    const [permissionGroup, setPermissionGroup] = useState<PermissionGroupResponse[]>([])
     useEffect(() => {
-        fetchMappings();
+        if (account) setPermissionIds(account.role.permissions.map(permission => permission.id))
+        fetchAllPermissionGroup();
     }, [])
-    const fetchMappings = () => {
-        ActuatorService.readEndpoints().then((d) => {
+    const fetchAllPermissionGroup = () => {
+        PermissionGroupService.readAll().then(d => {
             if (d.success) {
-                setEndpoints(d.data);
+                setPermissionGroup(d.data)
             }
         });
     }
-    return (
-        <Select style={{ width: "400px" }} options={endpoints.map((endpoint, index) => {
-            let action;
-            const path=endpoint.path.substring(8);
-            if (endpoint.method === Method.GET) {
-                action= <span className="text-info">READ</span>
-            }else if(endpoint.method === Method.POST){
-                action= <span className="text-success">CREATE</span>
-            }else if(endpoint.method === Method.PUT){
-                action= <span className="text-warning">UPDATE</span>
-            }else if(endpoint.method === Method.DELETE){
-                action=<span className="text-danger">DELETE</span>
-            }else{
-                action=<span className="text-secondary">UNKNOWN</span>
-            }
-           const index_= path.indexOf("/")
-            let name;
-            if(index_===-1){
-                name= "All "+path
-            }else{
-                const temp_name = path.substring(0,index_);
-                name=` ${temp_name} by ${path.substring(index_+1)}`
-            }
+    const handleSaveClick = () => {
+        if (account)
+            AccountService.updatePermission(account.id, permissionIds).then(d => console.log(d.data))
+    }
 
-            return {
-                value: index,
-                label: <span>{action} - {name}</span>,
-            }
-        }
-        )} />
-        // [{ value: 'sample', label: <span>sample</span> }]} />
+    return (
+        <>
+            <Checkbox.Group className="d-block mb-5" value={permissionIds} onChange={(e) => setPermissionIds(e)}>
+                <table className="w-100">
+                    {permissionGroup?.map(permissionGroup => { return (<tr key={`row-${permissionGroup.name}`} ><th>{permissionGroup.name}</th>{permissionGroup.permissions.map(permission => <td key={`cell-${permission.id}`}><Checkbox value={permission.id}>{permission.name}</Checkbox></td>)}</tr>) })}
+                </table >
+            </Checkbox.Group>
+            <Button onClick={handleSaveClick}>Save</Button>
+        </>
     )
 }
 
