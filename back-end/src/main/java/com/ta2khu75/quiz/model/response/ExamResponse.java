@@ -14,5 +14,5 @@ public class ExamResponse extends ExamBase {
 	Long id;
 	String imagePath;
 	AccountResponse author;
-	ExamCategoryResponse examCategory;
+	Long examCategoryId;
 }

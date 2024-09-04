@@ -12,7 +12,6 @@ import lombok.experimental.FieldDefaults;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ta2khu75.quiz.model.request.QuizRequest;
 import com.ta2khu75.quiz.model.response.QuizResponse;
-import com.ta2khu75.quiz.model.entity.QuizType;
 import com.ta2khu75.quiz.service.QuizSerivce;
 
 import org.springframework.http.HttpStatus;
@@ -43,11 +42,6 @@ public class QuizController {
 	@GetMapping("exam/{id}")
 	public ResponseEntity<List<QuizResponse>> readAllQuizExam(@PathVariable("id") Long id) {
 		return ResponseEntity.ok().body(service.readByExamId(id));
-	}
-
-	@GetMapping("quiz-type")
-	public ResponseEntity<QuizType[]> readAllQuizType() {
-		return ResponseEntity.ok(QuizType.values());
 	}
 
 	@GetMapping("{id}")

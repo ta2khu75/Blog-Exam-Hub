@@ -1,5 +1,5 @@
 export enum ExamLevel{
     EASY="EASY",
-    MEDIUM="MEDIUM",
+    NORMAL="NORMAL",
     HARD="HARD"
 }

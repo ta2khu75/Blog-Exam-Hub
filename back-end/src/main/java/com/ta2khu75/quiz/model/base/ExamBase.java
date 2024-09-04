@@ -2,7 +2,6 @@ package com.ta2khu75.quiz.model.base;
 
 import com.ta2khu75.quiz.model.entity.AccessModifier;
 import com.ta2khu75.quiz.model.entity.ExamLevel;
-import com.ta2khu75.quiz.model.entity.ExamType;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,9 +19,6 @@ public abstract class ExamBase {
 
 	@NotBlank(message = "Description must not be blank")
 	String description;
-
-	@NotNull(message = "Exam type must not be null")
-	ExamType examType;
 
 	@NotNull(message = "Exam level must not be null")
 	ExamLevel examLevel;

@@ -3,6 +3,7 @@ package com.ta2khu75.quiz.service.impl;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.ExamCategoryMapper;
@@ -25,6 +26,7 @@ public class ExamCategoryServiceImpl implements ExamCategoryService {
 	ExamCategoryMapper mapper;
 
 	@Override
+	@Transactional
 	public ExamCategoryResponse create(ExamCategoryRequest request) {
 		ExamCategory examCategory = mapper.toEntity(request);
 		examCategory.setName(StringUtil.convertCamelCaseToReadable(examCategory.getName()));
@@ -32,6 +34,7 @@ public class ExamCategoryServiceImpl implements ExamCategoryService {
 	}
 
 	@Override
+	@Transactional
 	public ExamCategoryResponse update(Long id, ExamCategoryRequest request) {
 		ExamCategory examCategory = this.findById(id);
 		mapper.update(request, examCategory);

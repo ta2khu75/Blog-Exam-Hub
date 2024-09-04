@@ -39,8 +39,8 @@ public class ExamResultController {
 		return ResponseEntity.ok(service.readByExamId(id));
 	}
 	@PostMapping("{id}")	
-	public ResponseEntity<ExamResultDetailsResponse> updateExamResult(@PathVariable("id") Long examHistoryId, @RequestParam("exam_id") Long examId, @RequestBody UserAnswerRequest[] answerUserRequest) {
-		return ResponseEntity.ok(service.scoreByExamId(examHistoryId, examId, answerUserRequest));
+	public ResponseEntity<ExamResultDetailsResponse> updateExamResult(@PathVariable("id") Long examHistoryId, @RequestBody UserAnswerRequest[] answerUserRequest) {
+		return ResponseEntity.ok(service.scoreByExamId(examHistoryId, answerUserRequest));
 	}
 	@GetMapping("/page")
 	public ResponseEntity<PageResponse<ExamResultResponse>> readPageExamResult(@RequestParam(name="size", required = false, defaultValue = "5") int size, @RequestParam(name="page", required = false, defaultValue = "0") int page) {

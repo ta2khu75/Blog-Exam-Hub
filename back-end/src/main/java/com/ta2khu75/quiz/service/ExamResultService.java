@@ -10,7 +10,7 @@ import com.ta2khu75.quiz.model.response.details.ExamResultDetailsResponse;
 public interface ExamResultService {
 	ExamResultResponse readByExamId(Long examId);
 	ExamResultResponse createByExamId(Long examId);
-	ExamResultDetailsResponse scoreByExamId(Long id, Long examId, UserAnswerRequest[] answerUserRequest);
+	ExamResultDetailsResponse scoreByExamId(Long id, UserAnswerRequest[] answerUserRequest);
 	
 	PageResponse<ExamResultResponse> readPage(Pageable pageable);
 
