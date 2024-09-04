@@ -4,19 +4,19 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.springframework.data.domain.Page;
 
-import com.ta2khu75.quiz.entity.Account;
-import com.ta2khu75.quiz.entity.request.AccountRequest;
-import com.ta2khu75.quiz.entity.request.update.AccountInfoRequest;
-import com.ta2khu75.quiz.entity.request.update.AccountStatusRequest;
-import com.ta2khu75.quiz.entity.response.AccountAuthResponse;
-import com.ta2khu75.quiz.entity.response.AccountResponse;
-import com.ta2khu75.quiz.entity.response.PageResponse;
-import com.ta2khu75.quiz.entity.response.details.AccountDetailsResponse;
+import com.ta2khu75.quiz.model.entity.Account;
+import com.ta2khu75.quiz.model.request.AccountRequest;
+import com.ta2khu75.quiz.model.request.update.AccountInfoRequest;
+import com.ta2khu75.quiz.model.request.update.AccountStatusRequest;
+import com.ta2khu75.quiz.model.response.AccountAuthResponse;
+import com.ta2khu75.quiz.model.response.AccountResponse;
+import com.ta2khu75.quiz.model.response.PageResponse;
+import com.ta2khu75.quiz.model.response.details.AccountDetailsResponse;
 
 import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface AccountMapper{
+public interface AccountMapper {
 	@Mapping(target = "displayName", ignore = true)
 	@Mapping(target = "createdAt", ignore = true)
 	@Mapping(target = "codeVerify", ignore = true)
@@ -29,9 +29,11 @@ public interface AccountMapper{
 	@Mapping(target = "role", ignore = true)
 	@Mapping(target = "updatedAt", ignore = true)
 	Account toEntity(AccountRequest request);
-    @Mapping(target="username", source="displayName")
-    AccountResponse toResponse(Account account);
-	@Mapping(target = "displayName",ignore = true) 
+
+	@Mapping(target = "username", source = "displayName")
+	AccountResponse toResponse(Account account);
+
+	@Mapping(target = "displayName", ignore = true)
 	@Mapping(target = "createdAt", ignore = true)
 	@Mapping(target = "codeVerify", ignore = true)
 	@Mapping(target = "enabled", ignore = true)
@@ -44,6 +46,7 @@ public interface AccountMapper{
 	@Mapping(target = "updatedAt", ignore = true)
 	@Mapping(target = "authorities", ignore = true)
 	void update(AccountRequest request, @MappingTarget Account account);
+
 	@Mapping(target = "displayName", source = "username")
 	@Mapping(target = "createdAt", ignore = true)
 	@Mapping(target = "email", ignore = true)
@@ -58,7 +61,8 @@ public interface AccountMapper{
 	@Mapping(target = "role", ignore = true)
 	@Mapping(target = "updatedAt", ignore = true)
 	@Mapping(target = "authorities", ignore = true)
-	void update(AccountInfoRequest request, @MappingTarget Account account);	
+	void update(AccountInfoRequest request, @MappingTarget Account account);
+
 	@Mapping(target = "birthday", ignore = true)
 	@Mapping(target = "codeVerify", ignore = true)
 	@Mapping(target = "createdAt", ignore = true)
@@ -75,23 +79,13 @@ public interface AccountMapper{
 	@Mapping(target = "updatedAt", ignore = true)
 	@Mapping(target = "authorities", ignore = true)
 	void update(AccountStatusRequest request, @MappingTarget Account account);
-	@Mapping(target="role", source="role.name")
-    @Mapping(target="username", source="displayName")
-	AccountAuthResponse toAuthResponse(Account account);	
+
+	@Mapping(target = "role", source = "role.name")
+	@Mapping(target = "username", source = "displayName")
+	AccountAuthResponse toAuthResponse(Account account);
+
 	@Mapping(target = "username", source = "displayName")
 	AccountDetailsResponse toDetailsResponse(Account account);
-    PageResponse<AccountDetailsResponse> toPageResponse(Page<Account> response);	
-//	default PermissionResponse toPermissionResponse(Permission permission) {
-//		if(permission == null) {
-//			return null;
-//		}
-//		PermissionResponse permissionResponse = new PermissionResponse();
-//		permissionResponse.setId(permission.getId());
-//		permissionResponse.setName(permission.getName());
-//		return permissionResponse;
-//		//return PermissionResponse.builder()
-////				.id(permission.getId())
-////				.name(permission.getName())
-////				.build();
-//	}
-	}
+
+	PageResponse<AccountDetailsResponse> toPageResponse(Page<Account> response);
+}

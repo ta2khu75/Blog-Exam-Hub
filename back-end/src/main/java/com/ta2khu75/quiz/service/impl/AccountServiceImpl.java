@@ -5,34 +5,26 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.ta2khu75.quiz.entity.Account;
-import com.ta2khu75.quiz.entity.Permission;
-import com.ta2khu75.quiz.entity.Role;
-import com.ta2khu75.quiz.entity.request.AccountRequest;
-import com.ta2khu75.quiz.entity.request.update.AccountInfoRequest;
-import com.ta2khu75.quiz.entity.request.update.AccountPasswordRequest;
-//import com.ta2khu75.quiz.entity.request.update.AccountPermissionRequest;
-import com.ta2khu75.quiz.entity.request.update.AccountStatusRequest;
-import com.ta2khu75.quiz.entity.response.AccountResponse;
-import com.ta2khu75.quiz.entity.response.PageResponse;
-import com.ta2khu75.quiz.entity.response.details.AccountDetailsResponse;
+
+import com.ta2khu75.quiz.model.request.AccountRequest;
+import com.ta2khu75.quiz.model.request.update.AccountInfoRequest;
+import com.ta2khu75.quiz.model.request.update.AccountPasswordRequest;
+import com.ta2khu75.quiz.model.request.update.AccountStatusRequest;
+import com.ta2khu75.quiz.model.response.AccountResponse;
+import com.ta2khu75.quiz.model.response.PageResponse;
+import com.ta2khu75.quiz.model.response.details.AccountDetailsResponse;
 import com.ta2khu75.quiz.exception.ExistingException;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.exception.NotMatchesException;
 import com.ta2khu75.quiz.mapper.AccountMapper;
+import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.repository.AccountRepository;
-//import com.ta2khu75.quiz.repository.PermissionRepository;
 import com.ta2khu75.quiz.repository.RoleRepository;
 import com.ta2khu75.quiz.scheduling.SendMailScheduling;
 import com.ta2khu75.quiz.service.AccountService;
@@ -47,7 +39,6 @@ import jakarta.mail.MessagingException;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AccountServiceImpl implements AccountService {
 	AccountRepository repository;
-//	PermissionRepository permissionRepository;
 	AccountMapper mapper;
 	RoleRepository roleRepository;
 	PasswordEncoder passwordEncoder;
@@ -80,6 +71,10 @@ public class AccountServiceImpl implements AccountService {
 		Account account = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found account with id: " + id));
 		mapper.update(request, account);
+		if (!account.getRole().getId().equals(request.getRoleId())) {
+			account.setRole(roleRepository.findById(request.getRoleId())
+					.orElseThrow(() -> new NotFoundException("Could not found role with id: " + request.getRoleId())));
+		}
 		return mapper.toDetailsResponse(repository.save(account));
 	}
 

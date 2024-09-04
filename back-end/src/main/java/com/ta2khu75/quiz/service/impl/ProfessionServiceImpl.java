@@ -8,12 +8,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.ta2khu75.quiz.entity.Answer;
-import com.ta2khu75.quiz.entity.ExamResult;
-import com.ta2khu75.quiz.entity.Quiz;
-import com.ta2khu75.quiz.entity.QuizType;
-import com.ta2khu75.quiz.entity.UserAnswer;
-import com.ta2khu75.quiz.entity.request.UserAnswerRequest;
+import com.ta2khu75.quiz.model.request.UserAnswerRequest;
+import com.ta2khu75.quiz.model.entity.Answer;
+import com.ta2khu75.quiz.model.entity.ExamResult;
+import com.ta2khu75.quiz.model.entity.Quiz;
+import com.ta2khu75.quiz.model.entity.QuizType;
+import com.ta2khu75.quiz.model.entity.UserAnswer;
 import com.ta2khu75.quiz.repository.AnswerRepository;
 import com.ta2khu75.quiz.repository.QuizRepository;
 import com.ta2khu75.quiz.repository.UserAnswerRepository;

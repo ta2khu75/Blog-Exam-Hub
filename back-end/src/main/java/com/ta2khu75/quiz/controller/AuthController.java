@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ta2khu75.quiz.entity.request.AuthRequest;
-import com.ta2khu75.quiz.entity.response.AccountResponse;
-import com.ta2khu75.quiz.entity.response.AuthResponse;
+import com.ta2khu75.quiz.model.request.AuthRequest;
+import com.ta2khu75.quiz.model.response.AccountResponse;
+import com.ta2khu75.quiz.model.response.AuthResponse;
 import com.ta2khu75.quiz.service.AuthService;
 
 import jakarta.validation.Valid;

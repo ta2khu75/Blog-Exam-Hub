@@ -7,15 +7,15 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.springframework.data.domain.Page;
 
-import com.ta2khu75.quiz.entity.Answer;
-import com.ta2khu75.quiz.entity.Exam;
-import com.ta2khu75.quiz.entity.Quiz;
-import com.ta2khu75.quiz.entity.request.ExamRequest;
-import com.ta2khu75.quiz.entity.response.AnswerResponse;
-import com.ta2khu75.quiz.entity.response.ExamResponse;
-import com.ta2khu75.quiz.entity.response.PageResponse;
-import com.ta2khu75.quiz.entity.response.details.ExamDetailsResponse;
-import com.ta2khu75.quiz.entity.response.details.QuizDetaislResponse;
+import com.ta2khu75.quiz.model.request.ExamRequest;
+import com.ta2khu75.quiz.model.response.AnswerResponse;
+import com.ta2khu75.quiz.model.response.ExamResponse;
+import com.ta2khu75.quiz.model.response.PageResponse;
+import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
+import com.ta2khu75.quiz.model.response.details.QuizDetaislResponse;
+import com.ta2khu75.quiz.model.entity.Answer;
+import com.ta2khu75.quiz.model.entity.Exam;
+import com.ta2khu75.quiz.model.entity.Quiz;
 
 import org.mapstruct.Mapping;
 
@@ -63,7 +63,6 @@ public interface ExamMapper {
 		response.setId(answer.getId());
 		response.setAnswer(answer.getAnswerString());
 		response.setCorrect(answer.getCorrect());
-		response.setQuizId(answer.getQuiz().getId());
 		return response;
 	}
 

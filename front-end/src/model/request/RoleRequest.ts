@@ -1,4 +1,4 @@
 export default interface RoleRequest{
     name: string;
-    permissionIds: number[];
+    permission_ids: number[];
 }

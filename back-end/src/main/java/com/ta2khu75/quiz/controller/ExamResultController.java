@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ta2khu75.quiz.entity.request.UserAnswerRequest;
-import com.ta2khu75.quiz.entity.response.ExamResultResponse;
-import com.ta2khu75.quiz.entity.response.PageResponse;
-import com.ta2khu75.quiz.entity.response.details.ExamResultDetailsResponse;
+import com.ta2khu75.quiz.model.request.UserAnswerRequest;
+import com.ta2khu75.quiz.model.response.ExamResultResponse;
+import com.ta2khu75.quiz.model.response.PageResponse;
+import com.ta2khu75.quiz.model.response.details.ExamResultDetailsResponse;
 import com.ta2khu75.quiz.service.ExamResultService;
 
 import lombok.AccessLevel;

@@ -3,10 +3,10 @@ package com.ta2khu75.quiz.service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ta2khu75.quiz.entity.request.ExamRequest;
-import com.ta2khu75.quiz.entity.response.ExamResponse;
-import com.ta2khu75.quiz.entity.response.PageResponse;
-import com.ta2khu75.quiz.entity.response.details.ExamDetailsResponse;
+import com.ta2khu75.quiz.model.request.ExamRequest;
+import com.ta2khu75.quiz.model.response.ExamResponse;
+import com.ta2khu75.quiz.model.response.PageResponse;
+import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
 
 import java.io.IOException;
 

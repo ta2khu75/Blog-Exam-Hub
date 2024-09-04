@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Button, Checkbox } from "antd";
+import { Checkbox } from "antd";
 import PermissionGroupResponse from "../../../../model/response/PermissionGroupResponse";
 import PermissionGroupService from "../../../../service/PermissionGroupService";
 import AccountDetailsResponse from "../../../../model/response/details/AccountDetailsResponse";
@@ -11,7 +11,7 @@ const ManagerPermission = ({ account }: Props) => {
     const [permissionIds, setPermissionIds] = useState<number[]>([])
     const [permissionGroup, setPermissionGroup] = useState<PermissionGroupResponse[]>([])
     useEffect(() => {
-        if (account) setPermissionIds(account.role.permissions.map(permission => permission.id))
+        // if (account) setPermissionIds(account.role.permissions.map(permission => permission.id))
         fetchAllPermissionGroup();
     }, [])
     const fetchAllPermissionGroup = () => {
@@ -27,14 +27,13 @@ const ManagerPermission = ({ account }: Props) => {
     }
 
     return (
-        <>
-            <Checkbox.Group className="d-block mb-5" value={permissionIds} onChange={(e) => setPermissionIds(e)}>
-                <table className="w-100">
-                    {permissionGroup?.map(permissionGroup => { return (<tr key={`row-${permissionGroup.name}`} ><th>{permissionGroup.name}</th>{permissionGroup.permissions.map(permission => <td key={`cell-${permission.id}`}><Checkbox value={permission.id}>{permission.name}</Checkbox></td>)}</tr>) })}
-                </table >
-            </Checkbox.Group>
-            <Button onClick={handleSaveClick}>Save</Button>
-        </>
+        <Checkbox.Group className="d-block mb-5"
+        //  value={permissionIds} onChange={(e) => setPermissionIds(e)}
+         >
+            <table className="w-100">
+                {permissionGroup?.map(permissionGroup => { return (<tr key={`row-${permissionGroup.name}`} ><th>{permissionGroup.name}</th>{permissionGroup.permissions.map(permission => <td key={`cell-${permission.id}`}><Checkbox value={permission.id}>{permission.name}</Checkbox></td>)}</tr>) })}
+            </table >
+        </Checkbox.Group>
     )
 }
 

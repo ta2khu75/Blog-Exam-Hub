@@ -16,6 +16,7 @@ import ChangePasswordPage from "./component/page/ChangePasswordPage";
 import PermissionCrud from "./component/page/admin/Manager/ManagerPermission";
 import AdComponent from "./component/page/admin/ADComponent";
 import ManagerRole from "./component/page/admin/Manager/ManagerRole";
+import ManagerExamCategory from "./component/page/admin/Manager/ManagerExamCategory";
 // const route=createBrowserRouter(
 //   createRoutesFromElements(
 //     <Route path="/" element={<Ap[]}>
@@ -61,6 +62,7 @@ const router = createBrowserRouter(
         </Route>
         <Route path="permission" element={<PermissionCrud/>} />
         <Route path="role" element={<ManagerRole/>} />
+        <Route path="exam-category" element={<ManagerExamCategory/>} />
         <Route path="exam-view/:id" element={<QuizList />} />
       </Route>
     </>

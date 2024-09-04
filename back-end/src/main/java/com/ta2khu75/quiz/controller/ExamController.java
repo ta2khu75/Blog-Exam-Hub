@@ -16,12 +16,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ta2khu75.quiz.entity.ExamLevel;
-import com.ta2khu75.quiz.entity.ExamType;
-import com.ta2khu75.quiz.entity.request.ExamRequest;
-import com.ta2khu75.quiz.entity.response.ExamResponse;
-import com.ta2khu75.quiz.entity.response.PageResponse;
-import com.ta2khu75.quiz.entity.response.details.ExamDetailsResponse;
+import com.ta2khu75.quiz.model.request.ExamRequest;
+import com.ta2khu75.quiz.model.response.ExamResponse;
+import com.ta2khu75.quiz.model.response.PageResponse;
+import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
+import com.ta2khu75.quiz.model.entity.ExamLevel;
+import com.ta2khu75.quiz.model.entity.ExamType;
 import com.ta2khu75.quiz.service.ExamService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;

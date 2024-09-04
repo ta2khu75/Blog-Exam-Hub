@@ -1,0 +1,3 @@
+interface ExamCategoryRequest{
+    name: string;
+}

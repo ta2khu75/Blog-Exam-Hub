@@ -1,7 +1,9 @@
 package com.ta2khu75.quiz.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.ta2khu75.quiz.entity.Answer;
+
+import com.ta2khu75.quiz.model.entity.Answer;
+
 import java.util.List;
 import java.util.Set;
 public interface AnswerRepository extends JpaRepository<Answer, Long> {

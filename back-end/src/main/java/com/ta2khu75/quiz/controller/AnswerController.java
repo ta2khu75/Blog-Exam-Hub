@@ -7,8 +7,8 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import com.ta2khu75.quiz.entity.request.AnswerRequest;
-import com.ta2khu75.quiz.entity.response.AnswerResponse;
+import com.ta2khu75.quiz.model.request.AnswerRequest;
+import com.ta2khu75.quiz.model.response.AnswerResponse;
 import com.ta2khu75.quiz.service.AnswerService;
 
 import org.springframework.http.HttpStatus;

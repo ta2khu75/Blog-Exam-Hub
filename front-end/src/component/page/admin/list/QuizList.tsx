@@ -86,7 +86,7 @@ const QuizList = () => {
         <Button onClick={() => handleAddClick()}>Add Quiz</Button>
       </ol>
       {examResponse && (
-        <ModalElement title="Modal Quiz" open={open} setOpen={setOpen}>
+        <ModalElement title="Modal Quiz" open={open} handleCancel={()=>setOpen(false)}>
           <QuizForm
             quizResponse={quizResponse}
             refresh={fetchListQuiz}

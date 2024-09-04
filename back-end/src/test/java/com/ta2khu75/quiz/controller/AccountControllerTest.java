@@ -14,9 +14,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ta2khu75.quiz.entity.Role;
 import com.ta2khu75.quiz.entity.request.AccountRequest;
 import com.ta2khu75.quiz.entity.response.AccountResponse;
+import com.ta2khu75.quiz.model.entity.Role;
 import com.ta2khu75.quiz.service.AccountService;
 
 import lombok.extern.slf4j.Slf4j;
