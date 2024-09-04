@@ -13,7 +13,7 @@ const ExamCategoryForm = ({ examCategory, setExamCategories }: Props) => {
             form.setFieldsValue(examCategory)
         }
         else {
-            form.resetFields()
+            form.resetFields();
         }
     }, [examCategory])
     const onFinish: FormProps<ExamCategoryRequest>['onFinish'] = (values) => {
@@ -21,24 +21,27 @@ const ExamCategoryForm = ({ examCategory, setExamCategories }: Props) => {
             ExamCategoryService.update(examCategory.id, values).then((response) => {
                 if (response.success) {
                     setExamCategories(examCategories => examCategories.map(examCategory => { if (examCategory.id === response.data.id) return response.data; return examCategory }))
-                    toast.success("Update successfully")
+                    form.resetFields();
+                }
+                else {
+                    toast.error(response.message_error)
+                }
+            });
+        } else {
+            ExamCategoryService.create(values).then((response) => {
+                if (response.success) {
+                    setExamCategories(examCategories => {
+                        return [...examCategories, response.data]
+                    })
+                    form.resetFields();
+                    toast.success("Create successfully")
                 }
                 else {
                     toast.error(response.message_error)
                 }
             });
         }
-        ExamCategoryService.create(values).then((response) => {
-            if (response.success) {
-                setExamCategories(examCategories => {
-                    return [...examCategories, response.data]
-                })
-                toast.success("Create successfully")
-            }
-            else {
-                toast.error(response.message_error)
-            }
-        });
+
     };
     const onFinishFailed: FormProps<ExamCategoryRequest>['onFinishFailed'] = (errorInfo) => {
         console.log('Failed:', errorInfo);

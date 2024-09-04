@@ -12,8 +12,8 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PROTECTED)
 public class ExamResultResponse {
 	Long id;
-	float point;
-	int correctCount;
+	Double point;
+	Integer correctCount;
 	ExamDetailsResponse exam;
 	AccountResponse account;
 	LocalDateTime endTime;

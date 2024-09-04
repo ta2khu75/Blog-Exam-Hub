@@ -32,7 +32,4 @@ export default class QuizService {
   static delete(id: number): Promise<ApiResponse<void>> {
     return instance.delete(`${basePath}/${id}`);
   }
-  static readAllQuizType(): Promise<ApiResponse<string[]>> {
-    return instance.get(`${basePath}/quiz-type`);
-  }
 }

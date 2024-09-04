@@ -1,6 +1,6 @@
 package com.ta2khu75.quiz.service.impl;
 
-import jakarta.transaction.Transactional;
+//import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ta2khu75.quiz.model.request.ExamRequest;
@@ -69,7 +70,7 @@ public class ExamServiceImpl implements ExamService {
 	}
 
 	@Override
-	@PostAuthorize("returnObject.author.email== authentication.name")
+//	@PostAuthorize("returnObject.author.email== authentication.name")
 	public ExamResponse read(Long id) {
 		Exam exam = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));

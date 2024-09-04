@@ -11,20 +11,19 @@ import ExamRequest from "../../../../model/request/ExamRequest";
 import { ExamLevel } from "../../../../model/ExamLevel";
 import { AccessModifier } from "../../../../model/AccessModifier";
 import ExamCategoryService from "../../../../service/ExamCategoryService";
-import { responsiveArray } from "antd/es/_util/responsiveObserver";
-
+import ExamForm from "../form/ExamForm";
 const ExamCrud = () => {
-  const [image, setImage] = useState<File>()
-  const [imageUrl, setImageUrl] = useState<string>()
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  // const [image, setImage] = useState<File>()
+  // const [imageUrl, setImageUrl] = useState<string>()
+  // const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [examCategories, setExamCategories] = useState<ExamCategoryResponse[]>()
-  const [errorImage, setErrorImage] = useState(false);
+  // const [errorImage, setErrorImage] = useState(false);
   const [exam, setExam] = useState<ExamResponse>();
   const [examResponsePage, setExamResponsePage] = useState<PageResponse<ExamResponse>>();
-  const [form] = Form.useForm<ExamRequest>();
+  // const [form] = Form.useForm<ExamRequest>();
   const navigate = useNavigate()
   useEffect(() => {
-    fetchReadPageExam();
+    fetchPageExam();
     fetchAllExamCategory();
   }, []);
   const fetchAllExamCategory = () => {
@@ -32,75 +31,75 @@ const ExamCrud = () => {
       if (response.success) setExamCategories(response.data)
     });
   }
-  const fetchReadPageExam = () => {
+  const fetchPageExam = () => {
     ExamService.readPage().then((data) => {
       if (data.success) setExamResponsePage(data.data)
     });
   }
-  const resetForm = () => {
-    form.resetFields();
-    setImage(undefined);
-    setImageUrl(undefined);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = '';
-    }
-  }
-  const handleUploadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setImage(e.target.files[0])
-      setImageUrl(URL.createObjectURL(e.target.files[0]))
-    }
-  }
+  // const resetForm = () => {
+  //   form.resetFields();
+  //   setImage(undefined);
+  //   setImageUrl(undefined);
+  //   if (fileInputRef.current) {
+  //     fileInputRef.current.value = '';
+  //   }
+  // }
+  // const handleUploadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (e.target.files) {
+  //     setImage(e.target.files[0])
+  //     setImageUrl(URL.createObjectURL(e.target.files[0]))
+  //   }
+  // }
   const handleViewClick = (data: ExamResponse) => {
     navigate("/admin/exam-view/" + data.id)
   }
   const handleEditClick = (data: ExamResponse) => {
     setExam(data);
-    form.setFieldsValue(data);
+    // form.setFieldsValue(data);
   }
   const handleDeleteClick = (data: ExamResponse) => {
     ExamService.delete(data.id).then((d) => {
       if (d.status_code < 400) {
         toast.success("Successfully to delete");
-        fetchReadPageExam();
-        resetForm();
+        fetchPageExam();
+        // resetForm();
       } else {
         toast.error(d.message_error);
       }
     })
   }
-  const onFinish: FormProps<ExamRequest>['onFinish'] = (values) => {
-    if (!exam?.id && image) {
-      ExamService.create(values, image).then((data) => {
-        if (data.success) {
-          fetchReadPageExam();
-          toast.success("Successfully to create")
-          resetForm();
-        } else {
-          toast.error(data.message_error)
-        }
-      })
-    } else if (exam?.id) {
-      ExamService.update(exam.id, values, image).then((data) => {
-        if (data.success) {
-          fetchReadPageExam();
-          toast.success("successfully")
-          form.setFieldsValue({})
-        } else {
-          toast.error(data.message_error)
-        }
-      })
-    } else {
-      setErrorImage(true)
-    }
-  };
+  // const onFinish: FormProps<ExamRequest>['onFinish'] = (values) => {
+  //   if (!exam?.id && image) {
+  //     ExamService.create(values, image).then((data) => {
+  //       if (data.success) {
+  //         fetchReadPageExam();
+  //         toast.success("Successfully to create")
+  //         resetForm();
+  //       } else {
+  //         toast.error(data.message_error)
+  //       }
+  //     })
+  //   } else if (exam?.id) {
+  //     ExamService.update(exam.id, values, image).then((data) => {
+  //       if (data.success) {
+  //         fetchReadPageExam();
+  //         toast.success("successfully")
+  //         form.setFieldsValue({})
+  //       } else {
+  //         toast.error(data.message_error)
+  //       }
+  //     })
+  //   } else {
+  //     setErrorImage(true)
+  //   }
+  // };
 
-  const onFinishFailed: FormProps<ExamRequest>['onFinishFailed'] = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
+  // const onFinishFailed: FormProps<ExamRequest>['onFinishFailed'] = (errorInfo) => {
+  //   console.log('Failed:', errorInfo);
+  // };
   return (
     <>
-      <Form
+      {/* <Form
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         form={form}
@@ -156,7 +155,8 @@ const ExamCrud = () => {
             Reset
           </Button>
         </Form.Item>
-      </Form>
+      </Form> */}
+      <ExamForm exam={exam} examCategories={examCategories} setExamResponsePage={setExamResponsePage} />
       <div className="row">
         {examResponsePage?.content?.map((examResponse) => <ExamCartElement key={`exam-cart-${examResponse.id}`} handleDeleteClick={handleDeleteClick} handleEditClick={handleEditClick} handleViewClick={handleViewClick} examResponse={examResponse} className="mt-4" />)}
       </div>

@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import ExamResponse from "../../../../model/response/ExamResponse";
 import QuizResponse from "../../../../model/response/QuizResponse";
+import { QuizType } from "../../../../model/QuizType";
+
 export type QuizRequest = {
   id?: number;
   question: string;
@@ -18,9 +20,7 @@ type Props = {
 const QuizForm = ({ examResponse, refresh, quizResponse }: Props) => {
   const [file, setFile] = useState<File>();
   const [form] = Form.useForm<QuizRequest>();
-  const [quizTypes, setQuizTypes] = useState<string[]>([]);
   useEffect(() => {
-    fetchReadAllQuizTypes();
     if (quizResponse) {
       console.log(quizResponse);
       form.setFieldsValue(quizResponse);
@@ -39,13 +39,6 @@ const QuizForm = ({ examResponse, refresh, quizResponse }: Props) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
     }
-  };
-  const fetchReadAllQuizTypes = () => {
-    QuizService.readAllQuizType().then((data) => {
-      if (data.success) {
-        setQuizTypes(data.data);
-      }
-    });
   };
   const onFinish: FormProps<QuizRequest>["onFinish"] = (values) => {
     if (!values.id) {
@@ -101,7 +94,7 @@ const QuizForm = ({ examResponse, refresh, quizResponse }: Props) => {
         rules={[{ required: true, message: "please select quiz type" }]}
       >
         <Select
-          options={quizTypes.map((e) => ({
+          options={Object.keys(QuizType).map((e) => ({
             value: e,
             label: <span>{e}</span>,
           }))}

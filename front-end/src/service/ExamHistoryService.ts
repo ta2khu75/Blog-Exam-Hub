@@ -4,19 +4,16 @@ import ExamHistoryDetailsResponse from "../model/response/details/ExamHistoryDet
 import ExamHistoryResponse from "../model/response/ExamHistoryResponse";
 import PageResponse from "../model/response/PageResponse";
 import instance from "../util/apiInstance";
-const basePath = "exam-history";
+const basePath = "exam-result";
 export default class ExamHistoryService {
   static readByExamId(id: number): Promise<ApiResponse<ExamHistoryResponse>> {
     return instance.get(`${basePath}/exam/${id}`);
   }
   static readById(
     id: number,
-    examId: number,
     data: AnswerUserRequest[]
   ): Promise<ApiResponse<ExamHistoryResponse>> {
-    return instance.post(`${basePath}/${id}`, data, {
-      params: { exam_id: examId },
-    });
+    return instance.post(`${basePath}/${id}`, data);
   }
   static readDetailsById(
     id: number

@@ -11,18 +11,17 @@ import { deleteQuizExam, setQuizExam } from "../../redux/slice/quizExamSlice";
 import ExamHistoryResponse from "../../model/response/ExamHistoryResponse";
 import { toast } from "react-toastify";
 import ModalElement from "../element/ModalElement";
-
 const ExamDetailPage = () => {
-  const stopTimerRef = useRef<(() => void) | null>(null) as MutableRefObject<
-    (() => void) | null
-  >;
   const { examId } = useParams();
-  const [openResult, setOpenResult] = useState(false);
   const navigate = useNavigate();
+  const [openResult, setOpenResult] = useState(false);
   const [timeLeft, setTimeLeft] = useState({
     minutes: 0,
     seconds: 0,
   });
+  const stopTimerRef = useRef<(() => void) | null>(null) as MutableRefObject<
+    (() => void) | null
+  >;
   const quizResponseList = useAppSelector(
     (state) => state.exams[Number(examId)] ?? []
   );
@@ -57,12 +56,14 @@ const ExamDetailPage = () => {
     ExamHistoryService.readByExamId(Number(examId)).then((d) => {
       if (d.success) {
         setExamHistoryResponse(d.data);
-        stopTimerRef.current = calculatorTime(new Date(d.data.end_time));
-        const quizzes = d.data.exam.quizzes.map((quiz) => {
-          quiz.answers = RandomUtil.shuffleArray(quiz.answers);
-          return quiz;
-        });
-        if (quizResponseList.length == 0) {
+        stopTimerRef.current = calculatorTime(
+          new Date(d.data.end_time)
+        );
+        if (d.status_code === 201 || quizResponseList.length == 0) {
+          const quizzes = d.data.exam.quizzes.map((quiz) => {
+            quiz.answers = RandomUtil.shuffleArray(quiz.answers);
+            return quiz;
+          });
           dispatch(
             setExam({
               id: Number(examId),
@@ -93,10 +94,11 @@ const ExamDetailPage = () => {
           quiz_id: Number(quiz_id),
           answer_ids,
         }));
+        console.log(answerUser);
+
     if (examHistoryResponse?.id && examId)
       ExamHistoryService.readById(
         examHistoryResponse?.id,
-        Number(examId),
         answerUser
       ).then((d) => {
         if (d.success) {
@@ -158,8 +160,8 @@ const ExamDetailPage = () => {
                   )
                 }
                 className={`btn ${quizExam === quizResponseList.length - 1
-                    ? "btn-secondary"
-                    : "btn-info"
+                  ? "btn-secondary"
+                  : "btn-info"
                   }`}
               >
                 Next

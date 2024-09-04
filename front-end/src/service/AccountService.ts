@@ -20,6 +20,7 @@ export default class AccountService {
   static updateStatus(id: string, account: AccountStatusRequest): Promise<ApiResponse<AccountDetailsResponse>> {
     return instance.put(`${basePath}/${id}`, account);
   }
+
   static updatePermission(id: string, permissionIds:number[]): Promise<ApiResponse<AccountDetailsResponse>> {
     return instance.put(`${basePath}/${id}/permission`, { permission_ids: permissionIds });
   }
