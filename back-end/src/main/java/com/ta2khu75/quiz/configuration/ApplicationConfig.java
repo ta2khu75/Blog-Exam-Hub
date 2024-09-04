@@ -22,12 +22,12 @@ import org.springframework.web.servlet.mvc.condition.PathPatternsRequestConditio
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import com.ta2khu75.quiz.entity.Account;
-import com.ta2khu75.quiz.entity.HTTPMethod;
-import com.ta2khu75.quiz.entity.Permission;
-import com.ta2khu75.quiz.entity.PermissionGroup;
-import com.ta2khu75.quiz.entity.Role;
 import com.ta2khu75.quiz.interceptor.InterceptorAuthorization;
+import com.ta2khu75.quiz.model.entity.Account;
+import com.ta2khu75.quiz.model.entity.HTTPMethod;
+import com.ta2khu75.quiz.model.entity.Permission;
+import com.ta2khu75.quiz.model.entity.PermissionGroup;
+import com.ta2khu75.quiz.model.entity.Role;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.PermissionGroupRepository;
 import com.ta2khu75.quiz.repository.PermissionRepository;

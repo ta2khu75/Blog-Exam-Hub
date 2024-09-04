@@ -13,8 +13,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import com.ta2khu75.quiz.configuration.SecurityJwtConfig;
-import com.ta2khu75.quiz.entity.response.AccountAuthResponse;
-import com.ta2khu75.quiz.entity.response.AccountResponse;
+import com.ta2khu75.quiz.model.response.AccountAuthResponse;
 
 import lombok.RequiredArgsConstructor;
 

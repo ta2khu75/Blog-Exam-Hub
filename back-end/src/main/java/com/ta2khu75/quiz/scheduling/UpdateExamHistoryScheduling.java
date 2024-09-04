@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.ta2khu75.quiz.entity.ExamResult;
+import com.ta2khu75.quiz.model.entity.ExamResult;
 import com.ta2khu75.quiz.repository.ExamHistoryRepository;
 
 import lombok.RequiredArgsConstructor;

@@ -89,7 +89,7 @@ const AnswerList = ({ quizResponse }: Props) => {
       <Button className="d-block" onClick={() => handleAddClick()}>
         Add Answer
       </Button>
-      <ModalElement open={open} setOpen={setOpen}>
+      <ModalElement open={open} handleCancel={() => setOpen(false)}>
         <AnswerForm
           answerResponse={answerResponse}
           quizResponse={quizResponse}

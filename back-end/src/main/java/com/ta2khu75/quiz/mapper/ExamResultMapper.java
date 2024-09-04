@@ -5,13 +5,13 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.data.domain.Page;
 
-import com.ta2khu75.quiz.entity.Answer;
-import com.ta2khu75.quiz.entity.ExamResult;
-import com.ta2khu75.quiz.entity.Role;
-import com.ta2khu75.quiz.entity.response.AnswerResponse;
-import com.ta2khu75.quiz.entity.response.ExamResultResponse;
-import com.ta2khu75.quiz.entity.response.PageResponse;
-import com.ta2khu75.quiz.entity.response.details.ExamResultDetailsResponse;
+import com.ta2khu75.quiz.model.entity.Answer;
+import com.ta2khu75.quiz.model.entity.ExamResult;
+import com.ta2khu75.quiz.model.entity.Role;
+import com.ta2khu75.quiz.model.response.AnswerResponse;
+import com.ta2khu75.quiz.model.response.ExamResultResponse;
+import com.ta2khu75.quiz.model.response.PageResponse;
+import com.ta2khu75.quiz.model.response.details.ExamResultDetailsResponse;
 
 @Mapper(componentModel = "spring")
 public interface ExamResultMapper {

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.ta2khu75.quiz.entity.response.PermissionResponse;
+import com.ta2khu75.quiz.model.response.PermissionResponse;
 import com.ta2khu75.quiz.service.PermissionService;
 
 import lombok.AccessLevel;

@@ -2,14 +2,14 @@ package com.ta2khu75.quiz.service;
 
 import org.springframework.data.domain.Pageable;
 
-import com.ta2khu75.quiz.entity.request.AccountRequest;
-import com.ta2khu75.quiz.entity.request.update.AccountInfoRequest;
-import com.ta2khu75.quiz.entity.request.update.AccountPasswordRequest;
-//import com.ta2khu75.quiz.entity.request.update.AccountPermissionRequest;
-import com.ta2khu75.quiz.entity.request.update.AccountStatusRequest;
-import com.ta2khu75.quiz.entity.response.AccountResponse;
-import com.ta2khu75.quiz.entity.response.PageResponse;
-import com.ta2khu75.quiz.entity.response.details.AccountDetailsResponse;
+import com.ta2khu75.quiz.model.request.AccountRequest;
+import com.ta2khu75.quiz.model.request.update.AccountInfoRequest;
+import com.ta2khu75.quiz.model.request.update.AccountPasswordRequest;
+//import com.ta2khu75.quiz.model.request.update.AccountPermissionRequest;
+import com.ta2khu75.quiz.model.request.update.AccountStatusRequest;
+import com.ta2khu75.quiz.model.response.AccountResponse;
+import com.ta2khu75.quiz.model.response.PageResponse;
+import com.ta2khu75.quiz.model.response.details.AccountDetailsResponse;
 
 import jakarta.mail.MessagingException;
 

@@ -5,12 +5,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.ta2khu75.quiz.entity.Permission;
-import com.ta2khu75.quiz.entity.Role;
-import com.ta2khu75.quiz.entity.request.RoleRequest;
-import com.ta2khu75.quiz.entity.response.RoleResponse;
+import com.ta2khu75.quiz.model.request.RoleRequest;
+import com.ta2khu75.quiz.model.response.details.RoleDetailsResponse;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.RoleMapper;
+import com.ta2khu75.quiz.model.entity.Permission;
+import com.ta2khu75.quiz.model.entity.Role;
 import com.ta2khu75.quiz.repository.PermissionRepository;
 import com.ta2khu75.quiz.repository.RoleRepository;
 import com.ta2khu75.quiz.service.RoleService;
@@ -28,28 +28,29 @@ public class RoleServiceImpl implements RoleService {
 	RoleMapper mapper;
 
 	@Override
-	public RoleResponse create(RoleRequest request) {
+	public RoleDetailsResponse create(RoleRequest request) {
 		Role role = mapper.toEntity(request);
 		role.setPermissions(new HashSet<>(permissionRepository.findAllById(request.getPermissionIds())));
-		return mapper.toResponse(repository.save(role));
+		return mapper.toDetailsResponse(repository.save(role));
 	}
 
 	@Override
-	public RoleResponse update(Long id, RoleRequest request) {
+	public RoleDetailsResponse update(Long id, RoleRequest request) {
 		Role role = this.find(id);
 		mapper.update(request, role);
 		if (role.getPermissions().stream().map(Permission::getId).noneMatch(request.getPermissionIds()::contains)) {
 			role.setPermissions(new HashSet<>(permissionRepository.findAllById(request.getPermissionIds())));
 		}
-		return mapper.toResponse(repository.save(role));
+		return mapper.toDetailsResponse(repository.save(role));
 	}
 
 	private Role find(Long id) {
 		return repository.findById(id).orElseThrow(() -> new NotFoundException("Could not found role with id: " + id));
 	}
 	@Override
-	public RoleResponse read(Long id) {
-		return mapper.toResponse(this.find(id));
+	public RoleDetailsResponse read(Long id) {
+		return mapper.toDetailsResponse(this.find(id));
+
 	}
 
 	@Override
@@ -58,8 +59,8 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	public List<RoleResponse> readAll() {
-		return repository.findAll().stream().map(mapper::toResponse).toList();
+	public List<RoleDetailsResponse> readAll() {
+		return repository.findAll().stream().map(mapper::toDetailsResponse).toList();
 	}
 
 }

@@ -10,9 +10,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ta2khu75.quiz.entity.QuizType;
-import com.ta2khu75.quiz.entity.request.QuizRequest;
-import com.ta2khu75.quiz.entity.response.QuizResponse;
+import com.ta2khu75.quiz.model.request.QuizRequest;
+import com.ta2khu75.quiz.model.response.QuizResponse;
+import com.ta2khu75.quiz.model.entity.QuizType;
 import com.ta2khu75.quiz.service.QuizSerivce;
 
 import org.springframework.http.HttpStatus;

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.ta2khu75.quiz.entity.Account;
+import com.ta2khu75.quiz.model.entity.Account;
 
 public interface AccountRepository extends JpaRepository<Account, String> {
 	Optional<Account> findByEmail(String email);

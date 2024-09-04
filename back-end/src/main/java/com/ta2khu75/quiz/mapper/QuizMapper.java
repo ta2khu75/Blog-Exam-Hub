@@ -4,16 +4,15 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
-import com.ta2khu75.quiz.entity.Answer;
-import com.ta2khu75.quiz.entity.Quiz;
-import com.ta2khu75.quiz.entity.request.QuizRequest;
-import com.ta2khu75.quiz.entity.response.AnswerResponse;
-import com.ta2khu75.quiz.entity.response.QuizResponse;
-import com.ta2khu75.quiz.entity.response.details.QuizDetaislResponse;
+import com.ta2khu75.quiz.model.request.QuizRequest;
+import com.ta2khu75.quiz.model.response.AnswerResponse;
+import com.ta2khu75.quiz.model.response.QuizResponse;
+import com.ta2khu75.quiz.model.response.details.QuizDetaislResponse;
+import com.ta2khu75.quiz.model.entity.Answer;
+import com.ta2khu75.quiz.model.entity.Quiz;
 
 @Mapper(componentModel = "spring")
 public interface QuizMapper {
-	@Mapping(target = "examId", source = "exam.id")
 	QuizResponse toResponse(Quiz quiz);
 
 	@Mapping(target = "filePath", ignore = true)
@@ -30,7 +29,6 @@ public interface QuizMapper {
 	@Mapping(target = "userAnswers", ignore = true)
 	void update(QuizRequest request, @MappingTarget Quiz quiz);
 
-	@Mapping(target = "examId", source = "exam.id")
 	QuizDetaislResponse toDetailsResponse(Quiz quiz);
 
 	default AnswerResponse toResponseDetails(Answer answer) {
@@ -39,7 +37,6 @@ public interface QuizMapper {
 		AnswerResponse response = new AnswerResponse();
 		response.setAnswer(answer.getAnswerString());
 		response.setCorrect(answer.getCorrect());
-		response.setQuizId(answer.getQuiz().getId());
 		return response;
 	}
 }

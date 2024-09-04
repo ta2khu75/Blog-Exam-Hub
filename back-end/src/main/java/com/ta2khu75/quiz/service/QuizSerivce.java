@@ -4,8 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ta2khu75.quiz.entity.request.QuizRequest;
-import com.ta2khu75.quiz.entity.response.QuizResponse;
+import com.ta2khu75.quiz.model.request.QuizRequest;
+import com.ta2khu75.quiz.model.response.QuizResponse;
 
 import java.io.IOException;
 import java.util.List;

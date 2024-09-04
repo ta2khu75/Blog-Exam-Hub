@@ -9,7 +9,8 @@ import ModalElement from '../../../element/ModalElement';
 import { AccountStatusRequest } from '../../../../model/request/update/AccountStatusRequest';
 import AccountDetailsResponse from '../../../../model/response/details/AccountDetailsResponse';
 import useDebounce from '../../../../hook/useDebounce';
-import ManagerPermission from './ManagerPermission';
+import RoleService from '../../../../service/RoleService';
+import RoleResponse from '../../../../model/response/RoleResponse';
 
 export type AccountRequest = {
   id: number;
@@ -24,19 +25,31 @@ const AccountCrud = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search);
-  const [accountResponsePage, setAccountResponsePage] = useState<PageResponse<AccountDetailsResponse>>();
+  const [accountPage, setAccountPage] = useState<PageResponse<AccountDetailsResponse>>();
+  const [roles, setRoles] = useState<RoleResponse[]>([]);
   useEffect(() => {
-    fetchReadPageAccount()
+    fetchPageAccount()
   }, [page, debouncedSearch])
+  useEffect(() => {
+    fetchAllRole()
+  }, [])
   useEffect(() => {
     if (account) {
       form.setFieldsValue(account)
+      form.setFieldValue("role_id",account.role.id)
     }
   }, [account, form]);
-  const fetchReadPageAccount = () => {
+  const fetchPageAccount = () => {
     AccountService.readPage(search, page).then((d) => {
       if (d.success) {
-        setAccountResponsePage(d.data)
+        setAccountPage(d.data)
+      }
+    })
+  }
+  const fetchAllRole = () => {
+    RoleService.readAll().then(d => {
+      if (d.success) {
+        setRoles(d.data)
       }
     })
   }
@@ -44,12 +57,12 @@ const AccountCrud = () => {
     if (account) {
       AccountService.updateStatus(account.id, values).then((data) => {
         if (data.success) {
-          const updatedAccounts = accountResponsePage?.content.map((account) => {
+          const updatedAccounts = accountPage?.content.map((account) => {
             if (account.id === data.data.id) {
               return data.data
             } return account;
           })
-          setAccountResponsePage((prev) => {
+          setAccountPage((prev) => {
             if (!prev) return prev;
             return { ...prev, content: updatedAccounts || [] };
           });
@@ -72,7 +85,7 @@ const AccountCrud = () => {
   }
   const handlePageChange = (page: number) => {
     setPage(page)
-    fetchReadPageAccount();
+    fetchPageAccount();
   }
   const handleSearchChange = (e: string) => {
     setSearch(e);
@@ -81,43 +94,50 @@ const AccountCrud = () => {
   return (
     <>
       <Input size='large' className='mb-5' placeholder='Search' value={search} type='text' onChange={(e) => handleSearchChange(e.target.value)} />
-      <ModalElement width={1500}  handleCancel={handleCancelClick} open={openEdit}>
-        <>
-          <Form
-            form={form}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
+      <ModalElement width={1500} handleCancel={handleCancelClick} open={openEdit}>
+        <Form
+          form={form}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+        >
+          <Form.Item<AccountStatusRequest>
+            label="Enabled"
+            name={'enabled'}
           >
-            <Form.Item<AccountStatusRequest>
-              label="Enabled"
-              name={'enabled'}
-            >
-              <Radio.Group>
-                <Radio value={true}>True</Radio>
-                <Radio value={false}>False</Radio>
-              </Radio.Group>
-            </Form.Item>
-            <Form.Item<AccountStatusRequest>
-              label="Non Locked"
-              name={'non_locked'}
-            >
-              <Radio.Group>
-                <Radio value={true}>True</Radio>
-                <Radio value={false}>False</Radio>
-              </Radio.Group>
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Update
-              </Button>
-            </Form.Item>
-          </Form>
-          <ManagerPermission account={account} />
-        </>
+            <Radio.Group>
+              <Radio value={true}>True</Radio>
+              <Radio value={false}>False</Radio>
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item<AccountStatusRequest>
+            label="Non Locked"
+            name={'non_locked'}
+          >
+            <Radio.Group>
+              <Radio value={true}>True</Radio>
+              <Radio value={false}>False</Radio>
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item<AccountStatusRequest>
+            label="Role"
+            name={'role_id'}
+          >
+            <Radio.Group>
+              {roles.map(role => (
+                <Radio key={`radio-role-${role.id}`} value={role.id}>{role.name}</Radio>
+              ))}
+            </Radio.Group>
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Update
+            </Button>
+          </Form.Item>
+        </Form>
       </ModalElement>
-      {accountResponsePage?.content && <>
-        <TableElement visiableColumns={["username", "email", "enabled", "non_locked", "role"]} showIndex={true} array={accountResponsePage.content} handleEditClick={handleEditClick} />
-        <Pagination align="center" onChange={(e) => handlePageChange(e)} defaultCurrent={page} defaultPageSize={10} total={accountResponsePage.total_elements} /></>}
+      {accountPage?.content && <>
+        <TableElement visiableColumns={["username", "email", "enabled", "non_locked", "role"]} showIndex={true} array={accountPage.content} handleEditClick={handleEditClick} />
+        <Pagination align="center" onChange={(e) => handlePageChange(e)} defaultCurrent={page} defaultPageSize={10} total={accountPage.total_elements} /></>}
     </>
   )
 }

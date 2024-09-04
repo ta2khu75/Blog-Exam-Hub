@@ -1,4 +1,4 @@
-import { Button, Form, FormProps, Input, InputNumber, Select } from "antd";
+import { Button, Form, FormProps, Input, InputNumber, Radio, Select } from "antd";
 import ExamService from "../../../../service/ExamService";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
@@ -7,30 +7,31 @@ import ExamResponse from "../../../../model/response/ExamResponse";
 import { useNavigate } from "react-router-dom";
 import TextArea from "antd/es/input/TextArea";
 import ExamCartElement from "../../../element/ExamCartElement";
-
-export type ExamRequest = {
-  id?: number;
-  title?: string;
-  time?: number;
-  description?: string;
-  exam_type?: string;
-  exam_level?: string;
-}
+import ExamRequest from "../../../../model/request/ExamRequest";
+import { ExamLevel } from "../../../../model/ExamLevel";
+import { AccessModifier } from "../../../../model/AccessModifier";
+import ExamCategoryService from "../../../../service/ExamCategoryService";
+import { responsiveArray } from "antd/es/_util/responsiveObserver";
 
 const ExamCrud = () => {
   const [image, setImage] = useState<File>()
   const [imageUrl, setImageUrl] = useState<string>()
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const [examCategories, setExamCategories] = useState<ExamCategoryResponse[]>()
   const [errorImage, setErrorImage] = useState(false);
-  const [examTypes, setExamTypes] = useState<string[]>([])
-  const [examLevels, setExamLevels] = useState<string[]>([])
+  const [exam, setExam] = useState<ExamResponse>();
   const [examResponsePage, setExamResponsePage] = useState<PageResponse<ExamResponse>>();
   const [form] = Form.useForm<ExamRequest>();
   const navigate = useNavigate()
   useEffect(() => {
-    fetchInitSelections()
-    fetchReadPageExam()
+    fetchReadPageExam();
+    fetchAllExamCategory();
   }, []);
+  const fetchAllExamCategory = () => {
+    ExamCategoryService.readAll().then((response) => {
+      if (response.success) setExamCategories(response.data)
+    });
+  }
   const fetchReadPageExam = () => {
     ExamService.readPage().then((data) => {
       if (data.success) setExamResponsePage(data.data)
@@ -41,12 +42,8 @@ const ExamCrud = () => {
     setImage(undefined);
     setImageUrl(undefined);
     if (fileInputRef.current) {
-      fileInputRef.current.value = ''; // Clear the file input
+      fileInputRef.current.value = '';
     }
-  }
-  const fetchInitSelections = () => {
-    ExamService.readAllExamLevel().then((d) => { setExamLevels(d.data) });
-    ExamService.readAllExamType().then((d) => { setExamTypes(d.data) });
   }
   const handleUploadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -58,6 +55,7 @@ const ExamCrud = () => {
     navigate("/admin/exam-view/" + data.id)
   }
   const handleEditClick = (data: ExamResponse) => {
+    setExam(data);
     form.setFieldsValue(data);
   }
   const handleDeleteClick = (data: ExamResponse) => {
@@ -72,7 +70,7 @@ const ExamCrud = () => {
     })
   }
   const onFinish: FormProps<ExamRequest>['onFinish'] = (values) => {
-    if (!values.id && image) {
+    if (!exam?.id && image) {
       ExamService.create(values, image).then((data) => {
         if (data.success) {
           fetchReadPageExam();
@@ -82,8 +80,8 @@ const ExamCrud = () => {
           toast.error(data.message_error)
         }
       })
-    } else if (values.id) {
-      ExamService.update(values.id, values, image).then((data) => {
+    } else if (exam?.id) {
+      ExamService.update(exam.id, values, image).then((data) => {
         if (data.success) {
           fetchReadPageExam();
           toast.success("successfully")
@@ -115,33 +113,40 @@ const ExamCrud = () => {
         ]} >
           <Input />
         </Form.Item>
-        <Form.Item<ExamRequest> label="Time" name={"time"}
-        rules={[
-          { required: true, message: "please input time" }
-        ]} >
-          <InputNumber addonAfter="minutes"/>
+        <Form.Item<ExamRequest> label="Duration" name={"duration"}
+          rules={[
+            { required: true, message: "please input time" }
+          ]} >
+          <InputNumber addonAfter="minutes" />
         </Form.Item>
         <Form.Item<ExamRequest> label="Exam Level" name={"exam_level"} rules={[
           { required: true, message: "please select exam level" }
         ]} >
-          <Select options={examLevels.map((e) => ({ value: e, label: <span>{e}</span> }))} />
-        </Form.Item>
-        <Form.Item<ExamRequest> label="Exam Type" name={"exam_type"} rules={[
-          { required: true, message: "please select exam type" }
-        ]} >
-          <Select options={examTypes.map((e) => ({ value: e, label: <span>{e}</span> }))} />
+          <Select options={Object.keys(ExamLevel).map((e) => ({ value: e, label: <span>{e}</span> }))} />
         </Form.Item>
         <Form.Item<ExamRequest> label="Description" name={"description"} rules={[
           { required: true, message: "please input description" }
         ]} >
           <TextArea rows={4} />
         </Form.Item>
+        <Form.Item<ExamRequest> label="Access Modifier" name={"access_modifier"} rules={[
+          { required: true, message: "please input access_modifier" }
+        ]} >
+          <Radio.Group>
+            {Object.keys(AccessModifier).map(access => <Radio key={`radio-${access}`} value={access}>{access}</Radio>)}
+          </Radio.Group>
+        </Form.Item>
+        <Form.Item<ExamRequest> label="Exam Category" name={"exam_category_id"} rules={[
+          { required: true, message: "please select exam category" }
+        ]} >
+          <Select showSearch optionFilterProp="label" options={examCategories?.map((examCategory) => ({ value: examCategory.id, label: examCategory.name }))} />
+        </Form.Item>
         {errorImage && <p className="text-danger">Please upload image</p>}
         <input onChange={(e) => handleUploadChange(e)} ref={fileInputRef} type="file" /><br />
-        { imageUrl &&
-        <div className="d-flex justify-content-center">
-          <img src={imageUrl} alt="" width={"300px"} height={"200px"} />
-        </div>
+        {imageUrl &&
+          <div className="d-flex justify-content-center">
+            <img src={imageUrl} alt="" width={"300px"} height={"200px"} />
+          </div>
         }
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
           <Button type="primary" htmlType="submit">
@@ -152,9 +157,9 @@ const ExamCrud = () => {
           </Button>
         </Form.Item>
       </Form>
-        <div className="row">
-          {examResponsePage?.content?.map((examResponse) => <ExamCartElement key={`exam-cart-${examResponse.id}`} handleDeleteClick={handleDeleteClick} handleEditClick={handleEditClick} handleViewClick={handleViewClick} examResponse={examResponse} className="mt-4" />)}
-        </div>
+      <div className="row">
+        {examResponsePage?.content?.map((examResponse) => <ExamCartElement key={`exam-cart-${examResponse.id}`} handleDeleteClick={handleDeleteClick} handleEditClick={handleEditClick} handleViewClick={handleViewClick} examResponse={examResponse} className="mt-4" />)}
+      </div>
     </>
   )
 }

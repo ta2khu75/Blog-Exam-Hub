@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.ta2khu75.quiz.entity.response.PermissionGroupResponse;
+import com.ta2khu75.quiz.model.response.PermissionGroupResponse;
 import com.ta2khu75.quiz.mapper.PermissionGroupMapper;
 import com.ta2khu75.quiz.repository.PermissionGroupRepository;
 import com.ta2khu75.quiz.service.PermissionGroupService;

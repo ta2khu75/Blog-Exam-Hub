@@ -10,12 +10,12 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import com.ta2khu75.quiz.entity.Answer;
-import com.ta2khu75.quiz.entity.Quiz;
-import com.ta2khu75.quiz.entity.request.AnswerRequest;
-import com.ta2khu75.quiz.entity.response.AnswerResponse;
+import com.ta2khu75.quiz.model.request.AnswerRequest;
+import com.ta2khu75.quiz.model.response.AnswerResponse;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.AnswerMapper;
+import com.ta2khu75.quiz.model.entity.Answer;
+import com.ta2khu75.quiz.model.entity.Quiz;
 import com.ta2khu75.quiz.repository.AnswerRepository;
 import com.ta2khu75.quiz.repository.QuizRepository;
 import com.ta2khu75.quiz.service.AnswerService;

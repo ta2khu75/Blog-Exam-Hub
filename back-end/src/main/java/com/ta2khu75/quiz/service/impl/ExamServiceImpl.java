@@ -7,22 +7,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ta2khu75.quiz.entity.Account;
-import com.ta2khu75.quiz.entity.Exam;
-import com.ta2khu75.quiz.entity.ExamResult;
-import com.ta2khu75.quiz.entity.request.ExamRequest;
-import com.ta2khu75.quiz.entity.response.ExamResponse;
-import com.ta2khu75.quiz.entity.response.PageResponse;
-import com.ta2khu75.quiz.entity.response.details.ExamDetailsResponse;
+import com.ta2khu75.quiz.model.request.ExamRequest;
+import com.ta2khu75.quiz.model.response.ExamResponse;
+import com.ta2khu75.quiz.model.response.PageResponse;
+import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
 import com.ta2khu75.quiz.enviroment.FolderEnv;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.ExamMapper;
+import com.ta2khu75.quiz.model.entity.Account;
+import com.ta2khu75.quiz.model.entity.Exam;
+import com.ta2khu75.quiz.model.entity.ExamResult;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.ExamHistoryRepository;
 import com.ta2khu75.quiz.repository.ExamRepository;
@@ -93,7 +92,7 @@ public class ExamServiceImpl implements ExamService {
 		String email=SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new NotFoundException("Could not find email"));
 		Account account=accountRepository.findByEmail(email).orElseThrow(()->new NotFoundException("Could not find account with email: "+email));
 		Exam exam = repository.findById(id).orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));
-		ExamResult examHistory = ExamResult.builder().account(account).exam(exam).endTime(LocalDateTime.now().plusMinutes(exam.getTime()+1)).build();
+		ExamResult examHistory = ExamResult.builder().account(account).exam(exam).endTime(LocalDateTime.now().plusMinutes(exam.getDuration()+1)).build();
 		examHistoryRepository.save(examHistory);
 		log.info(examHistory.toString());
 		return mapper.toDetailsResponse(exam);

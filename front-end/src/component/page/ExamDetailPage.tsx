@@ -198,7 +198,7 @@ const ExamDetailPage = () => {
           </div>
         </div>
       </div>
-      <ModalElement open={openResult} handleCancel={handleCancel} setOpen={setOpenResult}>
+      <ModalElement open={openResult} handleCancel={handleCancel}>
         <ul>
           <li>
             Tổng điểm: <span className="">{examHistoryResponse?.point}</span>
