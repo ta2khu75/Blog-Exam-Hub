@@ -1,15 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ExamService from "../../../../service/ExamService";
-import ExamResponse from "../../../../model/response/ExamResponse";
-import QuizResponse from "../../../../model/response/QuizResponse";
 import QuizService from "../../../../service/QuizService";
 import { Button } from "antd";
 import ModalElement from "../../../element/ModalElement";
-import QuizForm from "../form/QuizForm";
 import { toast } from "react-toastify";
 import PopoverActionElement from "../../../element/PopoverActionElement";
 import AnswerList from "./AnswerList";
+import QuizForm from "../../../element/form/QuizForm";
 
 const QuizList = () => {
   const { id } = useParams();

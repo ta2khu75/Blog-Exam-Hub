@@ -1,10 +1,5 @@
-import { AccountRequest } from "../model/request/AccountRequest";
 import AccountPasswordRequest from "../model/request/update/AccountPasswordRequest";
 import { AccountStatusRequest } from "../model/request/update/AccountStatusRequest";
-import AccountResponse from "../model/response/AccountResponse";
-import ApiResponse from "../model/response/ApiResponse";
-import AccountDetailsResponse from "../model/response/details/AccountDetailsResponse";
-import PageResponse from "../model/response/PageResponse";
 import instance from "../util/apiInstance";
 
 const basePath = "account";

@@ -1,12 +1,10 @@
 import ExamService from "../../../../service/ExamService";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import PageResponse from "../../../../model/response/PageResponse";
-import ExamResponse from "../../../../model/response/ExamResponse";
 import { useNavigate } from "react-router-dom";
 import ExamCartElement from "../../../element/ExamCartElement";
 import ExamCategoryService from "../../../../service/ExamCategoryService";
-import ExamForm from "../form/ExamForm";
+import ExamForm from "../../../element/form/ExamForm";
 const ExamCrud = () => {
   const [examCategories, setExamCategories] = useState<ExamCategoryResponse[]>()
   const [exam, setExam] = useState<ExamResponse>();

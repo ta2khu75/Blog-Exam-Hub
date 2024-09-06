@@ -1,17 +1,9 @@
 import { Button, Form, FormProps, Input, Select } from "antd";
-import QuizService from "../../../../service/QuizService";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import ExamResponse from "../../../../model/response/ExamResponse";
-import QuizResponse from "../../../../model/response/QuizResponse";
-import { QuizType } from "../../../../model/QuizType";
+import QuizService from "../../../service/QuizService";
+import { QuizType } from "../../../model/QuizType";
 
-export type QuizRequest = {
-  id?: number;
-  question: string;
-  quiz_type: string;
-  exam_id: number;
-};
 type Props = {
   examResponse: ExamResponse;
   refresh: () => void;
@@ -73,14 +65,14 @@ const QuizForm = ({ examResponse, refresh, quizResponse }: Props) => {
       <Form.Item<QuizRequest> label="id" name={"id"} hidden>
         <Input />
       </Form.Item>
-      <Form.Item<QuizRequest>
+      {/* <Form.Item<QuizRequest>
         label="Exam Id"
         hidden
         name={"exam_id"}
         rules={[{ required: true, message: "please input exam id" }]}
       >
         <Input />
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item<QuizRequest>
         label="Question"
         name={"question"}

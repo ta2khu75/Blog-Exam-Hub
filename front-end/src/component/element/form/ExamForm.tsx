@@ -1,13 +1,11 @@
 import { Button, Form, FormProps, Input, InputNumber, Radio, Select } from 'antd'
 import React, { useEffect, useRef, useState } from 'react'
-import ExamRequest from '../../../../model/request/ExamRequest';
-import ExamResponse from '../../../../model/response/ExamResponse';
-import ExamService from '../../../../service/ExamService';
-import { ExamLevel } from '../../../../model/ExamLevel';
 import TextArea from 'antd/es/input/TextArea';
-import { AccessModifier } from '../../../../model/AccessModifier';
-import PageResponse from '../../../../model/response/PageResponse';
 import { toast } from 'react-toastify';
+import ExamService from '../../../service/ExamService';
+// import { AccessModifier } from '../../../model/AccessModifier';
+import { ExamLevel } from '../../../model/ExamLevel';
+import { AccessModifier } from '../../../model/AccessModifier';
 type Props = {
     id?: string;
     exam?: ExamResponse,

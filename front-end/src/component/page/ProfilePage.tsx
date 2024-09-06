@@ -2,8 +2,8 @@ import { useAppSelector } from "../../redux/hooks";
 import avatar from "../../assets/EFjuFv.gif";
 import { useEffect, useState } from "react";
 import PageResponse from "../../model/response/PageResponse";
-import ExamHistoryResponse from "../../model/response/ExamHistoryResponse";
-import ExamHistoryService from "../../service/ExamHistoryService";
+import ExamHistoryResponse from "../../model/response/ExamResultResponse";
+import ExamHistoryService from "../../service/ExamResultService";
 import TableElement from "../element/TableElement";
 import { useNavigate } from "react-router-dom";
 const ProfilePage = () => {

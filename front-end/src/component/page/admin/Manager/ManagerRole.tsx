@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react"
-import RoleResponse from "../../../../model/response/RoleResponse"
 import RoleService from "../../../../service/RoleService"
 import TableElement from "../../../element/TableElement"
-// import { toast } from "react-toastify"
 import ModalElement from "../../../element/ModalElement"
 import { Button, Checkbox, Form, FormProps, Input } from "antd"
 import RoleRequest from "../../../../model/request/RoleRequest"
-import PermissionGroupResponse from "../../../../model/response/PermissionGroupResponse"
 import PermissionGroupService from "../../../../service/PermissionGroupService"
 
 const ManagerRole = () => {

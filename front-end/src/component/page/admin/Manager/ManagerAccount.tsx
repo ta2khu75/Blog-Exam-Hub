@@ -3,14 +3,11 @@ import { Button, Form, Input, Pagination, Radio } from 'antd';
 import AccountService from '../../../../service/AccountService';
 import { toast } from 'react-toastify';
 import { useEffect, useState } from 'react';
-import PageResponse from '../../../../model/response/PageResponse';
 import TableElement from '../../../element/TableElement';
 import ModalElement from '../../../element/ModalElement';
 import { AccountStatusRequest } from '../../../../model/request/update/AccountStatusRequest';
-import AccountDetailsResponse from '../../../../model/response/details/AccountDetailsResponse';
 import useDebounce from '../../../../hook/useDebounce';
 import RoleService from '../../../../service/RoleService';
-import RoleResponse from '../../../../model/response/RoleResponse';
 
 export type AccountRequest = {
   id: number;
