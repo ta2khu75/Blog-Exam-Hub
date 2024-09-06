@@ -41,8 +41,8 @@ public class ApplicationConfig implements WebMvcConfigurer {
 
 	@Bean
 	CommandLineRunner init(AccountRepository accountRepository, RoleRepository roleRepository,
-			PermissionRepository permissionRepository, PermissionGroupRepository permissionGroupRepository, PasswordEncoder passwordEncoder,
-			ApplicationContext applicationContext) {
+			PermissionRepository permissionRepository, PermissionGroupRepository permissionGroupRepository,
+			PasswordEncoder passwordEncoder, ApplicationContext applicationContext) {
 		return args -> {
 			if (accountRepository.count() == 0) {
 				initPermission(permissionRepository, permissionGroupRepository, applicationContext);
@@ -61,7 +61,8 @@ public class ApplicationConfig implements WebMvcConfigurer {
 	}
 
 	@SuppressWarnings({ "null" })
-	private void initPermission(PermissionRepository permissionRepository, PermissionGroupRepository permissionGroupRepository, ApplicationContext applicationContext) {
+	private void initPermission(PermissionRepository permissionRepository,
+			PermissionGroupRepository permissionGroupRepository, ApplicationContext applicationContext) {
 		Map<String, RequestMappingHandlerMapping> allRequestMappings = applicationContext
 				.getBeansOfType(RequestMappingHandlerMapping.class);
 		for (RequestMappingHandlerMapping handlerMapping : allRequestMappings.values()) {

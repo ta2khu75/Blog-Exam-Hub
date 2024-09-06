@@ -32,16 +32,11 @@ const items: ItemType<MenuItemType>[] = [
       icon: <TableOutlined />,
       label: <Link to={"/admin/role"}>Role</Link>,
     }, {
-      key: "1-3",
-      icon: <TableOutlined />,
-      label: <Link to={"/admin/permission"}>Permission</Link>,
-
-    },{
       key: "1-4",
       icon: <TableOutlined />,
       label: <Link to={`/admin/exam`}>Exam</Link>
-    },{
-      key:"1-5",
+    }, {
+      key: "1-5",
       icon: <TableOutlined />,
       label: <Link to={`/admin/exam-category`}>Exam Category</Link>
     }]

@@ -14,7 +14,6 @@ public interface AnswerMapper {
     AnswerResponse toResponse(Answer answer);
 	@Mapping(target = "answerString", source = "answer")
 	@Mapping(target = "id", ignore = true)
-	@Mapping(target = "quiz", ignore = true)
 	Answer toEntity(AnswerRequest request);
 	@Mapping(target = "answerString", source = "answer")
 	@Mapping(target = "id", ignore = true)
