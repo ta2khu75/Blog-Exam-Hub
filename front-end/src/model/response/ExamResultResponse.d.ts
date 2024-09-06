@@ -1,5 +1,3 @@
-import ExamDetailsResponse from "./details/ExamDetailsResponse";
-
 interface ExamResultResponse{
     id: number;
     point: number;

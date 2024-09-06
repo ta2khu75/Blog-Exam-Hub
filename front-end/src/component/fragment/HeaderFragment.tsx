@@ -16,7 +16,7 @@ const HeaderFragment = () => {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   }, [pathname]);
-  const authenticated = useAppSelector((state) => state.account.authenticated);
+  const account = useAppSelector((state) => state.account);
   const dispatch = useAppDispatch();
   const handleLogoutClick = () => {
     AuthService.logout().then((d) => {
@@ -31,11 +31,11 @@ const HeaderFragment = () => {
     });
   };
   return (
-    <nav className="navbar navbar-expand-lg" id="top" style={{ background: "#4f98a4" }}>
+    <nav className="navbar navbar-expand-lg d-block" id="top" style={{ background: "#4f98a4" }}>
       <div className="container">
         <Link className="navbar-brand" to="/">
           <i className="bi-back" />
-          <span>Topic</span>
+          <span>Exam Master</span>
         </Link>
         <div className="d-lg-none ms-auto me-4">
           <a href="#top" className="navbar-icon bi-person smoothscroll" />
@@ -107,14 +107,13 @@ const HeaderFragment = () => {
             </li>
           </ul>
           <div className="d-none d-lg-block dropdown">
-            <a
-              href="#top"
-              className="navbar-icon bi-person smoothscroll"
-              id="account-action"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            />
-            {!authenticated && (
+            <div className="d-flex align-items-center">
+              <span
+                className="navbar-icon bi-person smoothscroll"
+                id="account-action"
+              ></span><span className="ms-2 text-light">{account.account?.username ? `Hello ${account.account.username}` : ""}</span>
+            </div>
+            {!account.authenticated && (
               <ul
                 className="dropdown-menu dropdown-menu-light"
                 aria-labelledby="account-action"
@@ -131,7 +130,7 @@ const HeaderFragment = () => {
                 </li>
               </ul>
             )}
-            {authenticated && (
+            {account.authenticated && (
               <ul
                 className="dropdown-menu dropdown-menu-light"
                 aria-labelledby="account-action"

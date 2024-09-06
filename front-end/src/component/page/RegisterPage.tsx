@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import { useEffect } from "react";
 import AccountService from "../../service/AccountService";
 import { Link, useNavigate } from "react-router-dom";
-import { AccountRequest } from "../../model/request/AccountRequest";
 
 const AccountCrud = () => {
   const [form] = Form.useForm<AccountRequest>();

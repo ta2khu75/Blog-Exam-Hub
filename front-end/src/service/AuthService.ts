@@ -7,9 +7,10 @@ import axios from "axios";
 const basePath = "/auth";
 export default class AuthService {
   static login(authRequest: AuthRequest): Promise<ApiResponse<AuthResponse>> {
-    return instance.post(`${basePath}/login`, authRequest, {
-      withCredentials: true,
-    });
+    return instance.post(`${basePath}/login`, authRequest);
+  }
+  static myAccount():Promise<ApiResponse<AccountResponse>> {
+    return instance.get(`${basePath}/account`);
   }
   static refreshToken() {
     axiosRetry(axios, {
@@ -30,9 +31,7 @@ export default class AuthService {
       });
   }
   static logout():Promise<ApiResponse<void>> {
-    return instance.get(`${basePath}/logout`, {
-      withCredentials: true,
-    });
+    return instance.get(`${basePath}/logout`);
   }
   static refetchToken(){
     return axios.get("http://localhost:8080/api/v1/auth/refresh-token", {
