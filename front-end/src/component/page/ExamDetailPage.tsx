@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
-import QuizResponse from "../../response/QuizResponse";
+import QuizResponse from "../../model/response/QuizResponse";
 import AnswerListElement from "../element/AnswerListElement";
 import RandomUtil from "../../util/RandomUtil";
 import ExamHistoryService from "../../service/ExamHistoryService";
@@ -8,21 +8,20 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { deleteExam, setExam } from "../../redux/slice/examSlice";
 import { deleteUserExam, setUserExam } from "../../redux/slice/useExamSlice";
 import { deleteQuizExam, setQuizExam } from "../../redux/slice/quizExamSlice";
-import ExamHistoryResponse from "../../response/ExamHistoryResponse";
+import ExamHistoryResponse from "../../model/response/ExamHistoryResponse";
 import { toast } from "react-toastify";
 import ModalElement from "../element/ModalElement";
-
 const ExamDetailPage = () => {
-  const stopTimerRef = useRef<(() => void) | null>(null) as MutableRefObject<
-    (() => void) | null
-  >;
   const { examId } = useParams();
-  const [openResult, setOpenResult] = useState(false);
   const navigate = useNavigate();
+  const [openResult, setOpenResult] = useState(false);
   const [timeLeft, setTimeLeft] = useState({
     minutes: 0,
     seconds: 0,
   });
+  const stopTimerRef = useRef<(() => void) | null>(null) as MutableRefObject<
+    (() => void) | null
+  >;
   const quizResponseList = useAppSelector(
     (state) => state.exams[Number(examId)] ?? []
   );
@@ -57,12 +56,14 @@ const ExamDetailPage = () => {
     ExamHistoryService.readByExamId(Number(examId)).then((d) => {
       if (d.success) {
         setExamHistoryResponse(d.data);
-        stopTimerRef.current = calculatorTime(new Date(d.data.end_time));
-        const quizzes = d.data.exam.quizzes.map((quiz) => {
-          quiz.answers = RandomUtil.shuffleArray(quiz.answers);
-          return quiz;
-        });
-        if (quizResponseList.length == 0) {
+        stopTimerRef.current = calculatorTime(
+          new Date(d.data.end_time)
+        );
+        if (d.status_code === 201 || quizResponseList.length == 0) {
+          const quizzes = d.data.exam.quizzes.map((quiz) => {
+            quiz.answers = RandomUtil.shuffleArray(quiz.answers);
+            return quiz;
+          });
           dispatch(
             setExam({
               id: Number(examId),
@@ -93,14 +94,13 @@ const ExamDetailPage = () => {
           quiz_id: Number(quiz_id),
           answer_ids,
         }));
+        console.log(answerUser);
+
     if (examHistoryResponse?.id && examId)
       ExamHistoryService.readById(
         examHistoryResponse?.id,
-        Number(examId),
         answerUser
       ).then((d) => {
-        console.log(d.data);
-
         if (d.success) {
           if (stopTimerRef.current) stopTimerRef.current();
           setExamHistoryResponse(d.data);
@@ -160,8 +160,8 @@ const ExamDetailPage = () => {
                   )
                 }
                 className={`btn ${quizExam === quizResponseList.length - 1
-                    ? "btn-secondary"
-                    : "btn-info"
+                  ? "btn-secondary"
+                  : "btn-info"
                   }`}
               >
                 Next
@@ -200,7 +200,7 @@ const ExamDetailPage = () => {
           </div>
         </div>
       </div>
-      <ModalElement open={openResult} handleCancel={handleCancel} setOpen={setOpenResult}>
+      <ModalElement open={openResult} handleCancel={handleCancel}>
         <ul>
           <li>
             Tổng điểm: <span className="">{examHistoryResponse?.point}</span>

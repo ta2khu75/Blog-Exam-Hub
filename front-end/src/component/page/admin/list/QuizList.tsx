@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ExamService from "../../../../service/ExamService";
-import ExamResponse from "../../../../response/ExamResponse";
-import QuizResponse from "../../../../response/QuizResponse";
+import ExamResponse from "../../../../model/response/ExamResponse";
+import QuizResponse from "../../../../model/response/QuizResponse";
 import QuizService from "../../../../service/QuizService";
 import { Button } from "antd";
 import ModalElement from "../../../element/ModalElement";
@@ -86,7 +86,7 @@ const QuizList = () => {
         <Button onClick={() => handleAddClick()}>Add Quiz</Button>
       </ol>
       {examResponse && (
-        <ModalElement title="Modal Quiz" open={open} setOpen={setOpen}>
+        <ModalElement title="Modal Quiz" open={open} handleCancel={()=>setOpen(false)}>
           <QuizForm
             quizResponse={quizResponse}
             refresh={fetchListQuiz}

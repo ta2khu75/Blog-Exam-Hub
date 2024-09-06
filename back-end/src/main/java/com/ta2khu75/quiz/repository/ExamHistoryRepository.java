@@ -7,19 +7,16 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.querydsl.QuerydslPredicateExecutor;
-import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.data.repository.query.Param;
 
-import com.ta2khu75.quiz.entity.ExamHistory;
+import com.ta2khu75.quiz.model.entity.ExamResult;
 
-public interface ExamHistoryRepository extends JpaRepository<ExamHistory, Long>, JpaSpecificationExecutor<ExamHistory> {
+public interface ExamHistoryRepository extends JpaRepository<ExamResult, Long>{
 
-	Optional<ExamHistory> findByAccountEmailAndExamIdAndEndTimeAfterAndLastModifiedDateIsNull(String email, Long examId, LocalDateTime now);
+	Optional<ExamResult> findByAccountEmailAndExamIdAndEndTimeAfterAndLastModifiedDateIsNull(String email, Long examId, LocalDateTime now);
 
-	@Query("SELECT e FROM ExamHistory e WHERE e.endTime < :now AND e.lastModifiedDate IS NULL")
-	List<ExamHistory> findByEndTimeBeforeNow(@Param("now") LocalDateTime now);
-	Page<ExamHistory> findByAccountEmailAndLastModifiedDateIsNotNull(String email, Pageable pageable);
+	@Query("SELECT e FROM ExamResult e WHERE e.endTime < :now AND e.lastModifiedDate IS NULL")
+	List<ExamResult> findByEndTimeBeforeNow(@Param("now") LocalDateTime now);
+	Page<ExamResult> findByAccountEmailAndLastModifiedDateIsNotNull(String email, Pageable pageable);
 }

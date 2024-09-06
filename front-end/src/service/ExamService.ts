@@ -1,16 +1,10 @@
-import { ExamRequest } from "../component/page/admin/crud/ExamCrud";
-import ApiResponse from "../response/ApiResponse";
-import ExamResponse from "../response/ExamResponse";
-import PageResponse from "../response/PageResponse";
+import ExamRequest from "../model/request/ExamRequest";
+import ApiResponse from "../model/response/ApiResponse";
+import ExamResponse from "../model/response/ExamResponse";
+import PageResponse from "../model/response/PageResponse";
 import instance from "../util/apiInstance";
 const basePath = "exam";
 export default class ExamService {
-    static readAllExamLevel():Promise<ApiResponse<string[]>>{
-        return instance.get(`${basePath}/exam-level`);
-    }
-    static readAllExamType():Promise<ApiResponse<string[]>>{
-        return instance.get(`${basePath}/exam-type`);
-    }
     static readPage(): Promise<ApiResponse<PageResponse<ExamResponse>>> {
         return instance.get(basePath);
     }

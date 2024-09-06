@@ -1,6 +1,6 @@
 import { QuizRequest } from "../component/page/admin/form/QuizForm";
-import ApiResponse from "../response/ApiResponse";
-import QuizResponse from "../response/QuizResponse";
+import ApiResponse from "../model/response/ApiResponse";
+import QuizResponse from "../model/response/QuizResponse";
 import instance from "../util/apiInstance";
 const basePath = "quiz";
 export default class QuizService {
@@ -31,8 +31,5 @@ export default class QuizService {
   }
   static delete(id: number): Promise<ApiResponse<void>> {
     return instance.delete(`${basePath}/${id}`);
-  }
-  static readAllQuizType(): Promise<ApiResponse<string[]>> {
-    return instance.get(`${basePath}/quiz-type`);
   }
 }

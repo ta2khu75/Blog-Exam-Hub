@@ -1,24 +1,27 @@
 import { Checkbox, Radio, Space } from "antd";
-import QuizResponse from "../../response/QuizResponse";
-import AnswerResponse from "../../response/AnswerResponse";
+import QuizResponse from "../../model/response/QuizResponse";
+import AnswerResponse from "../../model/response/AnswerResponse";
 import { useAppSelector } from "../../redux/hooks";
 type Props = {
-  showAnswer?: boolean;
   examId: number;
+  showAnswer?: boolean;
+  userAnswer?: number[]
   quizResponse: QuizResponse;
   answerResponseList: AnswerResponse[];
   handleAnswerClick?: (quizResponse: QuizResponse, answers: number[]) => void;
 };
 const AnswerListElement = ({
   examId,
+  userAnswer,
   showAnswer,
   quizResponse,
   answerResponseList,
   handleAnswerClick,
 }: Props) => {
-  const value = useAppSelector(
+  const selectedAnswer = useAppSelector(
     (state) => state.userExams?.[examId]?.[quizResponse.id]
   );
+  const value = userAnswer ?? selectedAnswer;
   return (
     <>
       {quizResponse.quiz_type == "SINGLE_CHOICE" && (
@@ -44,9 +47,6 @@ const AnswerListElement = ({
                     {answer.correct && (
                       <i className="text-success bi bi-check-circle-fill"></i>
                     )}
-                    {/* {!answer.correct && (
-                      <i className="text-danger bi bi-x-circle-fill"></i>
-                    )} */}
                   </>
                 )}
               </Radio>
@@ -58,7 +58,7 @@ const AnswerListElement = ({
         <Checkbox.Group
           value={value}
           disabled={showAnswer}
-          onChange={(e) => handleAnswerClick?handleAnswerClick(quizResponse, e):{}}
+          onChange={(e) => handleAnswerClick ? handleAnswerClick(quizResponse, e) : {}}
         >
           <Space direction="vertical">
             {answerResponseList.map((answer) => (

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Button, Checkbox, Radio, Space } from "antd";
 import { toast } from "react-toastify";
-import QuizResponse from "../../../../response/QuizResponse";
-import AnswerResponse from "../../../../response/AnswerResponse";
+import QuizResponse from "../../../../model/response/QuizResponse";
+import AnswerResponse from "../../../../model/response/AnswerResponse";
 import AnswerService from "../../../../service/AnswerService";
 import ModalElement from "../../../element/ModalElement";
 import AnswerForm from "../form/AnswerForm";
@@ -89,7 +89,7 @@ const AnswerList = ({ quizResponse }: Props) => {
       <Button className="d-block" onClick={() => handleAddClick()}>
         Add Answer
       </Button>
-      <ModalElement open={open} setOpen={setOpen}>
+      <ModalElement open={open} handleCancel={() => setOpen(false)}>
         <AnswerForm
           answerResponse={answerResponse}
           quizResponse={quizResponse}

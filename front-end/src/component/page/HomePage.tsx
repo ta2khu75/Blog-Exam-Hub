@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import ExamResponse from "../../response/ExamResponse"
+import ExamResponse from "../../model/response/ExamResponse"
 import ExamService from "../../service/ExamService"
-import PageResponse from "../../response/PageResponse"
+import PageResponse from "../../model/response/PageResponse"
 import ExamCartElement from "../element/ExamCartElement"
 
 const HomePage = () => {
@@ -113,7 +113,7 @@ const HomePage = () => {
               <div className="tab-content" id="myTabContent">
                 <div className="tab-pane fade show active" id="design-tab-pane" role="tabpanel" aria-labelledby="design-tab" tabIndex={0}>
                   <div className="row">
-                    {examResponsePage?.content.map(examResponse => (
+                    {examResponsePage?.content?.map(examResponse => (
                       <ExamCartElement key={`exam-cart-${examResponse.id}`} examResponse={examResponse} className="mt-4"/>
                     ))}
 

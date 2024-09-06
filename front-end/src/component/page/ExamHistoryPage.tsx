@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ExamHistoryService from "../../service/ExamHistoryService";
-import UserAnswerResponse from "../../response/UserAnswerResponse";
-import QuizDetailsResponse from "../../response/details/QuizDetailsResponse";
-import AnswerHistoryListElement from "../element/AnswerHistoryListElement";
+import UserAnswerResponse from "../../model/response/UserAnswerResponse";
+import QuizDetailsResponse from "../../model/response/details/QuizDetailsResponse";
+import AnswerListElement from "../element/AnswerListElement";
 const ExamHistoryPage = () => {
   const { examHistoryId } = useParams();
   const [showAnswer, setShowAnswer] = useState(false);
@@ -39,8 +39,9 @@ const ExamHistoryPage = () => {
               </h4>
 
               <div className="row">
-                <AnswerHistoryListElement
-                  value={userAnswerResponses.filter((quiz) => quiz.quiz.id === quizResponses?.[quizExam]?.id
+                <AnswerListElement
+                  examId={0}
+                  userAnswer={userAnswerResponses.filter((quiz) => quiz.quiz.id === quizResponses?.[quizExam]?.id
                   )?.flatMap(quiz => { return quiz.answers.map((answer) => answer.id) }) ?? []}
                   showAnswer={showAnswer}
                   answerResponseList={

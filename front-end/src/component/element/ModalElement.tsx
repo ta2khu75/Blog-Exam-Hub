@@ -1,20 +1,22 @@
-import { Modal } from "antd"
+import { Button, Modal } from "antd"
 
 type Props = {
     title?: string;
     open: boolean;
-    setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    handleCancel?: ()=>void;
+    handleCancel: () => void;
     children?: JSX.Element
-    width?:number
+    width?: number
+    height?: number
 }
-const ModalElement = ({ title, open, setOpen, handleCancel,  children, width }: Props) => {
+const ModalElement = ({ title, open, handleCancel, children, width, height }: Props) => {
     return (
         <Modal title={title} open={open}
-        centered
-        width={width}
-            footer={[]}
-        onCancel={()=>handleCancel?handleCancel():setOpen(false)}
+            centered
+            width={width} height={height}
+            footer={[<Button key="cancel" onClick={handleCancel}>
+                Cancel
+            </Button>]}
+            onCancel={() => handleCancel()}
         >
             <div className="m-5">
                 {children}

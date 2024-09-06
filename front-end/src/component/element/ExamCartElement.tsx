@@ -1,5 +1,5 @@
 import { Button } from "antd";
-import ExamResponse from "../../response/ExamResponse"
+import ExamResponse from "../../model/response/ExamResponse"
 import { Link } from "react-router-dom";
 
 type Props = {

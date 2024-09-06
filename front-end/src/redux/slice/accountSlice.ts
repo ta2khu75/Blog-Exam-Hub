@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import AuthResponse from "../../response/AuthResponse";
+import AuthResponse from "../../model/response/AuthResponse";
 const initialState: AuthResponse = {
   authenticated: false,
 };
