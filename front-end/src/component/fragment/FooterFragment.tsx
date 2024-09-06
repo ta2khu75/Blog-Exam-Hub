@@ -1,5 +1,3 @@
-import React from 'react'
-
 const FooterFragment = () => {
   return (
     <footer className="site-footer section-padding">

@@ -1,4 +1,3 @@
-import ApiResponse from "../model/response/ApiResponse";
 import instance from "../util/apiInstance";
 const basePath = "exam-category";
 export default class ExamCategoryService {

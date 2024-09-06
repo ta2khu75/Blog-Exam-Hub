@@ -3,8 +3,8 @@ import ExamCategoryService from '../../../../service/ExamCategoryService'
 import TableElement from '../../../element/TableElement'
 import ModalElement from '../../../element/ModalElement'
 import { Button } from 'antd'
-import ExamCategoryForm from '../form/ExamCategoryForm'
 import { toast } from 'react-toastify'
+import ExamCategoryForm from '../../../element/form/ExamCategoryForm'
 
 const ManagerExamCategory = () => {
     const [examCategory, setExamCategory] = useState<ExamCategoryResponse>()

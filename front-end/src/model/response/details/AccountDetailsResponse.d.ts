@@ -1,8 +1,5 @@
-import AccountResponse from "../AccountResponse";
-import RoleResponse from "../RoleResponse";
-
-export default interface AccountDetailsResponse extends AccountResponse{
+interface AccountDetailsResponse extends AccountResponse{
     enabled: boolean;
-    nonLocked: boolean;
+    non_locked: boolean;
     role: RoleResponse;
 }

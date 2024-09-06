@@ -1,7 +1,6 @@
-import AccountResponse from "./AccountResponse";
 import ExamDetailsResponse from "./details/ExamDetailsResponse";
 
-export default interface ExamHistoryResponse{
+interface ExamResultResponse{
     id: number;
     point: number;
     correct_count:number;

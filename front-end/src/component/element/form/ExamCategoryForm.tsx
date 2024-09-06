@@ -1,7 +1,7 @@
 import { Button, Form, FormProps, Input } from 'antd'
-import ExamCategoryService from '../../../../service/ExamCategoryService';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
+import ExamCategoryService from '../../../service/ExamCategoryService';
 type Props = {
     examCategory?: ExamCategoryResponse;
     setExamCategories: React.Dispatch<React.SetStateAction<ExamCategoryResponse[]>>

@@ -1,7 +1,3 @@
-import ExamRequest from "../model/request/ExamRequest";
-import ApiResponse from "../model/response/ApiResponse";
-import ExamResponse from "../model/response/ExamResponse";
-import PageResponse from "../model/response/PageResponse";
 import instance from "../util/apiInstance";
 const basePath = "exam";
 export default class ExamService {

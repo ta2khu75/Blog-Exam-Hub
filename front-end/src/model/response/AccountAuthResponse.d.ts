@@ -1,4 +1,4 @@
-export default interface AccountAuthResponse{
+interface AccountAuthResponse{
     id: string;
     username: string;
     email: string;

@@ -1,6 +1,3 @@
-import { QuizRequest } from "../component/page/admin/form/QuizForm";
-import ApiResponse from "../model/response/ApiResponse";
-import QuizResponse from "../model/response/QuizResponse";
 import instance from "../util/apiInstance";
 const basePath = "quiz";
 export default class QuizService {

@@ -1,4 +1,4 @@
-export default interface ApiResponse<T>{
+interface ApiResponse<T>{
     status_code: number;
     success:boolean;
     data: T;

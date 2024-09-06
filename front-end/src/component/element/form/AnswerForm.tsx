@@ -1,15 +1,7 @@
 import { Button, Form, FormProps, Input, Radio } from "antd"
-import AnswerService from "../../../../service/AnswerService";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import QuizResponse from "../../../../model/response/QuizResponse";
-import AnswerResponse from "../../../../model/response/AnswerResponse";
-export type AnswerRequest = {
-    id?: number,
-    answer?: string,
-    correct?: boolean;
-    quiz_id?: number
-}
+import AnswerService from "../../../service/AnswerService";
 type Props = {
     quizResponse: QuizResponse
     answerResponse?: AnswerResponse
@@ -62,11 +54,6 @@ const AnswerForm = ({ answerResponse, quizResponse, refresh }: Props) => {
             form={form}
         >
             <Form.Item<AnswerRequest> label="Id" name={"id"} hidden>
-                <Input />
-            </Form.Item>
-            <Form.Item<AnswerRequest> label="Quiz Id" hidden name={"quiz_id"} rules={[
-                { required: true, message: "please input quiz id" }
-            ]}>
                 <Input />
             </Form.Item>
             <Form.Item<AnswerRequest> label="Answer" name={"answer"} rules={[
