@@ -12,6 +12,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RoleRequest {
 	@NotBlank
-	String name;	
+	String name;
 	List<Long> permissionIds=new ArrayList<>();
 }

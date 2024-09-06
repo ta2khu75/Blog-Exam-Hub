@@ -9,38 +9,62 @@ import { AccessModifier } from '../../../../model/AccessModifier';
 import PageResponse from '../../../../model/response/PageResponse';
 import { toast } from 'react-toastify';
 type Props = {
+    id?: string;
     exam?: ExamResponse,
+    setExam: React.Dispatch<React.SetStateAction<ExamResponse | undefined>>
     examCategories?: ExamCategoryResponse[]
-    setExamResponsePage: React.Dispatch<React.SetStateAction<PageResponse<ExamResponse> | undefined>>
+    setExamPage: React.Dispatch<React.SetStateAction<PageResponse<ExamResponse> | undefined>>
 }
-const ExamForm = ({ exam, examCategories, setExamResponsePage }: Props) => {
+const ExamForm = ({ id, exam, setExam, examCategories, setExamPage }: Props) => {
     const fileInputRef = useRef<HTMLInputElement | null>(null)
     const [image, setImage] = useState<File>()
     const [imageUrl, setImageUrl] = useState<string>()
     const [errorImage, setErrorImage] = useState(false);
     const [form] = Form.useForm<ExamRequest>();
     useEffect(() => {
-        if (exam) form.setFieldsValue(exam)
+        if (exam) {
+            form.setFieldsValue(exam);
+            form.setFieldValue("exam_category_id", exam.exam_category.id)
+        }
     }, [exam, form])
     const onFinish: FormProps<ExamRequest>['onFinish'] = (values) => {
         if (!exam?.id && image) {
-            ExamService.create(values, image).then((data) => {
-                if (data.success) {
-                    // fetchReadPageExam();
+            ExamService.create(values, image).then((response) => {
+                if (response.success) {
+                    setExamPage(examPage => examPage ? {
+                        ...examPage,
+                        content: [response.data, ...examPage.content]
+                    }
+                        : {
+                            content: [response.data],
+                            total_pages: 1,
+                            total_elements: 1
+                        })
                     handleResetClick();
                     toast.success("Successfully to create")
                 } else {
-                    toast.error(data.message_error)
+                    toast.error(response.message_error)
                 }
             })
         } else if (exam?.id) {
-            ExamService.update(exam.id, values, image).then((data) => {
-                if (data.success) {
-                    // fetchReadPageExam();
+            ExamService.update(exam.id, values, image).then((response) => {
+                if (response.success) {
+                    setExamPage(examPage => examPage ? {
+                        ...examPage, content: examPage.content.map((exam) => {
+                            if (exam.id === response.data.id) {
+                                return response.data;
+                            }
+                            return exam;
+                        })
+                    } : {
+                        content: [response.data],
+                        total_pages: 1,
+                        total_elements: 1
+                    })
                     handleResetClick();
                     toast.success("successfully")
                 } else {
-                    toast.error(data.message_error)
+                    toast.error(response.message_error)
                 }
             })
         } else {
@@ -59,6 +83,7 @@ const ExamForm = ({ exam, examCategories, setExamResponsePage }: Props) => {
     }
     const handleResetClick = () => {
         form.resetFields();
+        setExam(undefined);
         setImage(undefined);
         setImageUrl(undefined);
         if (fileInputRef.current) {
@@ -66,10 +91,11 @@ const ExamForm = ({ exam, examCategories, setExamResponsePage }: Props) => {
         }
     }
     return (
-        <Form
+        <Form id={id}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             form={form}
+            layout='vertical'
         >
             <Form.Item<ExamRequest> label="Title" name={"title"} rules={[
                 { required: true, message: "please input title" }
@@ -82,16 +108,6 @@ const ExamForm = ({ exam, examCategories, setExamResponsePage }: Props) => {
                 ]} >
                 <InputNumber addonAfter="minutes" />
             </Form.Item>
-            <Form.Item<ExamRequest> label="Exam Level" name={"exam_level"} rules={[
-                { required: true, message: "please select exam level" }
-            ]} >
-                <Select options={Object.keys(ExamLevel).map((e) => ({ value: e, label: <span>{e}</span> }))} />
-            </Form.Item>
-            <Form.Item<ExamRequest> label="Description" name={"description"} rules={[
-                { required: true, message: "please input description" }
-            ]} >
-                <TextArea rows={4} />
-            </Form.Item>
             <Form.Item<ExamRequest> label="Access Modifier" name={"access_modifier"} rules={[
                 { required: true, message: "please input access_modifier" }
             ]} >
@@ -99,6 +115,19 @@ const ExamForm = ({ exam, examCategories, setExamResponsePage }: Props) => {
                     {Object.keys(AccessModifier).map(access => <Radio key={`radio-${access}`} value={access}>{access}</Radio>)}
                 </Radio.Group>
             </Form.Item>
+            <Form.Item<ExamRequest> label="Exam Level" name={"exam_level"} rules={[
+                { required: true, message: "please select exam level" }
+            ]} >
+                <Radio.Group>
+                    {Object.keys(ExamLevel).map(level => <Radio key={`radio-${level}`} value={level}>{level}</Radio>)}
+                </Radio.Group>
+            </Form.Item>
+            <Form.Item<ExamRequest> label="Description" name={"description"} rules={[
+                { required: true, message: "please input description" }
+            ]} >
+                <TextArea rows={4} />
+            </Form.Item>
+
             <Form.Item<ExamRequest> label="Exam Category" name={"exam_category_id"} rules={[
                 { required: true, message: "please select exam category" }
             ]} >

@@ -34,10 +34,10 @@ public class QuizController {
 	ObjectMapper objectMapper;
 
 	@PostMapping(consumes = "multipart/form-data")
-	public ResponseEntity<QuizResponse> createQuiz(@RequestPart("quiz_request") String request, @RequestPart(name="file", required = false) MultipartFile file) throws IOException {
+	public ResponseEntity<QuizResponse> createQuiz(@RequestPart("quiz") String request, @RequestPart(name="file", required = false) MultipartFile file) throws IOException {
 		QuizRequest quizRequest = objectMapper.readValue(request, QuizRequest.class);
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(quizRequest, file));
-	}
+	}	
 
 	@GetMapping("exam/{id}")
 	public ResponseEntity<List<QuizResponse>> readAllQuizExam(@PathVariable("id") Long id) {
@@ -49,9 +49,9 @@ public class QuizController {
 		return ResponseEntity.status(HttpStatus.OK).body(service.read(id));
 	}
 
-	@PutMapping("{id}")
+	@PutMapping(value = "{id}", consumes = "multipart/form-data")
 	public ResponseEntity<QuizResponse> updateQuiz(@PathVariable("id") Long id,
-			@RequestPart("quiz_request") String request, @RequestPart(name="file", required = false) MultipartFile file) throws IOException {
+			@RequestPart("quiz") String request, @RequestPart(name="file", required = false) MultipartFile file) throws IOException {
 		QuizRequest quizRequest = objectMapper.readValue(request, QuizRequest.class);
 		return ResponseEntity.status(HttpStatus.OK).body(service.update(id, quizRequest, file));
 	}

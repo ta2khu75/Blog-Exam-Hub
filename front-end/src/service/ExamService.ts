@@ -14,7 +14,7 @@ export default class ExamService {
         form.append("exam_request", JSON.stringify(data));
         return instance.post(basePath, form);
     }
-    static update(id: number, data: ExamRequest, image?: File): Promise<ApiResponse<ExamRequest>> {
+    static update(id: number, data: ExamRequest, image?: File): Promise<ApiResponse<ExamResponse>> {
         const form = new FormData();
         if (image) {
             form.append("image", image)
