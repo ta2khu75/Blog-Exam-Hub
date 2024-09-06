@@ -9,7 +9,6 @@ import { deleteUserExam, setUserExam } from "../../redux/slice/useExamSlice";
 import { deleteQuizExam, setQuizExam } from "../../redux/slice/quizExamSlice";
 import { toast } from "react-toastify";
 import ModalElement from "../element/ModalElement";
-import { ExamResultResponse } from "../../model/response/ExamResultResponse";
 const ExamDetailPage = () => {
   const { examId } = useParams();
   const navigate = useNavigate();

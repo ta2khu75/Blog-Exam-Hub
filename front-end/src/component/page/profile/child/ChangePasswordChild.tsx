@@ -1,10 +1,9 @@
 import { Button, Form, FormProps, Input } from "antd";
-import { AuthRequest } from "./LoginPage";
-import AccountPasswordRequest from "../../model/request/update/AccountPasswordRequest";
+import { AuthRequest } from "../../LoginPage";
 import { toast } from "react-toastify";
-import AccountService from "../../service/AccountService";
+import AccountService from "../../../../service/AccountService";
 
-const ChangePasswordPage = () => {
+const ChangePasswordChild = () => {
   const [form] = Form.useForm<AccountPasswordRequest>();
   const onFinish: FormProps<AccountPasswordRequest>["onFinish"] = (values) => {
     AccountService.changePassword(values).then((d) => {
@@ -23,16 +22,14 @@ const ChangePasswordPage = () => {
     console.log("Failed:", errorInfo);
   };
   return (
-    <>
-      <div style={{ height: "75px" }}></div>
       <div className="d-flex justify-content-center">
-        <Form onFinish={onFinish} onFinishFailed={onFinishFailed} form={form}>
+        <Form className="w-50" layout="vertical" onFinish={onFinish} onFinishFailed={onFinishFailed} form={form}>
           <Form.Item<AccountPasswordRequest>
             label="Password"
             name="password"
             rules={[{ required: true, message: "Please input your password!" }]}
           >
-            <Input.Password />
+            <Input.Password size="large" />
           </Form.Item>
 
           <Form.Item<AccountPasswordRequest>
@@ -42,7 +39,7 @@ const ChangePasswordPage = () => {
               { required: true, message: "Please input your new password!" },
             ]}
           >
-            <Input.Password />
+            <Input.Password  size="large"/>
           </Form.Item>
           <Form.Item<AccountPasswordRequest>
             label="Confirm Password"
@@ -54,17 +51,16 @@ const ChangePasswordPage = () => {
               },
             ]}
           >
-            <Input.Password />
+            <Input.Password  size="large"/>
           </Form.Item>
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Form.Item className="d-flex justify-content-center">
             <Button type="primary" htmlType="submit">
-              Submit
+              Change Password
             </Button>
           </Form.Item>
         </Form>
       </div>
-    </>
   );
 };
 
-export default ChangePasswordPage;
+export default ChangePasswordChild;
