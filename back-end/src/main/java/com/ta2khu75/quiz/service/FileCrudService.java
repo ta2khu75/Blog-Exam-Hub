@@ -1,10 +1,12 @@
 package com.ta2khu75.quiz.service;
 
+import java.io.IOException;
+
 import org.springframework.web.multipart.MultipartFile;
 
-public interface CrudFileService <D, T, E>{
-    E create(T request, MultipartFile file);
-    E update(D id,T request, MultipartFile file);
-    E read(D id);
-    void delete(D id);
+import jakarta.validation.Valid;
+
+public interface FileCrudService <D, T, E> extends CrudService<D, T, E> {
+    E create(@Valid T request, MultipartFile file)throws IOException;
+    E update(D id,@Valid T request, MultipartFile file)throws IOException;
 }

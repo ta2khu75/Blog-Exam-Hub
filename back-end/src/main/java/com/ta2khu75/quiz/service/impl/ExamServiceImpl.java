@@ -1,6 +1,5 @@
 package com.ta2khu75.quiz.service.impl;
 
-//import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +7,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,8 +20,10 @@ import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.ExamMapper;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Exam;
+import com.ta2khu75.quiz.model.entity.ExamCategory;
 import com.ta2khu75.quiz.model.entity.ExamResult;
 import com.ta2khu75.quiz.repository.AccountRepository;
+import com.ta2khu75.quiz.repository.ExamCategoryRepository;
 import com.ta2khu75.quiz.repository.ExamHistoryRepository;
 import com.ta2khu75.quiz.repository.ExamRepository;
 import com.ta2khu75.quiz.service.ExamService;
@@ -42,6 +42,7 @@ public class ExamServiceImpl implements ExamService {
 	ExamRepository repository;
 	AccountRepository accountRepository;
 	ExamMapper mapper;
+	ExamCategoryRepository examCategoryRepository;
 	ExamHistoryRepository examHistoryRepository;
 	CloudinaryUtil cloudinaryService;
 
@@ -51,9 +52,18 @@ public class ExamServiceImpl implements ExamService {
 		Exam exam = mapper.toEntity(examRequest);
 		Map map = cloudinaryService.uploadFile(file, FolderEnv.EXAM_FOLDER);
 		exam.setImagePath((String) map.get("url"));
-		exam.setAccount(accountRepository.findByEmail(SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new NotFoundException("Could not find account"))).orElseThrow(()-> new NotFoundException("Could not find account")));
+		exam.setExamCategory(this.findExamCategoryById(examRequest.getExamCategoryId()));
+		exam.setAccount(accountRepository
+				.findByEmail(SecurityUtil.getCurrentUserLogin()
+						.orElseThrow(() -> new NotFoundException("Could not find account")))
+				.orElseThrow(() -> new NotFoundException("Could not find account")));
 		repository.save(exam);
 		return mapper.toResponse(repository.save(exam));
+	}
+
+	private ExamCategory findExamCategoryById(Long id) {
+		return examCategoryRepository.findById(id)
+				.orElseThrow(() -> new NotFoundException("Could not found exam category with id: " + id));
 	}
 
 	@Override
@@ -65,6 +75,8 @@ public class ExamServiceImpl implements ExamService {
 		if (file != null && !file.isEmpty()) {
 			Map map = cloudinaryService.uploadFile(file, FolderEnv.EXAM_FOLDER);
 			exam.setImagePath((String) map.get("url"));
+			if (exam.getExamCategory().getId() != examRequest.getExamCategoryId())
+				exam.setExamCategory(this.findExamCategoryById(examRequest.getExamCategoryId()));
 		}
 		return mapper.toResponse(repository.save(exam));
 	}
@@ -90,10 +102,14 @@ public class ExamServiceImpl implements ExamService {
 
 	@Override
 	public ExamDetailsResponse readDetail(Long id) {
-		String email=SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new NotFoundException("Could not find email"));
-		Account account=accountRepository.findByEmail(email).orElseThrow(()->new NotFoundException("Could not find account with email: "+email));
-		Exam exam = repository.findById(id).orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));
-		ExamResult examHistory = ExamResult.builder().account(account).exam(exam).endTime(LocalDateTime.now().plusMinutes(exam.getDuration()+1)).build();
+		String email = SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new NotFoundException("Could not find email"));
+		Account account = accountRepository.findByEmail(email)
+				.orElseThrow(() -> new NotFoundException("Could not find account with email: " + email));
+		Exam exam = repository.findById(id)
+				.orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));
+		ExamResult examHistory = ExamResult.builder().account(account).exam(exam)
+				.endTime(LocalDateTime.now().plusMinutes(exam.getDuration() + 1)).build();
 		examHistoryRepository.save(examHistory);
 		log.info(examHistory.toString());
 		return mapper.toDetailsResponse(exam);
