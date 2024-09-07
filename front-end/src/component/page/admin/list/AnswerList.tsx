@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { Button, Checkbox, Radio, Space } from "antd";
 import { toast } from "react-toastify";
-import QuizResponse from "../../../../model/response/QuizResponse";
-import AnswerResponse from "../../../../model/response/AnswerResponse";
 import AnswerService from "../../../../service/AnswerService";
 import ModalElement from "../../../element/ModalElement";
-import AnswerForm from "../form/AnswerForm";
 import PopoverActionElement from "../../../element/PopoverActionElement";
+import AnswerForm from "../../../element/form/AnswerForm";
 type Props = {
   quizResponse: QuizResponse;
 };

@@ -1,6 +1,3 @@
-import { AnswerRequest } from "../component/page/admin/form/AnswerForm";
-import AnswerResponse from "../model/response/AnswerResponse";
-import ApiResponse from "../model/response/ApiResponse";
 import instance from "../util/apiInstance";
 const basePath = "answer";
 export default class AnswerService{

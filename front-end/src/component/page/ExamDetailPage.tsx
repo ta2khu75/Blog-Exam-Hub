@@ -1,14 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
-import QuizResponse from "../../model/response/QuizResponse";
 import AnswerListElement from "../element/AnswerListElement";
 import RandomUtil from "../../util/RandomUtil";
-import ExamHistoryService from "../../service/ExamHistoryService";
+import ExamHistoryService from "../../service/ExamResultService";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { deleteExam, setExam } from "../../redux/slice/examSlice";
 import { deleteUserExam, setUserExam } from "../../redux/slice/useExamSlice";
 import { deleteQuizExam, setQuizExam } from "../../redux/slice/quizExamSlice";
-import ExamHistoryResponse from "../../model/response/ExamHistoryResponse";
 import { toast } from "react-toastify";
 import ModalElement from "../element/ModalElement";
 const ExamDetailPage = () => {
@@ -26,7 +24,7 @@ const ExamDetailPage = () => {
     (state) => state.exams[Number(examId)] ?? []
   );
   const [examHistoryResponse, setExamHistoryResponse] =
-    useState<ExamHistoryResponse>();
+    useState<ExamResultResponse>();
   const answerListUser = useAppSelector(
     (state) => state.userExams[Number(examId)]
   );
@@ -60,7 +58,7 @@ const ExamDetailPage = () => {
           new Date(d.data.end_time)
         );
         if (d.status_code === 201 || quizResponseList.length == 0) {
-          const quizzes = d.data.exam.quizzes.map((quiz) => {
+          const quizzes = d.data.exam.quizzes.map((quiz:QuizDetailsResponse) => {
             quiz.answers = RandomUtil.shuffleArray(quiz.answers);
             return quiz;
           });
@@ -70,6 +68,7 @@ const ExamDetailPage = () => {
               value: RandomUtil.shuffleArray(quizzes),
             })
           );
+          dispatch(deleteUserExam(Number(examId)));
         }
       }
     });
@@ -94,7 +93,7 @@ const ExamDetailPage = () => {
           quiz_id: Number(quiz_id),
           answer_ids,
         }));
-        console.log(answerUser);
+    console.log(answerUser);
 
     if (examHistoryResponse?.id && examId)
       ExamHistoryService.readById(

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom"
-import ExamResponse from "../../model/response/ExamResponse";
 import ExamService from "../../service/ExamService";
 
 const ExamAboutPage = () => {

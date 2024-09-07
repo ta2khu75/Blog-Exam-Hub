@@ -32,13 +32,8 @@ public class JWTUtil {
 		Instant now = Instant.now();
 		Instant validity = now.plus(this.expiration, ChronoUnit.SECONDS);
 		JwtClaimsSet claims = JwtClaimsSet.builder().issuer("com.ta2khu75").issuedAt(now).expiresAt(validity)
-<<<<<<< HEAD
-				.subject(accountResponse.getEmail()).claim("scope", "ROLE_" + accountResponse.getRole())// .build();
-				.claim("account", accountResponse).build();
-=======
+
 				.subject(response.getEmail()).claim("scope", "ROLE_" + response.getRole()).build();// .build();
-//				.claim("account", accountResponse).build();
->>>>>>> dfbe65e32203c4047af247042966a7002ae8b6e3
 		JwsHeader jwsHeader = JwsHeader.with(SecurityJwtConfig.JWT_ALGORITHM).build();
 		return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
 	}
@@ -47,11 +42,7 @@ public class JWTUtil {
 		Instant now = Instant.now();
 		Instant validity = now.plus(this.refreshExpiration, ChronoUnit.SECONDS);
 		JwtClaimsSet claims = JwtClaimsSet.builder().issuer("com.ta2khu75").issuedAt(now).expiresAt(validity)
-<<<<<<< HEAD
-				.subject(accountResponse.getEmail()).build();
-=======
 				.subject(response.getEmail()).build();
->>>>>>> dfbe65e32203c4047af247042966a7002ae8b6e3
 		JwsHeader jwsHeader = JwsHeader.with(SecurityJwtConfig.JWT_ALGORITHM).build();
 		return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
 	}

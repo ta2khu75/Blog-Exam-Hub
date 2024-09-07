@@ -1,5 +1,3 @@
-import RoleResponse from "../RoleResponse";
-
-export default interface RoleDetailsResponse extends RoleResponse{
+interface RoleDetailsResponse extends RoleResponse{
     permissionIds:number[];
 }

@@ -38,31 +38,7 @@ import jakarta.mail.MessagingException;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AccountServiceImpl implements AccountService {
-<<<<<<< HEAD
-    AccountRepository repository;
-    AccountMapper mapper;
-    PasswordEncoder passwordEncoder;
-    @Override
-    public AccountResponse create(AccountRequest request) {
-        if(request.getPassword().equals(request.getConfirmPassword())){
-                Account account =mapper.toEntity(request);
-                account.setEmail(account.getEmail().toLowerCase());
-                account.setPassword(passwordEncoder.encode(account.getPassword()));
-                return mapper.toResponse(repository.save(account));
-        }
-        throw new NotMatchesException("password and confirm password not matches");
-    }
 
-    @Override
-    public AccountResponse update(Long id, AccountRequest request) {
-        if(request.getPassword().equals(request.getConfirmPassword())){
-            Account account =repository.findById(id).orElseThrow(()-> new NotFoundException("Could not found account with id: "+id));
-            mapper.update(request,account);
-            return mapper.toResponse(repository.save(account));
-        }
-        throw new NotMatchesException("password and confirm password not matches");
-    }
-=======
 	AccountRepository repository;
 	AccountMapper mapper;
 	RoleRepository roleRepository;
@@ -90,8 +66,6 @@ public class AccountServiceImpl implements AccountService {
 		}
 		throw new NotMatchesException("password and confirm password not matches");
 	}
->>>>>>> dfbe65e32203c4047af247042966a7002ae8b6e3
-
 	@Override
 	public AccountDetailsResponse update(String id, AccountStatusRequest request) {
 		Account account = repository.findById(id)
