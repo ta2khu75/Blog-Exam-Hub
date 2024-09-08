@@ -5,6 +5,6 @@ import com.ta2khu75.quiz.model.response.AnswerResponse;
 
 
 import java.util.List;
-public interface AnswerService extends CrudService<Long, AnswerRequest , AnswerResponse>{
+public interface AnswerService extends BaseService<Long, AnswerRequest , AnswerResponse>{
     List<AnswerResponse> readAllByQuizId(Long id);
 }

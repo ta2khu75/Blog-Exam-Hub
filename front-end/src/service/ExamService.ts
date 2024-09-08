@@ -10,6 +10,15 @@ export default class ExamService {
         form.append("exam_request", JSON.stringify(data));
         return instance.post(basePath, form);
     }
+    static readPageMyExam(page = 1, size = 10): Promise<ApiResponse<PageResponse<ExamResponse>>> {
+        return instance.get(`${basePath}/my-exam`, { params: { page, size } });
+    }
+    static readPageByCategory(categoryId: number, page = 1, size = 10): Promise<ApiResponse<PageResponse<ExamResponse>>> {
+        return instance.get(`${basePath}/category/${categoryId}`, { params: { page, size } });
+    }
+    static readPageByAuthor(authorId: number, page = 1, size = 10): Promise<ApiResponse<PageResponse<ExamResponse>>> {
+        return instance.get(`${basePath}/author/${authorId}`, { params: { page, size } });
+    }
     static update(id: number, data: ExamRequest, image?: File): Promise<ApiResponse<ExamResponse>> {
         const form = new FormData();
         if (image) {

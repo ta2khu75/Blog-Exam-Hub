@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppstoreOutlined, UserOutlined, SettingOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, UserOutlined} from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Layout, Menu, theme } from 'antd';
 import { NavLink, Outlet } from 'react-router-dom';
@@ -31,41 +31,18 @@ const items: MenuItem[] = [
         label: 'Exam',
         icon: <AppstoreOutlined />,
         children: [
-            { key: '5', label: 'Option 5' },
-            { key: '6', label: 'Option 6' },
             {
-                key: 'sub3',
-                label: 'Submenu',
-                children: [
-                    { key: '7', label: 'Option 7' },
-                    { key: '8', label: 'Option 8' },
-                ],
+                key: '5', label: <NavLink to={"/profile/manager-exam"}>
+                    Manager
+                </NavLink>
+            },
+            {
+                key: '6', label: <NavLink to={"/profile/exam-result"}>
+                    History
+                </NavLink>
             },
         ],
-    },
-    {
-        type: 'divider',
-    },
-    {
-        key: 'sub4',
-        label: 'Navigation Three',
-        icon: <SettingOutlined />,
-        children: [
-            { key: '9', label: 'Option 9' },
-            { key: '10', label: 'Option 10' },
-            { key: '11', label: 'Option 11' },
-            { key: '12', label: 'Option 12' },
-        ],
-    },
-    {
-        key: 'grp',
-        label: 'Group',
-        type: 'group',
-        children: [
-            { key: '13', label: 'Option 13' },
-            { key: '14', label: 'Option 14' },
-        ],
-    },
+    }
 ];
 
 const ProfilePage = () => {

@@ -8,6 +8,7 @@ function App() {
   return (<>
     <main id='top'>
       <HeaderFragment />
+      <div style={{height:"78px"}}></div>
       <Outlet />
     </main>
     <FooterFragment />

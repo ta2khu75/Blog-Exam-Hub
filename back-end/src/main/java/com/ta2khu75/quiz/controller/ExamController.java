@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +39,7 @@ public class ExamController {
 	@PostMapping(consumes = "multipart/form-data")
 	public ResponseEntity<ExamResponse> createExam(@RequestPart("exam_request") String examRequestString,
 			@RequestPart(name = "image", required = true) MultipartFile image) throws IOException {
-		ExamRequest examRequest = objectMapper.readValue(examRequestString, ExamRequest.class); 
+		ExamRequest examRequest = objectMapper.readValue(examRequestString, ExamRequest.class);
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(examRequest, image));
 	}
 
@@ -66,8 +67,31 @@ public class ExamController {
 		return ResponseEntity.noContent().build();
 	}
 
+	@GetMapping("my-exam")
+	public ResponseEntity<PageResponse<ExamResponse>> readlPageMyExam(
+			@RequestParam(name="page", required = false, defaultValue = "1") int page,
+			@RequestParam(name="size", required = false, defaultValue = "5") int size) {
+		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
+		return ResponseEntity.ok(service.readPageMyExam(pageable));
+	}
+	@GetMapping("exam-category/{id}")
+	public ResponseEntity<PageResponse<ExamResponse>> readlPageExamCategory(@PathVariable("id") Long id,
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "5") int size) {
+		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
+		return ResponseEntity.ok(service.readPageCategoryExam(id, pageable));
+	}
+
+	@GetMapping("account/{id}")
+	public ResponseEntity<PageResponse<ExamResponse>> readlPageAccountExam(@PathVariable("id") String id,
+			@RequestParam(required = false, defaultValue = "1") int page,
+			@RequestParam(required = false, defaultValue = "5") int size) {
+		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
+		return ResponseEntity.ok(service.readPageAccountExam(id, pageable));
+	}
+
 	@GetMapping
-	public ResponseEntity<PageResponse<ExamResponse>> readAllExam(Pageable pageable) {
+	public ResponseEntity<PageResponse<ExamResponse>> readPageExam(Pageable pageable) {
 		return ResponseEntity.ok(service.readPage(pageable));
 	}
 }

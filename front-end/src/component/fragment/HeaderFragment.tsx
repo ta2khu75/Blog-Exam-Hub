@@ -141,11 +141,6 @@ const HeaderFragment = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink className="dropdown-item" to="/change-password">
-                    Change Password
-                  </NavLink>
-                </li>
-                <li>
                   <button
                     className="dropdown-item"
                     onClick={() => handleLogoutClick()}

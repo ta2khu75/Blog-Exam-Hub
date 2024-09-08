@@ -21,9 +21,10 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ExamCategory {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 	String name;
 	@OneToMany(mappedBy = "examCategory")
-	List<Exam> exams;}
-
+	List<Exam> exams;
+}

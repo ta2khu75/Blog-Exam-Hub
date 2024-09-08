@@ -18,51 +18,179 @@ import ProfilePage from "./component/page/profile/ProfilePage";
 import InfoChild from "./component/page/profile/child/InfoChild";
 import ChangePasswordChild from "./component/page/profile/child/ChangePasswordChild";
 import ChangeInfoChild from "./component/page/profile/child/ChangeInfoChild";
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <>
-      <Route path="/" element={<App />}>
-        <Route index element={<HomePage />} />
-        <Route path="login" element={<LoginPage />} />
-        {/* <Route path="change-password" element={<ChangePasswordPage />} /> */}
-        <Route path="register" element={<RegisterPage />} />
-        <Route path="exam-about/:id" element={<ExamAboutPage />} />
-        <Route path="profile" element={
+import ManagerExamChild from "./component/page/profile/child/ManagerExamChild";
+import ExamPage from "./component/page/exam/ExamPage";
+import ExamCreateChild from "./component/page/exam/child/ExamCreateChild";
+// const router = createBrowserRouter(
+//   createRoutesFromElements(
+//     <>
+//       <Route path="/" element={<App />}>
+//         <Route index element={<HomePage />} />
+//         <Route path="login" element={<LoginPage />} />
+//         {/* <Route path="change-password" element={<ChangePasswordPage />} /> */}
+//         <Route path="register" element={<RegisterPage />} />
+//         <Route path="exam-about/:id" element={<ExamAboutPage />} />
+//         <Route path="profile" element={
+//           <PrivateRouterElement>
+//             <ProfilePage />
+//           </PrivateRouterElement>
+//         }>
+//           <Route index element={<InfoChild />} />
+//           <Route path="account" element={<InfoChild />} />
+//           <Route path="change-password" element={<ChangePasswordChild />} />
+//           <Route path="change-info" element={<ChangeInfoChild />} />
+//           <Route path="manager-exam" element={<ManagerExamChild />} />
+//         </Route>
+//         <Route path="exam" element={
+//           <PrivateRouterElement>
+//             <ExamPage />
+//           </PrivateRouterElement>
+//         } />
+//         <Route path="exam-details/:examId" element={
+//           <PrivateRouterElement>
+//             <ExamDetailPage />
+//           </PrivateRouterElement>
+//         } />
+//         <Route path="exam-history/:examHistoryId" element={
+//           <PrivateRouterElement>
+//             <ExamHistoryPage />
+//           </PrivateRouterElement>
+//         } />
+//       </Route>
+//       <Route path="/admin" element={
+//         <PrivateRouterElement>
+//           <AdComponent />
+//         </PrivateRouterElement>
+//       }>
+//         <Route path="account" element={<AccountCrud />} />
+//         <Route path="exam" element={<ExamCrud />}>
+//           <Route path=":id" element={<QuizList />} />
+//         </Route>
+//         <Route path="role" element={<ManagerRole />} />
+//         <Route path="exam-category" element={<ManagerExamCategory />} />
+//         <Route path="exam-view/:id" element={<QuizList />} />
+//       </Route>
+//     </>
+//   )
+// );
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        index: true,
+        element: <HomePage />,
+      },
+      {
+        path: "login",
+        element: <LoginPage />,
+      },
+      {
+        path: "register",
+        element: <RegisterPage />,
+      },
+      {
+        path: "exam-about/:id",
+        element: <ExamAboutPage />,
+      },
+      {
+        path: "profile",
+        element: (
           <PrivateRouterElement>
             <ProfilePage />
           </PrivateRouterElement>
-        }>
-          <Route index element={<InfoChild />} />
-          <Route path="account" element={<InfoChild />} />
-          <Route path="change-password" element={<ChangePasswordChild />} />
-          <Route path="change-info" element={<ChangeInfoChild />} />
-        </Route>
-        <Route path="exam-details/:examId" element={
+        ),
+        children: [
+          {
+            index: true,
+            element: <InfoChild />,
+          },
+          {
+            path: "account",
+            element: <InfoChild />,
+          },
+          {
+            path: "change-password",
+            element: <ChangePasswordChild />,
+          },
+          {
+            path: "change-info",
+            element: <ChangeInfoChild />,
+          },
+          {
+            path: "manager-exam",
+            element: <ManagerExamChild />,
+          },
+        ],
+      },
+      {
+        path: "exam",
+        element: (
+          <PrivateRouterElement>
+            <ExamPage />
+          </PrivateRouterElement>
+        ),
+        children:[{
+          path: "create",
+          element:<ExamCreateChild/>
+        }]
+      },
+      {
+        path: "exam-details/:examId",
+        element: (
           <PrivateRouterElement>
             <ExamDetailPage />
           </PrivateRouterElement>
-        } />
-        <Route path="exam-history/:examHistoryId" element={
+        ),
+      },
+      {
+        path: "exam-history/:examHistoryId",
+        element: (
           <PrivateRouterElement>
             <ExamHistoryPage />
           </PrivateRouterElement>
-        } />
-      </Route>
-      <Route path="/admin" element={
-        <PrivateRouterElement>
-          <AdComponent />
-        </PrivateRouterElement>
-      }>
-        <Route path="account" element={<AccountCrud />} />
-        <Route path="exam" element={<ExamCrud />}>
-          <Route path=":id" element={<QuizList />} />
-        </Route>
-        <Route path="role" element={<ManagerRole />} />
-        <Route path="exam-category" element={<ManagerExamCategory />} />
-        <Route path="exam-view/:id" element={<QuizList />} />
-      </Route>
-    </>
-  )
-);
+        ),
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    element: (
+      <PrivateRouterElement>
+        <AdComponent />
+      </PrivateRouterElement>
+    ),
+    children: [
+      {
+        path: "account",
+        element: <AccountCrud />,
+      },
+      {
+        path: "exam",
+        element: <ExamCrud />,
+        children: [
+          {
+            path: ":id",
+            element: <QuizList />,
+          },
+        ],
+      },
+      {
+        path: "role",
+        element: <ManagerRole />,
+      },
+      {
+        path: "exam-category",
+        element: <ManagerExamCategory />,
+      },
+      {
+        path: "exam-view/:id",
+        element: <QuizList />,
+      },
+    ],
+  },
+]);
+
 
 export default router;

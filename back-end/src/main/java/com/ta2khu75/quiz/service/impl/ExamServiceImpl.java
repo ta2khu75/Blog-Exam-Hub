@@ -18,6 +18,7 @@ import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
 import com.ta2khu75.quiz.enviroment.FolderEnv;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.ExamMapper;
+import com.ta2khu75.quiz.model.entity.AccessModifier;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Exam;
 import com.ta2khu75.quiz.model.entity.ExamCategory;
@@ -113,5 +114,21 @@ public class ExamServiceImpl implements ExamService {
 		examHistoryRepository.save(examHistory);
 		log.info(examHistory.toString());
 		return mapper.toDetailsResponse(exam);
+	}
+
+	@Override
+	public PageResponse<ExamResponse> readPageMyExam(Pageable pageable) {
+		String email = SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new NotFoundException("Could not found email"));
+		return mapper.toPageResponse(repository.findByAccountEmail(email, pageable));
+	}
+
+	@Override
+	public PageResponse<ExamResponse> readPageAccountExam(String id, Pageable pageable) {
+		return mapper.toPageResponse(repository.findByAccountIdAndAccessModifier(id, AccessModifier.PUBLIC, pageable));
+	}
+
+	@Override
+	public PageResponse<ExamResponse> readPageCategoryExam(Long id, Pageable pageable) {
+		return mapper.toPageResponse(repository.findByExamCategoryIdAndAccessModifier(id, AccessModifier.PUBLIC, pageable));
 	}
 }
