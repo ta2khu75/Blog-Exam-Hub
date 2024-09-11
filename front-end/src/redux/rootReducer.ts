@@ -5,6 +5,7 @@ import accountReducer from './slice/accountSlice';
 import examReducer from './slice/examSlice';
 import userExamReducer from './slice/useExamSlice';
 import quizExamReducer from './slice/quizExamSlice';
+import quizReducer from './slice/quizSlice';
 // Import other slices as needed
 
 // Combine all your slices into one root slice
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   account: accountReducer,
   exams: examReducer,
   userExams: userExamReducer,
-  quizExam: quizExamReducer
+  quizExam: quizExamReducer,
+  quiz:quizReducer
   // socialAccount: socialAccountReducer
   // Add other slices here
 });

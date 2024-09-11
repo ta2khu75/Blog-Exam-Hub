@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import QuizDetailsResponse from "../../model/response/details/QuizDetailsResponse";
 interface ExamListQuiz{
   id:number;
   value:QuizDetailsResponse[];

@@ -17,7 +17,6 @@ public interface QuizMapper {
 
 	@Mapping(target = "filePath", ignore = true)
 	@Mapping(target = "answers", ignore = true)
-	@Mapping(target = "exam", ignore = true)
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "userAnswers", ignore = true)
 	Quiz toEntity(QuizRequest request);

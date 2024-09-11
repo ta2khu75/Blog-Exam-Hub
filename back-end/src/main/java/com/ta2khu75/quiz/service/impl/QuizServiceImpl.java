@@ -25,12 +25,13 @@ import com.ta2khu75.quiz.enviroment.FolderEnv;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.QuizMapper;
 import com.ta2khu75.quiz.model.CreateGroup;
+import com.ta2khu75.quiz.model.UpdateGroup;
 import com.ta2khu75.quiz.model.entity.Exam;
 import com.ta2khu75.quiz.model.entity.Quiz;
 import com.ta2khu75.quiz.repository.ExamRepository;
 import com.ta2khu75.quiz.repository.QuizRepository;
 import com.ta2khu75.quiz.service.AnswerService;
-import com.ta2khu75.quiz.service.QuizSerivce;
+import com.ta2khu75.quiz.service.QuizService;
 import com.ta2khu75.quiz.service.util.CloudinaryUtil;
 
 import jakarta.validation.groups.Default;
@@ -40,7 +41,7 @@ import jakarta.validation.groups.Default;
 @Validated
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class QuizServiceImpl implements QuizSerivce {
+public class QuizServiceImpl implements QuizService {
 	QuizMapper mapper;
 	QuizRepository repository;
 	AnswerService answerService;
@@ -50,12 +51,10 @@ public class QuizServiceImpl implements QuizSerivce {
 	@Override
 	@Transactional
 	@Validated({ CreateGroup.class, Default.class }) // khi dung validated group thi nen valid tang method
-	public QuizResponse create(QuizRequest request, MultipartFile file) throws IOException {
+	public QuizResponse create(QuizRequest request) {
 		checkCorrectAnswer(request.getAnswers());
-		Exam exam = findExamById(request.getExamId());
 		Quiz quiz = mapper.toEntity(request);
-		saveFile(quiz, file);
-		quiz.setExam(exam);
+//		saveFile(quiz, file);
 		Quiz savedQuiz = repository.save(quiz);
 		request.getAnswers().forEach(answer -> {
 			answer.setQuiz(savedQuiz);
@@ -66,8 +65,8 @@ public class QuizServiceImpl implements QuizSerivce {
 
 	@Override
 	@Transactional
-	@Validated({ Default.class })
-	public QuizResponse update(Long id, QuizRequest request, MultipartFile file) throws IOException {
+	@Validated({ Default.class, UpdateGroup.class })
+	public QuizResponse update(Long id, QuizRequest request ){
 		checkCorrectAnswer(request.getAnswers());
 		Quiz quiz = findById(id);
 		Map<Long, AnswerRequest> requestAnswerMap = request.getAnswers().stream()
@@ -87,7 +86,7 @@ public class QuizServiceImpl implements QuizSerivce {
 			}
 		});
 		mapper.update(request, quiz);
-		saveFile(quiz, file);
+//		saveFile(quiz, file);
 		return mapper.toResponse(repository.save(quiz));
 	}
 

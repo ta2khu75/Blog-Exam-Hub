@@ -1,6 +1,7 @@
 package com.ta2khu75.quiz.service.impl;
 
 import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ta2khu75.quiz.model.request.ExamRequest;
@@ -18,16 +20,19 @@ import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
 import com.ta2khu75.quiz.enviroment.FolderEnv;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.ExamMapper;
+import com.ta2khu75.quiz.model.UpdateGroup;
 import com.ta2khu75.quiz.model.entity.AccessModifier;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Exam;
 import com.ta2khu75.quiz.model.entity.ExamCategory;
 import com.ta2khu75.quiz.model.entity.ExamResult;
+import com.ta2khu75.quiz.model.entity.Quiz;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.ExamCategoryRepository;
 import com.ta2khu75.quiz.repository.ExamHistoryRepository;
 import com.ta2khu75.quiz.repository.ExamRepository;
 import com.ta2khu75.quiz.service.ExamService;
+import com.ta2khu75.quiz.service.QuizService;
 import com.ta2khu75.quiz.service.util.CloudinaryUtil;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
@@ -37,6 +42,7 @@ import java.util.Map;
 
 @Service
 @Slf4j
+@Validated
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExamServiceImpl implements ExamService {
@@ -45,20 +51,25 @@ public class ExamServiceImpl implements ExamService {
 	ExamMapper mapper;
 	ExamCategoryRepository examCategoryRepository;
 	ExamHistoryRepository examHistoryRepository;
+	QuizService quizService;
 	CloudinaryUtil cloudinaryService;
 
 	@Override
 	@Transactional
+	@Validated(value = { Default.class })
 	public ExamResponse create(@Valid ExamRequest examRequest, MultipartFile file) throws IOException {
 		Exam exam = mapper.toEntity(examRequest);
-		Map map = cloudinaryService.uploadFile(file, FolderEnv.EXAM_FOLDER);
-		exam.setImagePath((String) map.get("url"));
+		this.saveFile(exam, file);
 		exam.setExamCategory(this.findExamCategoryById(examRequest.getExamCategoryId()));
 		exam.setAccount(accountRepository
 				.findByEmail(SecurityUtil.getCurrentUserLogin()
 						.orElseThrow(() -> new NotFoundException("Could not find account")))
 				.orElseThrow(() -> new NotFoundException("Could not find account")));
-		repository.save(exam);
+		Exam examSaved = repository.save(exam);
+		examRequest.getQuizzes().forEach(quiz -> {
+			quiz.setExam(examSaved);
+			quizService.create(quiz);
+		});
 		return mapper.toResponse(repository.save(exam));
 	}
 
@@ -67,18 +78,24 @@ public class ExamServiceImpl implements ExamService {
 				.orElseThrow(() -> new NotFoundException("Could not found exam category with id: " + id));
 	}
 
-	@Override
-	@Transactional
-	public ExamResponse update(Long id, @Valid ExamRequest examRequest, MultipartFile file) throws IOException {
-		Exam exam = repository.findById(id)
-				.orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));
-		mapper.update(examRequest, exam);
+	private void saveFile(Exam exam, MultipartFile file) throws IOException {
 		if (file != null && !file.isEmpty()) {
 			Map map = cloudinaryService.uploadFile(file, FolderEnv.EXAM_FOLDER);
 			exam.setImagePath((String) map.get("url"));
-			if (exam.getExamCategory().getId() != examRequest.getExamCategoryId())
-				exam.setExamCategory(this.findExamCategoryById(examRequest.getExamCategoryId()));
 		}
+	}
+
+	@Override
+	@Transactional
+	@Validated(value = { Default.class, UpdateGroup.class })
+	public ExamResponse update(Long id, @Valid ExamRequest examRequest, MultipartFile file) throws IOException {
+		Exam exam = repository.findById(id)
+				.orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));
+		
+		mapper.update(examRequest, exam);
+		this.saveFile(exam, file);
+		if (exam.getExamCategory().getId() != examRequest.getExamCategoryId())
+			exam.setExamCategory(this.findExamCategoryById(examRequest.getExamCategoryId()));
 		return mapper.toResponse(repository.save(exam));
 	}
 
@@ -118,7 +135,8 @@ public class ExamServiceImpl implements ExamService {
 
 	@Override
 	public PageResponse<ExamResponse> readPageMyExam(Pageable pageable) {
-		String email = SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new NotFoundException("Could not found email"));
+		String email = SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new NotFoundException("Could not found email"));
 		return mapper.toPageResponse(repository.findByAccountEmail(email, pageable));
 	}
 
@@ -129,6 +147,7 @@ public class ExamServiceImpl implements ExamService {
 
 	@Override
 	public PageResponse<ExamResponse> readPageCategoryExam(Long id, Pageable pageable) {
-		return mapper.toPageResponse(repository.findByExamCategoryIdAndAccessModifier(id, AccessModifier.PUBLIC, pageable));
+		return mapper
+				.toPageResponse(repository.findByExamCategoryIdAndAccessModifier(id, AccessModifier.PUBLIC, pageable));
 	}
 }

@@ -1,59 +1,178 @@
-import { Button, Checkbox, Form, Input, Radio, Space } from 'antd'
+import { Alert, Button, Checkbox, Form, FormProps, Input, Radio, Space } from 'antd'
 import TextArea from 'antd/es/input/TextArea';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { QuizType } from '../../../model/QuizType';
-import { useImmer } from 'use-immer';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { addQuiz, updateQuiz } from '../../../redux/slice/quizSlice';
+import IfElseElement from '../IfElseElement';
 type Prop = {
-    setQuizRequests: React.Dispatch<React.SetStateAction<QuizRequest[]>>
-    quiz?: QuizRequest
+    indexQuiz?: number
 }
-const QuizFormNew = ({ setQuizRequests, quiz }: Prop) => {
-    const [quizRequest, setQuizRequest] = useImmer<QuizRequest>(quiz !== undefined ? quiz : { question: "", quiz_type: QuizType.SINGLE_CHOICE, answers: [{ answer: "", correct: false }, { answer: "", correct: false }, { answer: "", correct: false }, { answer: "", correct: false }] })
+const QuizFormNew = ({ indexQuiz }: Prop) => {
+    const dispatch = useAppDispatch();
+    const quizzes = useAppSelector(state => state.quiz.value)
+    const [form] = Form.useForm<QuizRequest>();
+    const [corrects, setCorrects] = useState<number[]>([]);
+    const [errorAnswer, setErrorAnswer] = useState(false);
+    const [quizType, setQuizType] = useState<string>(QuizType.SINGLE_CHOICE);
     useEffect(() => {
-        if (quiz) setQuizRequest(quiz)
-    }, [quiz])
-    const init = () => {
-        setQuizRequest({ question: "", quiz_type: QuizType.SINGLE_CHOICE, answers: [{ answer: "", correct: false }, { answer: "", correct: false }, { answer: "", correct: false }, { answer: "", correct: false }] })
+        if (indexQuiz) {
+            const quiz = quizzes[indexQuiz];
+            form.setFieldsValue(quiz);
+            setErrorAnswer(false);
+            setQuizType(quiz.quiz_type)
+            if (quiz.quiz_type === QuizType.SINGLE_CHOICE) {
+                setCorrects([quiz.answers.findIndex((answer) => answer.correct)])
+            } else {
+                setCorrects(quiz.answers
+                    .map((answer, index) => answer.correct ? index : null)
+                    .filter(index => index !== null))
+            }
+        }
+        else handleResetClick();
+    }, [indexQuiz, form, quizzes])
+    const onFinish: FormProps<QuizRequest>['onFinish'] = (values) => {
+        if (corrects.length > 0) {
+            if (indexQuiz) {
+                dispatch(updateQuiz({
+                    indexQuiz, quiz: {
+                        ...values, quiz_type: quizType, answers: values.answers.map((answer, index) => {
+                            if (corrects.includes(index)) return { ...answer, correct: true }
+                            return { ...answer, correct: false }
+                        })
+                    }
+                }))
+            } else {
+                dispatch(addQuiz({
+                    ...values, quiz_type: quizType, answers: values.answers.map((answer, index) => {
+                        if (corrects.includes(index)) return { ...answer, correct: true }
+                        return { ...answer, correct: false }
+                    })
+                }))
+            }
+            handleResetClick();
+        } else {
+            setErrorAnswer(true)
+        }
+    };
+    const onFinishFailed: FormProps<QuizRequest>['onFinishFailed'] = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+    const handleResetClick = () => {
+        form.setFieldsValue({ question: "", quiz_type: QuizType.SINGLE_CHOICE, answers: [{ answer: "", correct: false }, { answer: "", correct: false }, { answer: "", correct: false }, { answer: "", correct: false }] })
+        setErrorAnswer(false);
+        setCorrects([]);
+        setQuizType(QuizType.SINGLE_CHOICE);
     }
     const handleQuizTypeClick = (type: string) => {
-        setQuizRequest(draft => {
-            draft.quiz_type = type
-        })
-        if (type === QuizType.SINGLE_CHOICE) {
-            const indexFirst = quizRequest.answers.findIndex((answer) => answer.correct)
-            setQuizRequest(draft => {
-                draft.answers = draft.answers.map((answer, index) => {
-                    if (index !== indexFirst) {
-                        answer.correct = false
-                        return answer
-                    } return answer
-                })
-            })
+        setQuizType(type)
+        if (type === QuizType.SINGLE_CHOICE && corrects.length > 1) {
+            setCorrects([corrects[0]])
         }
     }
-    const handleAddClick = () => {
-        setQuizRequest(draft => {
-            draft.answers.push({ answer: "", correct: false })
-        })
-    }
-    const handleSaveClick = () => {
-        setQuizRequests(quizRequests => {
-            return [...quizRequests, quizRequest]
-        })
-        init()
-    }
     return (
-        <Form layout='vertical'>
-            <Form.Item label="Question">
-                <TextArea
-                    onChange={(e) => setQuizRequest(draft => {
-                        draft.question = e.target.value
-                    })}
-                    value={quizRequest.question} rows={4} />
+        <Form form={form} onFinish={onFinish} onFinishFailed={onFinishFailed} layout='vertical' >
+            <Form.Item<QuizRequest> name={'question'} rules={[{ required: true, message: 'Please input question!' }]} label="Question">
+                <TextArea rows={4} />
             </Form.Item>
-            <Form.Item label="Answer">
-                {quizRequest.quiz_type == QuizType.SINGLE_CHOICE && <Radio.Group defaultValue={quizRequest.answers.findIndex((answer) => answer.correct)} onChange={(e) => setQuizRequest(draft => {
+            <Form.Item label="Quiz type">
+                <Radio.Group value={quizType} onChange={(e) => handleQuizTypeClick(e.target.value)}>
+                    <Radio value={QuizType.SINGLE_CHOICE}>Single choice</Radio>
+                    <Radio value={QuizType.MULTIPLE_CHOICE}>Multiple choice</Radio>
+                </Radio.Group>
+            </Form.Item>
+            <Form.Item<QuizRequest> label="Answers" name={'answers'} rules={[{ required: true, message: "Must have answer" }]} >
+                {errorAnswer && <Alert message="Please select a correct answer" type="error" />}
+                <IfElseElement condition={QuizType.SINGLE_CHOICE === quizType}
+                    caseFalse={
+                        <Checkbox.Group className='w-100' value={corrects} onChange={(e) => setCorrects(e)}>
+                            <Space direction="vertical" className='w-100'>
+                                <Form.List name="answers" >
+                                    {(fields, { add, remove }) => (
+                                        <>
+                                            {fields.map(({ key, name, ...restField }, index) => (
+                                                <div className="d-flex" key={key}>
+                                                    <Form.Item>
+                                                        <Checkbox value={index} />
+                                                    </Form.Item>
+                                                    <Form.Item
+                                                        {...restField}
+                                                        name={[name, 'answer']}
+                                                        className='w-100 mx-2'
+                                                        rules={[{ required: true, message: 'Missing answer' }]}
+                                                    >
+                                                        <Input placeholder="Answer" />
+                                                    </Form.Item>
+                                                    <Button onClick={() => {
+                                                        console.log(index);
+
+                                                        if (corrects.includes(index)) {
+                                                            setCorrects(corrects.filter(item => item !== index));
+                                                        }
+                                                        remove(name);
+
+                                                    }}>
+                                                        <MinusCircleOutlined />
+                                                    </Button>
+                                                </div>
+                                            ))}
+                                            <Form.Item>
+                                                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                                    Add field
+                                                </Button>
+                                            </Form.Item>
+                                        </>
+                                    )}
+                                </Form.List>
+                            </Space>
+                        </Checkbox.Group>
+                    } >
+                    <Radio.Group className='w-100' value={corrects.length > 0 ? corrects[0] : undefined} onChange={(e) => {
+                        if (e.target.value != undefined) setCorrects([e.target.value]);
+                        else setCorrects([])
+                    }}>
+                        <Space direction="vertical" className='w-100'>
+                            <Form.List name="answers" >
+                                {(fields, { add, remove }) => (
+                                    <>
+                                        {fields.map(({ key, name, ...restField }, index) => (
+                                            <div className="d-flex" key={key}>
+                                                <Form.Item>
+                                                    <Radio value={index} className='m-0' />
+                                                </Form.Item>
+                                                <Form.Item
+                                                    {...restField}
+                                                    name={[name, 'answer']}
+                                                    className='w-100 mx-2'
+                                                    rules={[{ required: true, message: 'Missing answer' }]}
+                                                >
+                                                    <Input className='w-100' placeholder="Answer" />
+                                                </Form.Item>
+                                                <Button onClick={() => {
+                                                    remove(name);
+                                                    if (corrects.includes(index)) {
+                                                        setCorrects(corrects.filter(item => item !== index));
+                                                    }
+                                                }}>
+                                                    <MinusCircleOutlined />
+                                                </Button>
+                                            </div>
+                                        ))}
+                                        <Form.Item>
+                                            <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                                Add field
+                                            </Button>
+                                        </Form.Item>
+                                    </>
+                                )}
+                            </Form.List>
+                        </Space>
+                    </Radio.Group>
+                </IfElseElement>
+            </Form.Item>
+            {/* <Form.Item label="Answer">
+                {quizRequest.quiz_type == QuizType.SINGLE_CHOICE && <Radio.Group size='large' defaultValue={quizRequest.answers.findIndex((answer) => answer.correct)} onChange={(e) => setQuizRequest(draft => {
                     draft.answers.forEach(answer => answer.correct = false);
                     draft.answers[e.target.value].correct = true;
                 })
@@ -62,11 +181,13 @@ const QuizFormNew = ({ setQuizRequests, quiz }: Prop) => {
                         {quizRequest.answers.map((answer, index) => (
                             <div className='d-flex' key={index}>
                                 <Radio value={index} />
-                                <Input className='w-100' onChange={(e) => setQuizRequest(draft => {
+                                <Input className='mx-2' onChange={(e) => setQuizRequest(draft => {
                                     draft.answers[index].answer = e.target.value
                                 })} value={answer.answer} placeholder={`Answer ${index + 1}`} />
+                                <button className='btn btn-outline-danger' onClick={() => handleDeleteClick(index)}><CloseOutlined /></button>
                             </div>
-                        ))}</Space>
+                        ))}
+                    </Space>
                 </Radio.Group>
                 }
                 {quizRequest.quiz_type == QuizType.MULTIPLE_CHOICE && <Checkbox.Group
@@ -80,27 +201,28 @@ const QuizFormNew = ({ setQuizRequests, quiz }: Prop) => {
                     <Space direction="vertical" className='w-100'>
                         {quizRequest.answers.map((answer, index) => (
                             <div className='d-flex' key={index}>
-                                <Checkbox value={index} className='me-2' />
-                                <Input onChange={(e) => setQuizRequest(draft => {
+                                <Checkbox value={index} />
+                                <Input className='mx-2' onChange={(e) => setQuizRequest(draft => {
                                     draft.answers[index].answer = e.target.value
                                 })} value={answer.answer} placeholder={`Answer ${index + 1}`} />
+                                <button className='btn btn-outline-danger' onClick={() => handleDeleteClick(index)}><CloseOutlined /></button>
                             </div>
                         ))}
                     </Space>
                 </Checkbox.Group>
                 }
                 <Form.Item>
-                    <Button onClick={handleAddClick}>
+                    <button className='mt-4 btn btn-outline-success' onClick={handleAddClick}>
                         <PlusOutlined />
-                    </Button>
+                    </button>
                 </Form.Item>
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item>
-                {Object.keys(QuizType).map(type => <Button onClick={() => handleQuizTypeClick(type)} type={quizRequest.quiz_type == type ? "primary" : "default"} key={`radio-${type}`} value={type}>{type}</Button>)}
-            </Form.Item>
-            <Form.Item>
-                <Button onClick={handleSaveClick}>
-                    Submit
+                <Button type="primary" htmlType="submit">
+                    Save
+                </Button>
+                <Button type='default' onClick={handleResetClick}>
+                    Reset
                 </Button>
             </Form.Item>
         </Form >

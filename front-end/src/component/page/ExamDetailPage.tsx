@@ -117,7 +117,6 @@ const ExamDetailPage = () => {
   };
   return (
     <>
-      <div style={{ height: "100px" }}></div>
       <div className="container">
         <div className="row">
           <div className="col-lg-7 p-4 mx-4 border border-4 rounded-4" style={{ height: "80vh" }}>

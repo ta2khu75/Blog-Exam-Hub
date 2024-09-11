@@ -8,7 +8,7 @@ import com.ta2khu75.quiz.model.response.QuizResponse;
 
 import java.util.List;
 
-public interface QuizSerivce extends FileBaseService<Long, QuizRequest, QuizResponse> {
+public interface QuizService extends BaseService<Long, QuizRequest, QuizResponse> {
 	void deleteFile(Long id);
 
 	Page<QuizResponse> read(Pageable pageable);
