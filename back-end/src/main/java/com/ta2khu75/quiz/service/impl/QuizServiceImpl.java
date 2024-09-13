@@ -1,6 +1,7 @@
 package com.ta2khu75.quiz.service.impl;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -26,10 +27,10 @@ import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.QuizMapper;
 import com.ta2khu75.quiz.model.CreateGroup;
 import com.ta2khu75.quiz.model.UpdateGroup;
-import com.ta2khu75.quiz.model.entity.Exam;
+import com.ta2khu75.quiz.model.entity.Answer;
 import com.ta2khu75.quiz.model.entity.Quiz;
-import com.ta2khu75.quiz.repository.ExamRepository;
 import com.ta2khu75.quiz.repository.QuizRepository;
+import com.ta2khu75.quiz.repository.UserAnswerRepository;
 import com.ta2khu75.quiz.service.AnswerService;
 import com.ta2khu75.quiz.service.QuizService;
 import com.ta2khu75.quiz.service.util.CloudinaryUtil;
@@ -45,58 +46,11 @@ public class QuizServiceImpl implements QuizService {
 	QuizMapper mapper;
 	QuizRepository repository;
 	AnswerService answerService;
-	ExamRepository examRepository;
+	UserAnswerRepository userAnswerRepository;
 	CloudinaryUtil cloudinaryService;
-
-	@Override
-	@Transactional
-	@Validated({ CreateGroup.class, Default.class }) // khi dung validated group thi nen valid tang method
-	public QuizResponse create(QuizRequest request) {
-		checkCorrectAnswer(request.getAnswers());
-		Quiz quiz = mapper.toEntity(request);
-//		saveFile(quiz, file);
-		Quiz savedQuiz = repository.save(quiz);
-		request.getAnswers().forEach(answer -> {
-			answer.setQuiz(savedQuiz);
-			answerService.create(answer);
-		});
-		return mapper.toResponse(quiz);
-	}
-
-	@Override
-	@Transactional
-	@Validated({ Default.class, UpdateGroup.class })
-	public QuizResponse update(Long id, QuizRequest request ){
-		checkCorrectAnswer(request.getAnswers());
-		Quiz quiz = findById(id);
-		Map<Long, AnswerRequest> requestAnswerMap = request.getAnswers().stream()
-				.collect(Collectors.toMap(AnswerRequest::getId, Function.identity()));
-		quiz.getAnswers().stream().forEach(answer -> {
-			AnswerRequest answerRequest = requestAnswerMap.get(answer.getId());
-			if (answerRequest != null) {
-				answerService.update(answer.getId(), answerRequest);
-			} else {
-				answerService.delete(answer.getId());
-			}
-		});
-		request.getAnswers().forEach(answer -> {
-			if (answer.getId() == null) {
-				answer.setQuiz(quiz);
-				answerService.create(answer);
-			}
-		});
-		mapper.update(request, quiz);
-//		saveFile(quiz, file);
-		return mapper.toResponse(repository.save(quiz));
-	}
 
 	private Quiz findById(Long id) {
 		return repository.findById(id).orElseThrow(() -> new NotFoundException("Could not found quiz with id " + id));
-	}
-
-	private Exam findExamById(Long id) {
-		return examRepository.findById(id)
-				.orElseThrow(() -> new NotFoundException("Could not found exam with id " + id));
 	}
 
 	private QuizResponse save(Quiz quiz) {
@@ -117,7 +71,53 @@ public class QuizServiceImpl implements QuizService {
 	}
 
 	@Override
+	@Transactional
+	@Validated({ CreateGroup.class, Default.class }) // khi dung validated group thi nen valid tang method
+	public QuizResponse create(QuizRequest request) {
+		this.checkCorrectAnswer(request.getAnswers());
+		Quiz quiz = mapper.toEntity(request);
+//		saveFile(quiz, file);
+		Quiz savedQuiz = repository.save(quiz);
+		request.getAnswers().forEach(answer -> {
+			answer.setQuiz(savedQuiz);
+			answerService.create(answer);
+		});
+		return this.save(savedQuiz);
+	}
+
+	@Override
+	@Transactional
+	@Validated({ Default.class, UpdateGroup.class })
+	public QuizResponse update(Long id, QuizRequest request) {
+		this.checkCorrectAnswer(request.getAnswers());
+		Quiz quiz = findById(id);
+		Map<Long, AnswerRequest> requestAnswerMap = request.getAnswers().stream()
+				.filter(answer -> answer.getId() != null)
+				.collect(Collectors.toMap(AnswerRequest::getId, Function.identity()));
+		Iterator<Answer> answerIterator = quiz.getAnswers().iterator();
+		while (answerIterator.hasNext()) {
+			Answer existingAnswer = answerIterator.next();
+			AnswerRequest answerRequest = requestAnswerMap.get(existingAnswer.getId());
+			if (answerRequest != null) {
+				answerService.update(existingAnswer.getId(), answerRequest);
+			} else {
+				answerIterator.remove();
+				answerService.delete(existingAnswer.getId());
+			}
+		}
+		request.getAnswers().stream().filter(answer -> answer.getId() == null).forEach(answer -> {
+			answer.setQuiz(quiz);
+			answerService.create(answer);
+		});
+		mapper.update(request, quiz);
+//		saveFile(quiz, file);
+		return this.save(quiz);
+	}
+
+	@Override
 	public void delete(Long id) {
+		userAnswerRepository.deleteByQuizId(id);
+		answerService.deleteByQuizId(id);
 		repository.deleteById(id);
 	}
 
@@ -132,7 +132,7 @@ public class QuizServiceImpl implements QuizService {
 	}
 
 	@Override
-	public List<QuizResponse> readByExamId(Long id) {
+	public List<QuizResponse> readByExamId(String id) {
 		return repository.findByExamId(id).stream().map((exam) -> mapper.toResponse(exam)).toList();
 	}
 

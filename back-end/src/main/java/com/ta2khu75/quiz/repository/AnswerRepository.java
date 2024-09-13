@@ -10,4 +10,5 @@ public interface AnswerRepository extends JpaRepository<Answer, Long> {
     List<Answer> findByQuizId(Long id);
     List<Answer> findByQuizIdIn(Set<Long> quizIds);
     List<Answer> findByQuizIdAndCorrectTrue(Long id);
+    void deleteByQuizId(Long id);
 }

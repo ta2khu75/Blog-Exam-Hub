@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 @Entity
@@ -24,8 +25,10 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@ToString(exclude = {"accounts"})
 public class Role {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 	@Column(unique = true, nullable = false)
 	String name;
@@ -33,5 +36,5 @@ public class Role {
 	List<Account> accounts;
 	@ManyToMany
 	@Builder.Default
-	Set<Permission> permissions=new HashSet<>();
+	Set<Permission> permissions = new HashSet<>();
 }

@@ -31,7 +31,7 @@ import lombok.experimental.FieldDefaults;
 public class ExamResultController {
 	ExamResultService service;
 	@GetMapping("exam/{id}")
-	public ResponseEntity<ExamResultResponse> takeExam(@PathVariable("id") Long id) {
+	public ResponseEntity<ExamResultResponse> takeExam(@PathVariable("id") String id) {
 		ExamResultResponse response = service.readByExamId(id);
 		if (response == null) {
 			return ResponseEntity.status(HttpStatus.CREATED).body(service.createByExamId(id));

@@ -7,6 +7,8 @@ import { ExamLevel } from "../../../model/ExamLevel";
 import TextArea from "antd/es/input/TextArea";
 import { useAppDispatch } from "../../../redux/hooks";
 import { resetQuiz } from "../../../redux/slice/quizSlice";
+import { ExamStatus } from "../../../model/ExamStatus";
+import { useNavigate } from "react-router-dom";
 type Props = {
     id?: string;
     exam?: ExamResponse,
@@ -14,7 +16,8 @@ type Props = {
     examCategories?: ExamCategoryResponse[]
 }
 const ExamFormNew = ({ id, exam, quizzes, examCategories }: Props) => {
-    const dispatch=useAppDispatch()
+    const dispatch = useAppDispatch()
+    const navigate=useNavigate()
     const fileInputRef = useRef<HTMLInputElement | null>(null)
     const [image, setImage] = useState<File>()
     const [imageUrl, setImageUrl] = useState<string>()
@@ -33,12 +36,13 @@ const ExamFormNew = ({ id, exam, quizzes, examCategories }: Props) => {
                     handleResetClick();
                     toast.success("Successfully to create")
                     dispatch(resetQuiz())
+                    navigate("/profile/manager-exam")
                 } else {
                     toast.error(response.message_error)
                 }
             })
         } else if (exam?.id) {
-            ExamService.update(exam.id, values, image).then((response) => {
+            ExamService.update(exam.id, { ...values, quizzes: quizzes }, image).then((response) => {
                 if (response.success) {
                     handleResetClick();
                     toast.success("successfully to update")
@@ -97,15 +101,19 @@ const ExamFormNew = ({ id, exam, quizzes, examCategories }: Props) => {
                             {Object.keys(AccessModifier).map(access => <Radio key={`radio-${access}`} value={access}>{access}</Radio>)}
                         </Radio.Group>
                     </Form.Item>
-                    <Form.Item<ExamRequest> label="Exam Level" className="col-md-6" name={"exam_level"} rules={[
-                        { required: true, message: "please select exam level" }
-                    ]} >
-                        <Radio.Group>
-                            {Object.keys(ExamLevel).map(level => <Radio key={`radio-${level}`} value={level}>{level}</Radio>)}
+                    <Form.Item<ExamRequest> label="Exam status" className="col-md-6" name={"exam_status"}  >
+                        <Radio.Group disabled={exam?.exam_status===ExamStatus.COMPLETED}>
+                            {Object.keys(ExamStatus).map(status => <Radio key={`radio-${status}`} value={status}>{status}</Radio>)}
                         </Radio.Group>
                     </Form.Item>
                 </div>
-
+                <Form.Item<ExamRequest> label="Exam Level" name={"exam_level"} rules={[
+                    { required: true, message: "please select exam level" }
+                ]} >
+                    <Radio.Group>
+                        {Object.keys(ExamLevel).map(level => <Radio key={`radio-${level}`} value={level}>{level}</Radio>)}
+                    </Radio.Group>
+                </Form.Item>
                 <Form.Item<ExamRequest> label="Description" name={"description"} rules={[
                     { required: true, message: "please input description" }
                 ]} >

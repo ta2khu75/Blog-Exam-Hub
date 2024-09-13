@@ -5,6 +5,7 @@ export interface QuizState {
 const initialState: QuizState = {
     value: []
 }
+// luu quizzes trong truong hop tao quiz
 export const quizSlice = createSlice({
     name: "exam",
     initialState,

@@ -2,10 +2,11 @@ import { useEffect, useState } from 'react'
 import ExamService from '../../../../service/ExamService';
 import ExamCartElement from '../../../element/ExamCartElement';
 import { Pagination } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AppstoreAddOutlined } from '@ant-design/icons';
 import ExamCartElementNew from '../../../element/ExamCartElementNew';
 const ManagerExamChild = () => {
+  const navigate = useNavigate()
   const [pageExam, setPageExam] = useState<PageResponse<ExamResponse>>();
   const [page, setPage] = useState(1)
   useEffect(() => {
@@ -16,14 +17,24 @@ const ManagerExamChild = () => {
       if (data.success) setPageExam(data.data);
     });
   }
+  const handleDeleteClick = (id: string) => {
+    ExamService.delete(id).then((d) => {
+      if (d.success) {
+        fetchPageExam();
+      }
+    });
+  };
+  const handleEditClick = (id: string) => {
+    navigate(`/manager-exam/${id}`)
+  };
   return (
     <>
       <div className='d-flex justify-content-between align-items-center'>
-        <h1>My Exam</h1> <Link className='btn btn-primary' to={"/exam/create"}><AppstoreAddOutlined className='me-2' />Create Exam</Link>
+        <h1>My Exam</h1> <Link className='btn btn-primary' to={"/manager-exam/create"}><AppstoreAddOutlined className='me-2' />Create Exam</Link>
       </div>
       <div className="row">
         {pageExam?.content?.map(exam => <ExamCartElement key={`exam-cart-${exam.id}`} examResponse={exam} />)}
-        {pageExam?.content?.map(exam => <ExamCartElementNew key={`exam-cart-${exam.id}`} exam={exam} />)}
+        {pageExam?.content?.map(exam => <ExamCartElementNew handleDelete={() => handleDeleteClick(exam.id)} handleEdit={() => handleEditClick(exam.id)} key={`exam-cart-${exam.id}`} exam={exam} />)}
       </div>
       {pageExam && <Pagination onChange={(e) => setPage(e)} align="center" defaultCurrent={page} pageSize={6} total={pageExam.total_elements} />}
     </>

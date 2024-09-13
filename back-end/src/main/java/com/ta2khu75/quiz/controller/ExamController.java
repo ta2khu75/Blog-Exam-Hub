@@ -44,17 +44,17 @@ public class ExamController {
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<ExamResponse> readExam(@PathVariable("id") Long id) {
+	public ResponseEntity<ExamResponse> readExam(@PathVariable("id") String id) {
 		return ResponseEntity.ok(service.read(id));
 	}
 
-	@GetMapping("details/{id}")
-	public ResponseEntity<ExamDetailsResponse> readDetailExam(@PathVariable("id") Long id) {
+	@GetMapping("{id}/details")
+	public ResponseEntity<ExamDetailsResponse> readDetailExam(@PathVariable("id") String id) {
 		return ResponseEntity.ok(service.readDetail(id));
 	}
 
 	@PutMapping(path = "{id}", consumes = "multipart/form-data")
-	public ResponseEntity<ExamResponse> updateExam(@PathVariable(name = "id") Long id,
+	public ResponseEntity<ExamResponse> updateExam(@PathVariable(name = "id") String id,
 			@RequestPart("exam_request") String examRequestString,
 			@RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
 		ExamRequest examRequest = objectMapper.readValue(examRequestString, ExamRequest.class);
@@ -62,7 +62,7 @@ public class ExamController {
 	}
 
 	@DeleteMapping("{id}")
-	public ResponseEntity<Void> deleteExam(@PathVariable("id") Long id) {
+	public ResponseEntity<Void> deleteExam(@PathVariable("id") String id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
@@ -81,7 +81,6 @@ public class ExamController {
 		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
 		return ResponseEntity.ok(service.readPageCategoryExam(id, pageable));
 	}
-
 	@GetMapping("account/{id}")
 	public ResponseEntity<PageResponse<ExamResponse>> readlPageAccountExam(@PathVariable("id") String id,
 			@RequestParam(required = false, defaultValue = "1") int page,

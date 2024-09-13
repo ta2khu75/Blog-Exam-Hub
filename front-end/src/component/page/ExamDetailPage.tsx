@@ -5,32 +5,29 @@ import RandomUtil from "../../util/RandomUtil";
 import ExamHistoryService from "../../service/ExamResultService";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { deleteExam, setExam } from "../../redux/slice/examSlice";
-import { deleteUserExam, setUserExam } from "../../redux/slice/useExamSlice";
+import { deleteUserExam, setUserExam } from "../../redux/slice/userExamSlice";
 import { deleteQuizExam, setQuizExam } from "../../redux/slice/quizExamSlice";
 import { toast } from "react-toastify";
 import ModalElement from "../element/ModalElement";
+type Params = {
+  examId: string;
+}
 const ExamDetailPage = () => {
-  const { examId } = useParams();
+  const { examId } = useParams<Params>();
   const navigate = useNavigate();
   const [openResult, setOpenResult] = useState(false);
+  const quizResponseList = useAppSelector((state) => state.exams?.[examId ?? ""]) ?? [];
+  const answerListUser = useAppSelector((state) => state.userExams?.[examId ?? ""]) ?? [];
+  const quizExam = useAppSelector((state) => state.quizExam?.[examId ?? ""])??0;
+  const [examHistoryResponse, setExamHistoryResponse] = useState<ExamResultResponse>();
+  const stopTimerRef = useRef<(() => void) | null>(null) as MutableRefObject<
+    (() => void) | null
+  >;
   const [timeLeft, setTimeLeft] = useState({
     minutes: 0,
     seconds: 0,
   });
-  const stopTimerRef = useRef<(() => void) | null>(null) as MutableRefObject<
-    (() => void) | null
-  >;
-  const quizResponseList = useAppSelector(
-    (state) => state.exams[Number(examId)] ?? []
-  );
-  const [examHistoryResponse, setExamHistoryResponse] =
-    useState<ExamResultResponse>();
-  const answerListUser = useAppSelector(
-    (state) => state.userExams[Number(examId)]
-  );
-  const quizExam = useAppSelector(
-    (state) => state.quizExam?.[Number(examId)] ?? 0
-  );
+
   const dispatch = useAppDispatch();
   useEffect(() => {
     fetchExamHistoryResponse();
@@ -51,39 +48,43 @@ const ExamDetailPage = () => {
     return () => clearInterval(intervalId);
   };
   const fetchExamHistoryResponse = () => {
-    ExamHistoryService.readByExamId(Number(examId)).then((d) => {
-      if (d.success) {
-        setExamHistoryResponse(d.data);
-        stopTimerRef.current = calculatorTime(
-          new Date(d.data.end_time)
-        );
-        if (d.status_code === 201 || quizResponseList.length == 0) {
-          const quizzes = d.data.exam.quizzes.map((quiz:QuizDetailsResponse) => {
-            quiz.answers = RandomUtil.shuffleArray(quiz.answers);
-            return quiz;
-          });
-          dispatch(
-            setExam({
-              id: Number(examId),
-              value: RandomUtil.shuffleArray(quizzes),
-            })
+    if (examId)
+      ExamHistoryService.readByExamId(examId).then((d) => {
+        if (d.success) {
+          setExamHistoryResponse(d.data);
+          stopTimerRef.current = calculatorTime(
+            new Date(d.data.end_time)
           );
-          dispatch(deleteUserExam(Number(examId)));
+          if (d.status_code === 201 || quizResponseList.length == 0) {
+            const quizzes = d.data.exam.quizzes.map((quiz: QuizDetailsResponse) => {
+              quiz.answers = RandomUtil.shuffleArray(quiz.answers);
+              return quiz;
+            });
+            if (examId) {
+              dispatch(
+                setExam({
+                  examId: examId,
+                  quizzes: RandomUtil.shuffleArray(quizzes),
+                })
+              );
+              dispatch(deleteUserExam(examId));
+            }
+          }
         }
-      }
-    });
+      });
   };
   const handleAnswerClick = (
     quizResponse: QuizResponse,
     answerIds: number[]
   ) => {
-    dispatch(
-      setUserExam({
-        examId: Number(examId),
-        answerIds: answerIds,
-        quizId: quizResponse.id,
-      })
-    );
+    if (examId)
+      dispatch(
+        setUserExam({
+          examId: examId,
+          answerIds: answerIds,
+          quizId: quizResponse.id,
+        })
+      );
   };
   const handleSubmitAnswer = () => {
     const answerUser =
@@ -109,9 +110,11 @@ const ExamDetailPage = () => {
       });
   };
   const handleCancel = () => {
-    dispatch(deleteUserExam(Number(examId)));
-    dispatch(deleteQuizExam(Number(examId)));
-    dispatch(deleteExam(Number(examId)));
+    if (examId) {
+      dispatch(deleteUserExam(examId));
+      dispatch(deleteQuizExam(examId));
+      dispatch(deleteExam(examId));
+    }
     navigate("/profile");
     toast.success("Successfully finished the exam");
   };
@@ -129,7 +132,7 @@ const ExamDetailPage = () => {
               <div className="row">
                 <AnswerListElement
                   handleAnswerClick={handleAnswerClick}
-                  examId={Number(examId)}
+                  examId={examId??""}
                   answerResponseList={
                     quizResponseList?.[quizExam]?.answers ?? []
                   }
@@ -141,8 +144,9 @@ const ExamDetailPage = () => {
               <button
                 disabled={quizExam === 0}
                 onClick={() =>
-                  dispatch(
-                    setQuizExam({ id: Number(examId), value: quizExam - 1 })
+
+                  examId && dispatch(
+                    setQuizExam({ examId: examId, quizIndex: quizExam - 1 })
                   )
                 }
                 className={`btn ${quizExam === 0 ? "btn-secondary" : "btn-info"
@@ -153,8 +157,9 @@ const ExamDetailPage = () => {
               <button
                 disabled={quizExam === quizResponseList.length - 1}
                 onClick={() =>
+                  examId &&
                   dispatch(
-                    setQuizExam({ id: Number(examId), value: quizExam + 1 })
+                    setQuizExam({ examId: examId, quizIndex: quizExam + 1 })
                   )
                 }
                 className={`btn ${quizExam === quizResponseList.length - 1
@@ -177,7 +182,7 @@ const ExamDetailPage = () => {
               {quizResponseList?.map((quiz, index) => (
                 <button
                   onClick={() =>
-                    dispatch(setQuizExam({ id: Number(examId), value: index }))
+                    examId && dispatch(setQuizExam({ examId: examId, quizIndex: index }))
                   }
                   className={`
                   ${answerListUser?.[quiz.id] !== undefined &&

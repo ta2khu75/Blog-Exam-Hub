@@ -3,7 +3,7 @@ import { combineReducers } from '@reduxjs/toolkit';
 // import counterReducer from './slice/counterSlice';
 import accountReducer from './slice/accountSlice';
 import examReducer from './slice/examSlice';
-import userExamReducer from './slice/useExamSlice';
+import userExamReducer from './slice/userExamSlice';
 import quizExamReducer from './slice/quizExamSlice';
 import quizReducer from './slice/quizSlice';
 // Import other slices as needed

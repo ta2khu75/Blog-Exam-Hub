@@ -17,6 +17,7 @@ import com.ta2khu75.quiz.model.CreateGroup;
 import com.ta2khu75.quiz.model.UpdateGroup;
 import com.ta2khu75.quiz.model.entity.Answer;
 import com.ta2khu75.quiz.repository.AnswerRepository;
+import com.ta2khu75.quiz.repository.UserAnswerRepository;
 import com.ta2khu75.quiz.service.AnswerService;
 
 import jakarta.validation.groups.Default;
@@ -65,5 +66,11 @@ public class AnswerServiceImpl implements AnswerService {
 	@Override
 	public List<AnswerResponse> readAllByQuizId(Long id) {
 		return repository.findByQuizId(id).stream().map(mapper::toResponse).toList();
+	}
+
+	@Override
+	public void deleteByQuizId(Long id) {
+		repository.deleteByQuizId(id);
+		
 	}
 }

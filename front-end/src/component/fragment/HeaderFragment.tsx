@@ -4,20 +4,25 @@ import AuthService from "../../service/AuthService";
 import { resetAccount } from "../../redux/slice/accountSlice";
 import { toast } from "react-toastify";
 import { resetExam } from "../../redux/slice/examSlice";
-import { resetUserExam } from "../../redux/slice/useExamSlice";
+import { resetUserExam } from "../../redux/slice/userExamSlice";
 import { resetQuizExam } from "../../redux/slice/quizExamSlice";
 import { useEffect } from "react";
+import { resetQuiz } from "../../redux/slice/quizSlice";
 
 const HeaderFragment = () => {
   const { pathname } = useLocation();
+  const account = useAppSelector((state) => state.account);
+  const dispatch = useAppDispatch();
+  const quizzes = useAppSelector((state) => state.quiz.value)
   useEffect(() => {
     const element = document.getElementById('top');
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+    if (quizzes.length > 0 && pathname !== "/manager-exam/create") {
+      dispatch(resetQuiz())
+    }
   }, [pathname]);
-  const account = useAppSelector((state) => state.account);
-  const dispatch = useAppDispatch();
   const handleLogoutClick = () => {
     AuthService.logout().then((d) => {
       if (d.success) {

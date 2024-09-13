@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppstoreOutlined, UserOutlined} from '@ant-design/icons';
+import { AppstoreOutlined, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Layout, Menu, theme } from 'antd';
 import { NavLink, Outlet } from 'react-router-dom';
@@ -55,7 +55,6 @@ const ProfilePage = () => {
 
     return (
         <Content className='container'>
-            <div style={{ height: "50px" }}></div>
             <Layout
                 style={{ padding: '24px 0', background: colorBgContainer, borderRadius: borderRadiusLG }}
             >

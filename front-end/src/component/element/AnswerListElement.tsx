@@ -1,7 +1,7 @@
 import { Checkbox, Radio, Space } from "antd";
 import { useAppSelector } from "../../redux/hooks";
 type Props = {
-  examId: number;
+  examId: string;
   showAnswer?: boolean;
   userAnswer?: number[]
   quizResponse: QuizResponse;

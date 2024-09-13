@@ -17,7 +17,7 @@ const QuizFormNew = ({ indexQuiz }: Prop) => {
     const [errorAnswer, setErrorAnswer] = useState(false);
     const [quizType, setQuizType] = useState<string>(QuizType.SINGLE_CHOICE);
     useEffect(() => {
-        if (indexQuiz) {
+        if (indexQuiz !== undefined) {
             const quiz = quizzes[indexQuiz];
             form.setFieldsValue(quiz);
             setErrorAnswer(false);
@@ -34,7 +34,7 @@ const QuizFormNew = ({ indexQuiz }: Prop) => {
     }, [indexQuiz, form, quizzes])
     const onFinish: FormProps<QuizRequest>['onFinish'] = (values) => {
         if (corrects.length > 0) {
-            if (indexQuiz) {
+            if (indexQuiz != undefined) {
                 dispatch(updateQuiz({
                     indexQuiz, quiz: {
                         ...values, quiz_type: quizType, answers: values.answers.map((answer, index) => {
@@ -73,6 +73,9 @@ const QuizFormNew = ({ indexQuiz }: Prop) => {
     }
     return (
         <Form form={form} onFinish={onFinish} onFinishFailed={onFinishFailed} layout='vertical' >
+            <Form.Item<QuizRequest> name="id">
+                <Input hidden={true} placeholder="Image URL" />
+            </Form.Item>
             <Form.Item<QuizRequest> name={'question'} rules={[{ required: true, message: 'Please input question!' }]} label="Question">
                 <TextArea rows={4} />
             </Form.Item>

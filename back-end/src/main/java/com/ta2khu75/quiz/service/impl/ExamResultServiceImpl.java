@@ -50,7 +50,7 @@ public class ExamResultServiceImpl implements ExamResultService {
 	AccountRepository accountRepository;
 
 	@Override
-	public ExamResultResponse readByExamId(Long id) {
+	public ExamResultResponse readByExamId(String id) {
 		String email = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new NotFoundException("Could not find email"));
 		Optional<ExamResult> history = repository
@@ -163,7 +163,7 @@ public class ExamResultServiceImpl implements ExamResultService {
 	}
 
 	@Override
-	public ExamResultResponse createByExamId(Long examId) {
+	public ExamResultResponse createByExamId(String examId) {
 		String email = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new NotFoundException("Could not find email"));
 		Exam exam = examRepository.findById(examId)

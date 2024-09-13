@@ -1,16 +1,18 @@
-import { Card } from 'antd'
+import { Button, Card } from 'antd'
 import React from 'react'
 const { Meta } = Card;
 type Props = {
-  exam: ExamResponse
-  isEdit?: boolean
+  exam: ExamResponse,
+  handleEdit?: () => void;
+  handleDelete?: () => void;
 }
-const ExamCartElementNew = ({ exam, isEdit }: Props) => {
+const ExamCartElementNew = ({ exam, handleDelete, handleEdit }: Props) => {
   return (
     <Card
-      extra={<a href="#">More</a>}
+      extra={(handleDelete || handleEdit) && <><Button onClick={handleEdit}>Edit</Button><Button onClick={handleDelete}>Delete</Button></>}
       hoverable
       style={{ width: 300 }}
+      title={exam.title}
       cover={<img style={{ height: "200px" }} alt="example" src={exam.image_path} />}
     >
       <Meta title={exam.title} description={exam.description} />

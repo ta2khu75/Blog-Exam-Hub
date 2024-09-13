@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@ToString(exclude = {"exam","userAnswers"})
 public class Quiz {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -25,7 +27,7 @@ public class Quiz {
     QuizType quizType;
     @ManyToOne
     Exam exam;
-    @OneToMany(mappedBy = "quiz")
+    @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true)
     List<Answer> answers;
     @OneToMany(mappedBy = "quiz")
     List<UserAnswer> userAnswers;

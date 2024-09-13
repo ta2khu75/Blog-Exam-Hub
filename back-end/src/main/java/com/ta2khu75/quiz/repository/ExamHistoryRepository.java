@@ -14,7 +14,7 @@ import com.ta2khu75.quiz.model.entity.ExamResult;
 
 public interface ExamHistoryRepository extends JpaRepository<ExamResult, Long>{
 
-	Optional<ExamResult> findByAccountEmailAndExamIdAndEndTimeAfterAndLastModifiedDateIsNull(String email, Long examId, LocalDateTime now);
+	Optional<ExamResult> findByAccountEmailAndExamIdAndEndTimeAfterAndLastModifiedDateIsNull(String email, String examId, LocalDateTime now);
 
 	@Query("SELECT e FROM ExamResult e WHERE e.endTime < :now AND e.lastModifiedDate IS NULL")
 	List<ExamResult> findByEndTimeBeforeNow(@Param("now") LocalDateTime now);

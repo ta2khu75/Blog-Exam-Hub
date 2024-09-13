@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import com.ta2khu75.quiz.model.entity.AccessModifier;
 import com.ta2khu75.quiz.model.entity.Exam;
 
-public interface ExamRepository extends JpaRepository<Exam, Long> {
+public interface ExamRepository extends JpaRepository<Exam, String> {
 	@Query("select e from Exam e where e.account.id = :id and e.accessModifier = :accessModifier")
 	Page<Exam> findByAccountIdAndAccessModifier(@Param("id") String id,
 			@Param("accessModifier") AccessModifier accessModifier, Pageable pageable);

@@ -15,5 +15,5 @@ public interface QuizService extends BaseService<Long, QuizRequest, QuizResponse
 
 	QuizResponse read(Long id);
 
-	List<QuizResponse> readByExamId(Long id);
+	List<QuizResponse> readByExamId(String id);
 }

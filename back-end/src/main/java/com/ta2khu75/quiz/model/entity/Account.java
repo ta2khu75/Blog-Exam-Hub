@@ -25,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EntityListeners(AuditingEntityListener.class)
+@ToString(exclude = {"exams", "examResults"})
 public class Account implements UserDetails {
 	private static final long serialVersionUID = -6436446209727776976L;
 	@Id

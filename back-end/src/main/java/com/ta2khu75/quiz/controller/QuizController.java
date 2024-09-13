@@ -1,16 +1,12 @@
 package com.ta2khu75.quiz.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ta2khu75.quiz.model.request.QuizRequest;
 import com.ta2khu75.quiz.model.response.QuizResponse;
 import com.ta2khu75.quiz.service.QuizService;
 
@@ -19,10 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -31,7 +24,7 @@ import java.util.List;
 @RequestMapping("${app.api-prefix}/quiz")
 public class QuizController {
 	QuizService service;
-	ObjectMapper objectMapper;
+//	ObjectMapper objectMapper;
 
 //	@PostMapping(consumes = "multipart/form-data")
 //	public ResponseEntity<QuizResponse> createQuiz(@RequestPart("quiz") String request, @RequestPart(name="file", required = false) MultipartFile file) throws IOException {
@@ -40,7 +33,7 @@ public class QuizController {
 //	}	
 
 	@GetMapping("exam/{id}")
-	public ResponseEntity<List<QuizResponse>> readAllQuizExam(@PathVariable("id") Long id) {
+	public ResponseEntity<List<QuizResponse>> readAllQuizExam(@PathVariable("id") String id) {
 		return ResponseEntity.ok().body(service.readByExamId(id));
 	}
 

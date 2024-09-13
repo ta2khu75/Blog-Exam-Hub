@@ -19,7 +19,7 @@ export default class ExamService {
     static readPageByAuthor(authorId: number, page = 1, size = 10): Promise<ApiResponse<PageResponse<ExamResponse>>> {
         return instance.get(`${basePath}/author/${authorId}`, { params: { page, size } });
     }
-    static update(id: number, data: ExamRequest, image?: File): Promise<ApiResponse<ExamResponse>> {
+    static update(id: string, data: ExamRequest, image?: File): Promise<ApiResponse<ExamResponse>> {
         const form = new FormData();
         if (image) {
             form.append("image", image)
@@ -27,10 +27,13 @@ export default class ExamService {
         form.append("exam_request", JSON.stringify(data));
         return instance.put(`${basePath}/${id}`, form);
     }
-    static delete(id: number): Promise<ApiResponse<void>> {
+    static readDetailsById(id: string): Promise<ApiResponse<ExamDetailsResponse>> {
+        return instance.get(`${basePath}/${id}/details`);
+    }
+    static delete(id: string): Promise<ApiResponse<void>> {
         return instance.delete(`${basePath}/${id}`);
     }
-    static readById(id: number): Promise<ApiResponse<ExamResponse>> {
+    static readById(id: string): Promise<ApiResponse<ExamResponse>> {
         return instance.get(`${basePath}/${id}`);
     }
 }

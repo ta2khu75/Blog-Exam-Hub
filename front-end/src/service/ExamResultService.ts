@@ -1,9 +1,8 @@
 import AnswerUserRequest from "../model/request/AnswerUserRequest";
-import { ExamResultResponse } from "../model/response/ExamResultResponse";
 import instance from "../util/apiInstance";
 const basePath = "exam-result";
 export default class ExamHistoryService {
-  static readByExamId(id: number): Promise<ApiResponse<ExamResultResponse>> {
+  static readByExamId(id: string): Promise<ApiResponse<ExamResultResponse>> {
     return instance.get(`${basePath}/exam/${id}`);
   }
   static readById(

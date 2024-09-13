@@ -9,8 +9,8 @@ const ExamAboutPage = () => {
         fetchExam();
     }, [])
     const fetchExam = () => {
-        if (id && !isNaN(Number(id))) {
-            ExamService.readById(Number(id)).then((d) => {
+        if (id) {
+            ExamService.readById(id).then((d) => {
                 setExamResponse(d.data);
             })
         }

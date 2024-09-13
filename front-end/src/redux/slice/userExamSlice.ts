@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface ExamQuizAnswer {
-  examId: number;
+  examId: string;
   quizId: number;
   answerIds: number[];
 }
@@ -10,6 +10,7 @@ export interface QuizListState {
 export interface ExamListState {
   [key: string]: QuizListState;
 }
+// luu cac dap an cua bai thi
 const initialState: ExamListState = {};
 export const examUserSlice = createSlice({
   name: "examUser",
@@ -28,7 +29,7 @@ export const examUserSlice = createSlice({
         delete state[examId][quizId];
       }
     },
-    deleteUserExam: (state, action: PayloadAction<number>) => {
+    deleteUserExam: (state, action: PayloadAction<string>) => {
       delete state[action.payload];
     },
     resetUserExam: () => {

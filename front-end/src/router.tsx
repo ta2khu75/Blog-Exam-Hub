@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import AdminComponent from "./component/page/admin/AdminComponent";
 import LoginPage from "./component/page/LoginPage";
@@ -125,16 +125,16 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "exam",
+        path: "manager-exam",
         element: (
           <PrivateRouterElement>
             <ExamPage />
           </PrivateRouterElement>
         ),
-        children:[{
+        children: [{
           path: "create",
-          element:<ExamCreateChild/>
-        }]
+          element: <ExamCreateChild />
+        }, { path: ":examId", element: <ExamCreateChild /> }]
       },
       {
         path: "exam-details/:examId",

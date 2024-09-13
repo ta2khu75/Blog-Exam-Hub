@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PROTECTED)
 public class ExamResponse extends ExamBase {
-	Long id;
+	String id;
 	String imagePath;
 	AccountResponse author;
 	ExamCategoryResponse examCategory;
