@@ -22,6 +22,7 @@ import org.springframework.web.servlet.mvc.condition.PathPatternsRequestConditio
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.interceptor.InterceptorAuthorization;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.HTTPMethod;
@@ -34,10 +35,14 @@ import com.ta2khu75.quiz.repository.PermissionRepository;
 import com.ta2khu75.quiz.repository.RoleRepository;
 import com.ta2khu75.quiz.util.StringUtil;
 
+import lombok.RequiredArgsConstructor;
+
 @Configuration
+@RequiredArgsConstructor
 public class ApplicationConfig implements WebMvcConfigurer {
 	@Value("${app.api-prefix}")
 	private String apiPrefix;
+	private final InterceptorAuthorization interceptorAuthorization;
 
 	@Bean
 	CommandLineRunner init(AccountRepository accountRepository, RoleRepository roleRepository,
@@ -47,7 +52,7 @@ public class ApplicationConfig implements WebMvcConfigurer {
 			if (accountRepository.count() == 0) {
 				initPermission(permissionRepository, permissionGroupRepository, applicationContext);
 				Account account = Account.builder().email("root@g.com").password(passwordEncoder.encode("123"))
-						.displayName("root").firstName("root").lastName("root").birthday(LocalDate.now())
+						.displayName("root").firstName("root").lastName("root").enabled(true).birthday(LocalDate.now())
 						.role(initRole(roleRepository)).build();
 				accountRepository.save(account);
 			}
@@ -55,9 +60,11 @@ public class ApplicationConfig implements WebMvcConfigurer {
 	}
 
 	private Role initRole(RoleRepository roleRepository) {
-		roleRepository.save(Role.builder().name("USER").build());
-		roleRepository.save(Role.builder().name("ADMIN").build());
-		return roleRepository.save(Role.builder().name("ROOT").build());
+		List<Role> roles = List.of(Role.builder().name("USER").build(), Role.builder().name("ADMIN").build(),
+				Role.builder().name("ROOT").build());
+		roles = roleRepository.saveAll(roles);
+		return roles.stream().filter(role -> "ROOT".equals(role.getName())).findFirst()
+				.orElseThrow(() -> new NotFoundException("Not found role name ROOT"));
 	}
 
 	@SuppressWarnings({ "null" })
@@ -100,6 +107,8 @@ public class ApplicationConfig implements WebMvcConfigurer {
 				|| path.startsWith("/swagger-ui.html") || path.startsWith("/v3/api-docs.yaml");
 	}
 
+	private static final List<String> MEDIA_TYPES = Arrays.asList(MediaType.APPLICATION_JSON_VALUE);
+
 	@Override
 	public void addCorsMappings(@NonNull CorsRegistry registry) {
 		registry.addMapping("/api/**").allowedOrigins("http://localhost:5173").allowedMethods("*").allowedHeaders("*")
@@ -108,10 +117,8 @@ public class ApplicationConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(@NonNull InterceptorRegistry registry) {
-		registry.addInterceptor(new InterceptorAuthorization());
+		registry.addInterceptor(interceptorAuthorization);
 	}
-
-	private static final List<String> MEDIA_TYPES = Arrays.asList(MediaType.APPLICATION_JSON_VALUE);
 
 	@Bean
 	EndpointMediaTypes endpointMediaTypes() {

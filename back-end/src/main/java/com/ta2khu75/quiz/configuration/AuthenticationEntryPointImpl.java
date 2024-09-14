@@ -2,8 +2,7 @@ package com.ta2khu75.quiz.configuration;
 
 import java.io.IOException;
 
-//import org.springframework.http.HttpStatus;
-import org.apache.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
@@ -34,7 +33,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
 			apiResponse = AdviceException.ApiResponse.builder().statusCode(444).success(false)
 					.messageError(authException.getMessage()).build();
 		} else {
-			apiResponse = AdviceException.ApiResponse.builder().statusCode(HttpStatus.SC_UNAUTHORIZED).success(false)
+			apiResponse = AdviceException.ApiResponse.builder().statusCode(HttpStatus.UNAUTHORIZED.value()).success(false)
 					.messageError(authException.getMessage()).build();
 		}
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);

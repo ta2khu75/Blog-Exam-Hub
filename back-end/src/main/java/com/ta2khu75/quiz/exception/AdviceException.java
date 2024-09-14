@@ -37,7 +37,10 @@ public class AdviceException implements ResponseBodyAdvice<Object> {
 		return ResponseEntity.badRequest()
 				.body(new ExceptionResponse(ex.getBindingResult().getFieldError().getDefaultMessage()));
 	}
-
+	@ExceptionHandler(UnAuthorizedException.class)
+	public ResponseEntity<ExceptionResponse> handleUnauthorizedException(UnAuthorizedException ex) {
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionResponse(ex.getMessage()));
+	}
 	@ExceptionHandler(value = { NoResourceFoundException.class, NotFoundException.class })
 	public ResponseEntity<ExceptionResponse> handleInValidDataException(Exception ex) {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(ex.getMessage()));

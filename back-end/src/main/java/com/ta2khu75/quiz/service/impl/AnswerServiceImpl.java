@@ -17,7 +17,6 @@ import com.ta2khu75.quiz.model.CreateGroup;
 import com.ta2khu75.quiz.model.UpdateGroup;
 import com.ta2khu75.quiz.model.entity.Answer;
 import com.ta2khu75.quiz.repository.AnswerRepository;
-import com.ta2khu75.quiz.repository.UserAnswerRepository;
 import com.ta2khu75.quiz.service.AnswerService;
 
 import jakarta.validation.groups.Default;

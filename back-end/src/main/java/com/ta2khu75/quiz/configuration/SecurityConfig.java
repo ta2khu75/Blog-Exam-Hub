@@ -18,24 +18,28 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+
 import com.ta2khu75.quiz.repository.AccountRepository;
+import com.ta2khu75.quiz.repository.RoleRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@EnableMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
+@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 	@Value("${app.api-prefix}")
 	private String apiPrefix;
-	private final String[] PUBLIC_POST_ENDPOINT = { "/account", "/auth/login" };
-	private final String[] PUBLIC_GET_ENDPOINT = { "/auth/refresh-token", "/account/verify","/actuator/mappings", "/actuator/custommappings", "/auth/logout", "/exam", "/exam/*" };
+	private String[] PUBLIC_POST_ENDPOINT = { "/account", "/auth/login" };
+	private String[] PUBLIC_GET_ENDPOINT = { "/auth/refresh-token", "/account/verify", "/actuator/mappings",
+			"/actuator/custommappings", "/auth/logout", "/exam", "/exam/*" };
 	private final AuthenticationEntryPoint authenticationEntryPoint;
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
 	// config get auth on jwt
 	@Bean
 	JwtAuthenticationConverter jwtAuthenticationConverter() {
@@ -44,27 +48,18 @@ public class SecurityConfig {
 		JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
 		jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
 		return jwtAuthenticationConverter;
-
-//		JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-//		jwtGrantedAuthoritiesConverter.setAuthorityPrefix("");
-//		jwtGrantedAuthoritiesConverter.setAuthoritiesClaimName("auth");
-//		JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
-//		jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(jwtGrantedAuthoritiesConverter);
-//		return jwtAuthenticationConverter;
 	}
 
 	@Bean
-	SecurityFilterChain securityFilter(HttpSecurity http) throws Exception {
+	SecurityFilterChain securityFilter(HttpSecurity http, RoleRepository roleRepository) throws Exception {
 		http.csrf(csrf -> csrf.disable()).cors(Customizer.withDefaults())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authz -> authz
 						.requestMatchers(HttpMethod.POST, this.getPrefixedEndpoints(PUBLIC_POST_ENDPOINT)).permitAll()
 						.requestMatchers(HttpMethod.GET, this.getPrefixedEndpoints(PUBLIC_GET_ENDPOINT)).permitAll()
-						.requestMatchers("/").permitAll()
-						.anyRequest().authenticated())
+						.requestMatchers("/").permitAll().anyRequest().authenticated())
 				.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())
-						.authenticationEntryPoint(authenticationEntryPoint))/// .authenticationEntryPoint(authenticationEntryPoint))
-//				.exceptionHandling(exception -> exception.authenticationEntryPoint(null).accessDeniedHandler(null))
+						.authenticationEntryPoint(authenticationEntryPoint))
 				.formLogin(login -> login.disable());
 		return http.build();
 	}
