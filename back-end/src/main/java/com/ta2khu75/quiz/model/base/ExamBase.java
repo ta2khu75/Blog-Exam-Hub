@@ -1,8 +1,8 @@
 package com.ta2khu75.quiz.model.base;
 
-import com.ta2khu75.quiz.model.entity.AccessModifier;
-import com.ta2khu75.quiz.model.entity.ExamLevel;
-import com.ta2khu75.quiz.model.entity.ExamStatus;
+import com.ta2khu75.quiz.model.AccessModifier;
+import com.ta2khu75.quiz.model.ExamLevel;
+import com.ta2khu75.quiz.model.ExamStatus;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

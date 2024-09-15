@@ -8,14 +8,22 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
 import java.util.List;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+
+import com.ta2khu75.quiz.model.AccessModifier;
+import com.ta2khu75.quiz.model.ExamLevel;
+import com.ta2khu75.quiz.model.ExamStatus;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ToString(exclude = {"account", "quizzes","examCategory", "examResults"})
+@ToString(exclude = {"author","blog", "quizzes","examCategory", "examResults"})
 public class Exam {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
@@ -24,7 +32,7 @@ public class Exam {
 	String title;
 	@Column(nullable = false)
 	Integer duration;
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "TEXT")
 	String description;
 	@Column(nullable = false)
 	String imagePath;
@@ -39,11 +47,18 @@ public class Exam {
 	@Enumerated(EnumType.STRING)
 	AccessModifier accessModifier;
 	@ManyToOne
-	Account account;
+	Account author;
+	@ManyToOne
+	Blog blog;
 	@ManyToOne
 	ExamCategory examCategory;
 	@OneToMany(mappedBy = "exam")
 	List<Quiz> quizzes;
 	@OneToMany(mappedBy = "exam")
 	List<ExamResult> examResults;
+
+	@CreatedDate
+	LocalDate createdAt;
+	@LastModifiedDate
+	LocalDate lastModifiedAt;
 }

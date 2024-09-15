@@ -25,10 +25,10 @@ import com.ta2khu75.quiz.model.response.QuizResponse;
 import com.ta2khu75.quiz.enviroment.FolderEnv;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.QuizMapper;
-import com.ta2khu75.quiz.model.CreateGroup;
-import com.ta2khu75.quiz.model.UpdateGroup;
 import com.ta2khu75.quiz.model.entity.Answer;
 import com.ta2khu75.quiz.model.entity.Quiz;
+import com.ta2khu75.quiz.model.group.Create;
+import com.ta2khu75.quiz.model.group.Update;
 import com.ta2khu75.quiz.repository.QuizRepository;
 import com.ta2khu75.quiz.repository.UserAnswerRepository;
 import com.ta2khu75.quiz.service.AnswerService;
@@ -72,7 +72,7 @@ public class QuizServiceImpl implements QuizService {
 
 	@Override
 	@Transactional
-	@Validated({ CreateGroup.class, Default.class }) // khi dung validated group thi nen valid tang method
+	@Validated({ Create.class, Default.class }) // khi dung validated group thi nen valid tang method
 	public QuizResponse create(QuizRequest request) {
 		this.checkCorrectAnswer(request.getAnswers());
 		Quiz quiz = mapper.toEntity(request);
@@ -87,7 +87,7 @@ public class QuizServiceImpl implements QuizService {
 
 	@Override
 	@Transactional
-	@Validated({ Default.class, UpdateGroup.class })
+	@Validated({ Default.class, Update.class })
 	public QuizResponse update(Long id, QuizRequest request) {
 		this.checkCorrectAnswer(request.getAnswers());
 		Quiz quiz = findById(id);

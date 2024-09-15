@@ -1,5 +1,7 @@
 package com.ta2khu75.quiz.model.entity;
 
+import com.ta2khu75.quiz.model.HTTPMethod;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

@@ -1,6 +1,6 @@
 package com.ta2khu75.quiz.model.base;
 
-import com.ta2khu75.quiz.model.entity.QuizType;
+import com.ta2khu75.quiz.model.QuizType;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

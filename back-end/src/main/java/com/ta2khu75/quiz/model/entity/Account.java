@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,7 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EntityListeners(AuditingEntityListener.class)
-@ToString(exclude = {"exams", "examResults"})
+@ToString(exclude = {"exams","comments","blogs", "examResults"})
 public class Account implements UserDetails {
 	private static final long serialVersionUID = -6436446209727776976L;
 	@Id
@@ -50,13 +49,17 @@ public class Account implements UserDetails {
 	boolean nonLocked = true;
 	@CreatedDate
 	@Column(updatable = false, nullable = false)
-	LocalDateTime createdAt;
+	LocalDate createdAt;
 	@LastModifiedDate
 	@Column(insertable = false)
-	LocalDateTime updatedAt;
+	LocalDate updatedAt;
 	@ManyToOne
 	Role role;
-	@OneToMany(mappedBy = "account")
+	@OneToMany(mappedBy = "author")
+	List<Blog> blogs;
+	@OneToMany(mappedBy = "author")
+	List<Comment> comments;
+	@OneToMany(mappedBy = "author")
 	List<Exam> exams;
 	@OneToMany(mappedBy = "account")
 	List<ExamResult> examResults;

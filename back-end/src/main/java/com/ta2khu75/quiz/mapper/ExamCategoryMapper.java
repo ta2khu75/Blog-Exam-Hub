@@ -12,6 +12,8 @@ import org.mapstruct.MappingTarget;
 public interface ExamCategoryMapper {
 
 	ExamCategoryResponse toResponse(ExamCategory examCategory);
+	@Mapping(target = "exams", ignore = true)
+	@Mapping(target = "id", ignore = true)
 	void update(ExamCategoryRequest request, @MappingTarget ExamCategory examCategory);
 	@Mapping(target = "exams", ignore = true)
 	@Mapping(target = "id", ignore = true)

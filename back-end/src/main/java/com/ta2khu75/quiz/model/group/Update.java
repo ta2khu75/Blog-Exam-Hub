@@ -1,5 +1,5 @@
-package com.ta2khu75.quiz.model;
+package com.ta2khu75.quiz.model.group;
 
-public interface UpdateGroup {
+public interface Update {
 
 }

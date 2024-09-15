@@ -13,9 +13,9 @@ import com.ta2khu75.quiz.model.request.AnswerRequest;
 import com.ta2khu75.quiz.model.response.AnswerResponse;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.AnswerMapper;
-import com.ta2khu75.quiz.model.CreateGroup;
-import com.ta2khu75.quiz.model.UpdateGroup;
 import com.ta2khu75.quiz.model.entity.Answer;
+import com.ta2khu75.quiz.model.group.Create;
+import com.ta2khu75.quiz.model.group.Update;
 import com.ta2khu75.quiz.repository.AnswerRepository;
 import com.ta2khu75.quiz.service.AnswerService;
 
@@ -30,7 +30,7 @@ public class AnswerServiceImpl implements AnswerService {
 	AnswerMapper mapper;
 
 	@Override
-	@Validated({ Default.class, CreateGroup.class }) 
+	@Validated({ Default.class, Create.class }) 
 	public AnswerResponse create( AnswerRequest request) {
 		Answer answer = mapper.toEntity(request);
 		return this.save(answer);
@@ -45,7 +45,7 @@ public class AnswerServiceImpl implements AnswerService {
 	}
 
 	@Override
-	@Validated({ Default.class, UpdateGroup.class })
+	@Validated({ Default.class, Update.class })
 	public AnswerResponse update(Long id, AnswerRequest request) {
 		Answer answer = findById(id);
 		mapper.update(request, answer);

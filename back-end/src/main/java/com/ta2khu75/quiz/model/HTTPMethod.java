@@ -1,4 +1,4 @@
-package com.ta2khu75.quiz.model.entity;
+package com.ta2khu75.quiz.model;
 
 public enum HTTPMethod {
 	GET,

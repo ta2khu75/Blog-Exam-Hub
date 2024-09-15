@@ -2,6 +2,7 @@ package com.ta2khu75.quiz.model.entity;
 
 import java.util.List;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,10 +23,10 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString(exclude = {"exams"})
-public class ExamCategory {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ExamCategory{
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
+	@Column(nullable = false)
 	String name;
 	@OneToMany(mappedBy = "examCategory")
 	List<Exam> exams;

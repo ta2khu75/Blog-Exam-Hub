@@ -26,6 +26,7 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	// https://mvnrepository.com/artifact/com.cloudinary/cloudinary-http44
 	implementation 'com.cloudinary:cloudinary-http44:1.39.0'
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'

@@ -12,9 +12,11 @@ import com.ta2khu75.quiz.model.entity.Answer;
 public interface AnswerMapper {
     @Mapping(target = "answer", source = "answerString")
     AnswerResponse toResponse(Answer answer);
+	@Mapping(target = "userAnswers", ignore = true)
 	@Mapping(target = "answerString", source = "answer")
 	@Mapping(target = "id", ignore = true)
 	Answer toEntity(AnswerRequest request);
+	@Mapping(target = "userAnswers", ignore = true)
 	@Mapping(target = "answerString", source = "answer")
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "quiz", ignore = true)

@@ -1,8 +1,5 @@
 package com.ta2khu75.quiz.configuration;
 
-import java.util.Arrays;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,6 +18,8 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.RoleRepository;
+import com.ta2khu75.quiz.service.util.EndpointUtil;
+import com.ta2khu75.quiz.service.util.EndpointUtil.EndpointType;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,11 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
-	@Value("${app.api-prefix}")
-	private String apiPrefix;
-	private String[] PUBLIC_POST_ENDPOINT = { "/account", "/auth/login" };
-	private String[] PUBLIC_GET_ENDPOINT = { "/auth/refresh-token", "/account/verify", "/actuator/mappings",
-			"/actuator/custommappings", "/auth/logout", "/exam", "/exam/*" };
+	private final EndpointUtil endpointUtil;
 	private final AuthenticationEntryPoint authenticationEntryPoint;
 
 	@Bean
@@ -55,8 +50,8 @@ public class SecurityConfig {
 		http.csrf(csrf -> csrf.disable()).cors(Customizer.withDefaults())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authz -> authz
-						.requestMatchers(HttpMethod.POST, this.getPrefixedEndpoints(PUBLIC_POST_ENDPOINT)).permitAll()
-						.requestMatchers(HttpMethod.GET, this.getPrefixedEndpoints(PUBLIC_GET_ENDPOINT)).permitAll()
+						.requestMatchers(HttpMethod.POST, endpointUtil.getPublicEndpoint(EndpointType.POST)).permitAll()
+						.requestMatchers(HttpMethod.GET, endpointUtil.getPublicEndpoint(EndpointType.GET)).permitAll()
 						.requestMatchers("/").permitAll().anyRequest().authenticated())
 				.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())
 						.authenticationEntryPoint(authenticationEntryPoint))
@@ -70,10 +65,6 @@ public class SecurityConfig {
 			return accountRepository.findByEmail(email)
 					.orElseThrow(() -> new UsernameNotFoundException("User not found"));
 		};
-	}
-
-	private String[] getPrefixedEndpoints(String[] endpoints) {
-		return Arrays.stream(endpoints).map(endpoint -> apiPrefix + endpoint).toArray(String[]::new);
 	}
 
 }

@@ -25,7 +25,9 @@ public interface ExamMapper {
 	@Mapping(target = "author", ignore = true)
 	ExamResponse toResponse(Exam exam);
 
-	@Mapping(target = "account", ignore = true)
+	@Mapping(target = "blog", ignore = true)
+	@Mapping(target = "deleted", ignore = true)
+	@Mapping(target = "author", ignore = true)
 	@Mapping(target = "examCategory", ignore = true)
 	@Mapping(target = "examResults", ignore = true)
 	@Mapping(target = "id", ignore = true)
@@ -33,7 +35,9 @@ public interface ExamMapper {
 	@Mapping(target = "quizzes", ignore = true)
 	Exam toEntity(ExamRequest request);
 
-	@Mapping(target = "account", ignore = true)
+	@Mapping(target = "blog", ignore = true)
+	@Mapping(target = "deleted", ignore = true)
+	@Mapping(target = "author", ignore = true)
 	@Mapping(target = "examCategory", ignore = true)
 	@Mapping(target = "examResults", ignore = true)
 	@Mapping(target = "id", ignore = true)
@@ -44,7 +48,7 @@ public interface ExamMapper {
 	@Mapping(target = "content", qualifiedByName = "toExamResponse")
 	PageResponse<ExamResponse> toPageResponse(Page<Exam> page);
 
-	@Mapping(target = "author", source = "account")
+	@Mapping(target = "author", source = "author")
 	ExamDetailsResponse toDetailsResponse(Exam exam);
 	default QuizDetaislResponse toResponseDetails(Quiz quiz) {
 		QuizDetaislResponse quizDetaislResponse = new QuizDetaislResponse();

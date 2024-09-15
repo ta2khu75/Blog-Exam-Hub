@@ -10,6 +10,8 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
+import com.ta2khu75.quiz.model.QuizType;
+
 @Entity
 @Data
 @AllArgsConstructor

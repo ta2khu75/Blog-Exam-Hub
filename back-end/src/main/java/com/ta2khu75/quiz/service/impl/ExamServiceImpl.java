@@ -21,12 +21,12 @@ import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
 import com.ta2khu75.quiz.enviroment.FolderEnv;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.ExamMapper;
-import com.ta2khu75.quiz.model.entity.AccessModifier;
+import com.ta2khu75.quiz.model.AccessModifier;
+import com.ta2khu75.quiz.model.ExamStatus;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Exam;
 import com.ta2khu75.quiz.model.entity.ExamCategory;
 import com.ta2khu75.quiz.model.entity.ExamResult;
-import com.ta2khu75.quiz.model.entity.ExamStatus;
 import com.ta2khu75.quiz.model.entity.Quiz;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.ExamCategoryRepository;
@@ -81,7 +81,7 @@ public class ExamServiceImpl implements ExamService {
 		Exam exam = mapper.toEntity(examRequest);
 		this.saveFile(exam, file);
 		exam.setExamCategory(this.findExamCategoryById(examRequest.getExamCategoryId()));
-		exam.setAccount(accountRepository
+		exam.setAuthor(accountRepository
 				.findByEmail(SecurityUtil.getCurrentUserLogin()
 						.orElseThrow(() -> new NotFoundException("Could not find account")))
 				.orElseThrow(() -> new NotFoundException("Could not find account")));
@@ -164,7 +164,7 @@ public class ExamServiceImpl implements ExamService {
 	public PageResponse<ExamResponse> readPageMyExam(Pageable pageable) {
 		String email = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new NotFoundException("Could not found email"));
-		return mapper.toPageResponse(repository.findByAccountEmail(email, pageable));
+		return mapper.toPageResponse(repository.findByAuthorEmail(email, pageable));
 	}
 
 	@Override
