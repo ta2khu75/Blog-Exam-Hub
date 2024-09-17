@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,20 +20,21 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
-@Entity
-@AllArgsConstructor
 @Data
-@NoArgsConstructor
+@Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString(exclude = { "accounts" })
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ToString(exclude = {"accounts"})
-public class Role {
+public class Role{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 	@Column(unique = true, nullable = false)
 	String name;
 	@OneToMany(mappedBy = "role")
+	@JsonIgnore
 	List<Account> accounts;
 	@ManyToMany
 	@Builder.Default

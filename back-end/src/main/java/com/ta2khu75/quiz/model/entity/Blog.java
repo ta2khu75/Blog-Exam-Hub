@@ -7,9 +7,13 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.ta2khu75.quiz.model.AccessModifier;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,17 +38,24 @@ public class Blog {
 	String id;
 	String title;
 	String content;
-	String image;
+	String imagePath;
+	Integer viewCount;
+	boolean deleted;
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	AccessModifier accessModifier;
 	@OneToMany(mappedBy = "blog")
 	List<Exam> exams;
 	@CreatedDate
+	@Column(updatable = false, nullable = false)
 	LocalDate createdAt;
 	@LastModifiedDate
+	@Column(insertable = false)
 	LocalDate lastModifiedAt;
 	@ManyToOne
 	Account author;
 	@OneToMany(mappedBy = "blog")
 	List<Comment> comments;
-	@ManyToMany
+	@ManyToMany(mappedBy = "blogs")
 	List<BlogTag> blogTags;
 }

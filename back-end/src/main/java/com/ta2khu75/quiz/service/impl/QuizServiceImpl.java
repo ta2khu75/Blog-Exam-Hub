@@ -1,6 +1,5 @@
 package com.ta2khu75.quiz.service.impl;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import com.ta2khu75.quiz.model.request.AnswerRequest;
 import com.ta2khu75.quiz.model.request.QuizRequest;
 import com.ta2khu75.quiz.model.response.QuizResponse;
-import com.ta2khu75.quiz.enviroment.FolderEnv;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.QuizMapper;
 import com.ta2khu75.quiz.model.entity.Answer;
@@ -33,7 +30,6 @@ import com.ta2khu75.quiz.repository.QuizRepository;
 import com.ta2khu75.quiz.repository.UserAnswerRepository;
 import com.ta2khu75.quiz.service.AnswerService;
 import com.ta2khu75.quiz.service.QuizService;
-import com.ta2khu75.quiz.service.util.CloudinaryUtil;
 
 import jakarta.validation.groups.Default;
 
@@ -47,7 +43,6 @@ public class QuizServiceImpl implements QuizService {
 	QuizRepository repository;
 	AnswerService answerService;
 	UserAnswerRepository userAnswerRepository;
-	CloudinaryUtil cloudinaryService;
 
 	private Quiz findById(Long id) {
 		return repository.findById(id).orElseThrow(() -> new NotFoundException("Could not found quiz with id " + id));
@@ -60,13 +55,6 @@ public class QuizServiceImpl implements QuizService {
 	private void checkCorrectAnswer(List<AnswerRequest> answers) {
 		if (!answers.stream().anyMatch(answer -> answer.isCorrect())) {
 			throw new IllegalArgumentException("There is at least one correct answer");
-		}
-	}
-
-	private void saveFile(Quiz quiz, MultipartFile file) throws IOException {
-		if (file != null && !file.isEmpty()) {
-			Map map = cloudinaryService.uploadFile(file, FolderEnv.QUIZ_FOLDER);
-			quiz.setFilePath((String) map.get("url"));
 		}
 	}
 

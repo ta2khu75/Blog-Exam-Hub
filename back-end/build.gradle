@@ -25,6 +25,7 @@ repositories {
 }
 
 dependencies {
+	implementation 'com.google.firebase:firebase-admin:9.3.0'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 	// https://mvnrepository.com/artifact/com.cloudinary/cloudinary-http44
@@ -39,7 +40,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
+	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

@@ -3,9 +3,11 @@ package com.ta2khu75.quiz.model.entity;
 import java.time.LocalDate;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
@@ -19,15 +21,17 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
 public class Comment {
-	@Id
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	Long id;
 	String content;
-	String imagePath;
+	String filePath;
 	@ManyToOne
 	Account author;
 	@ManyToOne
 	Blog blog;
 	@CreatedDate
 	LocalDate createdAt;
+	@LastModifiedDate
+	LocalDate updatedAt;
 }

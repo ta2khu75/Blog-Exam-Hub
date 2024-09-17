@@ -2,7 +2,6 @@ package com.ta2khu75.quiz.service.impl;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -17,6 +16,7 @@ import com.ta2khu75.quiz.model.entity.Role;
 import com.ta2khu75.quiz.repository.PermissionRepository;
 import com.ta2khu75.quiz.repository.RoleRepository;
 import com.ta2khu75.quiz.service.RoleService;
+import com.ta2khu75.quiz.service.util.RedisUtil;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +30,7 @@ public class RoleServiceImpl implements RoleService {
 	PermissionRepository permissionRepository;
 	ApplicationEventPublisher eventPublisher;
 	RoleMapper mapper;
+	RedisUtil redisUtil;
 
 	@Override
 	public RoleDetailsResponse create(RoleRequest request) {
@@ -46,20 +47,25 @@ public class RoleServiceImpl implements RoleService {
 			role.setPermissions(new HashSet<>(permissionRepository.findAllById(request.getPermissionIds())));
 		}
 		role = repository.save(role);
-		if (role.getName().equals("ANONYMOUS")) {
-			eventPublisher.publishEvent(new RoleChangeEvent(this));
-		}
+		eventPublisher.publishEvent(new RoleChangeEvent(this, role.getId()));
 		return mapper.toDetailsResponse(role);
 	}
 
-	private Role find(Long id) {
-		return repository.findById(id).orElseThrow(() -> new NotFoundException("Could not found role with id: " + id));
+	@Override
+	public Role find(Long id) {
+		Role role = redisUtil.read(id.toString(), Role.class);
+		if (role == null) {
+			role = repository.findById(id)
+					.orElseThrow(() -> new NotFoundException("Could not found role with id: " + id));
+			role.getPermissions().size();
+			redisUtil.create(id.toString(), role);
+		}
+		return role;
 	}
 
 	@Override
 	public RoleDetailsResponse read(Long id) {
 		return mapper.toDetailsResponse(this.find(id));
-
 	}
 
 	@Override

@@ -2,21 +2,18 @@ package com.ta2khu75.quiz.model.response;
 
 import java.time.LocalDate;
 
-import com.ta2khu75.quiz.model.base.ExamBase;
+import com.ta2khu75.quiz.model.base.BlogBase;
 
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldDefaults;
-
 @Data
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PROTECTED)
-public class ExamResponse extends ExamBase {
-	String id;
+public class BlogResponse extends BlogBase {
 	String imagePath;
-	AccountResponse author;
-	ExamCategoryResponse examCategory;
 	LocalDate createdAt;
 	LocalDate lastModifiedAt;
+	AccountResponse author;	
 }

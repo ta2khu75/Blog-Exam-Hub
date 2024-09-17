@@ -3,13 +3,13 @@ package com.ta2khu75.quiz.service.util;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class EndpointUtil {
 	@Value("${app.api-prefix}")
 	private String apiPrefix;
-	private final String[] PUBLIC_POST_ENDPOINT = { "/account", "/auth/login" };
+	private final String[] PUBLIC_POST_ENDPOINT = { "/account", "/auth/login", "/blog/test" };
 	private final String[] PUBLIC_GET_ENDPOINT = { "/auth/refresh-token", "/account/verify", "/actuator/mappings",
 			"/actuator/custommappings", "/auth/logout", "/exam", "/exam/*" };
 

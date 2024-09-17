@@ -18,7 +18,6 @@ import com.ta2khu75.quiz.model.request.QuizRequest;
 import com.ta2khu75.quiz.model.response.ExamResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
-import com.ta2khu75.quiz.enviroment.FolderEnv;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.ExamMapper;
 import com.ta2khu75.quiz.model.AccessModifier;
@@ -34,7 +33,8 @@ import com.ta2khu75.quiz.repository.ExamHistoryRepository;
 import com.ta2khu75.quiz.repository.ExamRepository;
 import com.ta2khu75.quiz.service.ExamService;
 import com.ta2khu75.quiz.service.QuizService;
-import com.ta2khu75.quiz.service.util.CloudinaryUtil;
+import com.ta2khu75.quiz.service.util.FileUtil;
+import com.ta2khu75.quiz.service.util.FileUtil.Folder;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
 import java.io.IOException;
@@ -56,18 +56,11 @@ public class ExamServiceImpl implements ExamService {
 	ExamCategoryRepository examCategoryRepository;
 	ExamHistoryRepository examHistoryRepository;
 	QuizService quizService;
-	CloudinaryUtil cloudinaryService;
+	FileUtil fileUtil;
 
 	private ExamCategory findExamCategoryById(Long id) {
 		return examCategoryRepository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found exam category with id: " + id));
-	}
-
-	private void saveFile(Exam exam, MultipartFile file) throws IOException {
-		if (file != null && !file.isEmpty()) {
-			Map map = cloudinaryService.uploadFile(file, FolderEnv.EXAM_FOLDER);
-			exam.setImagePath((String) map.get("url"));
-		}
 	}
 
 	private Exam findById(String id) {
@@ -79,7 +72,7 @@ public class ExamServiceImpl implements ExamService {
 	@Validated(value = { Default.class })
 	public ExamResponse create(@Valid ExamRequest examRequest, MultipartFile file) throws IOException {
 		Exam exam = mapper.toEntity(examRequest);
-		this.saveFile(exam, file);
+		fileUtil.saveFile(exam, file, Folder.EXAM_FOLDER, Exam::setImagePath);
 		exam.setExamCategory(this.findExamCategoryById(examRequest.getExamCategoryId()));
 		exam.setAuthor(accountRepository
 				.findByEmail(SecurityUtil.getCurrentUserLogin()
@@ -118,7 +111,7 @@ public class ExamServiceImpl implements ExamService {
 			});
 		}
 		mapper.update(examRequest, exam);
-		this.saveFile(exam, file);
+		fileUtil.saveFile(exam, file, Folder.EXAM_FOLDER, Exam::setImagePath);
 		if (exam.getExamCategory().getId().equals(examRequest.getExamCategoryId()))
 			exam.setExamCategory(this.findExamCategoryById(examRequest.getExamCategoryId()));
 		return mapper.toResponse(repository.save(exam));
@@ -136,8 +129,12 @@ public class ExamServiceImpl implements ExamService {
 	@Transactional
 	public void delete(String id) {
 		Exam exam = this.findById(id);
-		exam.setDeleted(true);
-		repository.save(exam);
+		if (exam.getExamStatus() != ExamStatus.NOT_COMPLETED) {
+			repository.delete(exam);
+		} else {
+			exam.setDeleted(true);
+			repository.save(exam);
+		}
 	}
 
 	@Override
@@ -156,7 +153,6 @@ public class ExamServiceImpl implements ExamService {
 		ExamResult examHistory = ExamResult.builder().account(account).exam(exam)
 				.endTime(LocalDateTime.now().plusMinutes(exam.getDuration() + 1)).build();
 		examHistoryRepository.save(examHistory);
-		log.info(examHistory.toString());
 		return mapper.toDetailsResponse(exam);
 	}
 

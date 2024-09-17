@@ -1,7 +1,5 @@
 package com.ta2khu75.quiz.repository;
 
-import java.util.Set;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ta2khu75.quiz.model.entity.Permission;

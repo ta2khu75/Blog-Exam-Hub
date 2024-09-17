@@ -25,6 +25,8 @@ public interface ExamMapper {
 	@Mapping(target = "author", ignore = true)
 	ExamResponse toResponse(Exam exam);
 
+	@Mapping(target = "createdAt", ignore = true)
+	@Mapping(target = "lastModifiedAt", ignore = true)
 	@Mapping(target = "blog", ignore = true)
 	@Mapping(target = "deleted", ignore = true)
 	@Mapping(target = "author", ignore = true)
@@ -35,6 +37,8 @@ public interface ExamMapper {
 	@Mapping(target = "quizzes", ignore = true)
 	Exam toEntity(ExamRequest request);
 
+	@Mapping(target = "createdAt", ignore = true)
+	@Mapping(target = "lastModifiedAt", ignore = true)
 	@Mapping(target = "blog", ignore = true)
 	@Mapping(target = "deleted", ignore = true)
 	@Mapping(target = "author", ignore = true)

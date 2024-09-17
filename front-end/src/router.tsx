@@ -21,6 +21,7 @@ import ChangeInfoChild from "./component/page/profile/child/ChangeInfoChild";
 import ManagerExamChild from "./component/page/profile/child/ManagerExamChild";
 import ExamPage from "./component/page/exam/ExamPage";
 import ExamCreateChild from "./component/page/exam/child/ExamCreateChild";
+import BlogPage from "./component/page/blog/BlogPage";
 // const router = createBrowserRouter(
 //   createRoutesFromElements(
 //     <>
@@ -135,6 +136,13 @@ const router = createBrowserRouter([
           path: "create",
           element: <ExamCreateChild />
         }, { path: ":examId", element: <ExamCreateChild /> }]
+      }, {
+        path: "manager-blog",
+        element: (
+          <PrivateRouterElement>
+            <BlogPage />
+          </PrivateRouterElement>
+        ),
       },
       {
         path: "exam-details/:examId",

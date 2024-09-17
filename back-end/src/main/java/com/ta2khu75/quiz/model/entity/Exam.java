@@ -37,6 +37,12 @@ public class Exam {
 	@Column(nullable = false)
 	String imagePath;
 	boolean deleted;
+	@CreatedDate
+	@Column(nullable = false, updatable = false)
+	LocalDate createdAt;
+	@LastModifiedDate
+	@Column(insertable = false)
+	LocalDate lastModifiedAt;
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	ExamLevel examLevel;
@@ -52,13 +58,10 @@ public class Exam {
 	Blog blog;
 	@ManyToOne
 	ExamCategory examCategory;
-	@OneToMany(mappedBy = "exam")
+	@OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
 	List<Quiz> quizzes;
-	@OneToMany(mappedBy = "exam")
+	@OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
 	List<ExamResult> examResults;
 
-	@CreatedDate
-	LocalDate createdAt;
-	@LastModifiedDate
-	LocalDate lastModifiedAt;
+	
 }

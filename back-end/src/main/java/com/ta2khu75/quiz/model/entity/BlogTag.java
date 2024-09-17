@@ -1,10 +1,13 @@
 package com.ta2khu75.quiz.model.entity;
 
+import java.util.List;
+
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,4 +23,6 @@ import lombok.experimental.FieldDefaults;
 public class BlogTag {
 	@Id
 	String name;
+	@ManyToMany
+	List<Blog> blogs;
 }

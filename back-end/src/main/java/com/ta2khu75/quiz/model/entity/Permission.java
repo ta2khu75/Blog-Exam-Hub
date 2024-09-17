@@ -1,5 +1,6 @@
 package com.ta2khu75.quiz.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ta2khu75.quiz.model.HTTPMethod;
 
 import jakarta.persistence.Column;
@@ -37,5 +38,6 @@ public class Permission {
 	@Column(nullable = false)
 	HTTPMethod method;
 	@ManyToOne
+	@JsonIgnore
 	PermissionGroup permissionGroup;
 }

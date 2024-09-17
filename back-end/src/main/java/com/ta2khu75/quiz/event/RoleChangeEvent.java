@@ -1,11 +1,16 @@
 package com.ta2khu75.quiz.event;
 
+import java.time.Clock;
+
 import org.springframework.context.ApplicationEvent;
 
+import lombok.Getter;
+@Getter
 public class RoleChangeEvent extends ApplicationEvent {
-
-	public RoleChangeEvent(Object source) {
+	private Long roleId;
+	public RoleChangeEvent(Object source, Long roleId) {
 		super(source);
+		this.roleId = roleId;
 	}
 
 }
