@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -34,8 +35,11 @@ public class FirebaseUtil {
 	private String keyFile;
 
 	private String uploadFile(File file, String fileName) throws IOException {
+		Path filePath = file.toPath();
+		// Lấy MIME type của tệp
+		String mimeType = Files.probeContentType(filePath);
 		BlobId blobId = BlobId.of(bucketName, fileName); // Replace with your bucker name
-		BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType("media").build();
+		BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(mimeType).build();
 		InputStream inputStream = FirebaseUtil.class.getClassLoader().getResourceAsStream(keyFile); // change the file
 																									// name with your
 																									// one
@@ -58,13 +62,17 @@ public class FirebaseUtil {
 		return fileName.substring(fileName.lastIndexOf("."));
 	}
 
-	public String upload(Folder folder,MultipartFile multipartFile) {
+	public String upload(Folder folder, MultipartFile multipartFile) {
 		try {
 			String fileName = multipartFile.getOriginalFilename(); // to get original file name
-			fileName = UUID.randomUUID().toString().concat(this.getExtension(fileName)); // to generated random string
-																							// values for file name.
+			fileName = String.format("%s_%s", folder.name(),
+					UUID.randomUUID().toString().concat(this.getExtension(fileName))); // to generated
+			// random
+			// string
+			// values for file name.
 			File file = this.convertToFile(multipartFile, fileName); // to convert multipartFile to File
-			String URL = String.format("%s_%s", folder.name(),this.uploadFile(file, fileName)); // to get uploaded file link
+			String URL = this.uploadFile(file, fileName); // to get uploaded file
+															// link
 			file.delete();
 			return URL;
 		} catch (Exception e) {

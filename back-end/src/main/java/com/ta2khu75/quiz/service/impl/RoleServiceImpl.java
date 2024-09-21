@@ -25,7 +25,7 @@ import lombok.experimental.FieldDefaults;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class RoleServiceImpl implements RoleService {
+public class RoleServiceImpl  implements RoleService {
 	RoleRepository repository;
 	PermissionRepository permissionRepository;
 	ApplicationEventPublisher eventPublisher;

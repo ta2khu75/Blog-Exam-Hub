@@ -23,6 +23,4 @@ import lombok.experimental.FieldDefaults;
 public class BlogTag {
 	@Id
 	String name;
-	@ManyToMany
-	List<Blog> blogs;
 }

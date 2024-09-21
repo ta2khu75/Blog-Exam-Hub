@@ -23,7 +23,7 @@ public class FileUtil {
 			setFilePathFunction.accept(entity, fileUrl);
 		}
 	}
-
+	
 	public enum Folder {
 		USER_FOLDER, EXAM_FOLDER, QUIZ_FOLDER, ANSWER_FOLDER, COMMENT_FOLDER, BLOG_FOLDER;
 	}

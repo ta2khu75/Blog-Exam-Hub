@@ -8,12 +8,15 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldDefaults;
+
 @Data
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PROTECTED)
 public class BlogResponse extends BlogBase {
+	String id;
+	int viewCount;
 	String imagePath;
 	LocalDate createdAt;
 	LocalDate lastModifiedAt;
-	AccountResponse author;	
+	AccountResponse author;
 }

@@ -38,20 +38,20 @@ public class CommentController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<BlogResponse> deleteBlog(@PathVariable("id") Long id) {
+	public ResponseEntity<BlogResponse> deleteComment(@PathVariable("id") Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PostMapping(consumes = "multipart/form-data")
-	public ResponseEntity<CommentResponse> createBlog(@RequestPart("comment") String request,
+	public ResponseEntity<CommentResponse> createComment(@RequestPart("comment") String request,
 			@RequestPart("file") MultipartFile file) throws IOException {
 		CommentRequest commentRequest = mapper.readValue(request, CommentRequest.class);
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(commentRequest, file));
 	}
 
 	@PutMapping(path = "/{id}", consumes = "multipart/form-data")
-	public ResponseEntity<CommentResponse> updateBlog(Long id, @RequestPart("comment") String request,
+	public ResponseEntity<CommentResponse> updateComment(Long id, @RequestPart("comment") String request,
 			@RequestPart("image") MultipartFile file) throws IOException {
 		CommentRequest commentRequest = mapper.readValue(request, CommentRequest.class);
 		return ResponseEntity.ok(service.update(id, commentRequest, file));

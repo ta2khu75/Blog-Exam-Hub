@@ -2,17 +2,8 @@ package com.ta2khu75.quiz.service;
 
 import jakarta.validation.Valid;
 public interface BaseService<D, T, E> {
-	default E create(@Valid T request) {
-		System.out.println("Create");
-		return null;
-	}
-
-	default E update(D id, @Valid T request) {
-		System.out.println("Create");
-		return null;
-	}
-
+	E create(@Valid T request);
+	E update(D id, @Valid T request);
 	E read(D id);
-
 	void delete(D id);
 }

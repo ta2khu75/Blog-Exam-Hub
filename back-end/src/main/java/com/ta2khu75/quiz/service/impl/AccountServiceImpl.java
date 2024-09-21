@@ -38,7 +38,6 @@ import jakarta.mail.MessagingException;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AccountServiceImpl implements AccountService {
-
 	AccountRepository repository;
 	AccountMapper mapper;
 	RoleRepository roleRepository;

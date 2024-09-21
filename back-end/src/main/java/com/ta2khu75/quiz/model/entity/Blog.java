@@ -36,10 +36,12 @@ public class Blog {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	String id;
+	@Column(nullable = false)
 	String title;
+	@Column(columnDefinition = "TEXT", nullable = false)
 	String content;
 	String imagePath;
-	Integer viewCount;
+	int viewCount;
 	boolean deleted;
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
@@ -49,13 +51,11 @@ public class Blog {
 	@CreatedDate
 	@Column(updatable = false, nullable = false)
 	LocalDate createdAt;
-	@LastModifiedDate
-	@Column(insertable = false)
 	LocalDate lastModifiedAt;
 	@ManyToOne
 	Account author;
 	@OneToMany(mappedBy = "blog")
 	List<Comment> comments;
-	@ManyToMany(mappedBy = "blogs")
+	@ManyToMany
 	List<BlogTag> blogTags;
 }

@@ -1,62 +1,81 @@
 package com.ta2khu75.quiz.service.impl;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
+import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.BlogMapper;
+import com.ta2khu75.quiz.model.AccessModifier;
+import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Blog;
 import com.ta2khu75.quiz.model.entity.BlogTag;
 import com.ta2khu75.quiz.model.request.BlogRequest;
 import com.ta2khu75.quiz.model.response.BlogResponse;
+import com.ta2khu75.quiz.model.response.PageResponse;
+import com.ta2khu75.quiz.model.response.details.BlogDetailsResponse;
+import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.BlogRepository;
 import com.ta2khu75.quiz.repository.BlogTagRepository;
 import com.ta2khu75.quiz.service.BlogService;
 import com.ta2khu75.quiz.service.util.FileUtil;
 import com.ta2khu75.quiz.service.util.FileUtil.Folder;
 import com.ta2khu75.quiz.util.FunctionUtil;
+import com.ta2khu75.quiz.util.SecurityUtil;
 
 import jakarta.validation.Valid;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import jakarta.validation.groups.Default;
 
 @Service
 @Validated
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class BlogServiceImpl implements BlogService {
-	BlogRepository repository;
-	BlogMapper mapper;
-	FileUtil fileUtil;
-	BlogTagRepository blogTagRepository;
+public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper> implements BlogService {
+	private final FileUtil fileUtil;
+	private final AccountRepository accountRepository;
+	private final BlogTagRepository blogTagRepository;
+	public BlogServiceImpl(BlogRepository repository, BlogMapper mapper, FileUtil fileUtil,
+			AccountRepository accountRepository, BlogTagRepository blogTagRepository) {
+		super(repository, mapper);	
+		this.fileUtil = fileUtil;
+		this.accountRepository = accountRepository;
+		this.blogTagRepository = blogTagRepository;
+	}
 
 	private List<BlogTag> saveAll(List<String> blogTags) {
-		List<BlogTag> existingBlogTags = blogTagRepository.findAllByNameIn(blogTags);
+		Set<BlogTag> existingBlogTags = new HashSet<>(blogTagRepository.findAllByNameIn(blogTags));
 		Map<String, BlogTag> existingBlogTagMap = existingBlogTags.stream()
 				.collect(Collectors.toMap(BlogTag::getName, blogTag -> blogTag));
-		existingBlogTags.addAll(blogTagRepository
+		List<BlogTag> newBlogTags = blogTagRepository
 				.saveAll(blogTags.stream().map(blogTagName -> existingBlogTagMap.computeIfAbsent(blogTagName, n -> {
 					BlogTag blogTag = new BlogTag();
 					blogTag.setName(blogTag.getName());
 					blogTag.setName(blogTagName);
 					return blogTag;
-				})).collect(Collectors.toList())));
-		return existingBlogTags;
+				})).toList());
+		existingBlogTags.addAll(blogTagRepository.saveAll(newBlogTags));
+		return new ArrayList<>(existingBlogTags);
 	}
 
 	@Override
 	@Validated({ Default.class })
+	@Transactional
 	public BlogResponse create(@Valid BlogRequest request, MultipartFile file) throws IOException {
 		Blog blog = mapper.toEntity(request);
+		String email = SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new NotFoundException("Email not found"));
+		Account account = FunctionUtil.findOrThrow(email, Account.class, accountRepository::findByEmail);
+		blog.setAuthor(account);
 		fileUtil.saveFile(blog, file, Folder.BLOG_FOLDER, Blog::setImagePath);
-		List<BlogTag> blogTags = saveAll(request.getBlogTags());
+		List<BlogTag> blogTags = this.saveAll(request.getBlogTags());
 		blog.setBlogTags(blogTags);
 		return save(repository.save(blog));
 	}
@@ -73,6 +92,7 @@ public class BlogServiceImpl implements BlogService {
 		fileUtil.saveFile(blog, file, Folder.BLOG_FOLDER, Blog::setImagePath);
 		List<BlogTag> blogTags = saveAll(request.getBlogTags());
 		blog.setBlogTags(blogTags);
+		blog.setLastModifiedAt(LocalDate.now());
 		return save(repository.save(blog));
 	}
 
@@ -84,6 +104,33 @@ public class BlogServiceImpl implements BlogService {
 	@Override
 	public void delete(String id) {
 		repository.deleteById(id);
+	}
+
+	@Override
+	public PageResponse<BlogResponse> readPageAccountBlog(String id, Pageable pageable) {
+		return mapper.toPageResponse(repository.findByAccountIdAndAccessModifier(id, AccessModifier.PUBLIC, pageable));
+	}
+
+	@Override
+	public PageResponse<BlogResponse> readPageMyBlog(Pageable pageable) {
+		String email = SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new NotFoundException("Email not found"));
+		return mapper.toPageResponse(repository.findByAuthorEmail(email, pageable));
+	}
+
+	@Override
+	public PageResponse<BlogResponse> readPageBlogTag(String blogTagName, Pageable pageable) {
+		return mapper.toPageResponse(
+				repository.findByBlogTagAndAccessModifier(blogTagName, AccessModifier.PUBLIC, pageable));
+	}
+
+	@Override
+	public BlogDetailsResponse readDetail(String id) {
+		return mapper.toDetailsResponse(FunctionUtil.findOrThrow(id, Blog.class, repository::findById));
+	}
+
+	@Override
+	public PageResponse<BlogResponse> readPage(Pageable pageable) {
+		return mapper.toPageResponse(repository.findAll(pageable));
 	}
 
 }

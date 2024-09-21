@@ -1,6 +1,5 @@
 package com.ta2khu75.quiz.model.request;
 
-
 import com.ta2khu75.quiz.model.base.AccountBase;
 
 import jakarta.validation.constraints.Email;
@@ -14,7 +13,6 @@ import lombok.experimental.FieldDefaults;
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AccountRequest extends AccountBase {
-
 	@NotBlank(message = "Email must not be blank")
 	@Email(message = "Email should be a valid email address")
 	String email;
@@ -24,5 +22,4 @@ public class AccountRequest extends AccountBase {
 
 	@NotBlank(message = "Confirm password must not be blank")
 	String confirmPassword;
-	
 }
