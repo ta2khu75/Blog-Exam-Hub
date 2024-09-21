@@ -3,14 +3,17 @@ import { useEffect, useState } from 'react'
 import ReactQuill from 'react-quill'
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import 'react-quill/dist/quill.snow.css';
-import { BlogRequest } from '../../../model/request/BlogRequest';
 import { AccessModifier } from '../../../model/AccessModifier';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { BlogService } from '../../../service/BlogService';
+import { toast } from 'react-toastify';
+import BlogUploadImage from './BlogUploadImage';
+import ModalElement from '../../element/ModalElement';
 const BlogPage = () => {
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
         ['blockquote', 'code-block'],
-        ['link', 'image', 'video', 'formula'],
+        ['link', 'formula'],
 
         [{ 'header': 1 }, { 'header': 2 }],               // custom button values
         [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }],
@@ -24,51 +27,67 @@ const BlogPage = () => {
         [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
         [{ 'font': [] }],
         [{ 'align': [] }],
-
         ['clean']                                         // remove formatting button
     ];
     const { blogId } = useParams()
+    const navigate = useNavigate()
     const modules = { toolbar: toolbarOptions }
+    const [openImageContent, setOpenImageContent] = useState(false)
     const [form] = Form.useForm<BlogRequest>();
-    const [errorImage, setErrorImage] = useState(false);
+    const [errorContent, setErrorContent] = useState(false);
     const [image, setImage] = useState<File>()
-    const [value, setValue] = useState('');
+    const [content, setContent] = useState("");
     const onFinish: FormProps<BlogRequest>["onFinish"] = (values) => {
-        // if (!values.id) {
-        //   QuizService.create(values, file).then((data) => {
-        //     if (data.success) {
-        //       toast.success("Successfully to create");
-        //       resetFields();
-        //     } else {
-        //       toast.error(data.message_error);
-        //     }
-        //   });
-        // } else {
-        //   QuizService.update(values.id, values, file).then((data) => {
-        //     if (data.success) {
-        //       toast.success("successfully");
-        //       refresh();
-        //       resetFields();
-        //     } else {
-        //       toast.error(data.message_error);
-        //     }
-        //   });
-        // }
+        if (!(/^\s*$/.test(content))) {
+            if (blogId) {
+                BlogService.update(blogId, { ...values, content }, image).then((data) => {
+                    if (data.success) {
+                        toast.success("Successfully");
+                        navigate(`/profile/manager-blog`)
+                    } else {
+                        toast.error(data.message_error);
+                    }
+                });
+            } else {
+                BlogService.create({ ...values, content }, image).then((data) => {
+                    if (data.success) {
+                        toast.success("Successfully to create");
+                        navigate(`/profile/manager-blog`)
+                    } else {
+                        toast.error(data.message_error);
+                    }
+                });
+            }
+        } else {
+            setErrorContent(true);
+        }
     };
     useEffect(() => {
+        if (blogId) fetchBlog(blogId);
         handleResetClick()
-    }, [])
+    }, [blogId])
+    const fetchBlog = (blogId: string) => {
+        BlogService.readDetails(blogId).then((response) => {
+            if (response.success) {
+                form.setFieldsValue({ title: response.data.title, access_modifier: response.data.access_modifier, blog_tags: response.data.blog_tags })
+                setContent(response.data.content)
+            }
+        })
+    }
     const handleUploadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             setImage(e.target.files[0])
         }
     }
-    const blogRequest: BlogRequest = { title: "", content: "", access_modifier: AccessModifier.PRIVATE, blog_tags: [""] }
     const handleResetClick = () => {
         form.setFieldsValue({ title: "", content: "", access_modifier: AccessModifier.PRIVATE, blog_tags: [""] })
-        // setErrorAnswer(false);
-        // setCorrects([]);
-        // setQuizType(QuizType.SINGLE_CHOICE);
+        setErrorContent(false);
+    }
+    const handleCancelUploadImageClick = () => {
+        setOpenImageContent(false)
+    }
+    const handleShowUploadImageClick = () => {
+        setOpenImageContent(true)
     }
     return <div className='container'>
         <Form
@@ -76,11 +95,18 @@ const BlogPage = () => {
             form={form}
             layout='vertical'
         >
-            <Form.Item<BlogRequest> label="Title" name={"title"} rules={[
-                { required: true, message: "please input title" }
-            ]} >
-                <Input />
-            </Form.Item>
+            <div className='d-flex align-items-center'>
+                <Form.Item<BlogRequest> label="Title" className='w-100' name={"title"} rules={[
+                    { required: true, message: "please input title" }
+                ]} >
+                    <Input />
+                </Form.Item>
+                <Form.Item className='mt-4' >
+                    <Button type="primary" htmlType="submit">
+                        Submit
+                    </Button>
+                </Form.Item>
+            </div>
             <div className='d-flex'>
                 <Form.Item label="Blog tags">
                     <div className='d-flex'>
@@ -88,7 +114,7 @@ const BlogPage = () => {
                             {(fields, { add, remove }) => (
                                 <>
                                     {fields.map(({ key, name, ...restField }) => (
-                                        <Space key={key} className='d-flex' align="baseline">
+                                        <Space key={key} className='d-flex me-4' align="baseline">
                                             <Form.Item
                                                 {...restField}
                                                 name={[name]}
@@ -99,7 +125,7 @@ const BlogPage = () => {
                                             <MinusCircleOutlined onClick={() => remove(name)} />
                                         </Space>
                                     ))}
-                                    <Form.Item hidden={form.getFieldValue("blog_tags").length===5}>
+                                    <Form.Item hidden={form.getFieldValue("blog_tags")?.length === 5} className='ms-5' >
                                         <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
                                             Add field
                                         </Button>
@@ -109,29 +135,28 @@ const BlogPage = () => {
                         </Form.List>
                     </div>
                 </Form.Item>
-                {errorImage && <p className="text-danger">Please upload content</p>}
+            </div>
+            <div className='d-flex'>
                 <Form.Item<BlogRequest> label="Access Modifier" name={"access_modifier"} rules={[
                     { required: true, message: "please choose access_modifier" }]} >
                     <Radio.Group>
                         {Object.keys(AccessModifier).map(access => <Radio key={`radio-${access}`} value={access}>{access}</Radio>)}
                     </Radio.Group>
                 </Form.Item>
-                <Form.Item<BlogRequest> label="Image" rules={[
+                <Form.Item<BlogRequest> label="Image blog" rules={[
                     { required: true, message: "please input access_modifier" }
                 ]} >
                     <input onChange={(e) => handleUploadChange(e)} type="file" />
                 </Form.Item>
             </div>
-            {/* <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                <Button type="primary" htmlType="submit">
-                    Submit
-                </Button>
-                <Button onClick={handleResetClick} className="ml-2">
-                    Reset
-                </Button>
-            </Form.Item> */}
-
-            <ReactQuill modules={modules} className='vh-100' theme="snow" value={value} onChange={setValue} />
+            <ModalElement width={1500} open={openImageContent} handleCancel={handleCancelUploadImageClick}>
+                <BlogUploadImage setOpen={setOpenImageContent} setContent={setContent} />
+            </ModalElement>
+            <Form.Item>
+                <Button onClick={() => handleShowUploadImageClick()}>Upload image content</Button>
+            </Form.Item>
+            {errorContent && <p className="text-danger">Please input Content</p>}
+            <ReactQuill modules={modules} className='vh-100' theme="snow" value={content} onChange={setContent} />
         </Form >
     </div >
 }

@@ -39,7 +39,7 @@ const ExamHistoryPage = () => {
 
               <div className="row">
                 <AnswerListElement
-                  examId={0}
+                  examId={""}
                   userAnswer={userAnswerResponses.filter((quiz) => quiz.quiz.id === quizResponses?.[quizExam]?.id
                   )?.flatMap(quiz => { return quiz.answers.map((answer) => answer.id) }) ?? []}
                   showAnswer={showAnswer}

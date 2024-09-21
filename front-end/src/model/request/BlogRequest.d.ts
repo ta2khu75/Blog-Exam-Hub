@@ -1,5 +1,3 @@
-import { BlogBase } from "../base/BlogBase";
-
-interface BlogRequest extends BlogBase{
-    blog_tags: string[];
+interface BlogRequest extends BlogBase {
+    content: string;
 }

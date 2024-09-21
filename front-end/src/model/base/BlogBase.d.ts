@@ -1,7 +1,5 @@
-import { AccessModifier } from "../AccessModifier";
-
 interface BlogBase{
     title: string;
-    content:string;
+    blog_tags: string[];
     access_modifier: AccessModifier;
 }

@@ -64,24 +64,24 @@ const HeaderFragment = () => {
               </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link click-scroll" href="#section_2">
-                Browse Topics
-              </a>
+              <NavLink className="nav-link click-scroll" to="/blog">
+                Blog
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link click-scroll" href="#section_3">
-                How it works
-              </a>
+              <NavLink className="nav-link click-scroll" to="/exam">
+                Exam
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link click-scroll" href="#section_4">
-                FAQs
-              </a>
+              <NavLink className="nav-link click-scroll" to="/about">
+                About
+              </NavLink>
             </li>
             <li className="nav-item">
-              <a className="nav-link click-scroll" href="#section_5">
+              <NavLink className="nav-link click-scroll" to="/contact">
                 Contact
-              </a>
+              </NavLink>
             </li>
             <li className="nav-item dropdown">
               <a

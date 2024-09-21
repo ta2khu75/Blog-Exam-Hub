@@ -8,40 +8,53 @@ type MenuItem = Required<MenuProps>['items'][number];
 
 const items: MenuItem[] = [
     {
-        key: 'sub1',
+        key: 'profile',
         label: "Profile",
         icon: <UserOutlined />,
         children: [{
-            key: 'g0',
+            key: 'account',
             label: <NavLink to={"/profile/account"}>Account</NavLink>,
         },
         {
-            key: 'g1',
+            key: 'change-info',
             label: <NavLink to={"/profile/change-info"}>Change info</NavLink>,
 
         },
         {
-            key: 'g2',
+            key: 'change-password',
             label: <NavLink to={"/profile/change-password"}>Change Password</NavLink>,
         },
         ],
     },
     {
-        key: 'sub2',
+        key: 'exam',
         label: 'Exam',
         icon: <AppstoreOutlined />,
         children: [
             {
-                key: '5', label: <NavLink to={"/profile/manager-exam"}>
+                key: 'manager-exam', label: <NavLink to={"/profile/manager-exam"}>
                     Manager
                 </NavLink>
             },
             {
-                key: '6', label: <NavLink to={"/profile/exam-result"}>
+                key: 'exam-results', label: <NavLink to={"/profile/exam-result"}>
                     History
                 </NavLink>
             },
         ],
+    }, {
+        key: "blog",
+        label: "Blog",
+        icon: <AppstoreOutlined />,
+        children: [
+            {
+                key: "manager-blog",
+                label: <NavLink to={"/profile/manager-blog"}>Manger</NavLink>
+            }, {
+                key: "blog-post",
+                label: <NavLink to={"/profile/blog-post"}></NavLink>
+            }
+        ]
     }
 ];
 
@@ -54,7 +67,7 @@ const ProfilePage = () => {
     };
 
     return (
-        <Content className='container'>
+        <Content className='container vh-100'>
             <Layout
                 style={{ padding: '24px 0', background: colorBgContainer, borderRadius: borderRadiusLG }}
             >

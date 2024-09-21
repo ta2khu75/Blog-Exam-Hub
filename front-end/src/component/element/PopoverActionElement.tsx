@@ -1,9 +1,12 @@
 import { Popover } from "antd";
 import ActionElement from "./ActionElement";
+import { TooltipPlacement } from "antd/es/tooltip";
 type Props<T> = {
   data: T;
   title?: string;
   children: React.ReactNode
+  placement?: TooltipPlacement
+  handles?: HandlesProps[];
   handleEditClick?: (data: T) => void;
   handleDeleteClick?: (data: T) => void;
   handleViewClick?: (data: T) => void;
@@ -12,13 +15,15 @@ const PopoverActionElement = <T,>({
   data,
   title,
   children,
+  handles,
+  placement,
   handleDeleteClick,
   handleEditClick,
   handleViewClick,
 }: Props<T>) => {
   return (
     <Popover
-      placement="left"
+      placement={placement ?? "left"}
       title={title}
       content={
         <ActionElement
@@ -26,6 +31,7 @@ const PopoverActionElement = <T,>({
           handleViewClick={handleViewClick}
           handleEditClick={handleEditClick}
           handleDeleteClick={handleDeleteClick}
+          handles={handles}
         />
       }
     >
