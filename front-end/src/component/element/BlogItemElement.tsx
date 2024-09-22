@@ -7,7 +7,6 @@ const BlogItemElement = ({ blog }: Props) => {
     return (
         <div className="custom-block custom-block-topics-listing bg-white shadow-lg mb-5">
             <div className="d-flex">
-                <img src={blog.image_path} className="custom-block-image img-fluid" />
                 <div className="custom-block-topics-listing-info d-flex">
                     <div>
                         <div>{blog.author.username}</div>
