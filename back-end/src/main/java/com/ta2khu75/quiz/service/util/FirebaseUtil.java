@@ -71,8 +71,7 @@ public class FirebaseUtil {
 			// string
 			// values for file name.
 			File file = this.convertToFile(multipartFile, fileName); // to convert multipartFile to File
-			String URL = this.uploadFile(file, fileName); // to get uploaded file
-															// link
+			String URL = this.uploadFile(file, fileName); // to get uploaded file										// link
 			file.delete();
 			return URL;
 		} catch (Exception e) {
