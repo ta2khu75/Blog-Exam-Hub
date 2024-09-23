@@ -4,7 +4,7 @@ import { Pagination } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppstoreAddOutlined } from '@ant-design/icons';
 import { BlogService } from '../../../../service/BlogService';
-import BlogRowElement from '../../../element/BlogRowElement';
+import BlogRowElement from '../../../element/blog/BlogItemElement';
 const ManagerBlogChild = () => {
   const navigate = useNavigate()
   const [pageExam, setPageExam] = useState<PageResponse<BlogResponse>>();

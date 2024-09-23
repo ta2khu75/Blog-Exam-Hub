@@ -67,9 +67,6 @@ const AnswerListElement = ({
                     {answer.correct && (
                       <i className="text-success bi bi-check-circle-fill"></i>
                     )}
-                    {/* {!answer.correct && (
-                      <i className="text-danger bi bi-x-circle-fill"></i>
-                    )} */}
                   </>
                 )}
               </Checkbox>

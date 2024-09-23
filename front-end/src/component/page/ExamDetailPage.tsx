@@ -18,7 +18,7 @@ const ExamDetailPage = () => {
   const [openResult, setOpenResult] = useState(false);
   const quizResponseList = useAppSelector((state) => state.exams?.[examId ?? ""]) ?? [];
   const answerListUser = useAppSelector((state) => state.userExams?.[examId ?? ""]) ?? [];
-  const quizExam = useAppSelector((state) => state.quizExam?.[examId ?? ""])??0;
+  const quizExam = useAppSelector((state) => state.quizExam?.[examId ?? ""]) ?? 0;
   const [examHistoryResponse, setExamHistoryResponse] = useState<ExamResultResponse>();
   const stopTimerRef = useRef<(() => void) | null>(null) as MutableRefObject<
     (() => void) | null
@@ -132,7 +132,7 @@ const ExamDetailPage = () => {
               <div className="row">
                 <AnswerListElement
                   handleAnswerClick={handleAnswerClick}
-                  examId={examId??""}
+                  examId={examId ?? ""}
                   answerResponseList={
                     quizResponseList?.[quizExam]?.answers ?? []
                   }

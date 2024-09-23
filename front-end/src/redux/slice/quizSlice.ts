@@ -7,7 +7,7 @@ const initialState: QuizState = {
 }
 // luu quizzes trong truong hop tao quiz
 export const quizSlice = createSlice({
-    name: "exam",
+    name: "quiz",
     initialState,
     reducers: {
         setQuizzes: (

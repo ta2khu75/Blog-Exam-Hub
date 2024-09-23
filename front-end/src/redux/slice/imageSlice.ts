@@ -7,7 +7,7 @@ const initialState: ImageState = {
 }
 // luu danh sach image blog
 export const imageSlice = createSlice({
-    name: "exam",
+    name: "image",
     initialState,
     reducers: {
         setImages: (

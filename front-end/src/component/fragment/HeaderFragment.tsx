@@ -59,7 +59,7 @@ const HeaderFragment = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-lg-5 me-lg-auto">
             <li className="nav-item">
-              <NavLink className="nav-link click-scroll" to="/">
+              <NavLink className="nav-link click-scroll" to="/home">
                 Home
               </NavLink>
             </li>

@@ -6,7 +6,7 @@ const initialState:ExamState= {
 }
 // luu vi tri quiz dang lam trong exam
 export const quizExamSlice= createSlice({
-  name: "quizNumber",
+  name: "quizExam",
   initialState,
   reducers: {
     setQuizExam: (

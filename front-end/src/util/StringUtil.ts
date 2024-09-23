@@ -5,8 +5,9 @@ export default class StringUtil {
 
         // Replace the markdown image syntax with <img> tags
         const htmlContent = content.replace(imageMarkdownRegex, (match, p1) => {
-            return `<div style="text-align: center;"><img src="${p1}" width="1000px" alt="Image" /></div>`;
+            return `<div style="text-align: center;"><img class="img-fluid rounded" src="${p1}" style="max-width: 1000px; width: 100%; height: auto;" alt="Image" /></div>`;
         });
+
         return htmlContent;
     }
 }

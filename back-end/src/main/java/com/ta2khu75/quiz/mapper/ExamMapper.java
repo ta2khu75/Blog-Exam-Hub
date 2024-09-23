@@ -22,7 +22,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ExamMapper {
 	@Named("toExamResponse")
-	@Mapping(target = "author", ignore = true)
 	ExamResponse toResponse(Exam exam);
 
 	@Mapping(target = "createdAt", ignore = true)
@@ -48,11 +47,9 @@ public interface ExamMapper {
 	@Mapping(target = "imagePath", ignore = true)
 	@Mapping(target = "quizzes", ignore = true)
 	void update(ExamRequest request, @MappingTarget Exam exam);
-
 	@Mapping(target = "content", qualifiedByName = "toExamResponse")
 	PageResponse<ExamResponse> toPageResponse(Page<Exam> page);
 
-	@Mapping(target = "author", source = "author")
 	ExamDetailsResponse toDetailsResponse(Exam exam);
 	default QuizDetaislResponse toResponseDetails(Quiz quiz) {
 		QuizDetaislResponse quizDetaislResponse = new QuizDetaislResponse();

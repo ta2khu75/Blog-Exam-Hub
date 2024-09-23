@@ -1,42 +1,56 @@
-import { Button } from "antd";
-import { Link } from "react-router-dom";
-
+import { Button, Card } from 'antd'
+import { AccessModifier } from '../../model/AccessModifier';
+const { Meta } = Card;
+import { LockOutlined, UnlockOutlined } from '@ant-design/icons';
+import { ExamLevel } from '../../model/ExamLevel';
+import { Link } from 'react-router-dom';
 type Props = {
-    examResponse: ExamResponse;
-    className?: string;
-    handleViewClick?: (t: ExamResponse) => void;
-    handleEditClick?: (t: ExamResponse) => void;
-    handleDeleteClick?: (t: ExamResponse) => void;
+  exam: ExamResponse,
+  handleEdit?: () => void;
+  handleDelete?: () => void;
 }
-const ExamCartElement = ({ examResponse, className, handleViewClick, handleDeleteClick, handleEditClick }: Props) => {
-    return (
-        <div className={`col-lg-4 col-md-6 col-12 mb-4 mb-lg-0 ${className}`} >
-            <div className="custom-block bg-white shadow-lg">
-                    <Link to={`/exam-about/${examResponse.id}`} preventScrollReset={true} >
-                    <div className="d-flex">
-                        <div>
-                            <h6 className="mb-2">{examResponse.title}</h6>
-                            <p className="mb-0">{examResponse.description}</p>
-                        </div>
-                        <span className={`badge bg-design rounded-pill ms-auto  ${examResponse.exam_level == "EASY" ? "bg-success" : examResponse.exam_level == "HARD" ? "bg-danger" : "bg-warning"}`}>{examResponse.exam_level}</span>
-                    </div>
-                    {/* <span className={`badge bg-design rounded ms-auto ${examResponse.exam_level == "EASY" ? "bg-success" : examResponse.exam_level == "HARD" ? "bg-danger" : "bg-warning"}`}>{examResponse.exam_type}</span> */}
-                    <img src={examResponse.image_path} width={"356px"} height={"200px"} className="custom-block-image img-fluid" />
-                    </Link>
-                <div className="d-flex justify-content-around mt-4">
-                {handleViewClick &&
-                    <Button onClick={()=>handleViewClick(examResponse)} type='primary'>View</Button>
-                    }
-                    {handleEditClick &&
-                    <Button danger onClick={()=>handleEditClick(examResponse)}>Edit</Button>
-                    }{
-                    handleDeleteClick &&
-                    <Button type='primary' danger onClick={()=>handleDeleteClick(examResponse)}>Delete</Button>
-                    }
-                </div>
-            </div>
-        </div>
-    )
+const ExamCartElement = ({ exam, handleDelete, handleEdit }: Props) => {
+  const cssExamLevel = (examLevel: string): string => {
+    switch (examLevel) {
+      case ExamLevel.EASY:
+        return "bg-success";
+      case ExamLevel.NORMAL:
+        return "bg-warning";
+      case ExamLevel.HARD:
+        return "bg-danger";
+      default:
+        return "";
+    }
+  }
+  const cssExamDuration = (examDuration: number): string => {
+    if (examDuration <= 15) {
+      return "text-success";
+    } else if (examDuration <= 45) {
+      return "text-warning";
+    } else {
+      return "text-danger";
+    }
+  }
+  return (
+    <Card
+      extra={(handleDelete || handleEdit) && <><Button onClick={handleEdit}>Edit</Button><Button onClick={handleDelete}>Delete</Button></>}
+      hoverable
+      style={{ width: 300 }}
+      title={(handleDelete || handleEdit) && <>{exam.access_modifier === AccessModifier.PRIVATE ? <LockOutlined /> : <UnlockOutlined />}</>}
+      cover={<Link to={"/exam-about/" + exam.id}><img style={{ height: "200px", width: "100%" }} alt="example" src={exam.image_path} /></Link>}
+    >
+      <Meta title={<div className=''><span>{exam.title}</span></div>}
+        // avatar={<div>Author: {exam?.author?.username}</div>}
+        description={<div>
+          <div>
+            Level: <span className={`text-light p-1 rounded  ${cssExamLevel(exam.exam_level)}`}>{exam.exam_level}</span>
+          </div>
+          <div>Category: {exam.exam_category.name}
+          </div>
+          <div>Duration: <span className={`${cssExamDuration(exam.duration)}`}>{exam.duration} Minutes</span></div>
+        </div>} />
+    </Card >
+  )
 }
 
-export default ExamCartElement
+export default ExamCartElement;
