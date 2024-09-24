@@ -1,24 +1,33 @@
 import { useEffect, useState } from "react"
 import ExamService from "../../service/ExamService"
-import ExamCartElementNew from "../element/ExamCartElement"
+import ExamCartElementNew from "../element/exam/ExamCartElement"
 import { BlogService } from "../../service/BlogService"
 import BlogItemElement from "../element/blog/BlogItemElement"
 import IntroductionElement from "../element/IntoductionElement"
+import { Pagination } from "antd"
 
 const HomePage = () => {
   const [examPage, setExamPage] = useState<PageResponse<ExamResponse>>()
   const [blogPage, setBlogPage] = useState<PageResponse<BlogResponse>>()
+  const [pageBlog, setPageBlog] = useState(1)
+  const [pageExam, setPageExam] = useState(1)
   useEffect(() => {
     fetchReadBlogPage();
     fetchReadExamPage();
   }, [])
+  useEffect(() => {
+    fetchReadExamPage()
+  }, [pageExam])
+  useEffect(() => {
+    fetchReadBlogPage()
+  }, [pageBlog])
   const fetchReadExamPage = () => {
-    ExamService.readPage().then((data) => {
+    ExamService.readPage(pageExam, 4).then((data) => {
       if (data.success) setExamPage(data.data);
     })
   }
   const fetchReadBlogPage = () => {
-    BlogService.readPage().then((response) => {
+    BlogService.readPage(pageBlog, 5).then((response) => {
       if (response.success) setBlogPage(response.data);
     })
   }
@@ -40,6 +49,7 @@ const HomePage = () => {
                     {blogPage?.content?.map(blog => (
                       <BlogItemElement blog={blog} key={`blog-item-${blog.id}`} />
                     ))}
+                    <Pagination align="center" onChange={setPageBlog} pageSize={5} defaultCurrent={1} total={blogPage?.total_elements} />
                   </div>
                 </div>
                 <div className="tab-pane fade" id="marketing-tab-pane" role="tabpanel" aria-labelledby="marketing-tab" tabIndex={0}>
@@ -234,6 +244,7 @@ const HomePage = () => {
                     {examPage?.content?.map(examResponse => (
                       <ExamCartElementNew key={`exam-cart-${examResponse.id}`} exam={examResponse} />
                     ))}
+                    <Pagination align="center" onChange={setPageExam} pageSize={4} defaultCurrent={1} total={examPage?.total_elements} />
                   </div>
                 </div>
                 <div className="tab-pane fade" id="marketing-tab-pane" role="tabpanel" aria-labelledby="marketing-tab" tabIndex={0}>

@@ -1,8 +1,8 @@
 import instance from "../util/apiInstance";
 const basePath = "exam";
 export default class ExamService {
-    static readPage(): Promise<ApiResponse<PageResponse<ExamResponse>>> {
-        return instance.get(basePath);
+    static readPage(page = 1, size = 10): Promise<ApiResponse<PageResponse<ExamResponse>>> {
+        return instance.get(basePath, { params: { page, size } });
     }
     static create(data: ExamRequest, image: File): Promise<ApiResponse<ExamResponse>> {
         const form = new FormData();
@@ -16,7 +16,7 @@ export default class ExamService {
     static readPageByCategory(categoryId: number, page = 1, size = 10): Promise<ApiResponse<PageResponse<ExamResponse>>> {
         return instance.get(`${basePath}/category/${categoryId}`, { params: { page, size } });
     }
-    static readPageByAuthor(authorId: number, page = 1, size = 10): Promise<ApiResponse<PageResponse<ExamResponse>>> {
+    static readPageByAuthorId(authorId: string, page = 1, size = 10): Promise<ApiResponse<PageResponse<ExamResponse>>> {
         return instance.get(`${basePath}/author/${authorId}`, { params: { page, size } });
     }
     static update(id: string, data: ExamRequest, image?: File): Promise<ApiResponse<ExamResponse>> {

@@ -1,8 +1,8 @@
 import { Button, Card } from 'antd'
-import { AccessModifier } from '../../model/AccessModifier';
+import { AccessModifier } from '../../../model/AccessModifier';
 const { Meta } = Card;
 import { LockOutlined, UnlockOutlined } from '@ant-design/icons';
-import { ExamLevel } from '../../model/ExamLevel';
+import { ExamLevel } from '../../../model/ExamLevel';
 import { Link } from 'react-router-dom';
 type Props = {
   exam: ExamResponse,
@@ -39,7 +39,7 @@ const ExamCartElement = ({ exam, handleDelete, handleEdit }: Props) => {
       title={(handleDelete || handleEdit) && <>{exam.access_modifier === AccessModifier.PRIVATE ? <LockOutlined /> : <UnlockOutlined />}</>}
       cover={<Link to={"/exam-about/" + exam.id}><img style={{ height: "200px", width: "100%" }} alt="example" src={exam.image_path} /></Link>}
     >
-      <Meta title={<div className=''><span>{exam.title}</span></div>}
+      <Meta title={<div className=''><h6>{exam.title}</h6><span className='text-muted'>by <Link to={""}>{exam.author.username}</Link></span></div>}
         // avatar={<div>Author: {exam?.author?.username}</div>}
         description={<div>
           <div>

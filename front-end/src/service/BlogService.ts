@@ -4,7 +4,7 @@ export class BlogService {
     static read(id: string): Promise<ApiResponse<BlogResponse>> {
         return instance.get(`${basePath}/${id}`);
     }
-    static readDetails(id: string): Promise<ApiResponse<BlogDetailsResponse>>{
+    static readDetails(id: string): Promise<ApiResponse<BlogDetailsResponse>> {
         return instance.get(`${basePath}/${id}/details`);
     }
     static create(blog: BlogRequest, file?: File): Promise<ApiResponse<BlogResponse>> {
@@ -28,6 +28,12 @@ export class BlogService {
     }
     static readPageMyBlog(page = 1, size = 10): Promise<ApiResponse<PageResponse<BlogResponse>>> {
         return instance.get(`${basePath}/my-blog`, { params: { page, size } });
+    }
+    static readPageByAuthorId(authorId: string, page = 1, size = 5): Promise<ApiResponse<PageResponse<BlogResponse>>> {
+        return instance.get(`${basePath}/author/${authorId}`, { params: { page, size } });
+    }
+    static readPageByCategoryId(categoryId: string, page = 1, size = 10): Promise<ApiResponse<PageResponse<BlogResponse>>> {
+        return instance.get(`${basePath}/category/${categoryId}`, { params: { page, size } });
     }
     static readPage(page = 1, size = 10): Promise<ApiResponse<PageResponse<BlogResponse>>> {
         return instance.get(`${basePath}`, { params: { page, size } });

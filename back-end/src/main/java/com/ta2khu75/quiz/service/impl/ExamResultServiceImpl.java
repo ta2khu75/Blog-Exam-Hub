@@ -76,7 +76,7 @@ public class ExamResultServiceImpl implements ExamResultService {
 
 		// Truy xuất tất cả câu hỏi và đáp án một lần
 		List<Quiz> quizzes = quizRepository.findByExamId(examHistory.getExam().getId());
-		Map<Long, Quiz> quizMap = quizzes.stream().collect(Collectors.toMap(Quiz::getId, q -> q));
+//		Map<Long, Quiz> quizMap = quizzes.stream().collect(Collectors.toMap(Quiz::getId, q -> q));
 
 		// Lấy danh sách quizId từ các yêu cầu trả lời
 		Set<Long> quizIds = Arrays.stream(answerUserRequests).map(UserAnswerRequest::getQuizId)

@@ -1,6 +1,7 @@
 package com.ta2khu75.quiz.event.listener;
 
 import org.springframework.context.ApplicationListener;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import com.ta2khu75.quiz.event.RoleChangeEvent;
@@ -19,7 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RoleChangeListener implements ApplicationListener<RoleChangeEvent> {
 	RedisUtil redisUtil;
 	@Override
-	public void onApplicationEvent(RoleChangeEvent event) {
+	public void onApplicationEvent(@NonNull RoleChangeEvent event) {
 		redisUtil.delete(event.getRoleId().toString(), Role.class);
 	}
 }

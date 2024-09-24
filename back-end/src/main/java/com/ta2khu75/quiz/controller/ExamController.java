@@ -69,28 +69,33 @@ public class ExamController {
 
 	@GetMapping("my-exam")
 	public ResponseEntity<PageResponse<ExamResponse>> readlPageMyExam(
-			@RequestParam(name="page", required = false, defaultValue = "1") int page,
-			@RequestParam(name="size", required = false, defaultValue = "5") int size) {
+			@RequestParam(name = "page", required = false, defaultValue = "1") int page,
+			@RequestParam(name = "size", required = false, defaultValue = "5") int size) {
 		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
 		return ResponseEntity.ok(service.readPageMyExam(pageable));
 	}
+
 	@GetMapping("exam-category/{id}")
 	public ResponseEntity<PageResponse<ExamResponse>> readlPageExamCategory(@PathVariable("id") Long id,
-			@RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false, defaultValue = "5") int size) {
+			@RequestParam(name = "page", required = false, defaultValue = "1") int page,
+			@RequestParam(name = "size", required = false, defaultValue = "5") int size) {
 		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
 		return ResponseEntity.ok(service.readPageCategoryExam(id, pageable));
 	}
+
 	@GetMapping("account/{id}")
 	public ResponseEntity<PageResponse<ExamResponse>> readlPageAccountExam(@PathVariable("id") String id,
-			@RequestParam(required = false, defaultValue = "1") int page,
-			@RequestParam(required = false, defaultValue = "5") int size) {
+			@RequestParam(name = "page", required = false, defaultValue = "1") int page,
+			@RequestParam(name = "size", required = false, defaultValue = "5") int size) {
 		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
 		return ResponseEntity.ok(service.readPageAccountExam(id, pageable));
 	}
 
 	@GetMapping
-	public ResponseEntity<PageResponse<ExamResponse>> readPageExam(Pageable pageable) {
+	public ResponseEntity<PageResponse<ExamResponse>> readPageExam(
+			@RequestParam(name = "page", required = false, defaultValue = "1") int page,
+			@RequestParam(name = "size", required = false, defaultValue = "10") int size) {
+		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
 		return ResponseEntity.ok(service.readPage(pageable));
 	}
 }

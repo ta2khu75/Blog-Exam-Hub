@@ -17,6 +17,8 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface AccountMapper {
+	@Mapping(target = "blogs", ignore = true)
+	@Mapping(target = "comments", ignore = true)
 	@Mapping(target = "displayName", ignore = true)
 	@Mapping(target = "createdAt", ignore = true)
 	@Mapping(target = "codeVerify", ignore = true)
@@ -33,6 +35,8 @@ public interface AccountMapper {
 	@Mapping(target = "username", source = "displayName")
 	AccountResponse toResponse(Account account);
 
+	@Mapping(target = "blogs", ignore = true)
+	@Mapping(target = "comments", ignore = true)
 	@Mapping(target = "displayName", ignore = true)
 	@Mapping(target = "createdAt", ignore = true)
 	@Mapping(target = "codeVerify", ignore = true)
@@ -47,6 +51,8 @@ public interface AccountMapper {
 	@Mapping(target = "authorities", ignore = true)
 	void update(AccountRequest request, @MappingTarget Account account);
 
+	@Mapping(target = "blogs", ignore = true)
+	@Mapping(target = "comments", ignore = true)
 	@Mapping(target = "displayName", source = "username")
 	@Mapping(target = "createdAt", ignore = true)
 	@Mapping(target = "email", ignore = true)
@@ -63,6 +69,8 @@ public interface AccountMapper {
 	@Mapping(target = "authorities", ignore = true)
 	void update(AccountInfoRequest request, @MappingTarget Account account);
 
+	@Mapping(target = "blogs", ignore = true)
+	@Mapping(target = "comments", ignore = true)
 	@Mapping(target = "birthday", ignore = true)
 	@Mapping(target = "codeVerify", ignore = true)
 	@Mapping(target = "createdAt", ignore = true)

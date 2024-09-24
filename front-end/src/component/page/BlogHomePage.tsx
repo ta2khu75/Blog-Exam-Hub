@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react"
 import { BlogService } from "../../service/BlogService"
 import BlogItemElement from "../element/blog/BlogItemElement"
-import { useAppSelector } from "../../redux/hooks"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import FunctionUtil from "../../util/FunctionUtil"
 import BlogItemHistoryElement from "../element/blog/BlogItemHistoryElement"
 import IntroductionElement from "../element/IntoductionElement"
+import { deleteBlogHistory } from "../../redux/slice/blogHistorySlice"
+import { Pagination } from "antd"
 
 const BlogHomePage = () => {
   const [blogPage, setBlogPage] = useState<PageResponse<BlogResponse>>()
+  const [page, setPage] = useState(1);
   const blogHistories = useAppSelector(state => state.blogHistory);
+  const dispatch = useAppDispatch()
   useEffect(() => {
     fetchBlogPage()
   }, [])
@@ -33,6 +37,7 @@ const BlogHomePage = () => {
                 {blogPage?.content?.map(blog => (
                   <BlogItemElement blog={blog} key={`blog-item-${blog.id}`} />
                 ))}
+                <Pagination align="center" onChange={setPage} pageSize={10} defaultCurrent={page} total={blogPage?.total_elements} />
               </div>
             </div>
 
@@ -70,7 +75,7 @@ const BlogHomePage = () => {
           <div className="col-3">
             <h4 className="mb-3">Các blog bạn đã xem</h4>
             {FunctionUtil.convertMaptoArray<BlogResponse>(blogHistories)?.map(blogHistory =>
-              <BlogItemHistoryElement key={`blog-history-${blogHistory.id}`} blog={blogHistory} />
+              <BlogItemHistoryElement handleDelete={() => dispatch(deleteBlogHistory(blogHistory.id))} key={`blog-history-${blogHistory.id}`} blog={blogHistory} />
             )}
           </div>
         </div>

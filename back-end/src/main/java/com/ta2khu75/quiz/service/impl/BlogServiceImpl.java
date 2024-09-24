@@ -43,9 +43,10 @@ public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper>
 	private final FileUtil fileUtil;
 	private final AccountRepository accountRepository;
 	private final BlogTagRepository blogTagRepository;
+
 	public BlogServiceImpl(BlogRepository repository, BlogMapper mapper, FileUtil fileUtil,
 			AccountRepository accountRepository, BlogTagRepository blogTagRepository) {
-		super(repository, mapper);	
+		super(repository, mapper);
 		this.fileUtil = fileUtil;
 		this.accountRepository = accountRepository;
 		this.blogTagRepository = blogTagRepository;
@@ -107,30 +108,15 @@ public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper>
 	}
 
 	@Override
-	public PageResponse<BlogResponse> readPageAccountBlog(String id, Pageable pageable) {
-		return mapper.toPageResponse(repository.findByAccountIdAndAccessModifier(id, AccessModifier.PUBLIC, pageable));
-	}
-
-	@Override
-	public PageResponse<BlogResponse> readPageMyBlog(Pageable pageable) {
-		String email = SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new NotFoundException("Email not found"));
-		return mapper.toPageResponse(repository.findByAuthorEmail(email, pageable));
-	}
-
-	@Override
-	public PageResponse<BlogResponse> readPageBlogTag(String blogTagName, Pageable pageable) {
-		return mapper.toPageResponse(
-				repository.findByBlogTagAndAccessModifier(blogTagName, AccessModifier.PUBLIC, pageable));
-	}
-
-	@Override
 	public BlogDetailsResponse readDetail(String id) {
 		return mapper.toDetailsResponse(FunctionUtil.findOrThrow(id, Blog.class, repository::findById));
 	}
 
+
 	@Override
-	public PageResponse<BlogResponse> readPage(Pageable pageable) {
-		return mapper.toPageResponse(repository.findAll(pageable));
+	public PageResponse<BlogResponse> searchBlog(String tagName, String keyword, String authorEmail, String authorId,
+			AccessModifier accessModifier, Pageable pageable) {
+		return mapper.toPageResponse(repository.searchBlog(tagName, keyword, authorEmail, authorId, accessModifier, pageable));
 	}
 
 }

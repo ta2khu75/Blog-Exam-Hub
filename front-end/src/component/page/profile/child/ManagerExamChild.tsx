@@ -3,7 +3,7 @@ import ExamService from '../../../../service/ExamService';
 import { Pagination } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import { AppstoreAddOutlined } from '@ant-design/icons';
-import ExamCartElementNew from '../../../element/ExamCartElement';
+import ExamCartElementNew from '../../../element/exam/ExamCartElement';
 const ManagerExamChild = () => {
   const navigate = useNavigate()
   const [pageExam, setPageExam] = useState<PageResponse<ExamResponse>>();

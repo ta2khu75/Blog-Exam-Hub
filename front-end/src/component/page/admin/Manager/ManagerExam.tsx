@@ -2,7 +2,7 @@ import ExamService from "../../../../service/ExamService";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import ExamCartElement from "../../../element/ExamCartElement";
+import ExamCartElement from "../../../element/exam/ExamCartElement";
 import ExamCategoryService from "../../../../service/ExamCategoryService";
 import ExamForm from "../../../element/form/ExamForm";
 const ExamCrud = () => {

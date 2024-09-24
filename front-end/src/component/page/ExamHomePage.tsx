@@ -1,16 +1,21 @@
 import { useEffect, useState } from "react"
 import ExamCategoryService from "../../service/ExamCategoryService"
 import ExamService from "../../service/ExamService";
-import ExamCartElement from "../element/ExamCartElement";
+import ExamCartElement from "../element/exam/ExamCartElement";
 import IntroductionElement from "../element/IntoductionElement";
+import { Pagination } from "antd";
 
 const ExamHomePage = () => {
     const [examCategories, setExamCategories] = useState<ExamCategoryResponse[]>([]);
     const [examPage, setExamPage] = useState<PageResponse<ExamResponse>>();
+    const [page, setPage] = useState(1);
     useEffect(() => {
         fetchExamCategories();
         fetchExamPage();
     }, [])
+    useEffect(() => {
+        fetchExamPage();
+    }, [page]);
     const fetchExamPage = () => {
         ExamService.readPage().then(response => {
             if (response.success) {
@@ -67,6 +72,7 @@ const ExamHomePage = () => {
                     ))}
                 </div>
             </div>
+            <Pagination align="center" onChange={setPage} pageSize={10} defaultCurrent={page} total={examPage?.total_elements} />
         </section>
     )
 }

@@ -3,7 +3,6 @@ package com.ta2khu75.quiz.service.util;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
-import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 

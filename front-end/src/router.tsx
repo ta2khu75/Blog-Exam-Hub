@@ -27,6 +27,7 @@ import BlogHomePage from "./component/page/BlogHomePage";
 import ExamHomePage from "./component/page/ExamHomePage";
 import BlogDetailsPage from "./component/page/BlogDetailsPage";
 import ContactPage from "./component/page/ContactPage";
+import AboutPage from "./component/page/AboutPage";
 // const router = createBrowserRouter(
 //   createRoutesFromElements(
 //     <>
@@ -116,6 +117,9 @@ const router = createBrowserRouter([
       }, {
         path: "contact",
         element: <ContactPage />
+      }, {
+        path: "about",
+        element: <AboutPage />
       },
       {
         path: "profile",
