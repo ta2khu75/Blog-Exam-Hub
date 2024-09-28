@@ -2,12 +2,10 @@ package com.ta2khu75.quiz.controller;
 
 import java.io.IOException;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,11 +15,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ta2khu75.quiz.exception.UnAuthorizedException;
+import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.request.ExamRequest;
+import com.ta2khu75.quiz.model.request.search.ExamSearchRequest;
 import com.ta2khu75.quiz.model.response.ExamResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
 import com.ta2khu75.quiz.service.ExamService;
+import com.ta2khu75.quiz.util.SecurityUtil;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,34 +70,18 @@ public class ExamController {
 	}
 
 	@GetMapping("my-exam")
-	public ResponseEntity<PageResponse<ExamResponse>> readlPageMyExam(
-			@RequestParam(name = "page", required = false, defaultValue = "1") int page,
-			@RequestParam(name = "size", required = false, defaultValue = "5") int size) {
-		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-		return ResponseEntity.ok(service.readPageMyExam(pageable));
-	}
-
-	@GetMapping("exam-category/{id}")
-	public ResponseEntity<PageResponse<ExamResponse>> readlPageExamCategory(@PathVariable("id") Long id,
-			@RequestParam(name = "page", required = false, defaultValue = "1") int page,
-			@RequestParam(name = "size", required = false, defaultValue = "5") int size) {
-		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-		return ResponseEntity.ok(service.readPageCategoryExam(id, pageable));
-	}
-
-	@GetMapping("account/{id}")
-	public ResponseEntity<PageResponse<ExamResponse>> readlPageAccountExam(@PathVariable("id") String id,
-			@RequestParam(name = "page", required = false, defaultValue = "1") int page,
-			@RequestParam(name = "size", required = false, defaultValue = "5") int size) {
-		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-		return ResponseEntity.ok(service.readPageAccountExam(id, pageable));
+	public ResponseEntity<PageResponse<ExamResponse>> searchMyExam(ExamSearchRequest examSearchRequest) {
+		String email = SecurityUtil.getCurrentUserLogin().orElseThrow(()->new UnAuthorizedException("You must login first!"));
+		examSearchRequest.setAuthorEmail(email);
+		examSearchRequest.setAccessModifier(null);
+		examSearchRequest.setAuthorId(null);
+		return ResponseEntity.ok(service.searchExam(examSearchRequest));
 	}
 
 	@GetMapping
-	public ResponseEntity<PageResponse<ExamResponse>> readPageExam(
-			@RequestParam(name = "page", required = false, defaultValue = "1") int page,
-			@RequestParam(name = "size", required = false, defaultValue = "10") int size) {
-		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-		return ResponseEntity.ok(service.readPage(pageable));
+	public ResponseEntity<PageResponse<ExamResponse>> searchExam(ExamSearchRequest examSearchRequest){
+		examSearchRequest.setAccessModifier(AccessModifier.PUBLIC);
+		examSearchRequest.setAuthorEmail(null);
+		return ResponseEntity.ok(service.searchExam(examSearchRequest));
 	}
 }

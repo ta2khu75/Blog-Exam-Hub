@@ -20,7 +20,7 @@ const BlogItemElement = ({ blog, handleDelete, handleEdit }: Props) => {
                                     {access_modifier === AccessModifier.PRIVATE ? <LockOutlined className="me-1" /> : <UnlockOutlined className="me-1" />}
                                 </>
                             )}
-                            {title} <span className="text-muted ms-2">by <Link to={""}>{author.username}</Link></span>
+                            {title} <span className="text-muted ms-2">by <Link to={`/author/${author.id}`}>{author.username}</Link></span>
                         </h6>
                         <div className="blog-tags mt-1">
                             {blog_tags.map(tag => (

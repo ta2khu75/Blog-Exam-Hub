@@ -17,11 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.BlogMapper;
-import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Blog;
 import com.ta2khu75.quiz.model.entity.BlogTag;
 import com.ta2khu75.quiz.model.request.BlogRequest;
+import com.ta2khu75.quiz.model.request.search.BlogSearchRequest;
 import com.ta2khu75.quiz.model.response.BlogResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.BlogDetailsResponse;
@@ -112,11 +112,12 @@ public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper>
 		return mapper.toDetailsResponse(FunctionUtil.findOrThrow(id, Blog.class, repository::findById));
 	}
 
-
 	@Override
-	public PageResponse<BlogResponse> searchBlog(String tagName, String keyword, String authorEmail, String authorId,
-			AccessModifier accessModifier, Pageable pageable) {
-		return mapper.toPageResponse(repository.searchBlog(tagName, keyword, authorEmail, authorId, accessModifier, pageable));
+	public PageResponse<BlogResponse> searchBlog(BlogSearchRequest blogSearchRequest) {
+		Pageable pageable = Pageable.ofSize(blogSearchRequest.getSize()).withPage(blogSearchRequest.getPage() - 1);
+		return mapper
+				.toPageResponse(repository.searchBlog(blogSearchRequest.getTagName(), blogSearchRequest.getKeyword(),
+						null, blogSearchRequest.getAuthorId(), blogSearchRequest.getAccessModifier(), pageable));
 	}
 
 }

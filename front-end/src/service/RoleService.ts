@@ -1,6 +1,4 @@
 import RoleRequest from "../model/request/RoleRequest";
-import ApiResponse from "../model/response/ApiResponse";
-import RoleResponse from "../model/response/RoleResponse";
 import instance from "../util/apiInstance";
 const basePath = "role";
 export default class RoleService{

@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"
 import ExamCategoryService from "../../service/ExamCategoryService"
 import ExamService from "../../service/ExamService";
-import ExamCartElement from "../element/exam/ExamCartElement";
 import IntroductionElement from "../element/IntoductionElement";
-import { Pagination } from "antd";
+import ExamPageElement from "../element/exam/ExamPageElements";
 
 const ExamHomePage = () => {
     const [examCategories, setExamCategories] = useState<ExamCategoryResponse[]>([]);
@@ -17,7 +16,7 @@ const ExamHomePage = () => {
         fetchExamPage();
     }, [page]);
     const fetchExamPage = () => {
-        ExamService.readPage().then(response => {
+        ExamService.search({ page, size: 10 }).then(response => {
             if (response.success) {
                 setExamPage(response.data);
             }
@@ -63,16 +62,13 @@ const ExamHomePage = () => {
                             aria-labelledby={`tab-${examCategory.id}`}
                             tabIndex={0}
                         >
-                            <div className="row">
-                                {examPage?.content?.map(examResponse => (
-                                    <ExamCartElement key={`exam-cart-${examResponse.id}`} exam={examResponse} />
-                                ))}
-                            </div>
+                            {examPage && <div className="row">
+                                <ExamPageElement examPage={examPage} page={page} setPage={setPage} />
+                            </div>}
                         </div>
                     ))}
                 </div>
             </div>
-            <Pagination align="center" onChange={setPage} pageSize={10} defaultCurrent={page} total={examPage?.total_elements} />
         </section>
     )
 }

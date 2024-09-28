@@ -50,7 +50,7 @@ public class AccountController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<AccountResponse> readInfoOtherAccount(@PathVariable String id) {
+	public ResponseEntity<AccountResponse> readInfoOtherAccount(@PathVariable("id") String id) {
 		return ResponseEntity.ok(service.read(id));
 	}
 

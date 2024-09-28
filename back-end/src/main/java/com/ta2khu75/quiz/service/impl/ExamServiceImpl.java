@@ -15,13 +15,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ta2khu75.quiz.model.request.ExamRequest;
 import com.ta2khu75.quiz.model.request.QuizRequest;
+import com.ta2khu75.quiz.model.request.search.ExamSearchRequest;
 import com.ta2khu75.quiz.model.response.ExamResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.ExamMapper;
-import com.ta2khu75.quiz.model.AccessModifier;
-import com.ta2khu75.quiz.model.ExamLevel;
 import com.ta2khu75.quiz.model.ExamStatus;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Exam;
@@ -138,7 +137,6 @@ public class ExamServiceImpl implements ExamService {
 		}
 	}
 
-
 	@Override
 	public ExamDetailsResponse readDetail(String id) {
 		String email = SecurityUtil.getCurrentUserLogin()
@@ -153,10 +151,12 @@ public class ExamServiceImpl implements ExamService {
 		return mapper.toDetailsResponse(exam);
 	}
 
-
 	@Override
-	public PageResponse<ExamResponse> searchExam(String keyword, Long examCategoryId, String authorEmail,
-			String authorId, ExamLevel examLevel, AccessModifier accessModifier, Pageable pageable) {
-		return mapper.toPageResponse(repository.searchExam(keyword, examCategoryId, authorEmail, authorId, examLevel, accessModifier, pageable));
+	public PageResponse<ExamResponse> searchExam(ExamSearchRequest examSearchRequest) {
+		Pageable pageable = Pageable.ofSize(examSearchRequest.getSize()).withPage(examSearchRequest.getPage() - 1);
+		return mapper.toPageResponse(
+				repository.searchExam(examSearchRequest.getKeyword(), examSearchRequest.getExamCategoryIds(),
+						examSearchRequest.getAuthorEmail(), examSearchRequest.getAuthorId(),
+						examSearchRequest.getExamLevel(), examSearchRequest.getMinDuration(), examSearchRequest.getMaxDuration(), examSearchRequest.getAccessModifier(), pageable));
 	}
 }

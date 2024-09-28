@@ -22,12 +22,12 @@ const HomePage = () => {
     fetchReadBlogPage()
   }, [pageBlog])
   const fetchReadExamPage = () => {
-    ExamService.readPage(pageExam, 4).then((data) => {
+    ExamService.search({ page: pageExam, size: 4 }).then((data) => {
       if (data.success) setExamPage(data.data);
     })
   }
   const fetchReadBlogPage = () => {
-    BlogService.readPage(pageBlog, 5).then((response) => {
+    BlogService.search({ page: pageBlog, size: 5 }).then((response) => {
       if (response.success) setBlogPage(response.data);
     })
   }

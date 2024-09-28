@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
-import AdminComponent from "./component/page/admin/AdminComponent";
+// import AdminComponent from "./component/page/admin/AdminComponent";
 import LoginPage from "./component/page/LoginPage";
 import HomePage from "./component/page/HomePage";
 import AccountCrud from "./component/page/admin/Manager/ManagerAccount";
@@ -28,6 +28,12 @@ import ExamHomePage from "./component/page/ExamHomePage";
 import BlogDetailsPage from "./component/page/BlogDetailsPage";
 import ContactPage from "./component/page/ContactPage";
 import AboutPage from "./component/page/AboutPage";
+import TestIntern from "./component/page/TestIntern";
+import AuthorPage from "./component/page/AuthorPage";
+import ExamResultChild from "./component/page/profile/child/ExamResultChild";
+import Filter from "./component/page/Filter";
+import BlogListPage from "./component/page/BlogListPage";
+import ExamListPage from "./component/page/ExamListPage";
 // const router = createBrowserRouter(
 //   createRoutesFromElements(
 //     <>
@@ -120,6 +126,22 @@ const router = createBrowserRouter([
       }, {
         path: "about",
         element: <AboutPage />
+      }, {
+        path: "test",
+        element: <TestIntern />
+      }, {
+        path: "author/:authorId",
+        element: <AuthorPage />
+      }, {
+        path: "filter",
+        element: <Filter />
+      },
+      {
+        path: "blog/search",
+        element: <BlogListPage />
+      }, {
+        path: "exam/search",
+        element: <ExamListPage />
       },
       {
         path: "profile",
@@ -132,6 +154,10 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <InfoChild />,
+          },
+          {
+            path: "exam-result",
+            element: <ExamResultChild />
           },
           {
             path: "account",

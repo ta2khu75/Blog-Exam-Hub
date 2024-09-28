@@ -83,7 +83,7 @@ const HeaderFragment = () => {
                 Contact
               </NavLink>
             </li>
-            <li className="nav-item dropdown">
+            {/* <li className="nav-item dropdown">
               <a
                 className="nav-link dropdown-toggle"
                 href="#"
@@ -109,7 +109,7 @@ const HeaderFragment = () => {
                   </a>
                 </li>
               </ul>
-            </li>
+            </li> */}
           </ul>
           <div className="d-none d-lg-block dropdown">
             <div className="d-flex align-items-center">

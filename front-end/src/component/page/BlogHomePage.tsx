@@ -1,23 +1,29 @@
 import { useEffect, useState } from "react"
 import { BlogService } from "../../service/BlogService"
-import BlogItemElement from "../element/blog/BlogItemElement"
 import { useAppDispatch, useAppSelector } from "../../redux/hooks"
 import FunctionUtil from "../../util/FunctionUtil"
 import BlogItemHistoryElement from "../element/blog/BlogItemHistoryElement"
 import IntroductionElement from "../element/IntoductionElement"
 import { deleteBlogHistory } from "../../redux/slice/blogHistorySlice"
-import { Pagination } from "antd"
+import BlogListElement from "../element/blog/BlogExamElement"
+import { useNavigate } from "react-router-dom"
 
 const BlogHomePage = () => {
   const [blogPage, setBlogPage] = useState<PageResponse<BlogResponse>>()
   const [page, setPage] = useState(1);
   const blogHistories = useAppSelector(state => state.blogHistory);
+  const [keyword, setKeyword] = useState("");
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
   useEffect(() => {
     fetchBlogPage()
   }, [])
+  useEffect(() => {
+    if (keyword)
+      navigate("/blog/search?keyword=" + keyword)
+  }, [keyword])
   const fetchBlogPage = () => {
-    BlogService.readPage(1, 10).then((data) => {
+    BlogService.search({ page: page, size: 10 }).then((data) => {
       if (data.success) {
         setBlogPage(data.data)
       }
@@ -26,19 +32,16 @@ const BlogHomePage = () => {
   return (
 
     <section className="explore-section" id="section_2">
-      <IntroductionElement into="Khám Phá Blog" content="Khám phá những bài viết hữu ích về nhiều chủ đề thú vị." />
+      <IntroductionElement keyword={keyword} setKeyword={setKeyword} into="Khám Phá Blog" content="Khám phá những bài viết hữu ích về nhiều chủ đề thú vị." />
       <div className="container">
         <div className="row mt-4">
           <div className="col-9">
             {/* <div className="tab-content" id="myTabContent"> */}
             <h4 className="mb-3">Các blog mới nhất</h4>
             <div className="tab-pane fade show active" id="design-tab-pane" role="tabpanel" aria-labelledby="design-tab" tabIndex={0}>
-              <div className="row">
-                {blogPage?.content?.map(blog => (
-                  <BlogItemElement blog={blog} key={`blog-item-${blog.id}`} />
-                ))}
-                <Pagination align="center" onChange={setPage} pageSize={10} defaultCurrent={page} total={blogPage?.total_elements} />
-              </div>
+              {blogPage && <div className="row">
+                <BlogListElement blogPage={blogPage} page={page} setPage={setPage} />
+              </div>}
             </div>
 
             {/* Gợi Ý Chủ Đề */}

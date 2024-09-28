@@ -15,7 +15,7 @@ public interface BlogRepository extends JpaRepository<Blog, String> {
 			+ "AND (:keyword IS NULL OR b.title LIKE %:keyword% OR b.author.displayName LIKE %:keyword%) "
 			+ "AND (:authorEmail IS NULL OR b.author.email= :authorEmail) "
 			+ "AND (:authorId IS NULL OR b.author.id = :authorId) "
-			+ "AND (:accessModifier = :accessModifier)")
+			+ "AND (:accessModifier IS NULL OR b.accessModifier = :accessModifier)")
 	Page<Blog> searchBlog(@Param("tagName") String tagName, @Param("keyword") String keyword, @Param("authorEmail") String authorEmail,
 			@Param("authorId") String authorId, @Param("accessModifier") AccessModifier accessModifier,
 			Pageable pageable);
