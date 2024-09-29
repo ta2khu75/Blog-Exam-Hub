@@ -21,6 +21,7 @@ import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.request.BlogRequest;
 import com.ta2khu75.quiz.model.request.search.BlogSearchRequest;
 import com.ta2khu75.quiz.model.response.BlogResponse;
+import com.ta2khu75.quiz.model.response.CountResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.BlogDetailsResponse;
 import com.ta2khu75.quiz.service.BlogService;
@@ -38,11 +39,6 @@ public class BlogController {
 	BlogService service;
 	ObjectMapper mapper;
 
-	@GetMapping("/{id}")
-	public ResponseEntity<BlogResponse> readBlog(@PathVariable("id") String id) {
-		return ResponseEntity.ok(service.read(id));
-	}
-
 	@GetMapping
 	public ResponseEntity<PageResponse<BlogResponse>> searchBlog(@ModelAttribute // có hay khong co cung khong sao neu
 																					// validation thì cần
@@ -52,15 +48,24 @@ public class BlogController {
 		return ResponseEntity.ok(service.searchBlog(blogSearchRequest));
 	}
 
+	@GetMapping("my-blog")
+	public ResponseEntity<PageResponse<BlogResponse>> searchMyBlog(
+			@ModelAttribute BlogSearchRequest blogSearchRequest) {
+		blogSearchRequest.setAccessModifier(null);
+		blogSearchRequest.setAuthorId(null);
+		blogSearchRequest.setAuthorEmail(SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new UnAuthorizedException("You must login first!")));
+		return ResponseEntity.ok(service.searchBlog(blogSearchRequest));
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<BlogResponse> readBlog(@PathVariable("id") String id) {
+		return ResponseEntity.ok(service.read(id));
+	}
+
 	@GetMapping("/{id}/details")
 	public ResponseEntity<BlogDetailsResponse> readDetailsBlog(@PathVariable("id") String id) {
 		return ResponseEntity.ok(service.readDetail(id));
-	}
-
-	@DeleteMapping("/{id}")
-	public ResponseEntity<BlogResponse> deleteBlog(@PathVariable("id") String id) {
-		service.delete(id);
-		return ResponseEntity.noContent().build();
 	}
 
 	@PostMapping(consumes = "multipart/form-data")
@@ -69,7 +74,6 @@ public class BlogController {
 		BlogRequest blogRequest = mapper.readValue(request, BlogRequest.class);
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(blogRequest, file));
 	}
-
 	@PutMapping(path = "/{id}", consumes = "multipart/form-data")
 	public ResponseEntity<BlogResponse> updateBlog(@PathVariable("id") String id, @RequestPart("blog") String request,
 			@RequestPart(name = "image", required = false) MultipartFile file) throws IOException {
@@ -77,12 +81,19 @@ public class BlogController {
 		return ResponseEntity.ok(service.update(id, blogRequest, file));
 	}
 
-	@GetMapping("my-blog")
-	public ResponseEntity<PageResponse<BlogResponse>> readMyBlog(@ModelAttribute BlogSearchRequest blogSearchRequest) {
-		blogSearchRequest.setAccessModifier(null);
-		blogSearchRequest.setAuthorId(null);
-		blogSearchRequest.setAuthorEmail(SecurityUtil.getCurrentUserLogin().orElseThrow(()->new UnAuthorizedException("You must login first!")));
-		return ResponseEntity.ok(service.searchBlog(blogSearchRequest));
+	@DeleteMapping("/{id}")
+	public ResponseEntity<BlogResponse> deleteBlog(@PathVariable("id") String id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();
+	}
+	@GetMapping("my-blog/count")
+	public ResponseEntity<CountResponse> countMyBlog() {
+		String email=SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new UnAuthorizedException("You must login first!"));
+		return ResponseEntity.ok(new CountResponse(service.countByAuthorEmail(email)));
+	}
+	@GetMapping("{authorId}/count")
+	public ResponseEntity<CountResponse> countBlogAuthor(@PathVariable("authorId") String id) {
+		return ResponseEntity.ok(new CountResponse(service.countByAuthorIdAndAccessModifier(id, AccessModifier.PUBLIC)));
 	}
 
 }

@@ -1,6 +1,6 @@
 interface SearchRequestBase {
     keyword?: string,
-    author_id?: string,
+    authorId?: string,
     page: number,
     size: number
 }

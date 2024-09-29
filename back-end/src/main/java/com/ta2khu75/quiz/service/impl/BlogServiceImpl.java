@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.BlogMapper;
+import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Blog;
 import com.ta2khu75.quiz.model.entity.BlogTag;
@@ -109,15 +110,27 @@ public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper>
 
 	@Override
 	public BlogDetailsResponse readDetail(String id) {
-		return mapper.toDetailsResponse(FunctionUtil.findOrThrow(id, Blog.class, repository::findById));
+		Blog blog = FunctionUtil.findOrThrow(id, Blog.class, repository::findById);
+		blog.setViewCount(blog.getViewCount() + 1);
+		return mapper.toDetailsResponse(repository.save(blog));
 	}
 
 	@Override
 	public PageResponse<BlogResponse> searchBlog(BlogSearchRequest blogSearchRequest) {
 		Pageable pageable = Pageable.ofSize(blogSearchRequest.getSize()).withPage(blogSearchRequest.getPage() - 1);
 		return mapper
-				.toPageResponse(repository.searchBlog(blogSearchRequest.getTagName(), blogSearchRequest.getKeyword(),
-						null, blogSearchRequest.getAuthorId(), blogSearchRequest.getAccessModifier(), pageable));
+				.toPageResponse(repository.searchBlog(blogSearchRequest.getBlogTagNames(), blogSearchRequest.getKeyword(),
+						null, blogSearchRequest.getAuthorId(), blogSearchRequest.getMinView(), blogSearchRequest.getMaxView(), blogSearchRequest.getAccessModifier(), pageable));
+	}
+
+	@Override
+	public Long countByAuthorEmail(String authorEmail) {
+		return repository.countByAuthorEmail(authorEmail);
+	}
+
+	@Override
+	public Long countByAuthorIdAndAccessModifier(String authorId, AccessModifier accessModifier) {
+		return repository.countByAuthorIdAndAccessModifier(authorId, accessModifier);
 	}
 
 }

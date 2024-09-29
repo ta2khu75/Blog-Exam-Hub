@@ -28,11 +28,11 @@ public class Exam {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	String id;
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")	
 	String title;
 	@Column(nullable = false)
 	Integer duration;
-	@Column(nullable = false, columnDefinition = "TEXT")
+	@Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
 	String description;
 	@Column(nullable = false)
 	String imagePath;

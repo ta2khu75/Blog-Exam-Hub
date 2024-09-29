@@ -39,7 +39,7 @@ public class ExamResultController {
 		return ResponseEntity.ok(service.readByExamId(id));
 	}
 	@PostMapping("{id}")	
-	public ResponseEntity<ExamResultDetailsResponse> updateExamResult(@PathVariable("id") Long examHistoryId, @RequestBody UserAnswerRequest[] answerUserRequest) {
+	public ResponseEntity<ExamResultDetailsResponse> submitTheExam(@PathVariable("id") Long examHistoryId, @RequestBody UserAnswerRequest[] answerUserRequest) {
 		return ResponseEntity.ok(service.scoreByExamId(examHistoryId, answerUserRequest));
 	}
 	@GetMapping("/page")

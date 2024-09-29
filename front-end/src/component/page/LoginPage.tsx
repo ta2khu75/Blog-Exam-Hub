@@ -16,6 +16,8 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const onFinish: FormProps<AuthRequest>["onFinish"] = (values) => {
     AuthService.login(values).then((d) => {
+      console.log(d);
+
       if (d.success) {
         dispatch(setAccount(d.data))
         toast.success("login successful");

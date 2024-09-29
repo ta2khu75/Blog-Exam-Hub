@@ -13,29 +13,31 @@ const BlogItemElement = ({ blog, handleDelete, handleEdit }: Props) => {
         <div className="blog-item-element mb-3">
             <div className='row align-items-center small'>
                 <div className="col-11">
-                    <Link to={`/blog-details/${id}`}>
-                        <h6 className="text-info d-flex align-items-center">
-                            {(handleEdit || handleDelete) && (
-                                <>
-                                    {access_modifier === AccessModifier.PRIVATE ? <LockOutlined className="me-1" /> : <UnlockOutlined className="me-1" />}
-                                </>
-                            )}
-                            {title} <span className="text-muted ms-2">by <Link to={`/author/${author.id}`}>{author.username}</Link></span>
-                        </h6>
-                        <div className="blog-tags mt-1">
-                            {blog_tags.map(tag => (
-                                <Link to={""} key={`blog-tag-${tag}`}>
-                                    <span className="badge bg-secondary me-1">
-                                        {tag}
-                                    </span>
-                                </Link>
-                            ))}
-                        </div>
-                        <div className="blog-meta mt-1">
-                            <span className="me-2">Last edit: {last_modified_at ?? created_at}</span>
-                            <span>Views: {view_count}</span>
-                        </div>
-                    </Link>
+                    <h6 className="text-info d-flex align-items-center">
+                        {(handleEdit || handleDelete) && (
+                            <>
+                                {access_modifier === AccessModifier.PRIVATE ? <LockOutlined className="me-1" /> : <UnlockOutlined className="me-1" />}
+                            </>
+                        )}
+                        <Link to={`/blog-details/${id}`}>
+                            {title}
+
+                        </Link>
+                    </h6>
+                    <span className="text-muted">by <Link to={`/author/${author.id}`}>{author.username}</Link></span>
+                    <div className="blog-tags mt-1">
+                        {blog_tags.map((tag, index) => (
+                            <Link to={`/blog/search?blogTagNames=${tag}`} key={`blog-tag-${tag}-${index}`}>
+                                <span className="badge bg-secondary me-1">
+                                    {tag}
+                                </span>
+                            </Link>
+                        ))}
+                    </div>
+                    <div className="blog-meta mt-1">
+                        <span className="me-2">Last edit: {last_modified_at ?? created_at}</span>
+                        <span>Views: {view_count}</span>
+                    </div>
                 </div>
                 {(handleEdit || handleDelete) && (
                     <div className="col-1 d-flex flex-column">

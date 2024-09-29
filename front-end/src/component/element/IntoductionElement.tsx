@@ -18,7 +18,7 @@ const IntroductionElement = ({ into, content, keyword, setKeyword }: Props) => {
         <section className="hero-section d-flex justify-content-center align-items-center" style={{ color: 'white' }}>
             <div className="container text-center">
                 <h2 className="text-white text-center">{into}</h2>
-                <h6 className="text-dark">{content}</h6>
+                <h6 className="text-dark" dangerouslySetInnerHTML={{ __html: content }}></h6>
                 <form onSubmit={(e) => handleSubmitSearch(e)} className="custom-form mt-4">
                     <div className="input-group input-group-lg">
                         <span className="input-group-text bi-search"></span>

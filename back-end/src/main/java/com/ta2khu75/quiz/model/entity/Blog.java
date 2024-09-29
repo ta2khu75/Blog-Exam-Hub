@@ -35,9 +35,9 @@ public class Blog {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	String id;
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
 	String title;
-	@Column(columnDefinition = "TEXT", nullable = false)
+	@Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
 	String content;
 	String imagePath;
 	int viewCount;

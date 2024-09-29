@@ -44,7 +44,7 @@ const ExamCartElement = ({ exam, handleDelete, handleEdit }: Props) => {
           <div>
             Level: <span className={`text-light p-1 rounded  ${cssExamLevel(exam.exam_level)}`}>{exam.exam_level}</span>
           </div>
-          <div>Category: {exam.exam_category.name}
+          <div>Category: <Link to={`/exam/search?examCategoryIds=${exam.exam_category.id}`}>{exam.exam_category.name}</Link>
           </div>
           <div>Duration: <span className={`${cssExamDuration(exam.duration)}`}>{exam.duration} Minutes</span></div>
         </div>} />

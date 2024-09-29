@@ -19,6 +19,7 @@ import com.ta2khu75.quiz.exception.UnAuthorizedException;
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.request.ExamRequest;
 import com.ta2khu75.quiz.model.request.search.ExamSearchRequest;
+import com.ta2khu75.quiz.model.response.CountResponse;
 import com.ta2khu75.quiz.model.response.ExamResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
@@ -71,7 +72,8 @@ public class ExamController {
 
 	@GetMapping("my-exam")
 	public ResponseEntity<PageResponse<ExamResponse>> searchMyExam(ExamSearchRequest examSearchRequest) {
-		String email = SecurityUtil.getCurrentUserLogin().orElseThrow(()->new UnAuthorizedException("You must login first!"));
+		String email = SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
 		examSearchRequest.setAuthorEmail(email);
 		examSearchRequest.setAccessModifier(null);
 		examSearchRequest.setAuthorId(null);
@@ -79,9 +81,22 @@ public class ExamController {
 	}
 
 	@GetMapping
-	public ResponseEntity<PageResponse<ExamResponse>> searchExam(ExamSearchRequest examSearchRequest){
+	public ResponseEntity<PageResponse<ExamResponse>> searchExam(ExamSearchRequest examSearchRequest) {
 		examSearchRequest.setAccessModifier(AccessModifier.PUBLIC);
 		examSearchRequest.setAuthorEmail(null);
 		return ResponseEntity.ok(service.searchExam(examSearchRequest));
+	}
+
+	@GetMapping("my-exam/count")
+	public ResponseEntity<CountResponse> countMyExam() {
+		String email = SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
+		return ResponseEntity.ok(new CountResponse(service.countByAuthorEmail(email)));
+	}
+
+	@GetMapping("{authorId}/count")
+	public ResponseEntity<CountResponse> countExamAuthor(@PathVariable("authorId") String id) {
+		return ResponseEntity
+				.ok(new CountResponse(service.countByAuthorIdAndAccessModifier(id, AccessModifier.PUBLIC)));
 	}
 }

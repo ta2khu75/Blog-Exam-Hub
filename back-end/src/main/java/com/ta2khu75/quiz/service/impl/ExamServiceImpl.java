@@ -21,6 +21,7 @@ import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.ExamMapper;
+import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.ExamStatus;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Exam;
@@ -157,6 +158,16 @@ public class ExamServiceImpl implements ExamService {
 		return mapper.toPageResponse(
 				repository.searchExam(examSearchRequest.getKeyword(), examSearchRequest.getExamCategoryIds(),
 						examSearchRequest.getAuthorEmail(), examSearchRequest.getAuthorId(),
-						examSearchRequest.getExamLevel(), examSearchRequest.getMinDuration(), examSearchRequest.getMaxDuration(), examSearchRequest.getAccessModifier(), pageable));
+						examSearchRequest.getExamLevels(), examSearchRequest.getMinDuration(), examSearchRequest.getMaxDuration(), examSearchRequest.getAccessModifier(), pageable));
+	}
+
+	@Override
+	public Long countByAuthorEmail(String authorEmail) {
+		return repository.countByAuthorEmail(authorEmail);
+	}
+
+	@Override
+	public Long countByAuthorIdAndAccessModifier(String authorId, AccessModifier accessModifier) {
+		return repository.countByAuthorIdAndAccessModifier(authorId, accessModifier);
 	}
 }

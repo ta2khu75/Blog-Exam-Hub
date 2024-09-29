@@ -1,3 +1,5 @@
-interface BlogSearchRequest extends SearchRequestBase{
-    tag_name?:string;
+interface BlogSearchRequest extends SearchRequestBase {
+    blogTagNames?: string[],
+    minView?: number,
+    maxView?: number
 }

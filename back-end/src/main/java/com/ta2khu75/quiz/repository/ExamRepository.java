@@ -18,12 +18,17 @@ public interface ExamRepository extends JpaRepository<Exam, String> {
 			+ "AND (:examCategoryIds IS NULL OR e.examCategory.id IN (:examCategoryIds)) "
 			+ "AND (:authorEmail IS NULL OR e.author.email= :authorEmail) "
 			+ "AND (:authorId IS NULL OR e.author.id= :authorId) "
-			+ "AND (:examLevel IS NULL OR e.examLevel = :examLevel)"
-			+ "AND (:minDuration IS NULL OR e.duration >= :minDuration) " 
+			+ "AND (:examLevels IS NULL OR e.examLevel IN (:examLevels))"
+			+ "AND (:minDuration IS NULL OR e.duration >= :minDuration) "
 			+ "AND (:maxDuration IS NULL OR e.duration <= :maxDuration) "
 			+ "AND (:accessModifier IS NULL OR :accessModifier = :accessModifier) ")
 	Page<Exam> searchExam(@Param("keyword") String keyword, @Param("examCategoryIds") List<Long> examCategoryIds,
 			@Param("authorEmail") String authorEmail, @Param("authorId") String authorId,
-			@Param("examLevel") ExamLevel examLevel, @Param("minDuration") Integer minDuration, @Param("maxDuration") Integer maxDuration, @Param("accessModifier") AccessModifier accessModifier,
+			@Param("examLevels") List<ExamLevel> examLevel, @Param("minDuration") Integer minDuration,
+			@Param("maxDuration") Integer maxDuration, @Param("accessModifier") AccessModifier accessModifier,
 			Pageable pageable);
+
+	Long countByAuthorIdAndAccessModifier(String authorId, AccessModifier accessModifier);
+
+	Long countByAuthorEmail(String authorEmail);
 }

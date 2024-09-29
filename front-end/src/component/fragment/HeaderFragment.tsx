@@ -8,6 +8,8 @@ import { resetUserExam } from "../../redux/slice/userExamSlice";
 import { resetQuizExam } from "../../redux/slice/quizExamSlice";
 import { useEffect } from "react";
 import { resetQuiz } from "../../redux/slice/quizSlice";
+import { resetImages } from "../../redux/slice/imageSlice";
+import { resetBlogHistory } from "../../redux/slice/blogHistorySlice";
 
 const HeaderFragment = () => {
   const { pathname } = useLocation();
@@ -30,6 +32,8 @@ const HeaderFragment = () => {
         dispatch(resetQuizExam());
         dispatch(resetUserExam());
         dispatch(resetAccount());
+        dispatch(resetImages());
+        dispatch(resetBlogHistory());
         toast.success("logout successful");
         window.location.reload();
       }
@@ -40,7 +44,7 @@ const HeaderFragment = () => {
       <div className="container">
         <Link className="navbar-brand" to="/">
           <i className="bi-back" />
-          <span>Exam Master</span>
+          <span>Blog Test Hub</span>
         </Link>
         <div className="d-lg-none ms-auto me-4">
           <a href="#top" className="navbar-icon bi-person smoothscroll" />
@@ -59,7 +63,7 @@ const HeaderFragment = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ms-lg-5 me-lg-auto">
             <li className="nav-item">
-              <NavLink className="nav-link click-scroll" to="/home">
+              <NavLink className={`nav-link click-scroll ${pathname === "/" ? "active" : ""}`} to="/home">
                 Home
               </NavLink>
             </li>

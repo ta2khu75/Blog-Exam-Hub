@@ -3,11 +3,14 @@ import ExamCategoryService from "../../service/ExamCategoryService"
 import ExamService from "../../service/ExamService";
 import IntroductionElement from "../element/IntoductionElement";
 import ExamPageElement from "../element/exam/ExamPageElements";
+import { Link, useNavigate } from "react-router-dom";
 
 const ExamHomePage = () => {
     const [examCategories, setExamCategories] = useState<ExamCategoryResponse[]>([]);
     const [examPage, setExamPage] = useState<PageResponse<ExamResponse>>();
     const [page, setPage] = useState(1);
+    const [keyword, setKeyword] = useState("");
+    const navigate = useNavigate()
     useEffect(() => {
         fetchExamCategories();
         fetchExamPage();
@@ -15,6 +18,10 @@ const ExamHomePage = () => {
     useEffect(() => {
         fetchExamPage();
     }, [page]);
+    useEffect(() => {
+        if (keyword)
+            navigate("/exam/search?keyword=" + keyword)
+    }, [keyword])
     const fetchExamPage = () => {
         ExamService.search({ page, size: 10 }).then(response => {
             if (response.success) {
@@ -31,8 +38,12 @@ const ExamHomePage = () => {
     }
     return (
         <section className="explore-section" id="section_2">
-            <IntroductionElement into="Khám Phá Bài Thi" content="Bước Vào Thế Giới Đề Thi, Khám Phá Tiềm Năng Của Bạn!" />
+            <IntroductionElement keyword={keyword} setKeyword={setKeyword} into="Khám Phá Bài Thi" content="Bước Vào Thế Giới Đề Thi, Khám Phá Tiềm Năng Của Bạn!" />
             <div className="container">
+                <div className="d-flex justify-content-between">
+                    <h4 >Các exam mới nhất</h4>
+                    <Link className="btn btn-primary" to={"/manager-blog/create"}>Create Blog</Link>
+                </div>
                 <ul className="nav nav-tabs justify-content-center mb-4" id="myTab" role="tablist">
                     {examCategories.map((examCategory, index) => (
                         <li key={examCategory.id} className="nav-item" role="presentation">

@@ -12,7 +12,7 @@ const ManagerExamChild = () => {
     fetchPageExam();
   }, [page]);
   const fetchPageExam = () => {
-    ExamService.search({ page, size: 6 }).then((data) => {
+    ExamService.mySearch({ page, size: 6 }).then((data) => {
       if (data.success) setPageExam(data.data);
     });
   }

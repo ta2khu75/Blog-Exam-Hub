@@ -6,7 +6,7 @@ import { Button, Checkbox, Form, FormProps, Input } from "antd"
 import RoleRequest from "../../../../model/request/RoleRequest"
 import PermissionGroupService from "../../../../service/PermissionGroupService"
 
-const ManagerRole = () => {
+const ManagerRoleChild= () => {
     const [form] = Form.useForm<RoleRequest>();
     const [roles, setRoles] = useState<RoleResponse[]>([])
     const [permissionGroups, setPermissionGroups] = useState<PermissionGroupResponse[]>([])
@@ -72,24 +72,9 @@ const ManagerRole = () => {
         setOpen(false);
         setRole(undefined);
     }
-    // const handleDeleteClick = (data: RoleResponse) => {
-    //     RoleService.delete(data.id).then(d => {
-    //         if (d.success) {
-    //             toast.success("Successfully to delete");
-    //             setRoles(roles => roles.filter(role => role.id !== data.id));
-    //         } else {
-    //             toast.error(d.message_error);
-    //         }
-    //     })
-    // }
-    // const handleAddClick = () => {
-    //     setOpen(true);
-    //     setRole(undefined);
-    // }
     return (
         <div>
             <h2>Manager Role</h2>
-            {/* <Button onClick={handleAddClick}>Add New</Button> */}
             <ModalElement width={1500} open={open} handleCancel={handleCancelClick} >
                 <Form
                     form={form}
@@ -100,7 +85,7 @@ const ManagerRole = () => {
                         label="Name"
                         name={'name'}
                     >
-                        <Input />
+                        <Input disabled />
                     </Form.Item>
                     <Form.Item<RoleRequest>
                         label="Permissions"
@@ -119,11 +104,9 @@ const ManagerRole = () => {
                     </Form.Item>
                 </Form>
             </ModalElement>
-            <TableElement visiableColumns={["name"]} showIndex={true} array={roles} handleEditClick={handleEditClick}
-            //  handleDeleteClick={handleDeleteClick}
-            />
+            <TableElement visiableColumns={["name"]} showIndex={true} array={roles} handleEditClick={handleEditClick} />
         </div>
     )
 }
 
-export default ManagerRole
+export default ManagerRoleChild;

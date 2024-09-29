@@ -10,4 +10,7 @@ export default class StringUtil {
 
         return htmlContent;
     }
+    static checkEmpty(str: string): boolean {
+        return /^\s*$/.test(str);
+    }
 }

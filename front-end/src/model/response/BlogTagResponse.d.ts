@@ -1,0 +1,3 @@
+interface BlogTagResponse{
+    name: string
+}

@@ -4,10 +4,8 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,21 +30,8 @@ public class RoleController {
 	public ResponseEntity<List<RoleDetailsResponse>> readAllRole() {
 		return ResponseEntity.ok(roleService.readAll());
 	}
-	@PostMapping
-	public ResponseEntity<RoleResponse> createRole(@Valid @RequestBody RoleRequest request) {
-		return ResponseEntity.ok(roleService.create(request));
-	}
 	@PutMapping("{id}")
 	public ResponseEntity<RoleResponse> updateRole(@PathVariable("id") Long id, @Valid @RequestBody RoleRequest request) {
 		return ResponseEntity.ok(roleService.update(id, request));
-	}
-	@DeleteMapping("{id}")
-	public ResponseEntity<Void> deleteRole(@PathVariable("id") Long id) {
-		roleService.delete(id);
-		return ResponseEntity.noContent().build();
-	}
-	@GetMapping("{id}")
-	public ResponseEntity<RoleResponse> readRole(@PathVariable("id") Long id) {
-		return ResponseEntity.ok(roleService.read(id));
 	}
 }

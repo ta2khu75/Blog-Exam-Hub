@@ -18,7 +18,7 @@ public class Answer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
-	@Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "NVARCHAR(255)")
 	String answerString;
 	@Column(nullable = false)
 	Boolean correct;

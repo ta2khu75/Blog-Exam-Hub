@@ -13,7 +13,7 @@ const ManagerBlogChild = () => {
     fetchPageBlog();
   }, [page]);
   const fetchPageBlog = () => {
-    BlogService.search({ page, size: 6 }).then((data) => {
+    BlogService.mySearch({ page, size: 6 }).then((data) => {
       if (data.success) setPageExam(data.data);
     });
   }

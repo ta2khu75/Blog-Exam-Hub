@@ -21,7 +21,7 @@ import com.ta2khu75.quiz.model.QuizType;
 public class Quiz {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "NVARCHAR(255)")
     String question;
     String filePath;
     @Column(nullable = false)

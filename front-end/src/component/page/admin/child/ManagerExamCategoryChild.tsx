@@ -6,7 +6,7 @@ import { Button } from 'antd'
 import { toast } from 'react-toastify'
 import ExamCategoryForm from '../../../element/form/ExamCategoryForm'
 
-const ManagerExamCategory = () => {
+const ManagerExamCategoryChild = () => {
     const [examCategory, setExamCategory] = useState<ExamCategoryResponse>()
     const [examCategories, setExamCategories] = useState<ExamCategoryResponse[]>([])
     const [open, setOpen] = useState(false)
@@ -52,4 +52,4 @@ const ManagerExamCategory = () => {
     )
 }
 
-export default ManagerExamCategory
+export default ManagerExamCategoryChild;

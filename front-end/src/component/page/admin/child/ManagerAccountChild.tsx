@@ -14,7 +14,7 @@ export type AccountRequest = {
   password?: string;
   confirm_password?: string;
 };
-const AccountCrud = () => {
+const ManagerAccountChild = () => {
   const [form] = Form.useForm<AccountStatusRequest>();
   const [openEdit, setOpenEdit] = useState(false);
   const [account, setAccount] = useState<AccountDetailsResponse>()
@@ -32,7 +32,7 @@ const AccountCrud = () => {
   useEffect(() => {
     if (account) {
       form.setFieldsValue(account)
-      form.setFieldValue("role_id",account.role.id)
+      form.setFieldValue("role_id", account.role.id)
     }
   }, [account, form]);
   const fetchPageAccount = () => {
@@ -138,4 +138,4 @@ const AccountCrud = () => {
   )
 }
 
-export default AccountCrud
+export default ManagerAccountChild;

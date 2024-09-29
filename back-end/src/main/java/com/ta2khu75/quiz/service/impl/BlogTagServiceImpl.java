@@ -1,5 +1,7 @@
 package com.ta2khu75.quiz.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.ta2khu75.quiz.model.entity.BlogTag;
@@ -19,5 +21,9 @@ public class BlogTagServiceImpl implements BlogTagService {
 		BlogTag blog = new BlogTag();
 		blog.setName(name);
 		return blogTagRepository.save(blog);
+	}
+	@Override
+	public List<BlogTag> readAll() {
+		return blogTagRepository.findAll();
 	}
 }

@@ -1,9 +1,14 @@
 import { ExamSearchRequest } from "../model/request/search/ExamSearchRequest";
 import instance from "../util/apiInstance";
+import qs from 'qs';
 const basePath = "exam";
 export default class ExamService {
     static search(examSearchRequest: ExamSearchRequest): Promise<ApiResponse<PageResponse<ExamResponse>>> {
-        return instance.get(basePath, { params: { ...examSearchRequest } })
+        return instance.get(basePath, {
+            params: { ...examSearchRequest }, paramsSerializer: (params) => {
+                return qs.stringify(params, { arrayFormat: 'repeat' });
+            }
+        })
     }
     static mySearch(examSearch: ExamSearchRequest): Promise<ApiResponse<PageResponse<ExamResponse>>> {
         return instance.get(`${basePath}/my-exam`, { params: { ...examSearch } })
@@ -30,5 +35,12 @@ export default class ExamService {
     }
     static readById(id: string): Promise<ApiResponse<ExamResponse>> {
         return instance.get(`${basePath}/${id}`);
+    }
+    static countByAuthor(authorId: string): Promise<ApiResponse<CountResponse>> {
+
+        return instance.get(`${basePath}/${authorId}/count`);
+    }
+    static myCount(): Promise<ApiResponse<CountResponse>> {
+        return instance.get(`${basePath}/my-blog/count`);
     }
 }

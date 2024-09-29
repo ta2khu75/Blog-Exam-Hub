@@ -17,6 +17,7 @@
     "axios-retry": "^4.5.0",
     "firebase": "^10.13.2",
     "front-end-quiz": "file:",
+    "qs": "^6.13.0",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
     "react-dom": "^18.3.1",
@@ -29,6 +30,7 @@
     "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "@types/qs": "^6.9.16",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.15.0",

@@ -6,7 +6,7 @@ import BlogItemHistoryElement from "../element/blog/BlogItemHistoryElement"
 import IntroductionElement from "../element/IntoductionElement"
 import { deleteBlogHistory } from "../../redux/slice/blogHistorySlice"
 import BlogListElement from "../element/blog/BlogExamElement"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 
 const BlogHomePage = () => {
   const [blogPage, setBlogPage] = useState<PageResponse<BlogResponse>>()
@@ -37,7 +37,10 @@ const BlogHomePage = () => {
         <div className="row mt-4">
           <div className="col-9">
             {/* <div className="tab-content" id="myTabContent"> */}
-            <h4 className="mb-3">Các blog mới nhất</h4>
+            <div className="d-flex justify-content-between">
+              <h4 >Các blog mới nhất</h4>
+              <Link className="btn btn-primary" to={"/manager-blog/create"}>Create Blog</Link>
+            </div>
             <div className="tab-pane fade show active" id="design-tab-pane" role="tabpanel" aria-labelledby="design-tab" tabIndex={0}>
               {blogPage && <div className="row">
                 <BlogListElement blogPage={blogPage} page={page} setPage={setPage} />

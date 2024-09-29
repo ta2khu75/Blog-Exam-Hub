@@ -14,7 +14,7 @@ axiosRetry(instance, {
     return retryCount * 100;
   },
   retryCondition: (error) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 444) {
       return true;
     }
     return false;
@@ -97,7 +97,7 @@ instance.interceptors.response.use(
           .catch((err) => {
             processQueue(err, undefined);
             reject(err);
-            window.location.href = "/login";
+            // window.location.href = "/login";
           })
           .finally(() => {
             isRefreshing = false;

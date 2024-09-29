@@ -1,8 +1,13 @@
 import instance from "../util/apiInstance";
+import qs from "qs";
 const basePath = "blog";
 export class BlogService {
     static search(blogSearchRequest: BlogSearchRequest): Promise<ApiResponse<PageResponse<BlogResponse>>> {
-        return instance.get(`${basePath}`, { params: { ...blogSearchRequest } })
+        return instance.get(`${basePath}`, {
+            params: { ...blogSearchRequest }, paramsSerializer: (params) => {
+                return qs.stringify(params, { arrayFormat: 'repeat' });  // support array query params like tags[]=tag1&tags[]=tag2
+            }
+        })
     }
     static mySearch(blogSearchRequest: BlogSearchRequest): Promise<ApiResponse<PageResponse<BlogResponse>>> {
         return instance.get(`${basePath}/my-blog`, { params: { ...blogSearchRequest } })
@@ -32,4 +37,12 @@ export class BlogService {
     static readDetails(id: string): Promise<ApiResponse<BlogDetailsResponse>> {
         return instance.get(`${basePath}/${id}/details`);
     }
+    static countByAuthor(authorId: string): Promise<ApiResponse<CountResponse>> {
+
+        return instance.get(`${basePath}/${authorId}/count`);
+    }
+    static myCount(): Promise<ApiResponse<CountResponse>> {
+        return instance.get(`${basePath}/my-blog/count`);
+    }
+
 }
