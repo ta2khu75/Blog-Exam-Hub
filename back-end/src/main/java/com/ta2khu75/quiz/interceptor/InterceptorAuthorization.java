@@ -57,6 +57,9 @@ public class InterceptorAuthorization implements HandlerInterceptor {
 		}
 		Account account = accountRepository.findByEmail(gmail)
 				.orElseThrow(() -> new NotFoundException("Account not found with gmail " + gmail));
+		if (bestMatchingPattern.matches("/api/v1/auth.*")) {
+			return HandlerInterceptor.super.preHandle(request, response, handler);
+		}
 		if (this.isRootUser(account)) {
 			return HandlerInterceptor.super.preHandle(request, response, handler);
 		}
