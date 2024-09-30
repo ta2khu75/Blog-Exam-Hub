@@ -2,12 +2,12 @@ import { Button, Form, FormProps, Input, InputNumber, Radio, Select } from "antd
 import { useEffect, useRef, useState } from "react"
 import ExamService from "../../../service/ExamService";
 import { toast } from "react-toastify";
-import { AccessModifier } from "../../../model/AccessModifier";
-import { ExamLevel } from "../../../model/ExamLevel";
+import { AccessModifier } from "../../../@types/AccessModifier";
+import { ExamLevel } from "../../../@types/ExamLevel";
 import TextArea from "antd/es/input/TextArea";
 import { useAppDispatch } from "../../../redux/hooks";
 import { resetQuiz } from "../../../redux/slice/quizSlice";
-import { ExamStatus } from "../../../model/ExamStatus";
+import { ExamStatus } from "../../../@types/ExamStatus";
 import { useNavigate } from "react-router-dom";
 type Props = {
     id?: string;

@@ -1,4 +1,3 @@
-import AnswerUserRequest from "../model/request/AnswerUserRequest";
 import instance from "../util/apiInstance";
 const basePath = "exam-result";
 export default class ExamHistoryService {

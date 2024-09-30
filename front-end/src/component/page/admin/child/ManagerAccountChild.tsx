@@ -68,10 +68,6 @@ const ManagerAccountChild = () => {
     }
   };
 
-  const onFinishFailed: FormProps<AccountStatusRequest>['onFinishFailed'] = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
-
   const handleEditClick = (data: AccountDetailsResponse) => {
     setAccount(data)
     setOpenEdit(true);
@@ -94,7 +90,6 @@ const ManagerAccountChild = () => {
         <Form
           form={form}
           onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
         >
           <Form.Item<AccountStatusRequest>
             label="Enabled"

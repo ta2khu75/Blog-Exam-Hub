@@ -1,7 +1,7 @@
 import { Alert, Button, Checkbox, Form, FormProps, Input, Radio, Space } from 'antd'
 import TextArea from 'antd/es/input/TextArea';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
-import { QuizType } from '../../../model/QuizType';
+import { QuizType } from '../../../@types/QuizType';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { addQuiz, updateQuiz } from '../../../redux/slice/quizSlice';
@@ -174,52 +174,6 @@ const QuizFormNew = ({ indexQuiz }: Prop) => {
                     </Radio.Group>
                 </IfElseElement>
             </Form.Item>
-            {/* <Form.Item label="Answer">
-                {quizRequest.quiz_type == QuizType.SINGLE_CHOICE && <Radio.Group size='large' defaultValue={quizRequest.answers.findIndex((answer) => answer.correct)} onChange={(e) => setQuizRequest(draft => {
-                    draft.answers.forEach(answer => answer.correct = false);
-                    draft.answers[e.target.value].correct = true;
-                })
-                } className='w-100'>
-                    <Space direction="vertical" className='w-100'>
-                        {quizRequest.answers.map((answer, index) => (
-                            <div className='d-flex' key={index}>
-                                <Radio value={index} />
-                                <Input className='mx-2' onChange={(e) => setQuizRequest(draft => {
-                                    draft.answers[index].answer = e.target.value
-                                })} value={answer.answer} placeholder={`Answer ${index + 1}`} />
-                                <button className='btn btn-outline-danger' onClick={() => handleDeleteClick(index)}><CloseOutlined /></button>
-                            </div>
-                        ))}
-                    </Space>
-                </Radio.Group>
-                }
-                {quizRequest.quiz_type == QuizType.MULTIPLE_CHOICE && <Checkbox.Group
-                    defaultValue={quizRequest.answers
-                        .map((answer, index) => answer.correct ? index : null)
-                        .filter(index => index !== null)}
-                    onChange={(e: number[]) => setQuizRequest(draft => {
-                        e.map(index => draft.answers[index].correct = true);
-                    })
-                    } className='w-100'>
-                    <Space direction="vertical" className='w-100'>
-                        {quizRequest.answers.map((answer, index) => (
-                            <div className='d-flex' key={index}>
-                                <Checkbox value={index} />
-                                <Input className='mx-2' onChange={(e) => setQuizRequest(draft => {
-                                    draft.answers[index].answer = e.target.value
-                                })} value={answer.answer} placeholder={`Answer ${index + 1}`} />
-                                <button className='btn btn-outline-danger' onClick={() => handleDeleteClick(index)}><CloseOutlined /></button>
-                            </div>
-                        ))}
-                    </Space>
-                </Checkbox.Group>
-                }
-                <Form.Item>
-                    <button className='mt-4 btn btn-outline-success' onClick={handleAddClick}>
-                        <PlusOutlined />
-                    </button>
-                </Form.Item>
-            </Form.Item> */}
             <Form.Item>
                 <Button type="primary" htmlType="submit">
                     Save

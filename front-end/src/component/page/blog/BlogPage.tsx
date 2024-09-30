@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import ReactQuill from 'react-quill'
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import 'react-quill/dist/quill.snow.css';
-import { AccessModifier } from '../../../model/AccessModifier';
+import { AccessModifier } from '../../../@types/AccessModifier';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BlogService } from '../../../service/BlogService';
 import { toast } from 'react-toastify';
@@ -90,22 +90,19 @@ const BlogPage = () => {
         setOpenImageContent(true)
     }
     return <div className='container'>
+        <h2>Create Blog</h2>
         <Form
             onFinish={onFinish}
             form={form}
             layout='vertical'
         >
             <div className='d-flex align-items-center'>
-                <Form.Item<BlogRequest> label="Title" className='w-100' name={"title"} rules={[
-                    { required: true, message: "please input title" }
-                ]} >
-                    <Input />
-                </Form.Item>
-                <Form.Item className='mt-4' >
-                    <Button type="primary" htmlType="submit">
-                        Submit
-                    </Button>
-                </Form.Item>
+                <Space.Compact style={{ width: '100%' }}>
+                    <Form.Item<BlogRequest> label="Title" className='w-100' layout='horizontal' name={"title"}>
+                        <Input />
+                    </Form.Item>
+                    <Button type="primary" htmlType='submit'>Submit</Button>
+                </Space.Compact>
             </div>
             <div className='d-flex'>
                 <Form.Item label="Blog tags">

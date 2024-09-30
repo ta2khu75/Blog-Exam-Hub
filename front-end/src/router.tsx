@@ -3,19 +3,14 @@ import App from "./App";
 import AdminComponent from "./component/page/admin/AdminComponent";
 import LoginPage from "./component/page/LoginPage";
 import HomePage from "./component/page/HomePage";
-import AccountCrud from "./component/page/admin/child/ManagerAccountChild";
 import ExamCrud from "./component/page/admin/Manager/ManagerExam";
 import RegisterPage from "./component/page/RegisterPage";
 import ExamAboutPage from "./component/page/ExamAboutPage";
 import ExamDetailPage from "./component/page/ExamDetailPage";
 import PrivateRouterElement from "./component/element/PrivateRouterElement";
 import ExamHistoryPage from "./component/page/ExamHistoryPage";
-import ManagerRole from "./component/page/admin/child/ManagerRoleChild";
 import ManagerExamCategory from "./component/page/admin/child/ManagerExamCategoryChild";
-import ProfilePage from "./component/page/profile/ProfilePage";
 import InfoChild from "./component/page/profile/child/InfoChild";
-import ChangePasswordChild from "./component/page/profile/child/ChangePasswordChild";
-import ChangeInfoChild from "./component/page/profile/child/ChangeInfoChild";
 import ManagerExamChild from "./component/page/profile/child/ManagerExamChild";
 import ExamPage from "./component/page/exam/ExamPage";
 import ExamCreateChild from "./component/page/exam/child/ExamCreateChild";
@@ -26,13 +21,14 @@ import ExamHomePage from "./component/page/ExamHomePage";
 import BlogDetailsPage from "./component/page/BlogDetailsPage";
 import ContactPage from "./component/page/ContactPage";
 import AboutPage from "./component/page/AboutPage";
-import TestIntern from "./component/page/TestIntern";
 import AuthorPage from "./component/page/AuthorPage";
 import ExamResultChild from "./component/page/profile/child/ExamResultChild";
-import Filter from "./component/page/Filter";
 import BlogListPage from "./component/page/BlogListPage";
 import ExamListPage from "./component/page/ExamListPage";
 import DashboardChild from "./component/page/admin/child/DashboardChild";
+import ProfilePage from "./component/page/profile/ProfilePage";
+import ManagerRoleChild from "./component/page/admin/child/ManagerRoleChild";
+import ManagerAccountChild from "./component/page/admin/child/ManagerAccountChild";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -73,15 +69,10 @@ const router = createBrowserRouter([
       }, {
         path: "about",
         element: <AboutPage />
-      }, {
-        path: "test",
-        element: <TestIntern />
-      }, {
+      },
+      {
         path: "author/:authorId",
         element: <AuthorPage />
-      }, {
-        path: "filter",
-        element: <Filter />
       },
       {
         path: "blog/search",
@@ -109,14 +100,6 @@ const router = createBrowserRouter([
           {
             path: "account",
             element: <InfoChild />,
-          },
-          {
-            path: "change-password",
-            element: <ChangePasswordChild />,
-          },
-          {
-            path: "change-info",
-            element: <ChangeInfoChild />,
           },
           {
             path: "manager-exam",
@@ -189,7 +172,7 @@ const router = createBrowserRouter([
       },
       {
         path: "account",
-        element: <AccountCrud />,
+        element: <ManagerAccountChild />,
       },
       {
         path: "exam",
@@ -197,7 +180,7 @@ const router = createBrowserRouter([
       },
       {
         path: "role",
-        element: <ManagerRole />,
+        element: <ManagerRoleChild />,
       },
       {
         path: "exam-category",

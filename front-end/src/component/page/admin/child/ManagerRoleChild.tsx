@@ -3,7 +3,6 @@ import RoleService from "../../../../service/RoleService"
 import TableElement from "../../../element/TableElement"
 import ModalElement from "../../../element/ModalElement"
 import { Button, Checkbox, Form, FormProps, Input } from "antd"
-import RoleRequest from "../../../../model/request/RoleRequest"
 import PermissionGroupService from "../../../../service/PermissionGroupService"
 
 const ManagerRoleChild= () => {
