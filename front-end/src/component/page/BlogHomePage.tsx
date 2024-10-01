@@ -5,7 +5,7 @@ import FunctionUtil from "../../util/FunctionUtil"
 import BlogItemHistoryElement from "../element/blog/BlogItemHistoryElement"
 import IntroductionElement from "../element/IntoductionElement"
 import { deleteBlogHistory } from "../../redux/slice/blogHistorySlice"
-import BlogListElement from "../element/blog/BlogExamElement"
+import BlogListElement from "../element/blog/BlogPageElement"
 import { Link, useNavigate } from "react-router-dom"
 
 const BlogHomePage = () => {

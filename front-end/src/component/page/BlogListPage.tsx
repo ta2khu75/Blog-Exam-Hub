@@ -2,7 +2,7 @@ import { Button, Checkbox, Form, FormProps, Input, Space } from "antd";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { BlogService } from "../../service/BlogService";
-import BlogPageElement from "../element/blog/BlogExamElement";
+import BlogPageElement from "../element/blog/BlogPageElement";
 import { BlogTagService } from "../../service/BlogTagService";
 import StringUtil from "../../util/StringUtil";
 type Props = {

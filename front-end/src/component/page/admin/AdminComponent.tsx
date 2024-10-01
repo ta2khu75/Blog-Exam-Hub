@@ -86,8 +86,7 @@ const AdminComponent = () => {
                   <img src="https://mdbootstrap.com/img/Photos/Avatars/img (31).jpg" className="rounded-circle" height={22} loading="lazy" />
                 </a>
                 <ul className="dropdown-menu dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <li><a className="dropdown-item" href="#">My profile</a></li>
-                  <li><a className="dropdown-item" href="#">Settings</a></li>
+                  <li><Link className="dropdown-item" to="/profile">Profile</Link></li>
                   <li><button className="dropdown-item" onClick={handleLogoutClick} >Logout</button></li>
                 </ul>
               </li>

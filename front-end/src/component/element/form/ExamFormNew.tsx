@@ -17,7 +17,7 @@ type Props = {
 }
 const ExamFormNew = ({ id, exam, quizzes, examCategories }: Props) => {
     const dispatch = useAppDispatch()
-    const navigate=useNavigate()
+    const navigate = useNavigate()
     const fileInputRef = useRef<HTMLInputElement | null>(null)
     const [image, setImage] = useState<File>()
     const [imageUrl, setImageUrl] = useState<string>()
@@ -36,7 +36,7 @@ const ExamFormNew = ({ id, exam, quizzes, examCategories }: Props) => {
                     handleResetClick();
                     toast.success("Successfully to create")
                     dispatch(resetQuiz())
-                    navigate("/profile/manager-exam")
+                    navigate("/profile")
                 } else {
                     toast.error(response.message_error)
                 }
@@ -47,6 +47,7 @@ const ExamFormNew = ({ id, exam, quizzes, examCategories }: Props) => {
                     handleResetClick();
                     toast.success("successfully to update")
                     dispatch(resetQuiz())
+                    navigate("/profile")
                 } else {
                     toast.error(response.message_error)
                 }
@@ -102,7 +103,7 @@ const ExamFormNew = ({ id, exam, quizzes, examCategories }: Props) => {
                         </Radio.Group>
                     </Form.Item>
                     <Form.Item<ExamRequest> label="Exam status" className="col-md-6" name={"exam_status"}  >
-                        <Radio.Group disabled={exam?.exam_status===ExamStatus.COMPLETED}>
+                        <Radio.Group disabled={exam?.exam_status === ExamStatus.COMPLETED}>
                             {Object.keys(ExamStatus).map(status => <Radio key={`radio-${status}`} value={status}>{status}</Radio>)}
                         </Radio.Group>
                     </Form.Item>

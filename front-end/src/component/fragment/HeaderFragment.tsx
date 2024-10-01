@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { resetQuiz } from "../../redux/slice/quizSlice";
 import { resetImages } from "../../redux/slice/imageSlice";
 import { resetBlogHistory } from "../../redux/slice/blogHistorySlice";
+import AvatarElement from "../element/AvatarElement";
 
 const HeaderFragment = () => {
   const { pathname } = useLocation();
@@ -87,40 +88,16 @@ const HeaderFragment = () => {
                 Contact
               </NavLink>
             </li>
-            {/* <li className="nav-item dropdown">
-              <a
-                className="nav-link dropdown-toggle"
-                href="#"
-                id="navbarLightDropdownMenuLink"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Pages
-              </a>
-              <ul
-                className="dropdown-menu dropdown-menu-light"
-                aria-labelledby="navbarLightDropdownMenuLink"
-              >
-                <li>
-                  <a className="dropdown-item" href="topics-listing.html">
-                    Topics Listing
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item" href="contact.html">
-                    Contact Form
-                  </a>
-                </li>
-              </ul>
-            </li> */}
           </ul>
           <div className="d-none d-lg-block dropdown">
             <div className="d-flex align-items-center">
-              <span
+              {!account.account?.username && <span
                 className="navbar-icon bi-person smoothscroll"
                 id="account-action"
-              ></span><span className="ms-2 text-light">{account.account?.username ? `Hello ${account.account.username}` : ""}</span>
+              ></span>}
+              {account.account?.username && <AvatarElement username={account.account.username} size={50} />}
+
+              <span className="ms-2 text-light">{account.account?.username ? `Hello ${account.account.username}` : ""}</span>
             </div>
             {!account.authenticated && (
               <ul

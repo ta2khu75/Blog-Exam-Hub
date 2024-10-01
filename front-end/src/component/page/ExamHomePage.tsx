@@ -42,7 +42,7 @@ const ExamHomePage = () => {
             <div className="container">
                 <div className="d-flex justify-content-between">
                     <h4 >Các exam mới nhất</h4>
-                    <Link className="btn btn-primary" to={"/manager-blog/create"}>Create Blog</Link>
+                    <Link className="btn btn-primary" to={"/manager-exam/create"}>Create Exam</Link>
                 </div>
                 <ul className="nav nav-tabs justify-content-center mb-4" id="myTab" role="tablist">
                     {examCategories.map((examCategory, index) => (

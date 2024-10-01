@@ -1,7 +1,8 @@
 
 interface CommentResponse extends CommentBase{
+    id: number;
     file_path:string;
     author: AccountResponse;
-    create_at:string;
-    update_at: string;
+    created_at:string;
+    updated_at: string;
 }

@@ -12,6 +12,7 @@ import ExamListPage from "../ExamListPage";
 import ManagerBlogChild from "./child/ManagerBlogChild";
 import ManagerExamChild from "./child/ManagerExamChild";
 import ExamResultChild from "./child/ExamResultChild";
+import AvatarElement from "../../element/AvatarElement";
 
 const ProfilePage = () => {
     const { pathname } = useLocation()
@@ -102,9 +103,7 @@ const ProfilePage = () => {
                             <div className="mt-n5">
                                 <div className="d-flex align-items-center justify-content-center mb-2">
                                     <div className="linear-gradient d-flex align-items-center justify-content-center rounded-circle" style={{ width: 110, height: 110 }} >
-                                        <div className="border border-4 border-white d-flex align-items-center justify-content-center rounded-circle overflow-hidden" style={{ width: 100, backgroundColor: "#4F98A4", height: 100 }} >
-                                            <h1 className="text-light">{account?.username?.[0]?.toUpperCase()}</h1>
-                                        </div>
+                                        {account && <AvatarElement username={account.username} />}
                                     </div>
                                 </div>
                             </div>

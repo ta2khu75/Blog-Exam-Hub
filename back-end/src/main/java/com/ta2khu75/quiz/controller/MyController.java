@@ -29,37 +29,37 @@ public class MyController {
 	BlogService blogService;
 	ExamService examService;
 
-	@GetMapping("blog")
-	public ResponseEntity<PageResponse<BlogResponse>> searchMyBlog(
-			@ModelAttribute BlogSearchRequest blogSearchRequest) {
-		blogSearchRequest.setAccessModifier(null);
-		blogSearchRequest.setAuthorId(null);
-		blogSearchRequest.setAuthorEmail(SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthorizedException("You must login first!")));
-		return ResponseEntity.ok(blogService.searchBlog(blogSearchRequest));
-	}
-
-	@GetMapping("count-blog")
-	public ResponseEntity<CountResponse> countMyBlog() {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
-		return ResponseEntity.ok(new CountResponse(blogService.countByAuthorEmail(email)));
-	}
-
-	@GetMapping("count-exam")
-	public ResponseEntity<CountResponse> countMyExam() {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
-		return ResponseEntity.ok(new CountResponse(examService.countByAuthorEmail(email)));
-	}
-
-	@GetMapping("exam")
-	public ResponseEntity<PageResponse<ExamResponse>> searchMyExam(ExamSearchRequest examSearchRequest) {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
-		examSearchRequest.setAuthorEmail(email);
-		examSearchRequest.setAccessModifier(null);
-		examSearchRequest.setAuthorId(null);
-		return ResponseEntity.ok(examService.searchExam(examSearchRequest));
-	}
+//	@GetMapping("blog")
+//	public ResponseEntity<PageResponse<BlogResponse>> searchMyBlog(
+//			@ModelAttribute BlogSearchRequest blogSearchRequest) {
+//		blogSearchRequest.setAccessModifier(null);
+//		blogSearchRequest.setAuthorId(null);
+//		blogSearchRequest.setAuthorEmail(SecurityUtil.getCurrentUserLogin()
+//				.orElseThrow(() -> new UnAuthorizedException("You must login first!")));
+//		return ResponseEntity.ok(blogService.searchBlog(blogSearchRequest));
+//	}
+//
+//	@GetMapping("count-blog")
+//	public ResponseEntity<CountResponse> countMyBlog() {
+//		String email = SecurityUtil.getCurrentUserLogin()
+//				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
+//		return ResponseEntity.ok(new CountResponse(blogService.countByAuthorEmail(email)));
+//	}
+//
+//	@GetMapping("count-exam")
+//	public ResponseEntity<CountResponse> countMyExam() {
+//		String email = SecurityUtil.getCurrentUserLogin()
+//				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
+//		return ResponseEntity.ok(new CountResponse(examService.countByAuthorEmail(email)));
+//	}
+//
+//	@GetMapping("exam")
+//	public ResponseEntity<PageResponse<ExamResponse>> searchMyExam(ExamSearchRequest examSearchRequest) {
+//		String email = SecurityUtil.getCurrentUserLogin()
+//				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
+//		examSearchRequest.setAuthorEmail(email);
+//		examSearchRequest.setAccessModifier(null);
+//		examSearchRequest.setAuthorId(null);
+//		return ResponseEntity.ok(examService.searchExam(examSearchRequest));
+//	}
 }

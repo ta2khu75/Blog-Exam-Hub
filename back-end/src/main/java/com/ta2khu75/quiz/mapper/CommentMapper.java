@@ -2,10 +2,13 @@ package com.ta2khu75.quiz.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+import org.springframework.data.domain.Page;
 
 import com.ta2khu75.quiz.model.entity.Comment;
 import com.ta2khu75.quiz.model.request.CommentRequest;
 import com.ta2khu75.quiz.model.response.CommentResponse;
+import com.ta2khu75.quiz.model.response.PageResponse;
+
 import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
@@ -24,5 +27,5 @@ public interface CommentMapper {
 	@Mapping(target = "updatedAt", ignore = true)
 	void update(CommentRequest request, @MappingTarget Comment entity);
 	CommentResponse toResponse(Comment entity);
-	
+	PageResponse<CommentResponse> toPageResponse(Page<Comment> commentPage);	
 }

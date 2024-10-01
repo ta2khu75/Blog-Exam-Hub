@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class CommentResponse extends CommentBase {
+	Long id;
 	String filePath;
 	AccountResponse author;
 	LocalDate createdAt;

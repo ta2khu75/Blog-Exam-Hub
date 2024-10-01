@@ -2,17 +2,31 @@ import { Button } from 'antd'
 import { LockOutlined, UnlockOutlined } from '@ant-design/icons';
 import { AccessModifier } from '../../../@types/AccessModifier';
 import { Link } from 'react-router-dom';
+import AvatarElement from '../AvatarElement';
 type Props = {
     blog: BlogResponse,
     handleEdit?: () => void,
     handleDelete?: () => void,
 }
 const BlogItemElement = ({ blog, handleDelete, handleEdit }: Props) => {
-    const { id, title, blog_tags, access_modifier, last_modified_at, created_at, view_count, author } = blog;
+    const { id, title, blog_tags, access_modifier, created_at, comment_count, view_count, author } = blog;
     return (
         <div className="blog-item-element mb-3">
             <div className='row align-items-center small'>
-                <div className="col-11">
+                <div className={`col-${handleEdit || handleDelete ? "11" : "12"}`}>
+                    <div className='d-flex align-items-center'>
+                        <Link to={`/author/${author.id}`}>
+                            <AvatarElement username={blog.author.username} size={50} />
+                        </Link>
+                        <div className='d-flex align-items-center'>
+                            <Link to={`/author/${author.id}`}>
+                                <div className='d-flex align-items-center'>
+                                    <b>{blog.author.username}</b>
+                                </div>
+                            </Link>
+                            <span className='text-muted ms-2'>{created_at}</span>
+                        </div>
+                    </div>
                     <h6 className="text-info d-flex align-items-center">
                         {(handleEdit || handleDelete) && (
                             <>
@@ -21,10 +35,8 @@ const BlogItemElement = ({ blog, handleDelete, handleEdit }: Props) => {
                         )}
                         <Link to={`/blog-details/${id}`}>
                             {title}
-
                         </Link>
                     </h6>
-                    <span className="text-muted">by <Link to={`/author/${author.id}`}>{author.username}</Link></span>
                     <div className="blog-tags mt-1">
                         {blog_tags.map((tag, index) => (
                             <Link to={`/blog/search?blogTagNames=${tag}`} key={`blog-tag-${tag}-${index}`}>
@@ -35,8 +47,8 @@ const BlogItemElement = ({ blog, handleDelete, handleEdit }: Props) => {
                         ))}
                     </div>
                     <div className="blog-meta mt-1">
-                        <span className="me-2">Last edit: {last_modified_at ?? created_at}</span>
                         <span>Views: {view_count}</span>
+                        <span className='ms-2'>Comments: {comment_count}</span>
                     </div>
                 </div>
                 {(handleEdit || handleDelete) && (
@@ -47,7 +59,7 @@ const BlogItemElement = ({ blog, handleDelete, handleEdit }: Props) => {
                 )}
             </div>
             <hr className="my-2" />
-        </div>
+        </div >
     );
 }
 

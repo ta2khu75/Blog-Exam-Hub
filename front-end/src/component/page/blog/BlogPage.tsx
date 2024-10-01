@@ -43,7 +43,7 @@ const BlogPage = () => {
                 BlogService.update(blogId, { ...values, content }, image).then((data) => {
                     if (data.success) {
                         toast.success("Successfully");
-                        navigate(`/profile/manager-blog`)
+                        navigate(`/profile`)
                     } else {
                         toast.error(data.message_error);
                     }
@@ -52,7 +52,7 @@ const BlogPage = () => {
                 BlogService.create({ ...values, content }, image).then((data) => {
                     if (data.success) {
                         toast.success("Successfully to create");
-                        navigate(`/profile/manager-blog`)
+                        navigate(`/profile`)
                     } else {
                         toast.error(data.message_error);
                     }

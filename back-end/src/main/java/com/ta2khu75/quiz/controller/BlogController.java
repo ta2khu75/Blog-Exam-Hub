@@ -78,20 +78,20 @@ public class BlogController {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
-//	@GetMapping("my-blog/count")
-//	public ResponseEntity<CountResponse> countMyBlog() {
-//		String email=SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new UnAuthorizedException("You must login first!"));
-//		return ResponseEntity.ok(new CountResponse(service.countByAuthorEmail(email)));
-//	}
-//	@GetMapping("my-blog")
-//	public ResponseEntity<PageResponse<BlogResponse>> searchMyBlog(
-//			@ModelAttribute BlogSearchRequest blogSearchRequest) {
-//		blogSearchRequest.setAccessModifier(null);
-//		blogSearchRequest.setAuthorId(null);
-//		blogSearchRequest.setAuthorEmail(SecurityUtil.getCurrentUserLogin()
-//				.orElseThrow(() -> new UnAuthorizedException("You must login first!")));
-//		return ResponseEntity.ok(service.searchBlog(blogSearchRequest));
-//	}
+	@GetMapping("my-blog/count")
+	public ResponseEntity<CountResponse> countMyBlog() {
+		String email=SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new UnAuthorizedException("You must login first!"));
+		return ResponseEntity.ok(new CountResponse(service.countByAuthorEmail(email)));
+	}
+	@GetMapping("my-blog")
+	public ResponseEntity<PageResponse<BlogResponse>> searchMyBlog(
+			@ModelAttribute BlogSearchRequest blogSearchRequest) {
+		blogSearchRequest.setAccessModifier(null);
+		blogSearchRequest.setAuthorId(null);
+		blogSearchRequest.setAuthorEmail(SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new UnAuthorizedException("You must login first!")));
+		return ResponseEntity.ok(service.searchBlog(blogSearchRequest));
+	}
 	@GetMapping("{authorId}/count")
 	public ResponseEntity<CountResponse> countBlogAuthor(@PathVariable("authorId") String id) {
 		return ResponseEntity.ok(new CountResponse(service.countByAuthorIdAndAccessModifier(id, AccessModifier.PUBLIC)));

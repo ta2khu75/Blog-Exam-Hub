@@ -15,6 +15,7 @@ import lombok.experimental.FieldDefaults;
 public class BlogResponse extends BlogBase {
 	String id;
 	int viewCount;
+	int commentCount;
 	String imagePath;
 	LocalDate createdAt;
 	LocalDate lastModifiedAt;

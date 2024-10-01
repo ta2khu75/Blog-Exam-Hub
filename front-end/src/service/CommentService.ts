@@ -9,7 +9,7 @@ export class CommentService {
         if (file) {
             form.append("image", file)
         }
-        form.append("blog", JSON.stringify(comment));
+        form.append("comment", JSON.stringify(comment));
         return instance.post(basePath, form);
     }
     static update(id: string, comment: CommentRequest, file?: File): Promise<ApiResponse<CommentResponse>> {
@@ -17,10 +17,13 @@ export class CommentService {
         if (file) {
             form.append("image", file)
         }
-        form.append("blog", JSON.stringify(comment));
+        form.append("comment", JSON.stringify(comment));
         return instance.post(`${basePath}/${id}`, form);
     }
     static delete(id: string): Promise<ApiResponse<void>> {
         return instance.delete(`${basePath}/${id}`);
+    }
+    static readPageByBlog(id: string, page = 1, size = 5): Promise<ApiResponse<PageResponse<CommentResponse>>> {
+        return instance.get(`${basePath}/blog/${id}`, { params: { page, size } });
     }
 }
