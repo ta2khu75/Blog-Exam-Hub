@@ -1,7 +1,7 @@
 package com.ta2khu75.quiz.model.request;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
@@ -13,5 +13,5 @@ import lombok.experimental.FieldDefaults;
 public class RoleRequest {
 	@NotBlank
 	String name;
-	List<Long> permissionIds=new ArrayList<>();
+	Set<Long> permissionIds=new HashSet<>();
 }

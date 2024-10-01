@@ -1,4 +1,4 @@
- interface RoleRequest{
+interface RoleRequest {
     name: string;
-    permission_ids: number[];
+    permission_ids: Set<number>;
 }

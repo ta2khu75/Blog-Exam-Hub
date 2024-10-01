@@ -120,8 +120,8 @@ public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper>
 		Pageable pageable = Pageable.ofSize(blogSearchRequest.getSize()).withPage(blogSearchRequest.getPage() - 1);
 		return mapper
 				.toPageResponse(repository.searchBlog(blogSearchRequest.getBlogTagNames(), blogSearchRequest.getKeyword(),
-						null, blogSearchRequest.getAuthorId(), blogSearchRequest.getMinView(), blogSearchRequest.getMaxView(), blogSearchRequest.getAccessModifier(), pageable));
-	}
+						blogSearchRequest.getAuthorEmail(), blogSearchRequest.getAuthorId(), blogSearchRequest.getMinView(), blogSearchRequest.getMaxView(), blogSearchRequest.getAccessModifier(), pageable));
+		}
 
 	@Override
 	public Long countByAuthorEmail(String authorEmail) {

@@ -40,7 +40,7 @@ const HeaderFragment = () => {
     });
   };
   return (
-    <nav className="navbar navbar-expand-lg d-block" id="top" style={{ background: "#4f98a4" }}>
+    <nav className="navbar navbar-expand-lg d-block" id="top" style={{ background: "#4B94A1" }}>
       <div className="container">
         <Link className="navbar-brand" to="/">
           <i className="bi-back" />

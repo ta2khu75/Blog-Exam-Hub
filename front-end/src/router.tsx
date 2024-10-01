@@ -21,7 +21,6 @@ import ExamHomePage from "./component/page/ExamHomePage";
 import BlogDetailsPage from "./component/page/BlogDetailsPage";
 import ContactPage from "./component/page/ContactPage";
 import AboutPage from "./component/page/AboutPage";
-import AuthorPage from "./component/page/AuthorPage";
 import ExamResultChild from "./component/page/profile/child/ExamResultChild";
 import BlogListPage from "./component/page/BlogListPage";
 import ExamListPage from "./component/page/ExamListPage";
@@ -29,6 +28,7 @@ import DashboardChild from "./component/page/admin/child/DashboardChild";
 import ProfilePage from "./component/page/profile/ProfilePage";
 import ManagerRoleChild from "./component/page/admin/child/ManagerRoleChild";
 import ManagerAccountChild from "./component/page/admin/child/ManagerAccountChild";
+import AuthorPage from "./component/page/AuthorPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -72,7 +72,21 @@ const router = createBrowserRouter([
       },
       {
         path: "author/:authorId",
-        element: <AuthorPage />
+        element: <AuthorPage />,
+        children: [
+          {
+            index: true,
+            element: <BlogListPage />
+          },
+          {
+            path: "blog",
+            element: <BlogListPage />
+          },
+          {
+            path: "exam",
+            element: <ExamListPage />
+          }
+        ]
       },
       {
         path: "blog/search",

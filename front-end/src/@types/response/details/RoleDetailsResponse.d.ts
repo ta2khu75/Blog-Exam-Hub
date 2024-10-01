@@ -1,3 +1,3 @@
-interface RoleDetailsResponse extends RoleResponse{
-    permissionIds:number[];
+interface RoleDetailsResponse extends RoleResponse {
+    permission_ids: Set<number>
 }

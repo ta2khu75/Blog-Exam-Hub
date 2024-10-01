@@ -2,6 +2,8 @@ package com.ta2khu75.quiz.service.impl;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -43,7 +45,7 @@ public class RoleServiceImpl  implements RoleService {
 	public RoleDetailsResponse update(Long id, RoleRequest request) {
 		Role role = this.find(id);
 		mapper.update(request, role);
-		if (role.getPermissions().stream().map(Permission::getId).noneMatch(request.getPermissionIds()::contains)) {
+		if (request.getPermissionIds().size() != role.getPermissions().size() || !role.getPermissions().stream().map(Permission::getId).collect(Collectors.toSet()).equals(request.getPermissionIds())) {
 			role.setPermissions(new HashSet<>(permissionRepository.findAllById(request.getPermissionIds())));
 		}
 		role = repository.save(role);

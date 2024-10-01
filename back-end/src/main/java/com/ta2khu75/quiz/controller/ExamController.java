@@ -70,15 +70,6 @@ public class ExamController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@GetMapping("my-exam")
-	public ResponseEntity<PageResponse<ExamResponse>> searchMyExam(ExamSearchRequest examSearchRequest) {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
-		examSearchRequest.setAuthorEmail(email);
-		examSearchRequest.setAccessModifier(null);
-		examSearchRequest.setAuthorId(null);
-		return ResponseEntity.ok(service.searchExam(examSearchRequest));
-	}
 
 	@GetMapping
 	public ResponseEntity<PageResponse<ExamResponse>> searchExam(ExamSearchRequest examSearchRequest) {
@@ -87,13 +78,22 @@ public class ExamController {
 		return ResponseEntity.ok(service.searchExam(examSearchRequest));
 	}
 
-	@GetMapping("my-exam/count")
-	public ResponseEntity<CountResponse> countMyExam() {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
-		return ResponseEntity.ok(new CountResponse(service.countByAuthorEmail(email)));
-	}
-
+//	@GetMapping("my-exam/count")
+//	public ResponseEntity<CountResponse> countMyExam() {
+//		String email = SecurityUtil.getCurrentUserLogin()
+//				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
+//		return ResponseEntity.ok(new CountResponse(service.countByAuthorEmail(email)));
+//	}
+//
+//	@GetMapping("my-exam")
+//	public ResponseEntity<PageResponse<ExamResponse>> searchMyExam(ExamSearchRequest examSearchRequest) {
+//		String email = SecurityUtil.getCurrentUserLogin()
+//				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
+//		examSearchRequest.setAuthorEmail(email);
+//		examSearchRequest.setAccessModifier(null);
+//		examSearchRequest.setAuthorId(null);
+//		return ResponseEntity.ok(service.searchExam(examSearchRequest));
+//	}
 	@GetMapping("{authorId}/count")
 	public ResponseEntity<CountResponse> countExamAuthor(@PathVariable("authorId") String id) {
 		return ResponseEntity

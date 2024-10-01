@@ -5,12 +5,13 @@ import ExamService from "../../../service/ExamService";
 import ModalElement from "../../element/ModalElement";
 import ChangeInfoForm from "../../element/form/ChangeInfoForm";
 import ChangePasswordForm from "../../element/form/ChangePasswordForm";
-import { NavLink, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Tabs, TabsProps } from "antd";
 import BlogListPage from "../BlogListPage";
 import ExamListPage from "../ExamListPage";
 import ManagerBlogChild from "./child/ManagerBlogChild";
 import ManagerExamChild from "./child/ManagerExamChild";
+import ExamResultChild from "./child/ExamResultChild";
 
 const ProfilePage = () => {
     const { pathname } = useLocation()
@@ -47,19 +48,19 @@ const ProfilePage = () => {
             {
                 key: 'blog-tab',
                 label: 'Blogs',
-                children: pathname === "/profile-new" ? <ManagerBlogChild /> : <BlogListPage />,
+                children: pathname === "/profile" ? <ManagerBlogChild /> : <BlogListPage />,
             },
             {
                 key: 'exam-tab',
                 label: 'Exams',
-                children: pathname === "/profile-new" ? <ManagerExamChild /> : <ExamListPage />,
+                children: pathname === "/profile" ? <ManagerExamChild /> : <ExamListPage />,
             },
         ];
-        if (pathname === "/profile-new") {
+        if (pathname === "/profile") {
             items.push({
                 key: 'exam-result-tab',
                 label: 'Exam results',
-                children: 'Content of Tab Pane 4'
+                children: <ExamResultChild />
             })
         }
         return items;
@@ -116,20 +117,15 @@ const ProfilePage = () => {
                                 <li><b>Birth day</b>: {account?.birthday}</li>
                             </ul>
                         </div>
-                        <div className="col-lg-4 order-last">
-                            <ul className="list-unstyled d-flex align-items-center justify-content-center justify-content-lg-start my-3 gap-3">
-                                <li><button className="btn btn-primary" onClick={() => setOpenChangeInfo(true)}>Change info</button></li>
-                                <li><button className="btn btn-primary" onClick={() => setOpenChangePassword(true)}>Change password</button></li>
-                            </ul>
-                        </div>
+                        {pathname === "/profile" &&
+                            <div className="col-lg-4 order-last">
+                                <ul className="list-unstyled d-flex align-items-center justify-content-center justify-content-lg-start my-3 gap-3">
+                                    <li><button className="btn btn-primary" onClick={() => setOpenChangeInfo(true)}>Change info</button></li>
+                                    <li><button className="btn btn-primary" onClick={() => setOpenChangePassword(true)}>Change password</button></li>
+                                </ul>
+                            </div>
+                        }
                     </div>
-                </div>
-                <div className="d-flex">
-                    <NavLink to={"/profile/blog"}>Blogs</NavLink>
-                    <NavLink to={"/profile/exam"}>Exams</NavLink>
-                    {pathname?.startsWith("/profile") &&
-                        <NavLink to={"/profile/exam"}>Exam result</NavLink>
-                    }
                 </div>
                 <Tabs defaultActiveKey="1" items={tabMemo} />
             </div>
