@@ -1,8 +1,8 @@
 import { Button, Card } from 'antd'
-import { AccessModifier } from '../../../@types/AccessModifier';
+import { AccessModifier } from '../../../types/AccessModifier';
 const { Meta } = Card;
 import { LockOutlined, UnlockOutlined } from '@ant-design/icons';
-import { ExamLevel } from '../../../@types/ExamLevel';
+import { ExamLevel } from '../../../types/ExamLevel';
 import { Link } from 'react-router-dom';
 type Props = {
   exam: ExamResponse,

@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@FieldDefaults(level = AccessLevel.PROTECTED)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public abstract class BlogBase {
 	@NotNull(message = "Title must not be null")
 	String title;
@@ -19,5 +19,4 @@ public abstract class BlogBase {
 	AccessModifier accessModifier;
 	@NotEmpty(message = "Blog tags must not be empty")
 	List<String> blogTags;
-	
 }

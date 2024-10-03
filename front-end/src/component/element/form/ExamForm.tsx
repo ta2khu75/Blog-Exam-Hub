@@ -3,8 +3,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import TextArea from 'antd/es/input/TextArea';
 import { toast } from 'react-toastify';
 import ExamService from '../../../service/ExamService';
-import { ExamLevel } from '../../../@types/ExamLevel';
-import { AccessModifier } from '../../../@types/AccessModifier';
+import { ExamLevel } from '../../../types/ExamLevel';
+import { AccessModifier } from '../../../types/AccessModifier';
 type Props = {
     id?: string;
     exam?: ExamResponse,

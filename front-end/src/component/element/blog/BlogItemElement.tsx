@@ -1,6 +1,6 @@
 import { Button } from 'antd'
 import { LockOutlined, UnlockOutlined } from '@ant-design/icons';
-import { AccessModifier } from '../../../@types/AccessModifier';
+import { AccessModifier } from '../../../types/AccessModifier';
 import { Link } from 'react-router-dom';
 import AvatarElement from '../AvatarElement';
 type Props = {

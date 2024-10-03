@@ -10,7 +10,8 @@ import com.ta2khu75.quiz.model.response.CommentResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 
 import org.mapstruct.Mapping;
-@Mapper(componentModel = "spring")
+
+@Mapper(componentModel = "spring", uses = { AccountMapper.class, BlogMapper.class, InfoMapper.class })
 public interface CommentMapper {
 	@Mapping(target = "author", ignore = true)
 	@Mapping(target = "blog", ignore = true)
@@ -19,6 +20,7 @@ public interface CommentMapper {
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "updatedAt", ignore = true)
 	Comment toEntity(CommentRequest request);
+
 	@Mapping(target = "author", ignore = true)
 	@Mapping(target = "blog", ignore = true)
 	@Mapping(target = "createdAt", ignore = true)
@@ -26,6 +28,10 @@ public interface CommentMapper {
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "updatedAt", ignore = true)
 	void update(CommentRequest request, @MappingTarget Comment entity);
-	CommentResponse toResponse(Comment entity);
-	PageResponse<CommentResponse> toPageResponse(Page<Comment> commentPage);	
+
+	@Mapping(target = "info", source = "comment", qualifiedByName = "toInfoResponse")
+	@Mapping(target = "author", source = "author", qualifiedByName = "toAccountResponse")
+	CommentResponse toResponse(Comment comment);
+
+	PageResponse<CommentResponse> toPageResponse(Page<Comment> commentPage);
 }

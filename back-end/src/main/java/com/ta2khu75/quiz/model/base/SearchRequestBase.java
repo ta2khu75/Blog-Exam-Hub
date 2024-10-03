@@ -2,14 +2,17 @@ package com.ta2khu75.quiz.model.base;
 
 import com.ta2khu75.quiz.model.AccessModifier;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.experimental.FieldDefaults;
 
 @Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public abstract class SearchRequestBase {
-	protected String keyword;
-	protected String authorId;
-	protected String authorEmail;
-	protected AccessModifier accessModifier;
-	protected int page = 1;
-	protected int size = 10;
+	String keyword;
+	String authorId;
+	String authorEmail;
+	AccessModifier accessModifier;
+	int page = 1;
+	int size = 10;
 }

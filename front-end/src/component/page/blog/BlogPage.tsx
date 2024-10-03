@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import ReactQuill from 'react-quill'
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import 'react-quill/dist/quill.snow.css';
-import { AccessModifier } from '../../../@types/AccessModifier';
+import { AccessModifier } from '../../../types/AccessModifier';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BlogService } from '../../../service/BlogService';
 import { toast } from 'react-toastify';

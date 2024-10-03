@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ExamHistoryService from "../../service/ExamResultService";
-import UserAnswerResponse from "../../@types/response/UserAnswerResponse";
+import UserAnswerResponse from "../../types/response/UserAnswerResponse";
 import AnswerListElement from "../element/AnswerListElement";
 const ExamHistoryPage = () => {
   const { examHistoryId } = useParams();

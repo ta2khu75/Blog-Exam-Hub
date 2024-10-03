@@ -1,7 +1,7 @@
 import { Alert, Button, Checkbox, Form, FormProps, Input, Radio, Space } from 'antd'
 import TextArea from 'antd/es/input/TextArea';
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
-import { QuizType } from '../../../@types/QuizType';
+import { QuizType } from '../../../types/QuizType';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { addQuiz, updateQuiz } from '../../../redux/slice/quizSlice';

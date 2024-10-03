@@ -1,6 +1,5 @@
 package com.ta2khu75.quiz.model.response;
 
-
 import com.ta2khu75.quiz.model.base.AccountBase;
 
 import lombok.AccessLevel;
@@ -14,9 +13,9 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@FieldDefaults(level = AccessLevel.PROTECTED)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class AccountResponse extends AccountBase {
-	String id;
 	String username;
 	String email;
+	InfoResponse info;
 }

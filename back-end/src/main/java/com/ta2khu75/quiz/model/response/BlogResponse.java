@@ -1,7 +1,5 @@
 package com.ta2khu75.quiz.model.response;
 
-import java.time.LocalDate;
-
 import com.ta2khu75.quiz.model.base.BlogBase;
 
 import lombok.AccessLevel;
@@ -11,13 +9,11 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@FieldDefaults(level = AccessLevel.PROTECTED)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class BlogResponse extends BlogBase {
-	String id;
 	int viewCount;
 	int commentCount;
 	String imagePath;
-	LocalDate createdAt;
-	LocalDate lastModifiedAt;
 	AccountResponse author;
+	InfoResponse info;
 }

@@ -1,7 +1,5 @@
 package com.ta2khu75.quiz.model.response;
 
-import java.time.LocalDate;
-
 import com.ta2khu75.quiz.model.base.ExamBase;
 
 import lombok.AccessLevel;
@@ -11,12 +9,10 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@FieldDefaults(level = AccessLevel.PROTECTED)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ExamResponse extends ExamBase {
-	String id;
 	String imagePath;
 	AccountResponse author;
 	ExamCategoryResponse examCategory;
-	LocalDate createdAt;
-	LocalDate lastModifiedAt;
+	InfoResponse info;
 }

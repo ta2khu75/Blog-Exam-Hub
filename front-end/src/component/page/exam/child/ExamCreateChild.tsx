@@ -2,7 +2,7 @@ import { Button, Card, Checkbox, Radio, Space } from 'antd'
 import { useEffect, useState } from 'react'
 import ModalElement from '../../../element/ModalElement'
 import QuizFormNew from '../../../element/form/QuizFormNew';
-import { QuizType } from '../../../../@types/QuizType';
+import { QuizType } from '../../../../types/QuizType';
 import ExamFormNew from '../../../element/form/ExamFormNew';
 import ExamCategoryService from '../../../../service/ExamCategoryService';
 import { useAppDispatch, useAppSelector } from '../../../../redux/hooks';
@@ -10,7 +10,7 @@ import { deleteQuiz, setQuizzes } from '../../../../redux/slice/quizSlice';
 import IfElseElement from '../../../element/IfElseElement';
 import { useParams } from 'react-router-dom';
 import ExamService from '../../../../service/ExamService';
-import { ExamStatus } from '../../../../@types/ExamStatus';
+import { ExamStatus } from '../../../../types/ExamStatus';
 
 const ExamCreateChild = () => {
     const { examId } = useParams();

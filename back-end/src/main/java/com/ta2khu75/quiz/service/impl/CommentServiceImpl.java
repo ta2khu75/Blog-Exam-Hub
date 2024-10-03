@@ -61,7 +61,7 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentRepository, Comme
 
 	@Override
 	@Validated(Default.class)
-	public CommentResponse update(Long id, @Valid CommentRequest request, MultipartFile file) throws IOException {
+	public CommentResponse update(String id, @Valid CommentRequest request, MultipartFile file) throws IOException {
 		Comment comment = FunctionUtil.findOrThrow(id, Comment.class, repository::findById);
 		mapper.update(request, comment);
 		fileUtil.saveFile(comment, file, Folder.COMMENT_FOLDER, Comment::setFilePath);
@@ -69,12 +69,12 @@ public class CommentServiceImpl extends BaseServiceImpl<CommentRepository, Comme
 	}
 
 	@Override
-	public CommentResponse read(Long id) {
+	public CommentResponse read(String id) {
 		return mapper.toResponse(FunctionUtil.findOrThrow(id, Comment.class, repository::findById));
 	}
 
 	@Override
-	public void delete(Long id) {
+	public void delete(String id) {
 		repository.deleteById(id);
 	}
 

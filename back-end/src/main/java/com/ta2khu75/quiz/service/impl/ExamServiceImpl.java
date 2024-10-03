@@ -30,7 +30,7 @@ import com.ta2khu75.quiz.model.entity.ExamResult;
 import com.ta2khu75.quiz.model.entity.Quiz;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.ExamCategoryRepository;
-import com.ta2khu75.quiz.repository.ExamHistoryRepository;
+import com.ta2khu75.quiz.repository.ExamResultRepository;
 import com.ta2khu75.quiz.repository.ExamRepository;
 import com.ta2khu75.quiz.service.ExamService;
 import com.ta2khu75.quiz.service.QuizService;
@@ -39,7 +39,7 @@ import com.ta2khu75.quiz.service.util.FileUtil.Folder;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.function.Function;
@@ -55,7 +55,7 @@ public class ExamServiceImpl implements ExamService {
 	AccountRepository accountRepository;
 	ExamMapper mapper;
 	ExamCategoryRepository examCategoryRepository;
-	ExamHistoryRepository examHistoryRepository;
+	ExamResultRepository examHistoryRepository;
 	QuizService quizService;
 	FileUtil fileUtil;
 
@@ -80,11 +80,12 @@ public class ExamServiceImpl implements ExamService {
 						.orElseThrow(() -> new NotFoundException("Could not find account")))
 				.orElseThrow(() -> new NotFoundException("Could not find account")));
 		Exam examSaved = repository.save(exam);
-		examRequest.getQuizzes().forEach(quiz -> {
-			quiz.setExam(examSaved);
-			quizService.create(quiz);
-		});
-		return mapper.toResponse(repository.save(exam));
+//		examRequest.getQuizzes().forEach(quiz -> {
+//			quiz.setExam(examSaved);
+//			quizService.create(quiz);
+//		});
+//		return mapper.toResponse(repository.save(exam));
+		return null;
 	}
 
 	@Override
@@ -147,7 +148,7 @@ public class ExamServiceImpl implements ExamService {
 		Exam exam = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));
 		ExamResult examHistory = ExamResult.builder().account(account).exam(exam)
-				.endTime(LocalDateTime.now().plusMinutes(exam.getDuration() + 1)).build();
+				.endTime(Instant.now().plusSeconds((exam.getDuration()*60L) + 60)).build();
 		examHistoryRepository.save(examHistory);
 		return mapper.toDetailsResponse(exam);
 	}

@@ -7,6 +7,5 @@ import com.ta2khu75.quiz.model.entity.PermissionGroup;
 
 @Mapper(componentModel = "spring")
 public interface PermissionGroupMapper {
-
 	PermissionGroupResponse toResponse(PermissionGroup request);
 }

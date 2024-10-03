@@ -36,7 +36,7 @@ public class CommentController {
 	ObjectMapper mapper;
 
 	@GetMapping("/{id}")
-	public ResponseEntity<CommentResponse> readComment(@PathVariable("id") Long id) {
+	public ResponseEntity<CommentResponse> readComment(@PathVariable("id") String id) {
 		return ResponseEntity.ok(service.read(id));
 	}
 	@GetMapping("/blog/{id}")
@@ -47,7 +47,7 @@ public class CommentController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<BlogResponse> deleteComment(@PathVariable("id") Long id) {
+	public ResponseEntity<BlogResponse> deleteComment(@PathVariable("id") String id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
@@ -60,7 +60,7 @@ public class CommentController {
 	}
 
 	@PutMapping(path = "/{id}", consumes = "multipart/form-data")
-	public ResponseEntity<CommentResponse> updateComment(Long id, @RequestPart("comment") String request,
+	public ResponseEntity<CommentResponse> updateComment(@PathVariable("id") String id, @RequestPart("comment") String request,
 			@RequestPart(name = "image", required = false) MultipartFile file) throws IOException {
 		CommentRequest commentRequest = mapper.readValue(request, CommentRequest.class);
 		return ResponseEntity.ok(service.update(id, commentRequest, file));

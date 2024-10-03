@@ -1,12 +1,10 @@
 package com.ta2khu75.quiz.model.request;
 
-import com.ta2khu75.quiz.model.base.ExamCategoryBase;
-
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class ExamCategoryRequest extends ExamCategoryBase{
-
+public class ExamCategoryRequest{
+	@NotBlank(message = "Name must not be blank")
+	private String name;
 }

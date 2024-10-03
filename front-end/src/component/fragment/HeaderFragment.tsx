@@ -23,6 +23,8 @@ const HeaderFragment = () => {
       element.scrollIntoView({ behavior: 'smooth' });
     }
     if (quizzes.length > 0 && pathname !== "/manager-exam/create") {
+      console.log(pathname);
+
       dispatch(resetQuiz())
     }
   }, [pathname]);

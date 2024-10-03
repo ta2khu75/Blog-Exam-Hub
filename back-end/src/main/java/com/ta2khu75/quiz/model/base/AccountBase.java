@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@FieldDefaults(level = AccessLevel.PROTECTED)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public abstract class AccountBase {
 	@NotBlank(message = "First name must not be blank")
 	String firstName;

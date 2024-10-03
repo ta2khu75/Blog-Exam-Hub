@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@FieldDefaults(level = AccessLevel.PROTECTED)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public abstract class ExamBase {
 	@NotBlank(message = "Title must not be blank")
 	String title;

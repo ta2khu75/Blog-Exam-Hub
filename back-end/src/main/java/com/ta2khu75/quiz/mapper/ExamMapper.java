@@ -19,38 +19,45 @@ import com.ta2khu75.quiz.model.entity.Quiz;
 
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {AccountMapper.class, InfoMapper.class})
 public interface ExamMapper {
-	@Named("toExamResponse")
-	ExamResponse toResponse(Exam exam);
-
 	@Mapping(target = "createdAt", ignore = true)
-	@Mapping(target = "lastModifiedAt", ignore = true)
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "updatedAt", ignore = true)
+	@Mapping(target = "author", ignore = true)
 	@Mapping(target = "blog", ignore = true)
 	@Mapping(target = "deleted", ignore = true)
-	@Mapping(target = "author", ignore = true)
 	@Mapping(target = "examCategory", ignore = true)
 	@Mapping(target = "examResults", ignore = true)
-	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "imagePath", ignore = true)
 	@Mapping(target = "quizzes", ignore = true)
 	Exam toEntity(ExamRequest request);
 
 	@Mapping(target = "createdAt", ignore = true)
-	@Mapping(target = "lastModifiedAt", ignore = true)
+	@Mapping(target = "id", ignore = true)
+	@Mapping(target = "updatedAt", ignore = true)
+	@Mapping(target = "author", ignore = true)
 	@Mapping(target = "blog", ignore = true)
 	@Mapping(target = "deleted", ignore = true)
-	@Mapping(target = "author", ignore = true)
 	@Mapping(target = "examCategory", ignore = true)
 	@Mapping(target = "examResults", ignore = true)
-	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "imagePath", ignore = true)
 	@Mapping(target = "quizzes", ignore = true)
 	void update(ExamRequest request, @MappingTarget Exam exam);
+	
+	@Named("toExamResponse")
+	@Mapping(target = "info", source = "exam", qualifiedByName = "toInfoResponse")
+	@Mapping(target = "author", source = "author", qualifiedByName = "toAccountResponse")
+	ExamResponse toResponse(Exam exam);
+	
+	@Named("toExamDetailsResponse")
+	@Mapping(target = "info", source = "exam", qualifiedByName = "toInfoResponse")
+	@Mapping(target = "author", source = "author", qualifiedByName = "toAccountResponse")
+	ExamDetailsResponse toDetailsResponse(Exam exam);
+
 	@Mapping(target = "content", qualifiedByName = "toExamResponse")
 	PageResponse<ExamResponse> toPageResponse(Page<Exam> page);
 
-	ExamDetailsResponse toDetailsResponse(Exam exam);
 	default QuizDetaislResponse toResponseDetails(Quiz quiz) {
 		QuizDetaislResponse quizDetaislResponse = new QuizDetaislResponse();
 		quizDetaislResponse.setId(quiz.getId());

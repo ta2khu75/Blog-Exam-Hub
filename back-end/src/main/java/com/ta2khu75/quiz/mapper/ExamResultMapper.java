@@ -13,27 +13,38 @@ import com.ta2khu75.quiz.model.response.ExamResultResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.ExamResultDetailsResponse;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { AccountMapper.class, InfoMapper.class, ExamMapper.class })
 public interface ExamResultMapper {
 	@Named("toExamHistoryResponse")
-	@Mapping(target="exam.author", source="exam.author")
-	@Mapping(target="exam.quizzes", source="exam.quizzes")
-	ExamResultResponse toResponse(ExamResult examHistory);
-	@Mapping(target="exam.author", source="exam.author")
-	ExamResultDetailsResponse toDetailsResponse(ExamResult examHistory);
+	@Mapping(target = "exam.author", source = "exam.author")
+	@Mapping(target = "exam.quizzes", source = "exam.quizzes")
+	@Mapping(target = "info", source = "examResult", qualifiedByName = "toInfoResponse")
+	@Mapping(target = "account", source = "account", qualifiedByName = "toAccountResponse")
+	@Mapping(target = "exam", source = "exam", qualifiedByName = "toExamDetailsResponse")
+	ExamResultResponse toResponse(ExamResult examResult);
+
+	@Mapping(target = "exam.author", source = "exam.author")
+	@Mapping(target = "info", source = "examResult", qualifiedByName = "toInfoResponse")
+	@Mapping(target = "account", source = "account", qualifiedByName = "toAccountResponse")
+	@Mapping(target = "exam", source = "exam", qualifiedByName = "toExamDetailsResponse")
+	ExamResultDetailsResponse toDetailsResponse(ExamResult examResult);
 
 	@Mapping(target = "content", qualifiedByName = "toExamHistoryResponse")
 	PageResponse<ExamResultResponse> toPageResponse(Page<ExamResult> page);
+
 	default AnswerResponse toResponse(Answer answer) {
-		if(answer == null) return null;
+		if (answer == null)
+			return null;
 		AnswerResponse answerResponse = new AnswerResponse();
 		answerResponse.setId(answer.getId());
 		answerResponse.setCorrect(answer.getCorrect());
 		answerResponse.setAnswer(answer.getAnswerString());
 		return answerResponse;
 	}
+
 	default String toResponse(Role role) {
-		if(role==null) return null;
+		if (role == null)
+			return null;
 		return role.getName();
 	}
 }

@@ -3,7 +3,7 @@ import { store } from "../redux/store";
 import axiosRetry from "axios-retry";
 import AuthService from "../service/AuthService";
 import { setAccount } from "../redux/slice/accountSlice";
-import FailedQueueItem from "../@types/FailedQueueItem";
+import FailedQueueItem from "../types/FailedQueueItem";
 
 const instance = axios.create({
   baseURL: "http://localhost:8080/api/v1/",

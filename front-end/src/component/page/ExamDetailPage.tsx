@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { MutableRefObject, useEffect, useRef, useState } from "react";
 import AnswerListElement from "../element/AnswerListElement";
 import RandomUtil from "../../util/RandomUtil";
-import ExamHistoryService from "../../service/ExamResultService";
+import ExamResultService from "../../service/ExamResultService";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { deleteExam, setExam } from "../../redux/slice/examSlice";
 import { deleteUserExam, setUserExam } from "../../redux/slice/userExamSlice";
@@ -49,7 +49,7 @@ const ExamDetailPage = () => {
   };
   const fetchExamHistoryResponse = () => {
     if (examId)
-      ExamHistoryService.readByExamId(examId).then((d) => {
+      ExamResultService.readByExamId(examId).then((d) => {
         if (d.success) {
           setExamHistoryResponse(d.data);
           stopTimerRef.current = calculatorTime(
@@ -94,12 +94,10 @@ const ExamDetailPage = () => {
           quiz_id: Number(quiz_id),
           answer_ids,
         }));
-    console.log(answerUser);
 
     if (examHistoryResponse?.id && examId)
-      ExamHistoryService.readById(
-        examHistoryResponse?.id,
-        answerUser
+      ExamResultService.submitExam(
+        examHistoryResponse?.id, { user_answers: answerUser }
       ).then((d) => {
         if (d.success) {
           if (stopTimerRef.current) stopTimerRef.current();

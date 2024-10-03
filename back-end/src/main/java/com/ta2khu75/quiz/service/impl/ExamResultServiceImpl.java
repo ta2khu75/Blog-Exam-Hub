@@ -1,7 +1,6 @@
 package com.ta2khu75.quiz.service.impl;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -11,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ta2khu75.quiz.model.request.ExamResultRequest;
 import com.ta2khu75.quiz.model.request.UserAnswerRequest;
 import com.ta2khu75.quiz.model.response.ExamResultResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
@@ -26,7 +26,7 @@ import com.ta2khu75.quiz.model.entity.Quiz;
 import com.ta2khu75.quiz.model.entity.UserAnswer;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.AnswerRepository;
-import com.ta2khu75.quiz.repository.ExamHistoryRepository;
+import com.ta2khu75.quiz.repository.ExamResultRepository;
 import com.ta2khu75.quiz.repository.ExamRepository;
 import com.ta2khu75.quiz.repository.QuizRepository;
 import com.ta2khu75.quiz.repository.UserAnswerRepository;
@@ -42,7 +42,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExamResultServiceImpl implements ExamResultService {
 	ExamResultMapper mapper;
-	ExamHistoryRepository repository;
+	ExamResultRepository repository;
 	ExamRepository examRepository;
 	QuizRepository quizRepository;
 	AnswerRepository answerRepository;
@@ -53,8 +53,8 @@ public class ExamResultServiceImpl implements ExamResultService {
 	public ExamResultResponse readByExamId(String id) {
 		String email = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new NotFoundException("Could not find email"));
-		Optional<ExamResult> history = repository
-				.findByAccountEmailAndExamIdAndEndTimeAfterAndLastModifiedDateIsNull(email, id, LocalDateTime.now());
+		Optional<ExamResult> history = repository.findByAccountEmailAndExamIdAndEndTimeAfterAndUpdatedAtIsNull(email,
+				id, Instant.now());// IsNull(email, id, LocalDateTime.now());
 		if (history.isPresent()) {
 			return mapper.toResponse(history.get());
 		}
@@ -62,33 +62,28 @@ public class ExamResultServiceImpl implements ExamResultService {
 	}
 
 	@Override
-	public ExamResultDetailsResponse scoreByExamId(Long id, UserAnswerRequest[] answerUserRequest) {
+	public ExamResultDetailsResponse scoreByExamId(String id, ExamResultRequest examResultRequest) {
 		ExamResult examHistory = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id));
-		examHistory.setLastModifiedDate(LocalDateTime.now());
-		if (answerUserRequest.length != 0) {
-			this.score(examHistory, answerUserRequest);
+		if (examResultRequest.getUserAnswers().size() != 0) {
+			this.score(examHistory, examResultRequest.getUserAnswers());
 		}
 		return mapper.toDetailsResponse(repository.save(examHistory));
 	}
-	private void score(ExamResult examHistory, UserAnswerRequest[] answerUserRequests) {
-		float score = 0;
 
-		// Truy xuất tất cả câu hỏi và đáp án một lần
-		List<Quiz> quizzes = quizRepository.findByExamId(examHistory.getExam().getId());
-//		Map<Long, Quiz> quizMap = quizzes.stream().collect(Collectors.toMap(Quiz::getId, q -> q));
+	private void score(ExamResult examResult, Set<UserAnswerRequest> userAnswerRequests) {
+		float totalScore = 0;
 
-		// Lấy danh sách quizId từ các yêu cầu trả lời
-		Set<Long> quizIds = Arrays.stream(answerUserRequests).map(UserAnswerRequest::getQuizId)
-				.collect(Collectors.toSet());
+		// Truy xuất tất cả câu hỏi cho bài kiểm tra
+		List<Quiz> quizzes = quizRepository.findByExamId(examResult.getExam().getId());
+		Set<Long> quizIds = userAnswerRequests.stream().map(UserAnswerRequest::getQuizId).collect(Collectors.toSet());
 
 		// Truy xuất tất cả các đáp án cho các quizId
-		List<Answer> answers = answerRepository.findByQuizIdIn(quizIds);
-		Map<Long, List<Answer>> answerMap = answers.stream()
+		Map<Long, List<Answer>> answerMap = answerRepository.findByQuizIdIn(quizIds).stream()
 				.collect(Collectors.groupingBy(answer -> answer.getQuiz().getId()));
 
-		// Tạo Map từ quizId đến AnswerUserRequest
-		Map<Long, UserAnswerRequest> answerUserRequestMap = Arrays.stream(answerUserRequests)
+		// Tạo Map từ quizId đến UserAnswerRequest
+		Map<Long, UserAnswerRequest> answerUserRequestMap = userAnswerRequests.stream()
 				.collect(Collectors.toMap(UserAnswerRequest::getQuizId, ar -> ar));
 
 		// Tính điểm cho từng quiz
@@ -96,23 +91,67 @@ public class ExamResultServiceImpl implements ExamResultService {
 			UserAnswerRequest answerUserRequest = answerUserRequestMap.get(quiz.getId());
 			if (answerUserRequest != null) {
 				List<Answer> quizAnswers = answerMap.get(quiz.getId());
-				if (quizAnswers == null) {
-					continue; // Nếu không có đáp án cho câu hỏi, bỏ qua
-				}
-				saveUserAnswer(examHistory, quiz, quizAnswers, answerUserRequest.getAnswerIds());
-				if (quiz.getQuizType() == QuizType.SINGLE_CHOICE) {
-					score += caculateScoreQuizSingleChoice(quizAnswers, answerUserRequest.getAnswerIds());
-				} else {
-					score += caculateScoreQuizMultiChoice(quizAnswers, answerUserRequest.getAnswerIds());
-				}
+
+				// Bỏ qua nếu không có đáp án cho câu hỏi
+				if (quizAnswers == null)
+					continue;
+
+				saveUserAnswer(examResult, quiz, quizAnswers, answerUserRequest.getAnswerIds());
+
+				totalScore += (quiz.getQuizType() == QuizType.SINGLE_CHOICE)
+						? caculateScoreQuizSingleChoice(quizAnswers, answerUserRequest.getAnswerIds())
+						: caculateScoreQuizMultiChoice(quizAnswers, answerUserRequest.getAnswerIds());
 			}
 		}
 
-		examHistory.setCorrectCount((int) score);
-		// Tính điểm cho một lần
-		float num = score / quizzes.size();
-		examHistory.setPoint((float) (Math.round(num * 100) / 10));
+		int correctCount = (int) totalScore;
+		examResult.setCorrectCount(correctCount);
+
+		// Tính điểm cho một lần
+		float averageScore = totalScore / quizzes.size();
+		examResult.setPoint((float) Math.round(averageScore * 10)); // Đã thay đổi để đơn giản hóa
 	}
+
+//	private void score(ExamResult examHistory, Set<UserAnswerRequest> userAnswerRequests) {
+//		float score = 0;
+//
+//		// Truy xuất tất cả câu hỏi và đáp án một lần
+//		List<Quiz> quizzes = quizRepository.findByExamId(examHistory.getExam().getId());
+////		Map<Long, Quiz> quizMap = quizzes.stream().collect(Collectors.toMap(Quiz::getId, q -> q));
+//
+//		// Lấy danh sách quizId từ các yêu cầu trả lời
+//		Set<Long> quizIds = userAnswerRequests.stream().map(UserAnswerRequest::getQuizId).collect(Collectors.toSet());
+//
+//		// Truy xuất tất cả các đáp án cho các quizId
+//		List<Answer> answers = answerRepository.findByQuizIdIn(quizIds);
+//		Map<Long, List<Answer>> answerMap = answers.stream()
+//				.collect(Collectors.groupingBy(answer -> answer.getQuiz().getId()));
+//
+//		// Tạo Map từ quizId đến AnswerUserRequest
+//		Map<Long, UserAnswerRequest> answerUserRequestMap = userAnswerRequests.stream().collect(Collectors.toMap(UserAnswerRequest::getQuizId, ar -> ar));
+//
+//		// Tính điểm cho từng quiz
+//		for (Quiz quiz : quizzes) {
+//			UserAnswerRequest answerUserRequest = answerUserRequestMap.get(quiz.getId());
+//			if (answerUserRequest != null) {
+//				List<Answer> quizAnswers = answerMap.get(quiz.getId());
+//				if (quizAnswers == null) {
+//					continue; // Nếu không có đáp án cho câu hỏi, bỏ qua
+//				}
+//				saveUserAnswer(examHistory, quiz, quizAnswers, answerUserRequest.getAnswerIds());
+//				if (quiz.getQuizType() == QuizType.SINGLE_CHOICE) {
+//					score += caculateScoreQuizSingleChoice(quizAnswers, answerUserRequest.getAnswerIds());
+//				} else {
+//					score += caculateScoreQuizMultiChoice(quizAnswers, answerUserRequest.getAnswerIds());
+//				}
+//			}
+//		}
+//
+//		examHistory.setCorrectCount((int) score);
+//		// Tính điểm cho một lần
+//		float num = score / quizzes.size();
+//		examHistory.setPoint((float) (Math.round(num * 100) / 10));
+//	}
 
 	private void saveUserAnswer(ExamResult examHistory, Quiz quiz, List<Answer> answers, Set<Long> answerIds) {
 		UserAnswer userAnswer = new UserAnswer();
@@ -153,11 +192,11 @@ public class ExamResultServiceImpl implements ExamResultService {
 	public PageResponse<ExamResultResponse> readPage(Pageable pageable) {
 		String email = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new NotFoundException("Could not find email"));
-		return mapper.toPageResponse(repository.findByAccountEmailAndLastModifiedDateIsNotNull(email, pageable));
+		return mapper.toPageResponse(repository.findByAccountEmailAndUpdatedAtIsNotNull(email, pageable));
 	}
 
 	@Override
-	public ExamResultDetailsResponse read(Long id) {
+	public ExamResultDetailsResponse read(String id) {
 		return mapper.toDetailsResponse(repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id)));
 	}
@@ -171,7 +210,7 @@ public class ExamResultServiceImpl implements ExamResultService {
 		Account account = accountRepository.findByEmail(email)
 				.orElseThrow(() -> new NotFoundException("Could not find account with email: " + email));
 		ExamResult examResult = ExamResult.builder().account(account).exam(exam)
-				.endTime(LocalDateTime.now().plusMinutes(exam.getDuration()).plusSeconds(30)).build();
+				.endTime(Instant.now().plusSeconds(exam.getDuration() * 60L).plusSeconds(30)).build();
 		return mapper.toResponse(repository.save(examResult));
 	}
 }

@@ -4,15 +4,12 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
 import java.util.List;
-
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.ExamLevel;
@@ -22,12 +19,10 @@ import com.ta2khu75.quiz.model.ExamStatus;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ToString(exclude = {"author","blog", "quizzes","examCategory", "examResults"})
-public class Exam {
-	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	String id;
+public class Exam extends EntityBase {
 	@Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")	
 	String title;
 	@Column(nullable = false)
@@ -37,12 +32,6 @@ public class Exam {
 	@Column(nullable = false)
 	String imagePath;
 	boolean deleted;
-	@CreatedDate
-	@Column(nullable = false, updatable = false)
-	LocalDate createdAt;
-	@LastModifiedDate
-	@Column(insertable = false)
-	LocalDate lastModifiedAt;
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	ExamLevel examLevel;

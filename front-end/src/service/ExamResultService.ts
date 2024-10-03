@@ -1,14 +1,14 @@
 import instance from "../util/apiInstance";
 const basePath = "exam-result";
-export default class ExamHistoryService {
-  static readByExamId(id: string): Promise<ApiResponse<ExamResultResponse>> {
-    return instance.get(`${basePath}/exam/${id}`);
+export default class ExamResultService {
+  static readByExamId(examId: string): Promise<ApiResponse<ExamResultResponse>> {
+    return instance.get(`${basePath}/exam/${examId}`);
   }
-  static readById(
-    id: number,
-    data: AnswerUserRequest[]
+  static submitExam(
+    id: string,
+    data: ExamResultRequest
   ): Promise<ApiResponse<ExamResultResponse>> {
-    return instance.post(`${basePath}/${id}`, data);
+    return instance.put(`${basePath}/${id}`, data);
   }
   static readDetailsById(
     id: number

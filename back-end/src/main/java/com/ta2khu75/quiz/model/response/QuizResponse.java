@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@FieldDefaults(level = AccessLevel.PROTECTED)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class QuizResponse extends QuizBase{
 	Long id;
 	String filePath;

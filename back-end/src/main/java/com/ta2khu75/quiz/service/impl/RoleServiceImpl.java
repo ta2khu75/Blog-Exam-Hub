@@ -2,7 +2,6 @@ package com.ta2khu75.quiz.service.impl;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.context.ApplicationEventPublisher;

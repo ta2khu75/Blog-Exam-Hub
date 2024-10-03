@@ -1,4 +1,4 @@
-import { ExamSearchRequest } from "../@types/request/search/ExamSearchRequest";
+import { ExamSearchRequest } from "../types/request/search/ExamSearchRequest";
 import instance from "../util/apiInstance";
 import qs from 'qs';
 const basePath = "exam";

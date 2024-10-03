@@ -6,8 +6,8 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class EndpointResponse {
 	String path;
 	String method;

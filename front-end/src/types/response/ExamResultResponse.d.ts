@@ -1,7 +1,7 @@
-interface ExamResultResponse{
-    id: number;
+interface ExamResultResponse {
+    id: string;
     point: number;
-    correct_count:number;
+    correct_count: number;
     exam: ExamDetailsResponse;
     account: AccountResponse;
     end_time: Date;

@@ -1,7 +1,6 @@
 package com.ta2khu75.quiz.service.impl;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -94,7 +93,7 @@ public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper>
 		fileUtil.saveFile(blog, file, Folder.BLOG_FOLDER, Blog::setImagePath);
 		List<BlogTag> blogTags = saveAll(request.getBlogTags());
 		blog.setBlogTags(blogTags);
-		blog.setLastModifiedAt(LocalDate.now());
+//		blog.setLastModifiedAt(LocalDateTime.now());
 		return save(repository.save(blog));
 	}
 

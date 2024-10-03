@@ -10,26 +10,20 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-@Entity
 @Data
+@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EntityListeners(AuditingEntityListener.class)
 @ToString(exclude = {"exams","comments","blogs", "examResults"})
-public class Account implements UserDetails {
+public class Account extends EntityBase implements UserDetails {
 	private static final long serialVersionUID = -6436446209727776976L;
-	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	String id;
 	@Column(unique = true, nullable = false)
 	String email;
 	@Column(unique = true, nullable = false)
@@ -47,12 +41,6 @@ public class Account implements UserDetails {
 	boolean enabled;
 	@Builder.Default
 	boolean nonLocked = true;
-	@CreatedDate
-	@Column(updatable = false, nullable = false)
-	LocalDate createdAt;
-	@LastModifiedDate
-	@Column(insertable = false)
-	LocalDate updatedAt;
 	@ManyToOne
 	Role role;
 	@OneToMany(mappedBy = "author")

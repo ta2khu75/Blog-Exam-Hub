@@ -1,4 +1,4 @@
-import AnswerUserRequest from "../@types/request/AnswerUserRequest";
+import AnswerUserRequest from "../types/request/UserAnswerRequest";
 import instance from "../util/apiInstance";
 const basePath="profession"
 export default class ProfessionService{
