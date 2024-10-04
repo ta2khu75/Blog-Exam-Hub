@@ -27,7 +27,7 @@ const BlogItemHistoryElement = ({ blog, handleDelete, handleEdit }: Props) => {
                             ))}
                         </div>
                         <div className="blog-meta mt-1">
-                            <span className="me-2">Last edit: {info.id?? info.createdAt}</span>
+                            <span className="me-2">Last edit: {info.id?? info.created_at}</span>
                             <span>Views: {view_count}</span>
                         </div>
                     </Link>

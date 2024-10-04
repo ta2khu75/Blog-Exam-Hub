@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 
 import com.ta2khu75.quiz.model.entity.Answer;
 import com.ta2khu75.quiz.model.entity.ExamResult;
-import com.ta2khu75.quiz.model.entity.Role;
 import com.ta2khu75.quiz.model.response.AnswerResponse;
 import com.ta2khu75.quiz.model.response.ExamResultResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
@@ -41,10 +40,10 @@ public interface ExamResultMapper {
 		answerResponse.setAnswer(answer.getAnswerString());
 		return answerResponse;
 	}
-
-	default String toResponse(Role role) {
-		if (role == null)
-			return null;
-		return role.getName();
-	}
+//
+//	default String toResponse(Role role) {
+//		if (role == null)
+//			return null;
+//		return role.getName();
+//	}
 }

@@ -1,6 +1,6 @@
 type Props = {
     username: string,
-    size?: number
+    size?: number,
 }
 const AvatarElement = ({ username, size = 100 }: Props) => {
     return (

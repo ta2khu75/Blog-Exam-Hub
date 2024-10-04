@@ -4,6 +4,7 @@ const { Meta } = Card;
 import { LockOutlined, UnlockOutlined } from '@ant-design/icons';
 import { ExamLevel } from '../../../types/ExamLevel';
 import { Link } from 'react-router-dom';
+import AvatarElement from '../AvatarElement';
 type Props = {
   exam: ExamResponse,
   handleEdit?: () => void;
@@ -39,7 +40,17 @@ const ExamCartElement = ({ exam, handleDelete, handleEdit }: Props) => {
       title={(handleDelete || handleEdit) && <>{exam.access_modifier === AccessModifier.PRIVATE ? <LockOutlined /> : <UnlockOutlined />}</>}
       cover={<Link to={"/exam-about/" + exam.info.id}><img style={{ height: "200px", width: "100%" }} alt="example" src={exam.image_path} /></Link>}
     >
-      <Meta title={<div className=''><h6>{exam.title}</h6><span className='text-muted'>by <Link to={`/author/${exam.author.info.id}`}>{exam.author.username}</Link></span></div>}
+      <Meta title={
+        <div className='d-flex align-items-center'>
+          <div>
+            <Link to={`/author/${exam.author.info.id}`}><AvatarElement size={50} username={exam.author.username} /></Link>
+          </div>
+          <div>
+            <h6 className='my-0'><Link to={"/exam-about/" + exam.info.id}>{exam.title}</Link></h6>
+            <Link className='text-muted' to={`/author/${exam.author.info.id}`}>{exam.author.username}</Link>
+          </div>
+        </div>
+      }
         description={<div>
           <div>
             Level: <span className={`text-light p-1 rounded  ${cssExamLevel(exam.exam_level)}`}>{exam.exam_level}</span>

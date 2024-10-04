@@ -3,6 +3,7 @@ package com.ta2khu75.quiz.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 import com.ta2khu75.quiz.model.request.AnswerRequest;
 import com.ta2khu75.quiz.model.response.AnswerResponse;
@@ -10,6 +11,7 @@ import com.ta2khu75.quiz.model.entity.Answer;
 
 @Mapper(componentModel = "spring")
 public interface AnswerMapper {
+	@Named("toAnswerResponse")
 	@Mapping(target = "answer", source = "answerString")
 	AnswerResponse toResponse(Answer answer);
 

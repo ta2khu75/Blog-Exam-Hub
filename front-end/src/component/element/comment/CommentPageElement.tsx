@@ -10,7 +10,7 @@ const CommentPageElement = ({ commentPage, setPage, page }: Props) => {
   return (
     <>
       {commentPage?.content?.map(comment => {
-        return <CommentItemElement key={comment.id} comment={comment} />
+        return <CommentItemElement key={comment?.info?.id} comment={comment} />
       })}
       <Pagination align="center" onChange={setPage} pageSize={5} defaultCurrent={page} total={commentPage?.total_elements} />
     </>

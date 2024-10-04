@@ -80,12 +80,12 @@ public class ExamServiceImpl implements ExamService {
 						.orElseThrow(() -> new NotFoundException("Could not find account")))
 				.orElseThrow(() -> new NotFoundException("Could not find account")));
 		Exam examSaved = repository.save(exam);
-//		examRequest.getQuizzes().forEach(quiz -> {
-//			quiz.setExam(examSaved);
-//			quizService.create(quiz);
-//		});
-//		return mapper.toResponse(repository.save(exam));
-		return null;
+		examRequest.getQuizzes().forEach(quiz -> {
+			quiz.setExam(examSaved);
+			quizService.create(quiz);
+		});
+		return mapper.toResponse(repository.save(exam));
+//		return null;
 	}
 
 	@Override

@@ -36,7 +36,7 @@ public class ExamResultController {
 		if (response == null) {
 			return ResponseEntity.status(HttpStatus.CREATED).body(service.createByExamId(id));
 		}
-		return ResponseEntity.ok(service.readByExamId(id));
+		return ResponseEntity.ok(response);
 	}
 	@PutMapping("{id}")	
 	public ResponseEntity<ExamResultDetailsResponse> submitExam(@PathVariable("id") String examHistoryId, @RequestBody ExamResultRequest examResultRequest) {

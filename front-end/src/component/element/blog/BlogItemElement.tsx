@@ -9,7 +9,7 @@ type Props = {
     handleDelete?: () => void,
 }
 const BlogItemElement = ({ blog, handleDelete, handleEdit }: Props) => {
-    const { info, title, blog_tags, access_modifier,  comment_count, view_count, author } = blog;
+    const { info, title, blog_tags, access_modifier, comment_count, view_count, author } = blog;
     return (
         <div className="blog-item-element mb-3">
             <div className='row align-items-center small'>
@@ -24,7 +24,7 @@ const BlogItemElement = ({ blog, handleDelete, handleEdit }: Props) => {
                                     <b>{blog.author.username}</b>
                                 </div>
                             </Link>
-                            <span className='text-muted ms-2'>{info.createdAt}</span>
+                            <span className='text-muted ms-2'>{info.created_at}</span>
                         </div>
                     </div>
                     <h6 className="text-info d-flex align-items-center">
