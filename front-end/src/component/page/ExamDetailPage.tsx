@@ -95,9 +95,9 @@ const ExamDetailPage = () => {
           answer_ids,
         }));
 
-    if (examHistoryResponse?.id && examId)
+    if (examHistoryResponse?.info?.id && examId)
       ExamResultService.submitExam(
-        examHistoryResponse?.id, { user_answers: answerUser }
+        examHistoryResponse?.info?.id, { user_answers: answerUser }
       ).then((d) => {
         if (d.success) {
           if (stopTimerRef.current) stopTimerRef.current();

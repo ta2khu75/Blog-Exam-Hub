@@ -7,17 +7,17 @@ type Props = {
     handleDelete?: () => void,
 }
 const BlogItemHistoryElement = ({ blog, handleDelete, handleEdit }: Props) => {
-    const { id, title, blog_tags, last_modified_at, created_at, view_count, author } = blog;
+    const {info, title, blog_tags,  view_count, author } = blog;
     return (
         <div className="blog-item-element mb-3">
             <div className='row align-items-center small'>
                 <div className="col-11">
-                    <Link to={`/blog-details/${id}`} style={{ maxWidth: "600px", margin: "0 auto" }}>
+                    <Link to={`/blog-details/${info.id}`} style={{ maxWidth: "600px", margin: "0 auto" }}>
                         <h6 className="text-info d-flex mb-0 align-items-center">
                             {title}
                         </h6>
                         <span className="text-muted">
-                            by <Link to={`/author/${author.id}`}>{author.username}</Link>
+                            by <Link to={`/author/${author.info.id}`}>{author.username}</Link>
                         </span>
                         <div className="blog-tags mt-1">
                             {blog_tags.map(tag => (
@@ -27,7 +27,7 @@ const BlogItemHistoryElement = ({ blog, handleDelete, handleEdit }: Props) => {
                             ))}
                         </div>
                         <div className="blog-meta mt-1">
-                            <span className="me-2">Last edit: {last_modified_at ?? created_at}</span>
+                            <span className="me-2">Last edit: {info.id?? info.createdAt}</span>
                             <span>Views: {view_count}</span>
                         </div>
                     </Link>

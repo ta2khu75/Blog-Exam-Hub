@@ -32,7 +32,7 @@ const ManagerExamChild = () => {
         <h1>My Exam</h1> <Link className='btn btn-primary' to={"/manager-exam/create"}><AppstoreAddOutlined className='me-2' />Create Exam</Link>
       </div>
       <div className="row">
-        {pageExam?.content?.map(exam => <ExamCartElementNew handleDelete={() => handleDeleteClick(exam.id)} handleEdit={() => handleEditClick(exam.id)} key={`exam-cart-${exam.id}`} exam={exam} />)}
+        {pageExam?.content?.map(exam => <ExamCartElementNew handleDelete={() => handleDeleteClick(exam.info.id)} handleEdit={() => handleEditClick(exam.info.id)} key={`exam-cart-${exam.info.id}`} exam={exam} />)}
       </div>
       {pageExam && <Pagination onChange={(e) => setPage(e)} align="center" defaultCurrent={page} pageSize={6} total={pageExam.total_elements} />}
     </>

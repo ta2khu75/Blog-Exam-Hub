@@ -25,7 +25,7 @@ const ExamForm = ({ id, exam, setExam, examCategories, setExamPage }: Props) => 
         }
     }, [exam, form])
     const onFinish: FormProps<ExamRequest>['onFinish'] = (values) => {
-        if (!exam?.id && image) {
+        if (!exam?.info?.id && image) {
             ExamService.create(values, image).then((response) => {
                 if (response.success) {
                     setExamPage(examPage => examPage ? {
@@ -43,12 +43,12 @@ const ExamForm = ({ id, exam, setExam, examCategories, setExamPage }: Props) => 
                     toast.error(response.message_error)
                 }
             })
-        } else if (exam?.id) {
-            ExamService.update(exam.id, values, image).then((response) => {
+        } else if (exam?.info?.id) {
+            ExamService.update(exam.info.id, values, image).then((response) => {
                 if (response.success) {
                     setExamPage(examPage => examPage ? {
                         ...examPage, content: examPage.content.map((exam) => {
-                            if (exam.id === response.data.id) {
+                            if (exam.info.id === response.data.info.id) {
                                 return response.data;
                             }
                             return exam;

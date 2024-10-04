@@ -10,7 +10,7 @@ const ExamPageElement = ({ examPage, setPage, page }: Props) => {
     return (
         <>
             {examPage?.content?.map(exam => {
-                return <ExamCartElement key={exam.id} exam={exam} />
+                return <ExamCartElement key={exam.info.id} exam={exam} />
             })}
             <Pagination align="center" onChange={setPage} pageSize={5} defaultCurrent={page} total={examPage?.total_elements} />
         </>

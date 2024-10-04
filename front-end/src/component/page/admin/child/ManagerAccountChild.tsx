@@ -51,10 +51,10 @@ const ManagerAccountChild = () => {
   }
   const onFinish: FormProps<AccountStatusRequest>['onFinish'] = (values) => {
     if (account) {
-      AccountService.updateStatus(account.id, values).then((data) => {
+      AccountService.updateStatus(account.info.id, values).then((data) => {
         if (data.success) {
           const updatedAccounts = accountPage?.content.map((account) => {
-            if (account.id === data.data.id) {
+            if (account.info.id === data.data.info.id) {
               return data.data
             } return account;
           })

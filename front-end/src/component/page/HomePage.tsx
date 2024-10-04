@@ -52,7 +52,7 @@ const HomePage = () => {
                 <div className="tab-pane fade show active" id="design-tab-pane" role="tabpanel" aria-labelledby="design-tab" tabIndex={0}>
                   <div className="row">
                     {blogPage?.content?.map(blog => (
-                      <BlogItemElement blog={blog} key={`blog-item-${blog.id}`} />
+                      <BlogItemElement blog={blog} key={`blog-item-${blog.info.id}`} />
                     ))}
                     <Pagination align="center" onChange={setPageBlog} pageSize={5} defaultCurrent={1} total={blogPage?.total_elements} />
                   </div>
@@ -75,7 +75,7 @@ const HomePage = () => {
                 <div className="tab-pane fade show active" id="design-tab-pane" role="tabpanel" aria-labelledby="design-tab" tabIndex={0}>
                   <div className="row">
                     {examPage?.content?.map(examResponse => (
-                      <ExamCartElementNew key={`exam-cart-${examResponse.id}`} exam={examResponse} />
+                      <ExamCartElementNew key={`exam-cart-${examResponse.info.id}`} exam={examResponse} />
                     ))}
                     <Pagination align="center" onChange={setPageExam} pageSize={4} defaultCurrent={1} total={examPage?.total_elements} />
                   </div>

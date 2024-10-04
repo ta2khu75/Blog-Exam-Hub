@@ -33,7 +33,7 @@ const ManagerBlogChild = () => {
         <h1>My blog</h1> <Link className='btn btn-primary' to={"/manager-blog/create"}><AppstoreAddOutlined className='me-2' />Create Blog</Link>
       </div>
       <div className="row">
-        {pageExam?.content?.map(blog => <BlogRowElement blog={blog} handleDelete={() => handleDeleteClick(blog.id)} handleEdit={() => handleEditClick(blog.id)} />)}
+        {pageExam?.content?.map(blog => <BlogRowElement blog={blog} handleDelete={() => handleDeleteClick(blog.info.id)} handleEdit={() => handleEditClick(blog.info.id)} />)}
       </div>
       {pageExam && <Pagination onChange={(e) => setPage(e)} align="center" defaultCurrent={page} pageSize={6} total={pageExam.total_elements} />}
     </>

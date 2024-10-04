@@ -81,7 +81,7 @@ const BlogHomePage = () => {
           <div className="col-3">
             <h4 className="mb-3">Các blog bạn đã xem</h4>
             {FunctionUtil.convertMaptoArray<BlogResponse>(blogHistories)?.map(blogHistory =>
-              <BlogItemHistoryElement handleDelete={() => dispatch(deleteBlogHistory(blogHistory.id))} key={`blog-history-${blogHistory.id}`} blog={blogHistory} />
+              <BlogItemHistoryElement handleDelete={() => dispatch(deleteBlogHistory(blogHistory.info.id))} key={`blog-history-${blogHistory.info.id}`} blog={blogHistory} />
             )}
           </div>
         </div>

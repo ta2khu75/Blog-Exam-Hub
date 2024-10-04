@@ -33,7 +33,7 @@ const ExamAboutPage = () => {
                             </nav>
                             <h2 className="text-white">Introduction to <br />{examResponse?.title}</h2>
                             <div className="d-flex align-items-center mt-5">
-                                <Link to={`/exam-details/${examResponse?.id}`} className="btn custom-btn custom-border-btn smoothscroll me-4">
+                                <Link to={`/exam-details/${examResponse?.info?.id}`} className="btn custom-btn custom-border-btn smoothscroll me-4">
                                     Start Exam
                                 </Link>
                                 <a href="#top" className="custom-icon bi-bookmark" />

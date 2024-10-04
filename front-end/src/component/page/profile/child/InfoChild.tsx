@@ -24,7 +24,7 @@ const InfoChild = () => {
     });
   };
   const handleViewClick = (data: ExamResultResponse) => {
-    navigate(`/exam-history/${data.id}`)
+    navigate(`/exam-history/${data.info.id}`)
   }
   return (
     <div className="row">

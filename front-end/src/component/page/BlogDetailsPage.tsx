@@ -27,7 +27,7 @@ const BlogDetailsPage = () => {
         BlogService.readDetails(blogId).then(response => {
             if (response.success) {
                 setBlog(response.data)
-                dispatch(setBlogHistory({ blogId: response.data.id, blog: response.data }));
+                dispatch(setBlogHistory({ blogId: response.data.info.id, blog: response.data }));
             }
         })
     }
@@ -47,7 +47,7 @@ const BlogDetailsPage = () => {
                     <div className="text-center">
                         <h1>{blog?.title}</h1>
                         <p className="text-muted">
-                            By <Link to={`/author/${blog?.author.id}`}>{blog?.author.username}</Link>
+                            By <Link to={`/author/${blog?.author.info.id}`}>{blog?.author.username}</Link>
                         </p>
                     </div>
 

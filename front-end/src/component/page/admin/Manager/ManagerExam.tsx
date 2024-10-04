@@ -35,7 +35,7 @@ const ExamCrud = () => {
     ExamService.delete(id).then((d) => {
       if (d.success) {
         toast.success("Successfully to delete");
-        setExamPage(examPage => examPage ? { ...examPage, content: examPage.content.filter(exam => exam.id !== id) } : {
+        setExamPage(examPage => examPage ? { ...examPage, content: examPage.content.filter(exam => exam.info.id !== id) } : {
           content: [],
           total_pages: 1,
           total_elements: 1
@@ -49,7 +49,7 @@ const ExamCrud = () => {
     <>
       <ExamForm id="form" exam={exam} setExam={setExam} examCategories={examCategories} setExamPage={setExamPage} />
       <div className="row">
-        {examPage?.content?.map((examResponse) => <ExamCartElement exam={examResponse} key={`exam-cart-${examResponse.id}`} handleDelete={() => handleDeleteClick(examResponse.id)} handleEdit={() => handleEditClick(examResponse)} />)}
+        {examPage?.content?.map((examResponse) => <ExamCartElement exam={examResponse} key={`exam-cart-${examResponse.info.id}`} handleDelete={() => handleDeleteClick(examResponse.info.id)} handleEdit={() => handleEditClick(examResponse)} />)}
       </div>
     </>
   )

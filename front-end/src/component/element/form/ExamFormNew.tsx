@@ -30,7 +30,7 @@ const ExamFormNew = ({ id, exam, quizzes, examCategories }: Props) => {
         }
     }, [exam, form])
     const onFinish: FormProps<ExamRequest>['onFinish'] = (values) => {
-        if (!exam?.id && image) {
+        if (!exam?.info?.id && image) {
             ExamService.create({ ...values, quizzes: quizzes }, image).then((response) => {
                 if (response.success) {
                     handleResetClick();
@@ -41,8 +41,8 @@ const ExamFormNew = ({ id, exam, quizzes, examCategories }: Props) => {
                     toast.error(response.message_error)
                 }
             })
-        } else if (exam?.id) {
-            ExamService.update(exam.id, { ...values, quizzes: quizzes }, image).then((response) => {
+        } else if (exam?.info?.id) {
+            ExamService.update(exam?.info?.id, { ...values, quizzes: quizzes }, image).then((response) => {
                 if (response.success) {
                     handleResetClick();
                     toast.success("successfully to update")

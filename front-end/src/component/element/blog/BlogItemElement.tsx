@@ -9,22 +9,22 @@ type Props = {
     handleDelete?: () => void,
 }
 const BlogItemElement = ({ blog, handleDelete, handleEdit }: Props) => {
-    const { id, title, blog_tags, access_modifier, created_at, comment_count, view_count, author } = blog;
+    const { info, title, blog_tags, access_modifier,  comment_count, view_count, author } = blog;
     return (
         <div className="blog-item-element mb-3">
             <div className='row align-items-center small'>
                 <div className={`col-${handleEdit || handleDelete ? "11" : "12"}`}>
                     <div className='d-flex align-items-center'>
-                        <Link to={`/author/${author.id}`}>
+                        <Link to={`/author/${author.info.id}`}>
                             <AvatarElement username={blog.author.username} size={50} />
                         </Link>
                         <div className='d-flex align-items-center'>
-                            <Link to={`/author/${author.id}`}>
+                            <Link to={`/author/${author.info.id}`}>
                                 <div className='d-flex align-items-center'>
                                     <b>{blog.author.username}</b>
                                 </div>
                             </Link>
-                            <span className='text-muted ms-2'>{created_at}</span>
+                            <span className='text-muted ms-2'>{info.createdAt}</span>
                         </div>
                     </div>
                     <h6 className="text-info d-flex align-items-center">
@@ -33,7 +33,7 @@ const BlogItemElement = ({ blog, handleDelete, handleEdit }: Props) => {
                                 {access_modifier === AccessModifier.PRIVATE ? <LockOutlined className="me-1" /> : <UnlockOutlined className="me-1" />}
                             </>
                         )}
-                        <Link to={`/blog-details/${id}`}>
+                        <Link to={`/blog-details/${info.id}`}>
                             {title}
                         </Link>
                     </h6>
