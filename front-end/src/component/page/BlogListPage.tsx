@@ -1,14 +1,12 @@
 import { Button, Checkbox, Form, FormProps, Input, Space } from "antd";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { BlogService } from "../../service/BlogService";
 import BlogPageElement from "../element/blog/BlogPageElement";
 import { BlogTagService } from "../../service/BlogTagService";
 import StringUtil from "../../util/StringUtil";
-type Props = {
-    authorId?: string
-}
-const BlogListPage = ({ authorId }: Props) => {
+const BlogListPage = () => {
+    const { authorId } = useParams()
     const [form] = Form.useForm<BlogSearchRequest>()
     const [searchParams, setSearchParams] = useSearchParams()
     const [blogPage, setBlogPage] = useState<PageResponse<BlogResponse>>();

@@ -10,25 +10,27 @@ import ExamDetailPage from "./component/page/ExamDetailPage";
 import PrivateRouterElement from "./component/element/PrivateRouterElement";
 import ExamHistoryPage from "./component/page/ExamHistoryPage";
 import ManagerExamCategory from "./component/page/admin/child/ManagerExamCategoryChild";
-import InfoChild from "./component/page/profile/child/InfoChild";
-import ManagerExamChild from "./component/page/profile/child/ManagerExamChild";
+// import InfoChild from "./component/page/profile/child/InfoChild";
+// import ManagerExamChild from "./component/page/profile/child/ManagerExamChild";
 import ExamPage from "./component/page/exam/ExamPage";
 import ExamCreateChild from "./component/page/exam/child/ExamCreateChild";
 import BlogPage from "./component/page/blog/BlogPage";
-import ManagerBlogChild from "./component/page/profile/child/ManagerBlogChild";
+// import ManagerBlogChild from "./component/page/profile/child/ManagerBlogChild";
 import BlogHomePage from "./component/page/BlogHomePage";
 import ExamHomePage from "./component/page/ExamHomePage";
 import BlogDetailsPage from "./component/page/BlogDetailsPage";
 import ContactPage from "./component/page/ContactPage";
 import AboutPage from "./component/page/AboutPage";
-import ExamResultChild from "./component/page/profile/child/ExamResultChild";
+// import ExamResultChild from "./component/page/profile/child/ExamResultChild";
 import BlogListPage from "./component/page/BlogListPage";
 import ExamListPage from "./component/page/ExamListPage";
 import DashboardChild from "./component/page/admin/child/DashboardChild";
-import ProfilePage from "./component/page/profile/ProfilePage";
 import ManagerRoleChild from "./component/page/admin/child/ManagerRoleChild";
 import ManagerAccountChild from "./component/page/admin/child/ManagerAccountChild";
-import AuthorPage from "./component/page/AuthorPage";
+import FollowerPageElement from "./component/element/account/FollowerPageElement";
+import BlogChild from "./component/page/profile/child/BlogChild";
+import ExamChild from "./component/page/profile/child/ExamChild";
+import ProfilePage from "./component/page/profile/ProfilePage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -70,24 +72,27 @@ const router = createBrowserRouter([
         path: "about",
         element: <AboutPage />
       },
-      {
-        path: "author/:authorId",
-        element: <AuthorPage />,
-        children: [
-          {
-            index: true,
-            element: <BlogListPage />
-          },
-          {
-            path: "blog",
-            element: <BlogListPage />
-          },
-          {
-            path: "exam",
-            element: <ExamListPage />
-          }
-        ]
-      },
+      // {
+      //   path: "author/:authorId",
+      //   element: <AuthorPage />,
+      //   children: [
+      //     {
+      //       index: true,
+      //       element: <BlogChild />
+      //     },
+      //     {
+      //       path: "blog",
+      //       element: <BlogChild />
+      //     },
+      //     {
+      //       path: "exam",
+      //       element: <ExamChild />
+      //     }, {
+      //       path: "follower",
+      //       element: <FollowerPageElement />
+      //     }
+      //   ]
+      // },
       {
         path: "blog/search",
         element: <BlogListPage />
@@ -96,33 +101,42 @@ const router = createBrowserRouter([
         element: <ExamListPage />
       },
       {
-        path: "profile",
-        element: (
-          <PrivateRouterElement>
-            <ProfilePage />
-          </PrivateRouterElement>
-        ),
+        path: "profile/:id",
+        element: <ProfilePage />,
         children: [
           {
             index: true,
-            element: <InfoChild />,
+            element: <BlogChild />
           },
           {
-            path: "exam-result",
-            element: <ExamResultChild />
+            path: "blog",
+            element: <BlogChild />
           },
           {
-            path: "account",
-            element: <InfoChild />,
-          },
-          {
-            path: "manager-exam",
-            element: <ManagerExamChild />,
+            path: "exam",
+            element: <ExamChild />
           }, {
-            path: "manager-blog",
-            element: <ManagerBlogChild />
+            path: "follower",
+            element: <FollowerPageElement />
           }
-        ],
+        ]
+        // children: [
+        //   {
+        //     path: "exam-result",
+        //     element: <ExamResultChild />
+        //   },
+        //   {
+        //     path: "account",
+        //     element: <InfoChild />,
+        //   },
+        //   {
+        //     path: "manager-exam",
+        //     element: <ManagerExamChild />,
+        //   }, {
+        //     path: "manager-blog",
+        //     element: <ManagerBlogChild />
+        //   }
+        // ],
       },
       {
         path: "manager-exam",

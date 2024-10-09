@@ -11,7 +11,7 @@ public class EndpointUtil {
 	private String apiPrefix;
 	private final String[] PUBLIC_POST_ENDPOINT = { "/account", "/auth/login", "/blog/test" };
 	private final String[] PUBLIC_GET_ENDPOINT = { "/auth/refresh-token", "/account/verify", "/actuator/mappings",
-			"/actuator/custommappings", "/auth/logout", "/account/*",  "/blog", "/blog/**", "/exam-category","/blog-tag", "/exam", "/exam/*" };
+			"/actuator/custommappings", "/auth/logout", "/account/*/details",  "/blog", "/blog/**", "/exam-category","/blog-tag", "/exam", "/exam/*" };
 
 	public String[] getPublicEndpoint(EndpointType endpointType) {
 		switch (endpointType) {

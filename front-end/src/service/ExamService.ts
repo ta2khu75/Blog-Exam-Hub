@@ -37,7 +37,6 @@ export default class ExamService {
         return instance.get(`${basePath}/${id}`);
     }
     static countByAuthor(authorId: string): Promise<ApiResponse<CountResponse>> {
-
         return instance.get(`${basePath}/${authorId}/count`);
     }
     static myCount(): Promise<ApiResponse<CountResponse>> {

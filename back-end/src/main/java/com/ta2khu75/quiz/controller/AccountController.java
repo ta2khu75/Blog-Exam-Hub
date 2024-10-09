@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.view.RedirectView;
@@ -19,6 +20,7 @@ import com.ta2khu75.quiz.model.request.update.AccountPasswordRequest;
 import com.ta2khu75.quiz.model.request.update.AccountStatusRequest;
 import com.ta2khu75.quiz.model.response.AccountResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
+import com.ta2khu75.quiz.model.response.details.AccountAuthDetailsResponse;
 import com.ta2khu75.quiz.model.response.details.AccountDetailsResponse;
 import com.ta2khu75.quiz.service.AccountService;
 
@@ -36,12 +38,12 @@ public class AccountController {
 	}
 
 	@PutMapping
-	public ResponseEntity<AccountResponse> updateMyAccount(@Valid @RequestBody AccountInfoRequest request) {
-		return ResponseEntity.ok(service.update(request));
+	public ResponseEntity<AccountResponse> updateMyInfoAccount(@Valid @RequestBody AccountInfoRequest request) {
+		return ResponseEntity.ok(service.updateInfo(request));
 	}
 
 	@GetMapping
-	public ResponseEntity<PageResponse<AccountDetailsResponse>> readPage(
+	public ResponseEntity<PageResponse<AccountAuthDetailsResponse>> readPage(
 			@RequestParam(name = "search", required = false, defaultValue = "") String search,
 			@RequestParam(name = "size", required = false, defaultValue = "5") int size,
 			@RequestParam(name = "page", required = false, defaultValue = "1") int page) {
@@ -55,25 +57,20 @@ public class AccountController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<AccountDetailsResponse> updateStatusOtherAccount(@PathVariable("id") String id,
+	public ResponseEntity<AccountAuthDetailsResponse> updateStatusOtherAccount(@PathVariable("id") String id,
 			@Valid @RequestBody AccountStatusRequest request) {
-		return ResponseEntity.ok(service.update(id, request));
+		return ResponseEntity.ok(service.updateStatus(id, request));
 	}
-//	@PutMapping("/{id}/permission")
-//	public ResponseEntity<AccountDetailsResponse> updatePermissionOtherAccount(@PathVariable("id") String id,
-//			@Valid @RequestBody AccountPermissionRequest request) {
-//		return ResponseEntity.ok(service.update(id, request));
-//	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteOtherAccount(@PathVariable String id) {
+	public ResponseEntity<Void> deleteOtherAccount(@PathVariable("id") String id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/change-password")
-	public ResponseEntity<AccountResponse> updatePasswordAccount(@RequestBody AccountPasswordRequest request) {
-		return ResponseEntity.ok(service.changePassword(request));
+	public ResponseEntity<AccountResponse> updateMyPasswordAccount(@RequestBody AccountPasswordRequest request) {
+		return ResponseEntity.ok(service.updatePassword(request));
 	}
 
 	@GetMapping("/verify")
@@ -86,5 +83,10 @@ public class AccountController {
 			clientRedirectUrl = "http://localhost:5173/login";
 		}
 		return new RedirectView(clientRedirectUrl);
+	}
+	@GetMapping("/{id}/details")
+	@Transactional
+	public ResponseEntity<AccountDetailsResponse> readAccountDetails(@PathVariable("id") String id) {
+		return ResponseEntity.ok(service.readDetails(id));
 	}
 }

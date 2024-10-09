@@ -43,11 +43,11 @@ const ExamCartElement = ({ exam, handleDelete, handleEdit }: Props) => {
       <Meta title={
         <div className='d-flex align-items-center'>
           <div>
-            <Link to={`/author/${exam.author.info.id}`}><AvatarElement size={50} username={exam.author.username} /></Link>
+            <Link to={`/profile/${exam.author.info.id}/exam`}><AvatarElement size={50} username={exam.author.username} /></Link>
           </div>
           <div>
             <h6 className='my-0'><Link to={"/exam-about/" + exam.info.id}>{exam.title}</Link></h6>
-            <Link className='text-muted' to={`/author/${exam.author.info.id}`}>{exam.author.username}</Link>
+            <Link className='text-muted' to={`/profile/${exam.author.info.id}/exam`}>{exam.author.username}</Link>
           </div>
         </div>
       }

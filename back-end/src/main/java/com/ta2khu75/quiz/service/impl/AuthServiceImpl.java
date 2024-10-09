@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.ta2khu75.quiz.model.request.AuthRequest;
 import com.ta2khu75.quiz.model.response.AccountAuthResponse;
-import com.ta2khu75.quiz.model.response.AccountResponse;
 import com.ta2khu75.quiz.model.response.AuthResponse;
+import com.ta2khu75.quiz.model.response.details.AccountDetailsResponse;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.exception.NotMatchesException;
 import com.ta2khu75.quiz.mapper.AccountMapper;
@@ -44,43 +44,52 @@ public class AuthServiceImpl implements AuthService {
 		Account account = (Account) authentication.getPrincipal();
 		return makeAuthResponse(account);
 	}
+
 	@Override
-	public AccountResponse getAccount() {
-		String email = SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new NotFoundException("Could not found email")); 
-		Account account =findAccount(email); 
-		return mapper.toResponse(account);
+	public AccountDetailsResponse getAccount() {
+		String email = SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new NotFoundException("Could not found email"));
+		Account account = findAccount(email);
+		return mapper.toDetailsResponse(account);
 	}
 
 	@Override
 	public AuthResponse refreshToken(String token) {
 		Jwt jwt = jwtUtil.validateToken(token);
-		Account account = validateRefreshToken(jwt.getSubject(), token); 
+		Account account = validateRefreshToken(jwt.getSubject(), token);
 		return this.makeAuthResponse(account);
 	}
+
 	private AuthResponse makeAuthResponse(Account account) {
 		AccountAuthResponse accountAuthResponse = mapper.toAuthResponse(account);
 		String refreshToken = jwtUtil.createRefreshToken(accountAuthResponse);
 		this.updateRefreshToken(account, refreshToken);
-		return new AuthResponse(accountAuthResponse, jwtUtil.createToken(accountAuthResponse), jwtUtil.createRefreshToken(accountAuthResponse), true);
+		return new AuthResponse(accountAuthResponse, jwtUtil.createToken(accountAuthResponse),
+				jwtUtil.createRefreshToken(accountAuthResponse), true);
 	}
+
 	private void updateRefreshToken(Account account, String refreshToken) {
 		account.setRefreshToken(refreshToken);
 		accountRepository.save(account);
 	}
+
 	private Account validateRefreshToken(String email, String refreshToken) {
 		Account account = findAccount(email);
 		if (!account.getRefreshToken().equals(refreshToken))
 			throw new NotMatchesException("Refresh token not invalid");
 		return account;
 	}
+
 	private Account findAccount(String email) {
-		return  accountRepository.findByEmail(email)
+		return accountRepository.findByEmail(email)
 				.orElseThrow(() -> new NotFoundException("Could not found account with email: " + email));
 	}
+
 	@Override
 	public void logout() {
-		String email = SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new NotFoundException("Could not found email")); 
-		Account account =findAccount(email); 
+		String email = SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new NotFoundException("Could not found email"));
+		Account account = findAccount(email);
 		account.setRefreshToken(null);
 		accountRepository.save(account);
 	}

@@ -16,6 +16,7 @@ public interface AccountRepository extends JpaRepository<Account, String> {
 	Optional<Account> findByEmailAndRefreshToken(String email, String refreshToken);
 
 	Optional<Account> findByCodeVerify(String codeVerify);
+
 	@Query("SELECT a FROM Account a WHERE a.displayName LIKE %:search% OR a.email LIKE %:search%")
-    Page<Account> searchByDisplayNameOrEmail(@Param	("search") String search, Pageable pageable);
+	Page<Account> searchByDisplayNameOrEmail(@Param("search") String search, Pageable pageable);
 }

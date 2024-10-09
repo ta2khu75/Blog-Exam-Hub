@@ -18,6 +18,7 @@ import com.ta2khu75.quiz.model.request.update.AccountPasswordRequest;
 import com.ta2khu75.quiz.model.request.update.AccountStatusRequest;
 import com.ta2khu75.quiz.model.response.AccountResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
+import com.ta2khu75.quiz.model.response.details.AccountAuthDetailsResponse;
 import com.ta2khu75.quiz.model.response.details.AccountDetailsResponse;
 import com.ta2khu75.quiz.exception.ExistingException;
 import com.ta2khu75.quiz.exception.NotFoundException;
@@ -65,8 +66,9 @@ public class AccountServiceImpl implements AccountService {
 		}
 		throw new NotMatchesException("password and confirm password not matches");
 	}
+
 	@Override
-	public AccountDetailsResponse update(String id, AccountStatusRequest request) {
+	public AccountAuthDetailsResponse updateStatus(String id, AccountStatusRequest request) {
 		Account account = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found account with id: " + id));
 		mapper.update(request, account);
@@ -74,7 +76,7 @@ public class AccountServiceImpl implements AccountService {
 			account.setRole(roleRepository.findById(request.getRoleId())
 					.orElseThrow(() -> new NotFoundException("Could not found role with id: " + request.getRoleId())));
 		}
-		return mapper.toDetailsResponse(repository.save(account));
+		return mapper.toAuthDetailsResponse(repository.save(account));
 	}
 
 	@Override
@@ -89,15 +91,15 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public PageResponse<AccountDetailsResponse> readPage(String search, Pageable pageable) {
-		PageResponse<AccountDetailsResponse> response = mapper
+	public PageResponse<AccountAuthDetailsResponse> readPage(String search, Pageable pageable) {
+		PageResponse<AccountAuthDetailsResponse> response = mapper
 				.toPageResponse(repository.searchByDisplayNameOrEmail(search, pageable));
 		response.setNumber(response.getNumber() + 1);
 		return response;
 	}
 
 	@Override
-	public AccountResponse changePassword(AccountPasswordRequest request) {
+	public AccountResponse updatePassword(AccountPasswordRequest request) {
 		String email = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new NotFoundException("Could not find email"));
 		Account account = repository.findByEmail(email)
@@ -113,7 +115,7 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public AccountResponse update(AccountInfoRequest request) {
+	public AccountResponse updateInfo(AccountInfoRequest request) {
 		String email = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new NotFoundException("Could not find email"));
 		Account account = repository.findByEmail(email)
@@ -135,27 +137,19 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public AccountResponse readMyAccount() {
+	public AccountDetailsResponse readMyAccount() {
 		String email = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new NotFoundException("Could not find email"));
 		Account account = repository.findByEmail(email)
 				.orElseThrow(() -> new NotFoundException("Could not find account with email: " + email));
-		return mapper.toResponse(account);
+		return mapper.toDetailsResponse(account);
 	}
 
-//	@Override
-//	public AccountDetailsResponse update(String id, AccountPermissionRequest request) {
-//		Account account = repository.findById(id)
-//				.orElseThrow(() -> new NotFoundException("Could not found account with id: " + id));
-//		List<Permission> list= permissionRepository.findAllById(request.getPermissionIds());
-//		Role role = account.getRole();
-//		role.setPermissions(new HashSet<>(permissionRepository.findAllById(request.getPermissionIds())));
-////		permissionRepository.findAllById(request.getPermissionIds()).stream().map(permission -> {
-////			
-////			return permission;
-////		}).toList();
-//		account.setRole(roleRepository.save(role));
-////		account.setRole(account.getRole()permissionRepository.findAllById(request.getPermissionIds()));
-//		return mapper.toDetailsResponse(repository.save(account));
-//	}
+	@Override
+	public AccountDetailsResponse readDetails(String id) {
+		Account account = repository.findById(id)
+				.orElseThrow(() -> new NotFoundException("Could not found account with id: " + id));
+		return mapper.toDetailsResponse(account);
+	}
+
 }

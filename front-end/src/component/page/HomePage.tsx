@@ -28,7 +28,7 @@ const HomePage = () => {
     })
   }
   const fetchReadBlogPage = () => {
-    BlogService.search({ page: pageBlog, size: 5 }).then((response) => {
+    BlogService.search({ page: pageBlog, size: 10 }).then((response) => {
       if (response.success) setBlogPage(response.data);
     })
   }

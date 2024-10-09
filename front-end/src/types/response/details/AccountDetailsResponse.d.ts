@@ -1,5 +1,5 @@
 interface AccountDetailsResponse extends AccountResponse{
-    enabled: boolean;
-    non_locked: boolean;
-    role: RoleResponse;
+    blog_count: number,
+    exam_count: number,
+    follow_count: number,
 }

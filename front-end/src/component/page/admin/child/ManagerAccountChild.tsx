@@ -17,11 +17,11 @@ export type AccountRequest = {
 const ManagerAccountChild = () => {
   const [form] = Form.useForm<AccountStatusRequest>();
   const [openEdit, setOpenEdit] = useState(false);
-  const [account, setAccount] = useState<AccountDetailsResponse>()
+  const [account, setAccount] = useState<AccountAuthDetailsResponse>()
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search);
-  const [accountPage, setAccountPage] = useState<PageResponse<AccountDetailsResponse>>();
+  const [accountPage, setAccountPage] = useState<PageResponse<AccountAuthDetailsResponse>>();
   const [roles, setRoles] = useState<RoleResponse[]>([]);
   useEffect(() => {
     fetchPageAccount()
@@ -68,7 +68,7 @@ const ManagerAccountChild = () => {
     }
   };
 
-  const handleEditClick = (data: AccountDetailsResponse) => {
+  const handleEditClick = (data: AccountAuthDetailsResponse) => {
     setAccount(data)
     setOpenEdit(true);
   }

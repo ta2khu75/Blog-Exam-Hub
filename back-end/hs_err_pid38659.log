@@ -1,0 +1,1821 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00007306d80902a4, pid=38659, tid=40310
+#
+# JRE version: OpenJDK Runtime Environment JBR-21.0.3+13-453.2-jcef (21.0.3+13) (build 21.0.3+13-b453.2)
+# Java VM: OpenJDK 64-Bit Server VM JBR-21.0.3+13-453.2-jcef (21.0.3+13-b453.2, mixed mode, sharing, tiered, compressed oops, compressed class ptrs, g1 gc, linux-amd64)
+# Problematic frame:
+# v  ~BufferBlob::MethodHandles adapters 0x00007306d80902a4
+#
+# Core dump will be written. Default location: Core dumps may be processed with "/usr/share/apport/apport -p%p -s%s -c%c -d%d -P%P -u%u -g%g -- %E" (or dumping to /home/ta2khu75/Documents/project/quiz/back-end/core.38659)
+#
+# If you would like to submit a bug report, please visit:
+#   https://youtrack.jetbrains.com/issues/JBR
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -XX:+ShowCodeDetailsInExceptionMessages -agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:36081 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=33057 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=localhost -Dspring.jmx.enabled=true -Dmanagement.endpoints.jmx.exposure.include=* -Dspring.application.admin.enabled=true -Djava.security.egd=file:/dev/./urandom -Dspring.boot.project.name=back-end -javaagent:/home/ta2khu75/App/sts-4.24.0.RELEASE/configuration/org.eclipse.osgi/265/0/.cp/lib/javaagent-shaded.jar -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -Dawt.toolkit.name=XToolkit com.ta2khu75.quiz.BackEndApplication --spring.output.ansi.enabled=always
+
+Host: AMD Ryzen 7 5800H with Radeon Graphics, 16 cores, 13G, Ubuntu 22.04.5 LTS
+Time: Sun Oct  6 17:44:53 2024 +07 elapsed time: 744.210808 seconds (0d 0h 12m 24s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x0000730544521130):  JavaThread "http-nio-8080-exec-7" daemon [_thread_in_Java, id=40310, stack(0x00007306ba200000,0x00007306ba300000) (1024K)]
+
+Stack: [0x00007306ba200000,0x00007306ba300000],  sp=0x00007306ba2f4818,  free space=978k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+v  ~BufferBlob::MethodHandles adapters 0x00007306d80902a4
+
+siginfo: si_signo: 11 (SIGSEGV), si_code: 128 (SI_KERNEL), si_addr: 0x0000000000000000
+
+Registers:
+RAX=0x00007306d8067ccf, RBX=0x0000000732c61508, RCX=0x00007306ba2f4828, RDX=0x0000000000000003
+RSP=0x00007306ba2f4818, RBP=0x00007306ba2f4870, RSI=0x0000730544521110, RDI=0x0000000000000000
+R8 =0x00007305445218c0, R9 =0x0000000000000004, R10=0x00007306d3d5ca73, R11=0xe658c2a400000000
+R12=0x0000000000000000, R13=0x00007306ba2f4818, R14=0x00007306ba2f4898, R15=0x0000730544521130
+RIP=0x00007306d80902a4, EFLAGS=0x0000000000010202, CSGSFS=0x002b000000000033, ERR=0x0000000000000000
+  TRAPNO=0x000000000000000d
+
+
+Register to memory mapping:
+
+RAX=0x00007306d8067ccf is at code_begin+3951 in an Interpreter codelet
+return entry points  [0x00007306d8066d60, 0x00007306d8068980]  7200 bytes
+RBX=0x0000000732c61508 is an oop: java.lang.String 
+{0x0000000732c61508} - klass: 'java/lang/String'
+ - string: "c9a67cd7-90e2-472c-b3b7-f7ab87008cd0"
+ - ---- fields (total size 3 words):
+ - private 'hash' 'I' @12  -1205917060 (0xb81f2a7c)
+ - private final 'coder' 'B' @16  0 (0x00)
+ - private 'hashIsZero' 'Z' @17  false (0x00)
+ - injected 'flags' 'B' @18  0 (0x00)
+ - private final 'value' '[B' @20  [B{0x0000000732c61520} (0xe658c2a4)
+RCX=0x00007306ba2f4828 is pointing into the stack for thread: 0x0000730544521130
+RDX=0x0000000000000003 is an unknown value
+RSP=0x00007306ba2f4818 is pointing into the stack for thread: 0x0000730544521130
+RBP=0x00007306ba2f4870 is pointing into the stack for thread: 0x0000730544521130
+RSI=0x0000730544521110 points into unknown readable memory: 0x0000001e00000003 | 03 00 00 00 1e 00 00 00
+RDI=0x0 is null
+R8 =0x00007305445218c0 points into unknown readable memory: 0x000073066f01a7b0 | b0 a7 01 6f 06 73 00 00
+R9 =0x0000000000000004 is an unknown value
+R10=0x00007306d3d5ca73 is an unknown value
+R11=0xe658c2a400000000 is an unknown value
+R12=0x0 is null
+R13=0x00007306ba2f4818 is pointing into the stack for thread: 0x0000730544521130
+R14=0x00007306ba2f4898 is pointing into the stack for thread: 0x0000730544521130
+R15=0x0000730544521130 is a thread
+
+Top of Stack: (sp=0x00007306ba2f4818)
+0x00007306ba2f4818:   00007306d8067ccf 000000072cd31e18
+0x00007306ba2f4828:   00007306ba2f4828 0000730664d5ca73
+0x00007306ba2f4838:   0000000000000005 0000730664d5cbf0
+0x00007306ba2f4848:   0000730664d5cee0 0000000728a03de8
+0x00007306ba2f4858:   0000730664d5ca80 00007306ba2f4818
+0x00007306ba2f4868:   00007306ba2f48a0 00000007fff5e368
+0x00007306ba2f4878:   00007306d170d588 00000007fff5ded8
+0x00007306ba2f4888:   0000000732c61508 000000072cd31e18
+0x00007306ba2f4898:   00000007fff5e028 0000000100002410
+0x00007306ba2f48a8:   000000072cd17440 0000000728d34bb0
+0x00007306ba2f48b8:   0000000000000080 00000007fff5e338
+0x00007306ba2f48c8:   0000000732c61508 000000072cd31e18
+0x00007306ba2f48d8:   00000007fff5e2e8 000000072cd31e18
+0x00007306ba2f48e8:   00000007fff5e1f0 00000007fff5e028
+0x00007306ba2f48f8:   0000000732c61508 00007306d170d424
+0x00007306ba2f4908:   0000000000000007 00000007fff5e368
+0x00007306ba2f4918:   00007306d8f9e0cc 000000072cd31e18
+0x00007306ba2f4928:   0000000732c75258 00007306e658c2a1
+0x00007306ba2f4938:   00000007fff5e368 00000007fff5e338
+0x00007306ba2f4948:   00007306d87bbb65 000000072cd31e18
+0x00007306ba2f4958:   0000000732c75258 00000007fff5e338
+0x00007306ba2f4968:   00000007e658c2a1 00007306ba2f4970
+0x00007306ba2f4978:   00007306eac7e3a2 00007306d8f9d570
+0x00007306ba2f4988:   0000730544521130 00007306ba2f4bd8
+0x00007306ba2f4998:   00007306d2406808 0000730500000006
+0x00007306ba2f49a8:   0000000100000006 0000730500000004
+0x00007306ba2f49b8:   0000000000000000 00007306ba2f2530
+0x00007306ba2f49c8:   000073051c57fe70 00007306ba2f2570
+0x00007306ba2f49d8:   0000730600000004 000073051c06b650
+0x00007306ba2f49e8:   00000001000b3645 00007306ba2f56c0
+0x00007306ba2f49f8:   00007306d8067bf8 00007306d8066a90
+0x00007306ba2f4a08:   0000000000000000 000000072cd17440 
+
+Instructions: (pc=0x00007306d80902a4)
+0x00007306d80901a4:   06 73 00 00 00 02 09 d8 06 73 00 00 80 12 09 d8
+0x00007306d80901b4:   06 73 00 00 f0 01 09 d8 06 73 00 00 f0 01 09 d8
+0x00007306d80901c4:   06 73 00 00 00 00 00 00 00 00 00 00 8b 07 74 eb
+0x00007306d80901d4:   06 73 00 00 f0 10 00 00 60 00 00 00 ff ff ff ff
+0x00007306d80901e4:   f0 10 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+0x00007306d80901f4:   00 00 00 00 00 00 00 00 00 00 00 00 f4 66 66 66
+0x00007306d8090204:   0f 1f 84 00 00 00 00 00 66 66 0f 1f 84 00 00 00
+0x00007306d8090214:   00 00 66 66 0f 1f 84 00 00 00 00 00 48 8b 53 08
+0x00007306d8090224:   0f b7 52 2e 48 8b 0c d4 8b 59 14 48 c1 e3 03 8b
+0x00007306d8090234:   5b 28 48 c1 e3 03 8b 5b 24 48 c1 e3 03 48 8b 5b
+0x00007306d8090244:   10 48 85 db 0f 84 10 00 00 00 41 80 bf 08 06 00
+0x00007306d8090254:   00 00 74 03 ff 63 50 ff 63 68 e9 9d 16 00 00 66
+0x00007306d8090264:   66 66 0f 1f 84 00 00 00 00 00 66 0f 1f 84 00 00
+0x00007306d8090274:   00 00 00 66 0f 1f 84 00 00 00 00 00 48 8b 53 08
+0x00007306d8090284:   0f b7 52 2e 48 8b 0c d4 58 5b 50 44 8b 51 08 49
+0x00007306d8090294:   bb 00 00 00 6f 06 73 00 00 4d 03 d3 4c 8b 5b 10
+0x00007306d80902a4:   4b 8b 9c da f0 01 00 00 48 85 db 0f 84 10 00 00
+0x00007306d80902b4:   00 41 80 bf 08 06 00 00 00 74 03 ff 63 50 ff 63
+0x00007306d80902c4:   68 e9 36 16 00 00 66 66 66 0f 1f 84 00 00 00 00
+0x00007306d80902d4:   00 66 66 66 0f 1f 84 00 00 00 00 00 58 5b 50 8b
+0x00007306d80902e4:   5b 24 48 c1 e3 03 48 8b 5b 10 48 85 db 0f 84 10
+0x00007306d80902f4:   00 00 00 41 80 bf 08 06 00 00 00 74 03 ff 63 50
+0x00007306d8090304:   ff 63 68 e9 f4 15 00 00 66 66 0f 1f 84 00 00 00
+0x00007306d8090314:   00 00 66 66 0f 1f 84 00 00 00 00 00 48 8b 53 08
+0x00007306d8090324:   0f b7 52 2e 48 8b 0c d4 58 5b 50 48 3b 01 8b 5b
+0x00007306d8090334:   24 48 c1 e3 03 48 8b 5b 10 48 85 db 0f 84 10 00
+0x00007306d8090344:   00 00 41 80 bf 08 06 00 00 00 74 03 ff 63 50 ff
+0x00007306d8090354:   63 68 e9 a5 15 00 00 0f 1f 44 00 00 48 8b 53 08
+0x00007306d8090364:   0f b7 52 2e 48 8b 0c d4 58 5b 50 44 8b 51 08 49
+0x00007306d8090374:   bb 00 00 00 6f 06 73 00 00 4d 03 d3 8b 43 18 48
+0x00007306d8090384:   c1 e0 03 48 8b 40 10 48 8b 5b 10 45 8b 9a a0 00
+0x00007306d8090394:   00 00 4f 8d 9c da f0 01 00 00 4d 8d 14 da 49 8b 
+
+
+Stack slot to memory mapping:
+
+stack at sp + 0 slots: 0x00007306d8067ccf is at code_begin+3951 in an Interpreter codelet
+return entry points  [0x00007306d8066d60, 0x00007306d8068980]  7200 bytes
+stack at sp + 1 slots: 0x000000072cd31e18 is an oop: com.ta2khu75.quiz.service.impl.AccountServiceImpl 
+{0x000000072cd31e18} - klass: 'com/ta2khu75/quiz/service/impl/AccountServiceImpl'
+ - ---- fields (total size 4 words):
+ - private final 'repository' 'Lcom/ta2khu75/quiz/repository/AccountRepository;' @12  a 'jdk/proxy5/$Proxy248'{0x000000072ccd1ce0} (0xe599a39c)
+ - private final 'mapper' 'Lcom/ta2khu75/quiz/mapper/AccountMapper;' @16  a 'com/ta2khu75/quiz/mapper/AccountMapperImpl'{0x000000072ccafb70} (0xe5995f6e)
+ - private final 'roleRepository' 'Lcom/ta2khu75/quiz/repository/RoleRepository;' @20  a 'jdk/proxy5/$Proxy249'{0x000000072cd4d770} (0xe59a9aee)
+ - private final 'passwordEncoder' 'Lorg/springframework/security/crypto/password/PasswordEncoder;' @24  a 'org/springframework/security/crypto/bcrypt/BCryptPasswordEncoder'{0x000000072ccaf5f8} (0xe5995ebf)
+ - private final 'sendMailScheduling' 'Lcom/ta2khu75/quiz/scheduling/SendMailScheduling;' @28  a 'com/ta2khu75/quiz/scheduling/SendMailScheduling'{0x000000072cd380a8} (0xe59a7015)
+stack at sp + 2 slots: 0x00007306ba2f4828 is pointing into the stack for thread: 0x0000730544521130
+stack at sp + 3 slots: 0x0000730664d5ca73 is pointing into metadata
+stack at sp + 4 slots: 0x0000000000000005 is an unknown value
+stack at sp + 5 slots: 0x0000730664d5cbf0 is pointing into metadata
+stack at sp + 6 slots: 0x0000730664d5cee0 is pointing into metadata
+stack at sp + 7 slots: 0x0000000728a03de8 is an oop: java.lang.Class 
+{0x0000000728a03de8} - klass: 'java/lang/Class'
+ - ---- fields (total size 15 words):
+ - private volatile transient 'classRedefinedCount' 'I' @12  0 (0x00000000)
+ - injected 'klass' 'J' @16  126471488019456 (0x00007306701e1c00)
+ - injected 'array_klass' 'J' @24  0 (0x0000000000000000)
+ - injected 'oop_size' 'I' @32  15 (0x0000000f)
+ - injected 'static_oop_field_count' 'I' @36  1 (0x00000001)
+ - private volatile transient 'cachedConstructor' 'Ljava/lang/reflect/Constructor;' @40  null (0x00000000)
+ - private transient 'name' 'Ljava/lang/String;' @44  null (0x00000000)
+ - private transient 'module' 'Ljava/lang/Module;' @48  a 'java/lang/Module'{0x00000007284f4678} (0xe509e8cf)
+ - private final 'classLoader' 'Ljava/lang/ClassLoader;' @52  null (0x00000000)
+ - private transient 'classData' 'Ljava/lang/Object;' @56  a 'java/lang/invoke/LambdaForm'{0x0000000728abe6d8} => a 'java/lang/invoke/MemberName'{0x0000000728abe808} = {method} {0x0000730664d5ca80} 'invokeVirtual' '(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;' in 'java/lang/invoke/LambdaForm$DMH+0x00007306701e1c00' (0xe5157cdb)
+ - private transient 'packageName' 'Ljava/lang/String;' @60  null (0x00000000)
+ - private final 'componentType' 'Ljava/lang/Class;' @64  null (0x00000000)
+ - private volatile transient 'reflectionData' 'Ljava/lang/ref/SoftReference;' @68  null (0x00000000)
+ - private volatile transient 'genericInfo' 'Lsun/reflect/generics/repository/ClassRepository;' @72  null (0x00000000)
+ - private volatile transient 'enumConstants' '[Ljava/lang/Object;' @76  null (0x00000000)
+ - private volatile transient 'enumConstantDirectory' 'Ljava/util/Map;' @80  null (0x00000000)
+ - private volatile transient 'annotationData' 'Ljava/lang/Class$AnnotationData;' @84  null (0x00000000)
+ - private volatile transient 'annotationType' 'Lsun/reflect/annotation/AnnotationType;' @88  null (0x00000000)
+ - transient 'classValueMap' 'Ljava/lang/ClassValue$ClassValueMap;' @92  null (0x00000000)
+ - injected 'protection_domain' 'Ljava/lang/Object;' @96  null (0x00000000)
+ - injected 'signers_name' 'Ljava/lang/Object;' @100  null (0x00000000)
+ - injected 'source_file' 'Ljava/lang/Object;' @104  null (0x00000000)
+ - signature: Ljava/lang/invoke/LambdaForm$DMH+0x00007306701e1c00;
+ - ---- static fields (1):
+ - static final '_D_0' 'Ljava/lang/invoke/LambdaForm;' @112  a 'java/lang/invoke/LambdaForm'{0x0000000728abe6d8} => a 'java/lang/invoke/MemberName'{0x0000000728abe808} = {method} {0x0000730664d5ca80} 'invokeVirtual' '(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;' in 'java/lang/invoke/LambdaForm$DMH+0x00007306701e1c00' (0xe5157cdb)
+
+MethodHandle::interpreter_entry::_linkToVirtual [0x00007306d8090263, 0x00007306d80902ca] (103 bytes)
+[MachCode]
+  0x00007306d8090263: 6666 660f | 1f84 0000 | 0000 0066 | 0f1f 8400 | 0000 0000 | 660f 1f84 | 0000 0000 | 0048 8b53 
+  0x00007306d8090283: 080f b752 | 2e48 8b0c | d458 5b50 | 448b 5108 | 49bb 0000 | 006f 0673 | 0000 4d03 | d34c 8b5b 
+  0x00007306d80902a3: 104b 8b9c | daf0 0100 | 0048 85db | 0f84 1000 | 0000 4180 | bf08 0600 | 0000 7403 | ff63 50ff 
+  0x00007306d80902c3: 6368 e936 | 
+[/MachCode]
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x000073059c3b0130, length=43, elements={
+0x00007306e4171a80, 0x00007306e41730d0, 0x00007306e4174bc0, 0x00007306e4176200,
+0x00007306e41777a0, 0x00007306e4179360, 0x00007306e417aa20, 0x00007306e4194ef0,
+0x00007306e41e81c0, 0x00007306e41fbde0, 0x000073061c001120, 0x00007306e49a1430,
+0x00007306e4aa1e90, 0x00007306e4aae7d0, 0x00007306e4ace850, 0x00007305cc0121f0,
+0x00007305c800ff00, 0x00007305935ba870, 0x00007306e40335d0, 0x00007305e0006460,
+0x00007306215d8c30, 0x0000730544457ea0, 0x0000730544447850, 0x0000730544447f60,
+0x000073054449c9a0, 0x000073054444afa0, 0x00007305444b8600, 0x000073054449dc70,
+0x000073054449e380, 0x000073054451e550, 0x000073054451cfd0, 0x000073054451d6e0,
+0x000073054451f970, 0x00007305445203f0, 0x0000730544521130, 0x0000730544521d30,
+0x0000730544528820, 0x0000730544528f30, 0x000073054452caf0, 0x000073054452d7b0,
+0x00007305e00043a0, 0x000073054451bbc0, 0x000073055c5aff90
+}
+
+Java Threads: ( => current thread )
+  0x00007306e4171a80 JavaThread "Reference Handler"          daemon [_thread_blocked, id=38675, stack(0x00007306cc3d8000,0x00007306cc4d8000) (1024K)]
+  0x00007306e41730d0 JavaThread "Finalizer"                  daemon [_thread_blocked, id=38676, stack(0x00007306cc2d8000,0x00007306cc3d8000) (1024K)]
+  0x00007306e4174bc0 JavaThread "Signal Dispatcher"          daemon [_thread_blocked, id=38677, stack(0x00007306cc1d8000,0x00007306cc2d8000) (1024K)]
+  0x00007306e4176200 JavaThread "Service Thread"             daemon [_thread_blocked, id=38678, stack(0x00007306cc0d8000,0x00007306cc1d8000) (1024K)]
+  0x00007306e41777a0 JavaThread "Monitor Deflation Thread"   daemon [_thread_blocked, id=38679, stack(0x00007306c5f00000,0x00007306c6000000) (1024K)]
+  0x00007306e4179360 JavaThread "C2 CompilerThread0"         daemon [_thread_blocked, id=38680, stack(0x00007306c5500000,0x00007306c5600000) (1024K)]
+  0x00007306e417aa20 JavaThread "C1 CompilerThread0"         daemon [_thread_blocked, id=38681, stack(0x00007306c5400000,0x00007306c5500000) (1024K)]
+  0x00007306e4194ef0 JavaThread "Common-Cleaner"             daemon [_thread_blocked, id=38683, stack(0x00007306c5200000,0x00007306c5300000) (1024K)]
+  0x00007306e41e81c0 JavaThread "JDWP Transport Listener: dt_socket" daemon [_thread_blocked, id=38686, stack(0x00007306c5000000,0x00007306c5100000) (1024K)]
+  0x00007306e41fbde0 JavaThread "JDWP Event Helper Thread"   daemon [_thread_blocked, id=38687, stack(0x00007306c4f00000,0x00007306c5000000) (1024K)]
+  0x000073061c001120 JavaThread "JDWP Command Reader"        daemon [_thread_in_native, id=38688, stack(0x00007306c4e00000,0x00007306c4f00000) (1024K)]
+  0x00007306e49a1430 JavaThread "Notification Thread"        daemon [_thread_blocked, id=38692, stack(0x00007306c4d00000,0x00007306c4e00000) (1024K)]
+  0x00007306e4aa1e90 JavaThread "RMI TCP Accept-0"           daemon [_thread_in_native, id=38699, stack(0x00007306c45fc000,0x00007306c46fc000) (1024K)]
+  0x00007306e4aae7d0 JavaThread "RMI TCP Accept-33057"       daemon [_thread_in_native, id=38700, stack(0x00007306c44fc000,0x00007306c45fc000) (1024K)]
+  0x00007306e4ace850 JavaThread "RMI TCP Accept-0"           daemon [_thread_in_native, id=38701, stack(0x00007306c43fc000,0x00007306c44fc000) (1024K)]
+  0x00007305cc0121f0 JavaThread "RMI Scheduler(0)"           daemon [_thread_blocked, id=38705, stack(0x00007306c40fc000,0x00007306c41fc000) (1024K)]
+  0x00007305c800ff00 JavaThread "JMX server connection timeout 42" daemon [_thread_blocked, id=38706, stack(0x00007306bbf00000,0x00007306bc000000) (1024K)]
+  0x00007305935ba870 JavaThread "Live Reload Server"         daemon [_thread_in_native, id=38819, stack(0x00007306baa00000,0x00007306bab00000) (1024K)]
+  0x00007306e40335d0 JavaThread "DestroyJavaVM"                     [_thread_blocked, id=38667, stack(0x00007306ea419000,0x00007306ea519000) (1024K)]
+  0x00007305e0006460 JavaThread "RMI TCP Connection(10)-127.0.0.1" daemon [_thread_in_native, id=38850, stack(0x00007306c5100000,0x00007306c5200000) (1024K)]
+  0x00007306215d8c30 JavaThread "JMX server connection timeout 95" daemon [_thread_blocked, id=38851, stack(0x00007306b9800000,0x00007306b9900000) (1024K)]
+  0x0000730544457ea0 JavaThread "Catalina-utility-1"                [_thread_blocked, id=40267, stack(0x00007306bb6fd000,0x00007306bb7fd000) (1024K)]
+  0x0000730544447850 JavaThread "Catalina-utility-2"                [_thread_blocked, id=40268, stack(0x00007306bbafd000,0x00007306bbbfd000) (1024K)]
+  0x0000730544447f60 JavaThread "container-0"                       [_thread_blocked, id=40269, stack(0x00007306b9a00000,0x00007306b9b00000) (1024K)]
+  0x000073054449c9a0 JavaThread "mssql-jdbc-shared-timer-core-1" daemon [_thread_blocked, id=40271, stack(0x00007306b9f00000,0x00007306ba000000) (1024K)]
+  0x000073054444afa0 JavaThread "HikariPool-2 housekeeper"   daemon [_thread_blocked, id=40272, stack(0x00007306b9b00000,0x00007306b9c00000) (1024K)]
+  0x00007305444b8600 JavaThread "lettuce-timer-6-1"          daemon [_thread_blocked, id=40276, stack(0x00007306bab00000,0x00007306bac00000) (1024K)]
+  0x000073054449dc70 JavaThread "File Watcher"               daemon [_thread_blocked, id=40303, stack(0x00007306ba600000,0x00007306ba700000) (1024K)]
+  0x000073054449e380 JavaThread "http-nio-8080-exec-1"       daemon [_thread_blocked, id=40304, stack(0x00007306b9c00000,0x00007306b9d00000) (1024K)]
+  0x000073054451e550 JavaThread "http-nio-8080-exec-2"       daemon [_thread_blocked, id=40305, stack(0x00007306ba300000,0x00007306ba400000) (1024K)]
+  0x000073054451cfd0 JavaThread "http-nio-8080-exec-3"       daemon [_thread_blocked, id=40306, stack(0x00007306b9e00000,0x00007306b9f00000) (1024K)]
+  0x000073054451d6e0 JavaThread "http-nio-8080-exec-4"       daemon [_thread_blocked, id=40307, stack(0x00007306ba400000,0x00007306ba500000) (1024K)]
+  0x000073054451f970 JavaThread "http-nio-8080-exec-5"       daemon [_thread_blocked, id=40308, stack(0x00007306ba000000,0x00007306ba100000) (1024K)]
+  0x00007305445203f0 JavaThread "http-nio-8080-exec-6"       daemon [_thread_blocked, id=40309, stack(0x00007306b9d00000,0x00007306b9e00000) (1024K)]
+=>0x0000730544521130 JavaThread "http-nio-8080-exec-7"       daemon [_thread_in_Java, id=40310, stack(0x00007306ba200000,0x00007306ba300000) (1024K)]
+  0x0000730544521d30 JavaThread "http-nio-8080-exec-8"       daemon [_thread_blocked, id=40311, stack(0x00007306baef6000,0x00007306baff6000) (1024K)]
+  0x0000730544528820 JavaThread "http-nio-8080-exec-9"       daemon [_thread_blocked, id=40312, stack(0x00007306c41fc000,0x00007306c42fc000) (1024K)]
+  0x0000730544528f30 JavaThread "http-nio-8080-exec-10"      daemon [_thread_blocked, id=40313, stack(0x00007306c47fc000,0x00007306c48fc000) (1024K)]
+  0x000073054452caf0 JavaThread "http-nio-8080-Poller"       daemon [_thread_in_native, id=40314, stack(0x00007306c42fc000,0x00007306c43fc000) (1024K)]
+  0x000073054452d7b0 JavaThread "http-nio-8080-Acceptor"     daemon [_thread_in_native, id=40315, stack(0x00007306bb8fd000,0x00007306bb9fd000) (1024K)]
+  0x00007305e00043a0 JavaThread "RMI TCP Connection(idle)"   daemon [_thread_blocked, id=40318, stack(0x00007306b9700000,0x00007306b9800000) (1024K)]
+  0x000073054451bbc0 JavaThread "scheduling-1"                      [_thread_blocked, id=40323, stack(0x00007306b9400000,0x00007306b9500000) (1024K)]
+  0x000073055c5aff90 JavaThread "lettuce-nioEventLoop-7-1"   daemon [_thread_in_native, id=40328, stack(0x00007306ba100000,0x00007306ba200000) (1024K)]
+Total: 43
+
+Other Threads:
+  0x00007306e41629d0 VMThread "VM Thread"                           [id=38674, stack(0x00007306cc4d9000,0x00007306cc5d9000) (1024K)]
+  0x00007306e4148750 WatcherThread "VM Periodic Task Thread"        [id=38673, stack(0x00007306cc5da000,0x00007306cc6da000) (1024K)]
+  0x00007306e4092a00 WorkerThread "GC Thread#0"                     [id=38668, stack(0x00007306e8500000,0x00007306e8600000) (1024K)]
+  0x000073065c009200 WorkerThread "GC Thread#1"                     [id=38693, stack(0x00007306c4c00000,0x00007306c4d00000) (1024K)]
+  0x000073065c009ce0 WorkerThread "GC Thread#2"                     [id=38694, stack(0x00007306c4aff000,0x00007306c4bff000) (1024K)]
+  0x000073065c00a7c0 WorkerThread "GC Thread#3"                     [id=38695, stack(0x00007306c49fe000,0x00007306c4afe000) (1024K)]
+  0x000073065c00b2a0 WorkerThread "GC Thread#4"                     [id=38696, stack(0x00007306c48fd000,0x00007306c49fd000) (1024K)]
+  0x000073065c013460 WorkerThread "GC Thread#5"                     [id=38709, stack(0x00007306bbe00000,0x00007306bbf00000) (1024K)]
+  0x000073065c013dc0 WorkerThread "GC Thread#6"                     [id=38710, stack(0x00007306bbcff000,0x00007306bbdff000) (1024K)]
+  0x000073065c0147e0 WorkerThread "GC Thread#7"                     [id=38711, stack(0x00007306bbbfe000,0x00007306bbcfe000) (1024K)]
+  0x000073065c00de10 WorkerThread "GC Thread#8"                     [id=38717, stack(0x00007306bb5fd000,0x00007306bb6fd000) (1024K)]
+  0x000073065c017390 WorkerThread "GC Thread#9"                     [id=38718, stack(0x00007306bb4fc000,0x00007306bb5fc000) (1024K)]
+  0x000073065c017e30 WorkerThread "GC Thread#10"                    [id=38719, stack(0x00007306bb3fb000,0x00007306bb4fb000) (1024K)]
+  0x000073065c018910 WorkerThread "GC Thread#11"                    [id=38720, stack(0x00007306bb2fa000,0x00007306bb3fa000) (1024K)]
+  0x000073065c019ee0 WorkerThread "GC Thread#12"                    [id=38721, stack(0x00007306bb1f9000,0x00007306bb2f9000) (1024K)]
+  0x00007306e40a1840 ConcurrentGCThread "G1 Main Marker"            [id=38669, stack(0x00007306e83ff000,0x00007306e84ff000) (1024K)]
+  0x00007306e40a27e0 WorkerThread "G1 Conc#0"                       [id=38670, stack(0x00007306e82fe000,0x00007306e83fe000) (1024K)]
+  0x00007306c0000d90 WorkerThread "G1 Conc#1"                       [id=38722, stack(0x00007306bb0f8000,0x00007306bb1f8000) (1024K)]
+  0x00007306c00018b0 WorkerThread "G1 Conc#2"                       [id=38723, stack(0x00007306baff7000,0x00007306bb0f7000) (1024K)]
+  0x00007306e4136410 ConcurrentGCThread "G1 Refine#0"               [id=38671, stack(0x00007306cc8f6000,0x00007306cc9f6000) (1024K)]
+  0x00007306e41373c0 ConcurrentGCThread "G1 Service"                [id=38672, stack(0x00007306cc7f5000,0x00007306cc8f5000) (1024K)]
+Total: 21
+
+Threads with active compile tasks:
+Total: 0
+
+VM state: not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap address: 0x0000000727e00000, size: 3458 MB, Compressed Oops mode: Zero based, Oop shift amount: 3
+
+CDS archive(s) mapped at: [0x000073066f000000-0x000073066fd44000-0x000073066fd44000), size 13910016, SharedBaseAddress: 0x000073066f000000, ArchiveRelocationMode: 1.
+Compressed class space mapped at: 0x0000730670000000-0x00007306b0000000, reserved size: 1073741824
+Narrow klass base: 0x000073066f000000, Narrow klass shift: 0, Narrow klass range: 0x100000000
+
+GC Precious Log:
+ CardTable entry size: 512
+ Card Set container configuration: InlinePtr #cards 4 size 8 Array Of Cards #cards 16 size 48 Howl #buckets 8 coarsen threshold 3686 Howl Bitmap #cards 512 size 80 coarsen threshold 460 Card regions per heap region 1 cards per card region 4096
+ CPUs: 16 total, 16 available
+ Memory: 13824M
+ Large Page Support: Disabled
+ NUMA Support: Disabled
+ Compressed Oops: Enabled (Zero based)
+ Heap Region Size: 2M
+ Heap Min Capacity: 8M
+ Heap Initial Capacity: 218M
+ Heap Max Capacity: 3458M
+ Pre-touch: Disabled
+ Parallel Workers: 13
+ Concurrent Workers: 3
+ Concurrent Refinement Workers: 13
+ Periodic GC: Disabled
+
+Heap:
+ garbage-first heap   total 190464K, used 105538K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 15 young (30720K), 5 survivors (10240K)
+ Metaspace       used 131277K, committed 132416K, reserved 1179648K
+  class space    used 16998K, committed 17536K, reserved 1048576K
+
+Heap Regions: E=young(eden), S=young(survivor), O=old, HS=humongous(starts), HC=humongous(continues), CS=collection set, F=free, TAMS=top-at-mark-start, PB=parsable bottom
+|   0|0x0000000727e00000, 0x0000000727fffff8, 0x0000000728000000| 99%| O|  |TAMS 0x0000000727e00000| PB 0x0000000727e00000| Untracked 
+|   1|0x0000000728000000, 0x00000007281ffff0, 0x0000000728200000| 99%| O|  |TAMS 0x0000000728000000| PB 0x0000000728000000| Untracked 
+|   2|0x0000000728200000, 0x0000000728400000, 0x0000000728400000|100%| O|  |TAMS 0x0000000728200000| PB 0x0000000728200000| Untracked 
+|   3|0x0000000728400000, 0x00000007285ffff8, 0x0000000728600000| 99%| O|  |TAMS 0x0000000728400000| PB 0x0000000728400000| Untracked 
+|   4|0x0000000728600000, 0x0000000728800000, 0x0000000728800000|100%| O|  |TAMS 0x0000000728600000| PB 0x0000000728600000| Untracked 
+|   5|0x0000000728800000, 0x00000007289fff70, 0x0000000728a00000| 99%| O|  |TAMS 0x0000000728800000| PB 0x0000000728800000| Untracked 
+|   6|0x0000000728a00000, 0x0000000728c00000, 0x0000000728c00000|100%| O|  |TAMS 0x0000000728a00000| PB 0x0000000728a00000| Untracked 
+|   7|0x0000000728c00000, 0x0000000728dfffb8, 0x0000000728e00000| 99%| O|  |TAMS 0x0000000728c00000| PB 0x0000000728c00000| Untracked 
+|   8|0x0000000728e00000, 0x0000000728fffff8, 0x0000000729000000| 99%| O|  |TAMS 0x0000000728e00000| PB 0x0000000728e00000| Untracked 
+|   9|0x0000000729000000, 0x00000007291ffff8, 0x0000000729200000| 99%| O|  |TAMS 0x0000000729000000| PB 0x0000000729000000| Untracked 
+|  10|0x0000000729200000, 0x00000007293fffd0, 0x0000000729400000| 99%| O|  |TAMS 0x0000000729200000| PB 0x0000000729200000| Untracked 
+|  11|0x0000000729400000, 0x0000000729600000, 0x0000000729600000|100%| O|  |TAMS 0x0000000729400000| PB 0x0000000729400000| Untracked 
+|  12|0x0000000729600000, 0x00000007297fffe8, 0x0000000729800000| 99%| O|  |TAMS 0x0000000729600000| PB 0x0000000729600000| Untracked 
+|  13|0x0000000729800000, 0x00000007299ffff0, 0x0000000729a00000| 99%| O|  |TAMS 0x0000000729800000| PB 0x0000000729800000| Untracked 
+|  14|0x0000000729a00000, 0x0000000729bffff8, 0x0000000729c00000| 99%| O|  |TAMS 0x0000000729a00000| PB 0x0000000729a00000| Untracked 
+|  15|0x0000000729c00000, 0x0000000729dffff8, 0x0000000729e00000| 99%| O|  |TAMS 0x0000000729c00000| PB 0x0000000729c00000| Untracked 
+|  16|0x0000000729e00000, 0x0000000729fffff0, 0x000000072a000000| 99%| O|  |TAMS 0x0000000729e00000| PB 0x0000000729e00000| Untracked 
+|  17|0x000000072a000000, 0x000000072a1fffb8, 0x000000072a200000| 99%| O|  |TAMS 0x000000072a000000| PB 0x000000072a000000| Untracked 
+|  18|0x000000072a200000, 0x000000072a3ffff0, 0x000000072a400000| 99%| O|  |TAMS 0x000000072a200000| PB 0x000000072a200000| Untracked 
+|  19|0x000000072a400000, 0x000000072a5fc358, 0x000000072a600000| 99%| O|  |TAMS 0x000000072a400000| PB 0x000000072a400000| Untracked 
+|  20|0x000000072a600000, 0x000000072a7fffe0, 0x000000072a800000| 99%| O|  |TAMS 0x000000072a600000| PB 0x000000072a600000| Untracked 
+|  21|0x000000072a800000, 0x000000072a9fffe0, 0x000000072aa00000| 99%| O|  |TAMS 0x000000072a800000| PB 0x000000072a800000| Untracked 
+|  22|0x000000072aa00000, 0x000000072abffff8, 0x000000072ac00000| 99%| O|  |TAMS 0x000000072aa00000| PB 0x000000072aa00000| Untracked 
+|  23|0x000000072ac00000, 0x000000072ae00000, 0x000000072ae00000|100%| O|  |TAMS 0x000000072ac00000| PB 0x000000072ac00000| Untracked 
+|  24|0x000000072ae00000, 0x000000072afffff0, 0x000000072b000000| 99%| O|  |TAMS 0x000000072ae00000| PB 0x000000072ae00000| Untracked 
+|  25|0x000000072b000000, 0x000000072b200000, 0x000000072b200000|100%| O|  |TAMS 0x000000072b000000| PB 0x000000072b000000| Untracked 
+|  26|0x000000072b200000, 0x000000072b34c6b0, 0x000000072b400000| 64%| O|  |TAMS 0x000000072b200000| PB 0x000000072b200000| Untracked 
+|  27|0x000000072b400000, 0x000000072b4df760, 0x000000072b600000| 43%| O|  |TAMS 0x000000072b400000| PB 0x000000072b400000| Untracked 
+|  28|0x000000072b600000, 0x000000072b600000, 0x000000072b800000|  0%| F|  |TAMS 0x000000072b600000| PB 0x000000072b600000| Untracked 
+|  29|0x000000072b800000, 0x000000072b9beb98, 0x000000072ba00000| 87%| O|  |TAMS 0x000000072b800000| PB 0x000000072b800000| Untracked 
+|  30|0x000000072ba00000, 0x000000072bb07e00, 0x000000072bc00000| 51%| O|  |TAMS 0x000000072ba00000| PB 0x000000072ba00000| Untracked 
+|  31|0x000000072bc00000, 0x000000072bd28e68, 0x000000072be00000| 57%| O|  |TAMS 0x000000072bc00000| PB 0x000000072bc00000| Untracked 
+|  32|0x000000072be00000, 0x000000072c000000, 0x000000072c000000|100%| O|  |TAMS 0x000000072be00000| PB 0x000000072be00000| Untracked 
+|  33|0x000000072c000000, 0x000000072c200000, 0x000000072c200000|100%|HS|  |TAMS 0x000000072c000000| PB 0x000000072c000000| Complete 
+|  34|0x000000072c200000, 0x000000072c400000, 0x000000072c400000|100%|HC|  |TAMS 0x000000072c200000| PB 0x000000072c200000| Complete 
+|  35|0x000000072c400000, 0x000000072c600000, 0x000000072c600000|100%|HC|  |TAMS 0x000000072c400000| PB 0x000000072c400000| Complete 
+|  36|0x000000072c600000, 0x000000072c800000, 0x000000072c800000|100%| O|  |TAMS 0x000000072c600000| PB 0x000000072c600000| Untracked 
+|  37|0x000000072c800000, 0x000000072ca00000, 0x000000072ca00000|100%| O|  |TAMS 0x000000072c800000| PB 0x000000072c800000| Untracked 
+|  38|0x000000072ca00000, 0x000000072cc00000, 0x000000072cc00000|100%| O|  |TAMS 0x000000072ca00000| PB 0x000000072ca00000| Untracked 
+|  39|0x000000072cc00000, 0x000000072ce00000, 0x000000072ce00000|100%| O|  |TAMS 0x000000072cc00000| PB 0x000000072cc00000| Untracked 
+|  40|0x000000072ce00000, 0x000000072d000000, 0x000000072d000000|100%| O|  |TAMS 0x000000072ce00000| PB 0x000000072ce00000| Untracked 
+|  41|0x000000072d000000, 0x000000072d000000, 0x000000072d200000|  0%| F|  |TAMS 0x000000072d000000| PB 0x000000072d000000| Untracked 
+|  42|0x000000072d200000, 0x000000072d200000, 0x000000072d400000|  0%| F|  |TAMS 0x000000072d200000| PB 0x000000072d200000| Untracked 
+|  43|0x000000072d400000, 0x000000072d400000, 0x000000072d600000|  0%| F|  |TAMS 0x000000072d400000| PB 0x000000072d400000| Untracked 
+|  44|0x000000072d600000, 0x000000072d600000, 0x000000072d800000|  0%| F|  |TAMS 0x000000072d600000| PB 0x000000072d600000| Untracked 
+|  45|0x000000072d800000, 0x000000072d8f9180, 0x000000072da00000| 48%| S|CS|TAMS 0x000000072d800000| PB 0x000000072d800000| Complete 
+|  46|0x000000072da00000, 0x000000072dc00000, 0x000000072dc00000|100%| S|CS|TAMS 0x000000072da00000| PB 0x000000072da00000| Complete 
+|  47|0x000000072dc00000, 0x000000072de00000, 0x000000072de00000|100%| S|CS|TAMS 0x000000072dc00000| PB 0x000000072dc00000| Complete 
+|  48|0x000000072de00000, 0x000000072e000000, 0x000000072e000000|100%| S|CS|TAMS 0x000000072de00000| PB 0x000000072de00000| Complete 
+|  49|0x000000072e000000, 0x000000072e200000, 0x000000072e200000|100%| S|CS|TAMS 0x000000072e000000| PB 0x000000072e000000| Complete 
+|  50|0x000000072e200000, 0x000000072e200000, 0x000000072e400000|  0%| F|  |TAMS 0x000000072e200000| PB 0x000000072e200000| Untracked 
+|  51|0x000000072e400000, 0x000000072e400000, 0x000000072e600000|  0%| F|  |TAMS 0x000000072e400000| PB 0x000000072e400000| Untracked 
+|  52|0x000000072e600000, 0x000000072e600000, 0x000000072e800000|  0%| F|  |TAMS 0x000000072e600000| PB 0x000000072e600000| Untracked 
+|  53|0x000000072e800000, 0x000000072e800000, 0x000000072ea00000|  0%| F|  |TAMS 0x000000072e800000| PB 0x000000072e800000| Untracked 
+|  54|0x000000072ea00000, 0x000000072ea00000, 0x000000072ec00000|  0%| F|  |TAMS 0x000000072ea00000| PB 0x000000072ea00000| Untracked 
+|  55|0x000000072ec00000, 0x000000072ec00000, 0x000000072ee00000|  0%| F|  |TAMS 0x000000072ec00000| PB 0x000000072ec00000| Untracked 
+|  56|0x000000072ee00000, 0x000000072ee00000, 0x000000072f000000|  0%| F|  |TAMS 0x000000072ee00000| PB 0x000000072ee00000| Untracked 
+|  57|0x000000072f000000, 0x000000072f000000, 0x000000072f200000|  0%| F|  |TAMS 0x000000072f000000| PB 0x000000072f000000| Untracked 
+|  58|0x000000072f200000, 0x000000072f200000, 0x000000072f400000|  0%| F|  |TAMS 0x000000072f200000| PB 0x000000072f200000| Untracked 
+|  59|0x000000072f400000, 0x000000072f400000, 0x000000072f600000|  0%| F|  |TAMS 0x000000072f400000| PB 0x000000072f400000| Untracked 
+|  60|0x000000072f600000, 0x000000072f600000, 0x000000072f800000|  0%| F|  |TAMS 0x000000072f600000| PB 0x000000072f600000| Untracked 
+|  61|0x000000072f800000, 0x000000072f800000, 0x000000072fa00000|  0%| F|  |TAMS 0x000000072f800000| PB 0x000000072f800000| Untracked 
+|  62|0x000000072fa00000, 0x000000072fa00000, 0x000000072fc00000|  0%| F|  |TAMS 0x000000072fa00000| PB 0x000000072fa00000| Untracked 
+|  63|0x000000072fc00000, 0x000000072fc00000, 0x000000072fe00000|  0%| F|  |TAMS 0x000000072fc00000| PB 0x000000072fc00000| Untracked 
+|  64|0x000000072fe00000, 0x000000072fe00000, 0x0000000730000000|  0%| F|  |TAMS 0x000000072fe00000| PB 0x000000072fe00000| Untracked 
+|  65|0x0000000730000000, 0x0000000730000000, 0x0000000730200000|  0%| F|  |TAMS 0x0000000730000000| PB 0x0000000730000000| Untracked 
+|  66|0x0000000730200000, 0x0000000730200000, 0x0000000730400000|  0%| F|  |TAMS 0x0000000730200000| PB 0x0000000730200000| Untracked 
+|  67|0x0000000730400000, 0x0000000730400000, 0x0000000730600000|  0%| F|  |TAMS 0x0000000730400000| PB 0x0000000730400000| Untracked 
+|  68|0x0000000730600000, 0x0000000730600000, 0x0000000730800000|  0%| F|  |TAMS 0x0000000730600000| PB 0x0000000730600000| Untracked 
+|  69|0x0000000730800000, 0x0000000730800000, 0x0000000730a00000|  0%| F|  |TAMS 0x0000000730800000| PB 0x0000000730800000| Untracked 
+|  70|0x0000000730a00000, 0x0000000730a00000, 0x0000000730c00000|  0%| F|  |TAMS 0x0000000730a00000| PB 0x0000000730a00000| Untracked 
+|  71|0x0000000730c00000, 0x0000000730c00000, 0x0000000730e00000|  0%| F|  |TAMS 0x0000000730c00000| PB 0x0000000730c00000| Untracked 
+|  72|0x0000000730e00000, 0x0000000730e00000, 0x0000000731000000|  0%| F|  |TAMS 0x0000000730e00000| PB 0x0000000730e00000| Untracked 
+|  73|0x0000000731000000, 0x0000000731000000, 0x0000000731200000|  0%| F|  |TAMS 0x0000000731000000| PB 0x0000000731000000| Untracked 
+|  74|0x0000000731200000, 0x0000000731200000, 0x0000000731400000|  0%| F|  |TAMS 0x0000000731200000| PB 0x0000000731200000| Untracked 
+|  75|0x0000000731400000, 0x0000000731400000, 0x0000000731600000|  0%| F|  |TAMS 0x0000000731400000| PB 0x0000000731400000| Untracked 
+|  76|0x0000000731600000, 0x0000000731600000, 0x0000000731800000|  0%| F|  |TAMS 0x0000000731600000| PB 0x0000000731600000| Untracked 
+|  77|0x0000000731800000, 0x0000000731800000, 0x0000000731a00000|  0%| F|  |TAMS 0x0000000731800000| PB 0x0000000731800000| Untracked 
+|  78|0x0000000731a00000, 0x0000000731a00000, 0x0000000731c00000|  0%| F|  |TAMS 0x0000000731a00000| PB 0x0000000731a00000| Untracked 
+|  79|0x0000000731c00000, 0x0000000731c00000, 0x0000000731e00000|  0%| F|  |TAMS 0x0000000731c00000| PB 0x0000000731c00000| Untracked 
+|  80|0x0000000731e00000, 0x0000000731e00000, 0x0000000732000000|  0%| F|  |TAMS 0x0000000731e00000| PB 0x0000000731e00000| Untracked 
+|  81|0x0000000732000000, 0x0000000732000000, 0x0000000732200000|  0%| F|  |TAMS 0x0000000732000000| PB 0x0000000732000000| Untracked 
+|  82|0x0000000732200000, 0x0000000732200000, 0x0000000732400000|  0%| F|  |TAMS 0x0000000732200000| PB 0x0000000732200000| Untracked 
+|  83|0x0000000732400000, 0x00000007324eebb8, 0x0000000732600000| 46%| E|  |TAMS 0x0000000732400000| PB 0x0000000732400000| Complete 
+|  84|0x0000000732600000, 0x0000000732800000, 0x0000000732800000|100%| E|CS|TAMS 0x0000000732600000| PB 0x0000000732600000| Complete 
+|  85|0x0000000732800000, 0x0000000732a00000, 0x0000000732a00000|100%| E|CS|TAMS 0x0000000732800000| PB 0x0000000732800000| Complete 
+|  86|0x0000000732a00000, 0x0000000732c00000, 0x0000000732c00000|100%| E|CS|TAMS 0x0000000732a00000| PB 0x0000000732a00000| Complete 
+|  87|0x0000000732c00000, 0x0000000732e00000, 0x0000000732e00000|100%| E|CS|TAMS 0x0000000732c00000| PB 0x0000000732c00000| Complete 
+|  88|0x0000000732e00000, 0x0000000733000000, 0x0000000733000000|100%| E|CS|TAMS 0x0000000732e00000| PB 0x0000000732e00000| Complete 
+|  89|0x0000000733000000, 0x0000000733200000, 0x0000000733200000|100%| E|CS|TAMS 0x0000000733000000| PB 0x0000000733000000| Complete 
+|  90|0x0000000733200000, 0x0000000733400000, 0x0000000733400000|100%| E|CS|TAMS 0x0000000733200000| PB 0x0000000733200000| Complete 
+| 108|0x0000000735600000, 0x0000000735800000, 0x0000000735800000|100%| E|CS|TAMS 0x0000000735600000| PB 0x0000000735600000| Complete 
+|1728|0x00000007ffe00000, 0x0000000800000000, 0x0000000800000000|100%| E|CS|TAMS 0x00000007ffe00000| PB 0x00000007ffe00000| Complete 
+
+Card table byte_map: [0x00007306e8600000,0x00007306e8cc1000] _byte_map_base: 0x00007306e4cc1000
+
+Marking Bits: (CMBitMap*) 0x00007306e4093520
+ Bits: [0x00007306cd400000, 0x00007306d0a08000)
+
+Polling page: 0x00007306ebf64000
+
+Metaspace:
+
+Usage:
+  Non-class:    111,60 MB used.
+      Class:     16,60 MB used.
+       Both:    128,20 MB used.
+
+Virtual space:
+  Non-class space:      128,00 MB reserved,     112,19 MB ( 88%) committed,  2 nodes.
+      Class space:        1,00 GB reserved,      17,12 MB (  2%) committed,  1 nodes.
+             Both:        1,12 GB reserved,     129,31 MB ( 11%) committed. 
+
+Chunk freelists:
+   Non-Class:  15,38 MB
+       Class:  14,79 MB
+        Both:  30,17 MB
+
+MaxMetaspaceSize: unlimited
+CompressedClassSpaceSize: 1,00 GB
+Initial GC threshold: 21,00 MB
+Current GC threshold: 213,06 MB
+CDS: on
+ - commit_granule_bytes: 65536.
+ - commit_granule_words: 8192.
+ - virtual_space_node_default_size: 8388608.
+ - enlarge_chunks_in_place: 1.
+ - use_allocation_guard: 0.
+
+
+Internal statistics:
+
+num_allocs_failed_limit: 11.
+num_arena_births: 2116.
+num_arena_deaths: 134.
+num_vsnodes_births: 3.
+num_vsnodes_deaths: 0.
+num_space_committed: 2069.
+num_space_uncommitted: 0.
+num_chunks_returned_to_freelist: 210.
+num_chunks_taken_from_freelist: 7294.
+num_chunk_merges: 60.
+num_chunk_splits: 4941.
+num_chunks_enlarged: 3522.
+num_inconsistent_stats: 0.
+
+CodeHeap 'non-profiled nmethods': size=119168Kb used=12184Kb max_used=12184Kb free=106983Kb
+ bounds [0x00007306d87a0000, 0x00007306d9390000, 0x00007306dfc00000]
+CodeHeap 'profiled nmethods': size=119164Kb used=30098Kb max_used=30098Kb free=89065Kb
+ bounds [0x00007306d0c00000, 0x00007306d2970000, 0x00007306d805f000]
+CodeHeap 'non-nmethods': size=7428Kb used=1944Kb max_used=3708Kb free=5483Kb
+ bounds [0x00007306d805f000, 0x00007306d840f000, 0x00007306d87a0000]
+ total_blobs=15241 nmethods=14340 adapters=804
+ compilation: enabled
+              stopped_count=0, restarted_count=0
+ full_count=0
+
+Compilation events (20 events):
+Event: 721,334 Thread 0x00007306e417aa20 21034       3       org.hibernate.engine.spi.LoadQueryInfluencers::hasEnabledFilters (23 bytes)
+Event: 721,334 Thread 0x00007306e417aa20 nmethod 21034 0x00007306d2965390 code [0x00007306d2965540, 0x00007306d2965818]
+Event: 721,336 Thread 0x00007306e4179360 21035       4       com.microsoft.sqlserver.jdbc.SQLServerStatement::startResults (6 bytes)
+Event: 721,336 Thread 0x00007306e4179360 nmethod 21035 0x00007306d9382610 code [0x00007306d9382780, 0x00007306d9382810]
+Event: 726,325 Thread 0x00007306e4179360 21036       4       java.util.concurrent.TimeUnit::convert (73 bytes)
+Event: 726,326 Thread 0x00007306e4179360 nmethod 21036 0x00007306d9382910 code [0x00007306d9382aa0, 0x00007306d9382c88]
+Event: 728,994 Thread 0x00007306e417aa20 21037       1       org.apache.catalina.core.StandardContext::getThreadBindingListener (5 bytes)
+Event: 728,994 Thread 0x00007306e4179360 21038       4       java.util.concurrent.locks.ReentrantReadWriteLock$Sync::tryReleaseShared (146 bytes)
+Event: 728,994 Thread 0x00007306e417aa20 nmethod 21037 0x00007306d9382e10 code [0x00007306d9382fa0, 0x00007306d9383068]
+Event: 729,001 Thread 0x00007306e4179360 nmethod 21038 0x00007306d9383110 code [0x00007306d9383340, 0x00007306d9384238]
+Event: 729,001 Thread 0x00007306e4179360 21039       4       java.util.concurrent.locks.AbstractQueuedSynchronizer::acquireShared (20 bytes)
+Event: 729,006 Thread 0x00007306e4179360 nmethod 21039 0x00007306d9384b90 code [0x00007306d9384de0, 0x00007306d9385908]
+Event: 736,333 Thread 0x00007306e417aa20 21040       3       org.springframework.data.repository.query.ParametersParameterAccessor::getPageable (106 bytes)
+Event: 736,334 Thread 0x00007306e417aa20 nmethod 21040 0x00007306d2965910 code [0x00007306d2965c20, 0x00007306d2967320]
+Event: 736,334 Thread 0x00007306e417aa20 21041       1       org.hibernate.type.descriptor.java.TemporalJavaType::isTemporalType (2 bytes)
+Event: 736,334 Thread 0x00007306e417aa20 nmethod 21041 0x00007306d9385d90 code [0x00007306d9385f20, 0x00007306d9385fe0]
+Event: 736,336 Thread 0x00007306e417aa20 21043       3       org.hibernate.resource.jdbc.internal.AbstractLogicalConnectionImplementor::afterTransaction (18 bytes)
+Event: 736,336 Thread 0x00007306e417aa20 nmethod 21043 0x00007306d2967990 code [0x00007306d2967b40, 0x00007306d2967d98]
+Event: 736,336 Thread 0x00007306e417aa20 21042       3       org.hibernate.resource.jdbc.internal.LogicalConnectionManagedImpl::afterTransaction (30 bytes)
+Event: 736,336 Thread 0x00007306e417aa20 nmethod 21042 0x00007306d2967e90 code [0x00007306d2968080, 0x00007306d29684b0]
+
+GC Heap History (20 events):
+Event: 266,940 GC heap before
+{Heap before GC invocations=42 (full 0):
+ garbage-first heap   total 147456K, used 133305K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 31 young (63488K), 3 survivors (6144K)
+ Metaspace       used 125726K, committed 126784K, reserved 1179648K
+  class space    used 16620K, committed 17088K, reserved 1048576K
+}
+Event: 266,945 GC heap after
+{Heap after GC invocations=43 (full 0):
+ garbage-first heap   total 147456K, used 79915K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 3 young (6144K), 3 survivors (6144K)
+ Metaspace       used 125726K, committed 126784K, reserved 1179648K
+  class space    used 16620K, committed 17088K, reserved 1048576K
+}
+Event: 567,940 GC heap before
+{Heap before GC invocations=43 (full 0):
+ garbage-first heap   total 147456K, used 114731K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 21 young (43008K), 3 survivors (6144K)
+ Metaspace       used 126168K, committed 127232K, reserved 1179648K
+  class space    used 16688K, committed 17152K, reserved 1048576K
+}
+Event: 568,017 GC heap after
+{Heap after GC invocations=44 (full 1):
+ garbage-first heap   total 147456K, used 64867K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 0 young (0K), 0 survivors (0K)
+ Metaspace       used 126090K, committed 127232K, reserved 1179648K
+  class space    used 16668K, committed 17152K, reserved 1048576K
+}
+Event: 568,642 GC heap before
+{Heap before GC invocations=44 (full 1):
+ garbage-first heap   total 147456K, used 128355K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 32 young (65536K), 0 survivors (0K)
+ Metaspace       used 126802K, committed 127808K, reserved 1179648K
+  class space    used 16753K, committed 17216K, reserved 1048576K
+}
+Event: 568,645 GC heap after
+{Heap after GC invocations=45 (full 1):
+ garbage-first heap   total 147456K, used 70388K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 3 young (6144K), 3 survivors (6144K)
+ Metaspace       used 126802K, committed 127808K, reserved 1179648K
+  class space    used 16753K, committed 17216K, reserved 1048576K
+}
+Event: 569,014 GC heap before
+{Heap before GC invocations=45 (full 1):
+ garbage-first heap   total 147456K, used 123636K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 29 young (59392K), 3 survivors (6144K)
+ Metaspace       used 127003K, committed 128064K, reserved 1179648K
+  class space    used 16767K, committed 17216K, reserved 1048576K
+}
+Event: 569,017 GC heap after
+{Heap after GC invocations=46 (full 1):
+ garbage-first heap   total 147456K, used 72392K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 2 young (4096K), 2 survivors (4096K)
+ Metaspace       used 127003K, committed 128064K, reserved 1179648K
+  class space    used 16767K, committed 17216K, reserved 1048576K
+}
+Event: 569,700 GC heap before
+{Heap before GC invocations=46 (full 1):
+ garbage-first heap   total 147456K, used 123592K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 27 young (55296K), 2 survivors (4096K)
+ Metaspace       used 127869K, committed 128896K, reserved 1179648K
+  class space    used 16805K, committed 17280K, reserved 1048576K
+}
+Event: 569,704 GC heap after
+{Heap after GC invocations=47 (full 1):
+ garbage-first heap   total 147456K, used 75602K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 3 young (6144K), 3 survivors (6144K)
+ Metaspace       used 127869K, committed 128896K, reserved 1179648K
+  class space    used 16805K, committed 17280K, reserved 1048576K
+}
+Event: 570,027 GC heap before
+{Heap before GC invocations=48 (full 1):
+ garbage-first heap   total 151552K, used 122706K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 26 young (53248K), 3 survivors (6144K)
+ Metaspace       used 128317K, committed 129344K, reserved 1179648K
+  class space    used 16842K, committed 17344K, reserved 1048576K
+}
+Event: 570,030 GC heap after
+{Heap after GC invocations=49 (full 1):
+ garbage-first heap   total 151552K, used 77977K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 4 young (8192K), 4 survivors (8192K)
+ Metaspace       used 128317K, committed 129344K, reserved 1179648K
+  class space    used 16842K, committed 17344K, reserved 1048576K
+}
+Event: 570,451 GC heap before
+{Heap before GC invocations=49 (full 1):
+ garbage-first heap   total 151552K, used 123033K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 26 young (53248K), 4 survivors (8192K)
+ Metaspace       used 129272K, committed 130368K, reserved 1179648K
+  class space    used 16899K, committed 17408K, reserved 1048576K
+}
+Event: 570,456 GC heap after
+{Heap after GC invocations=50 (full 1):
+ garbage-first heap   total 151552K, used 80370K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 3 young (6144K), 3 survivors (6144K)
+ Metaspace       used 129272K, committed 130368K, reserved 1179648K
+  class space    used 16899K, committed 17408K, reserved 1048576K
+}
+Event: 570,834 GC heap before
+{Heap before GC invocations=50 (full 1):
+ garbage-first heap   total 151552K, used 127474K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 26 young (53248K), 3 survivors (6144K)
+ Metaspace       used 129786K, committed 130880K, reserved 1179648K
+  class space    used 16946K, committed 17472K, reserved 1048576K
+}
+Event: 570,837 GC heap after
+{Heap after GC invocations=51 (full 1):
+ garbage-first heap   total 151552K, used 81952K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 2 young (4096K), 2 survivors (4096K)
+ Metaspace       used 129786K, committed 130880K, reserved 1179648K
+  class space    used 16946K, committed 17472K, reserved 1048576K
+}
+Event: 571,108 GC heap before
+{Heap before GC invocations=52 (full 1):
+ garbage-first heap   total 157696K, used 131104K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 26 young (53248K), 2 survivors (4096K)
+ Metaspace       used 129796K, committed 130880K, reserved 1179648K
+  class space    used 16947K, committed 17472K, reserved 1048576K
+}
+Event: 571,112 GC heap after
+{Heap after GC invocations=53 (full 1):
+ garbage-first heap   total 190464K, used 83204K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 3 young (6144K), 3 survivors (6144K)
+ Metaspace       used 129796K, committed 130880K, reserved 1179648K
+  class space    used 16947K, committed 17472K, reserved 1048576K
+}
+Event: 625,133 GC heap before
+{Heap before GC invocations=53 (full 1):
+ garbage-first heap   total 190464K, used 163076K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 43 young (88064K), 3 survivors (6144K)
+ Metaspace       used 131009K, committed 132096K, reserved 1179648K
+  class space    used 16979K, committed 17472K, reserved 1048576K
+}
+Event: 625,138 GC heap after
+{Heap after GC invocations=54 (full 1):
+ garbage-first heap   total 190464K, used 87106K [0x0000000727e00000, 0x0000000800000000)
+  region size 2048K, 5 young (10240K), 5 survivors (10240K)
+ Metaspace       used 131009K, committed 132096K, reserved 1179648K
+  class space    used 16979K, committed 17472K, reserved 1048576K
+}
+
+Dll operation events (12 events):
+Event: 0,004 Loaded shared library /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjava.so
+Event: 0,026 Loaded shared library /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libzip.so
+Event: 0,028 Loaded shared library /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjsvml.so
+Event: 0,154 Loaded shared library /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libinstrument.so
+Event: 0,156 Loaded shared library /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libnio.so
+Event: 0,159 Loaded shared library /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libzip.so
+Event: 0,259 Loaded shared library /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjimage.so
+Event: 0,297 Loaded shared library /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libmanagement.so
+Event: 0,304 Loaded shared library /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libmanagement_ext.so
+Event: 0,333 Loaded shared library /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libnet.so
+Event: 0,452 Loaded shared library /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libextnet.so
+Event: 0,468 Loaded shared library /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libverify.so
+
+Deoptimization events (20 events):
+Event: 685,708 Thread 0x000073054451e550 DEOPT UNPACKING pc=0x00007306d80b372f sp=0x00007306ba3f4aa8 mode 1
+Event: 685,708 Thread 0x0000730544521130 DEOPT UNPACKING pc=0x00007306d80b372f sp=0x00007306ba2f4aa8 mode 1
+Event: 685,708 Thread 0x000073054451e550 DEOPT PACKING pc=0x00007306d0c2cf5c sp=0x00007306ba3f5640
+Event: 685,708 Thread 0x0000730544521130 DEOPT PACKING pc=0x00007306d0c2cf5c sp=0x00007306ba2f5640
+Event: 685,708 Thread 0x000073054451e550 DEOPT UNPACKING pc=0x00007306d80b372f sp=0x00007306ba3f4b38 mode 1
+Event: 685,708 Thread 0x0000730544521130 DEOPT UNPACKING pc=0x00007306d80b372f sp=0x00007306ba2f4b38 mode 1
+Event: 685,709 Thread 0x000073054451cfd0 DEOPT PACKING pc=0x00007306d1b99484 sp=0x00007306b9ef5340
+Event: 685,709 Thread 0x000073054451cfd0 DEOPT UNPACKING pc=0x00007306d80b372f sp=0x00007306b9ef4818 mode 1
+Event: 685,709 Thread 0x000073054451cfd0 DEOPT PACKING pc=0x00007306d0f06184 sp=0x00007306b9ef53f0
+Event: 685,709 Thread 0x000073054451cfd0 DEOPT UNPACKING pc=0x00007306d80b372f sp=0x00007306b9ef4920 mode 1
+Event: 685,709 Thread 0x000073054451cfd0 DEOPT PACKING pc=0x00007306d0c5d9d4 sp=0x00007306b9ef54e0
+Event: 685,709 Thread 0x000073054451cfd0 DEOPT UNPACKING pc=0x00007306d80b372f sp=0x00007306b9ef4a28 mode 1
+Event: 685,709 Thread 0x000073054451cfd0 DEOPT PACKING pc=0x00007306d0ca85f4 sp=0x00007306b9ef55e0
+Event: 685,709 Thread 0x000073054451cfd0 DEOPT UNPACKING pc=0x00007306d80b372f sp=0x00007306b9ef4aa8 mode 1
+Event: 685,709 Thread 0x000073054451cfd0 DEOPT PACKING pc=0x00007306d0c2cf5c sp=0x00007306b9ef5640
+Event: 685,709 Thread 0x000073054451cfd0 DEOPT UNPACKING pc=0x00007306d80b372f sp=0x00007306b9ef4b38 mode 1
+Event: 690,834 Thread 0x000073054449dc70 DEOPT PACKING pc=0x00007306d1f37e77 sp=0x00007306ba6fe600
+Event: 690,834 Thread 0x000073054449dc70 DEOPT UNPACKING pc=0x00007306d80b372f sp=0x00007306ba6fdab8 mode 0
+Event: 744,033 Thread 0x0000730544521130 DEOPT PACKING pc=0x00007306d24ef75c sp=0x00007306ba2f4830
+Event: 744,033 Thread 0x0000730544521130 DEOPT UNPACKING pc=0x00007306d80b372f sp=0x00007306ba2f3cf8 mode 0
+
+Classes loaded (20 events):
+Event: 567,814 Loading class java/util/concurrent/CompletableFuture$BiCompletion done
+Event: 567,814 Loading class java/util/concurrent/CompletableFuture$BiRelay done
+Event: 567,814 Loading class java/util/concurrent/CompletableFuture$CoCompletion
+Event: 567,814 Loading class java/util/concurrent/CompletableFuture$CoCompletion done
+Event: 567,814 Loading class java/util/concurrent/CompletableFuture$UniRelay
+Event: 567,814 Loading class java/util/concurrent/CompletableFuture$UniRelay done
+Event: 567,917 Loading class javax/management/NotificationBroadcasterSupport$WildcardListenerInfo
+Event: 567,917 Loading class javax/management/NotificationBroadcasterSupport$WildcardListenerInfo done
+Event: 567,928 Loading class java/util/AbstractMap$2
+Event: 567,928 Loading class java/util/AbstractMap$2 done
+Event: 567,928 Loading class java/util/AbstractMap$2$1
+Event: 567,928 Loading class java/util/AbstractMap$2$1 done
+Event: 568,017 Loading class java/lang/ref/Finalizer$2
+Event: 568,017 Loading class java/lang/ref/Finalizer$2 done
+Event: 568,018 Loading class java/lang/ref/Finalizer$1
+Event: 568,018 Loading class java/lang/ref/Finalizer$1 done
+Event: 694,548 Loading class java/lang/invoke/BoundMethodHandle$Species_LLLLLLLLLL
+Event: 694,548 Loading class java/lang/invoke/BoundMethodHandle$Species_LLLLLLLLLL done
+Event: 694,549 Loading class java/lang/invoke/BoundMethodHandle$Species_LLLLLLLLLLL
+Event: 694,549 Loading class java/lang/invoke/BoundMethodHandle$Species_LLLLLLLLLLL done
+
+Classes unloaded (20 events):
+Event: 567,955 Thread 0x00007306e41629d0 Unloading class 0x0000730670f06800 'java/lang/invoke/LambdaForm$MH+0x0000730670f06800'
+Event: 567,955 Thread 0x00007306e41629d0 Unloading class 0x0000730670f06400 'java/lang/invoke/LambdaForm$MH+0x0000730670f06400'
+Event: 567,955 Thread 0x00007306e41629d0 Unloading class 0x0000730670f05c00 'java/lang/invoke/LambdaForm$MH+0x0000730670f05c00'
+Event: 567,955 Thread 0x00007306e41629d0 Unloading class 0x0000730670f05800 'java/lang/invoke/LambdaForm$MH+0x0000730670f05800'
+Event: 567,955 Thread 0x00007306e41629d0 Unloading class 0x0000730670f05400 'java/lang/invoke/LambdaForm$MH+0x0000730670f05400'
+Event: 567,955 Thread 0x00007306e41629d0 Unloading class 0x0000730670f04c00 'java/lang/invoke/LambdaForm$MH+0x0000730670f04c00'
+Event: 567,956 Thread 0x00007306e41629d0 Unloading class 0x0000730670f04800 'java/lang/invoke/LambdaForm$MH+0x0000730670f04800'
+Event: 567,956 Thread 0x00007306e41629d0 Unloading class 0x0000730670f04400 'java/lang/invoke/LambdaForm$MH+0x0000730670f04400'
+Event: 567,956 Thread 0x00007306e41629d0 Unloading class 0x0000730670f04000 'java/lang/invoke/LambdaForm$MH+0x0000730670f04000'
+Event: 567,956 Thread 0x00007306e41629d0 Unloading class 0x0000730670f03800 'java/lang/invoke/LambdaForm$MH+0x0000730670f03800'
+Event: 567,956 Thread 0x00007306e41629d0 Unloading class 0x0000730670f03000 'java/lang/invoke/LambdaForm$MH+0x0000730670f03000'
+Event: 567,956 Thread 0x00007306e41629d0 Unloading class 0x0000730670f02c00 'java/lang/invoke/LambdaForm$MH+0x0000730670f02c00'
+Event: 567,956 Thread 0x00007306e41629d0 Unloading class 0x0000730670f02800 'java/lang/invoke/LambdaForm$MH+0x0000730670f02800'
+Event: 567,956 Thread 0x00007306e41629d0 Unloading class 0x0000730670f02000 'java/lang/invoke/LambdaForm$MH+0x0000730670f02000'
+Event: 567,956 Thread 0x00007306e41629d0 Unloading class 0x0000730670f01c00 'java/lang/invoke/LambdaForm$MH+0x0000730670f01c00'
+Event: 567,956 Thread 0x00007306e41629d0 Unloading class 0x0000730670f01800 'java/lang/invoke/LambdaForm$DMH+0x0000730670f01800'
+Event: 567,956 Thread 0x00007306e41629d0 Unloading class 0x0000730670f01400 'java/lang/invoke/LambdaForm$DMH+0x0000730670f01400'
+Event: 567,956 Thread 0x00007306e41629d0 Unloading class 0x0000730670f01000 'java/lang/invoke/LambdaForm$DMH+0x0000730670f01000'
+Event: 567,956 Thread 0x00007306e41629d0 Unloading class 0x0000730670f00800 'jdk/internal/reflect/GeneratedSerializationConstructorAccessor51'
+Event: 567,956 Thread 0x00007306e41629d0 Unloading class 0x0000730670f00400 'jdk/internal/reflect/GeneratedSerializationConstructorAccessor50'
+
+Classes redefined (3 events):
+Event: 566,443 Thread 0x00007306e41629d0 redefined class name=com.ta2khu75.quiz.controller.AccountController, count=1
+Event: 744,075 Thread 0x00007306e41629d0 redefined class name=com.ta2khu75.quiz.service.impl.AccountServiceImpl, count=1
+Event: 744,075 Thread 0x00007306e41629d0 redefined class name=com.ta2khu75.quiz.service.impl.AccountServiceImpl, count=1
+
+Internal exceptions (20 events):
+Event: 568,784 Thread 0x00007305e495b390 Exception <a 'java/lang/ArrayIndexOutOfBoundsException'{0x0000000732dbef70}> (0x0000000732dbef70) 
+thrown [src/hotspot/share/runtime/sharedRuntime.cpp, line 625]
+Event: 568,784 Thread 0x00007305e495b390 Exception <a 'java/lang/ArrayIndexOutOfBoundsException'{0x0000000732dbf7f8}> (0x0000000732dbf7f8) 
+thrown [src/hotspot/share/runtime/sharedRuntime.cpp, line 625]
+Event: 568,786 Thread 0x00007305e495b390 Exception <a 'java/lang/ArrayIndexOutOfBoundsException'{0x00000007302065c0}> (0x00000007302065c0) 
+thrown [src/hotspot/share/runtime/sharedRuntime.cpp, line 625]
+Event: 568,786 Thread 0x00007305e495b390 Exception <a 'java/lang/ArrayIndexOutOfBoundsException'{0x0000000730206e48}> (0x0000000730206e48) 
+thrown [src/hotspot/share/runtime/sharedRuntime.cpp, line 625]
+Event: 568,787 Thread 0x00007305e495b390 Implicit null exception at 0x00007306d8881ffa to 0x00007306d8883718
+Event: 568,889 Thread 0x00007305e495b390 Exception <a 'java/io/FileNotFoundException'{0x000000072ee544f8}> (0x000000072ee544f8) 
+thrown [src/hotspot/share/prims/jni.cpp, line 535]
+Event: 568,889 Thread 0x00007305e495b390 Exception <a 'java/io/FileNotFoundException'{0x000000072ee55408}> (0x000000072ee55408) 
+thrown [src/hotspot/share/prims/jni.cpp, line 535]
+Event: 568,990 Thread 0x00007305e495b390 Exception <a 'java/io/FileNotFoundException'{0x000000072e1e0658}> (0x000000072e1e0658) 
+thrown [src/hotspot/share/prims/jni.cpp, line 535]
+Event: 569,670 Thread 0x00007305e495b390 Implicit null exception at 0x00007306d8eaa73f to 0x00007306d8eab178
+Event: 569,987 Thread 0x00007305e495b390 Exception <a 'java/io/FileNotFoundException'{0x000000072e96b578}> (0x000000072e96b578) 
+thrown [src/hotspot/share/prims/jni.cpp, line 535]
+Event: 569,987 Thread 0x00007305e495b390 Exception <a 'java/io/FileNotFoundException'{0x000000072e975010}> (0x000000072e975010) 
+thrown [src/hotspot/share/prims/jni.cpp, line 535]
+Event: 570,206 Thread 0x00007305e495b390 Implicit null exception at 0x00007306d92cf2e0 to 0x00007306d92cfd78
+Event: 570,255 Thread 0x00007305e495b390 Implicit null exception at 0x00007306d92d5a6d to 0x00007306d92d65b4
+Event: 570,456 Thread 0x00007305e495b390 Implicit null exception at 0x00007306d87f5980 to 0x00007306d87f5c38
+Event: 608,569 Thread 0x0000730544521d30 Exception <a 'java/lang/NoSuchMethodError'{0x000000072ee2c618}: 'java.lang.Object java.lang.invoke.DirectMethodHandle$Holder.invokeVirtual(java.lang.Object, java.lang.Object, java.lang.Object, int, int)'> (0x000000072ee2c618) 
+thrown [src/hotspot/share/interpreter/linkResolver.cpp, line 783]
+Event: 608,569 Thread 0x0000730544521d30 Exception <a 'java/lang/NoSuchMethodError'{0x000000072ee343e8}: 'java.lang.Object java.lang.invoke.DelegatingMethodHandle$Holder.reinvoke_L(java.lang.Object, java.lang.Object, java.lang.Object, int, int)'> (0x000000072ee343e8) 
+thrown [src/hotspot/share/interpreter/linkResolver.cpp, line 783]
+Event: 634,318 Thread 0x0000730544521130 Exception <a 'java/io/IOException'{0x00000007ffff8d70}> (0x00000007ffff8d70) 
+thrown [src/hotspot/share/prims/jni.cpp, line 535]
+Event: 639,732 Thread 0x000073054451cfd0 Exception <a 'java/io/IOException'{0x00000007357fd188}> (0x00000007357fd188) 
+thrown [src/hotspot/share/prims/jni.cpp, line 535]
+Event: 694,548 Thread 0x0000730544521130 Exception <a 'java/lang/NoSuchMethodError'{0x0000000732bd7998}: 'java.lang.Object java.lang.invoke.DirectMethodHandle$Holder.invokeStatic(java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object)'> (0x0000000732bd7998) 
+thrown [src/hotspot/share/interpreter/linkResolver.cpp, line 783]
+Event: 694,549 Thread 0x0000730544521130 Exception <a 'java/lang/NoSuchMethodError'{0x0000000732bf86e0}: 'java.lang.Object java.lang.invoke.DirectMethodHandle$Holder.invokeStatic(java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object, java.lang.Object)'> (0x0000000732bf86e0) 
+thrown [src/hotspot/share/interpreter/linkResolver.cpp, line 783]
+
+ZGC Phase Switch (0 events):
+No events
+
+VM Operations (20 events):
+Event: 744,033 Executing VM operation: ChangeSingleStep
+Event: 744,033 Executing VM operation: ChangeSingleStep done
+Event: 744,033 Executing VM operation: ChangeSingleStep
+Event: 744,033 Executing VM operation: ChangeSingleStep done
+Event: 744,053 Executing VM operation: RedefineClasses
+Event: 744,109 Executing VM operation: RedefineClasses done
+Event: 744,124 Executing VM operation: ChangeBreakpoints
+Event: 744,128 Executing VM operation: ChangeBreakpoints done
+Event: 744,128 Executing VM operation: ChangeBreakpoints
+Event: 744,130 Executing VM operation: ChangeBreakpoints done
+Event: 744,133 Executing VM operation: ChangeBreakpoints
+Event: 744,136 Executing VM operation: ChangeBreakpoints done
+Event: 744,136 Executing VM operation: ChangeBreakpoints
+Event: 744,139 Executing VM operation: ChangeBreakpoints done
+Event: 744,153 Executing VM operation: ChangeBreakpoints
+Event: 744,157 Executing VM operation: ChangeBreakpoints done
+Event: 744,158 Executing VM operation: ChangeBreakpoints
+Event: 744,162 Executing VM operation: ChangeBreakpoints done
+Event: 744,164 Executing VM operation: ChangeSingleStep
+Event: 744,164 Executing VM operation: ChangeSingleStep done
+
+Events (20 events):
+Event: 623,548 Protecting memory [0x00007306ba500000,0x00007306ba504000] with protection modes 0
+Event: 630,140 Thread 0x0000730634a452f0 Thread exited: 0x0000730634a452f0
+Event: 634,315 Thread 0x000073063439baf0 Thread added: 0x000073063439baf0
+Event: 634,315 Protecting memory [0x00007306ba500000,0x00007306ba504000] with protection modes 0
+Event: 634,315 Thread 0x000073063439c2f0 Thread added: 0x000073063439c2f0
+Event: 634,315 Protecting memory [0x00007306badf6000,0x00007306badfa000] with protection modes 0
+Event: 641,741 Thread 0x000073063439c2f0 Thread exited: 0x000073063439c2f0
+Event: 646,328 Thread 0x00007305d80060d0 Thread exited: 0x00007305d80060d0
+Event: 646,337 Thread 0x000073063439baf0 Thread exited: 0x000073063439baf0
+Event: 661,328 Thread 0x00007305d8001e30 Thread exited: 0x00007305d8001e30
+Event: 661,331 Thread 0x00007305e0001c60 Thread exited: 0x00007305e0001c60
+Event: 685,711 Thread 0x0000730634389990 Thread added: 0x0000730634389990
+Event: 685,711 Protecting memory [0x00007306bb9fd000,0x00007306bba01000] with protection modes 0
+Event: 690,787 Thread 0x0000730634389990 Thread exited: 0x0000730634389990
+Event: 694,544 Thread 0x000073063438d500 Thread added: 0x000073063438d500
+Event: 694,544 Protecting memory [0x00007306bb9fd000,0x00007306bba01000] with protection modes 0
+Event: 694,544 Thread 0x000073063438dfa0 Thread added: 0x000073063438dfa0
+Event: 694,544 Protecting memory [0x00007306bb7fd000,0x00007306bb801000] with protection modes 0
+Event: 699,550 Thread 0x000073063438dfa0 Thread exited: 0x000073063438dfa0
+Event: 704,550 Thread 0x000073063438d500 Thread exited: 0x000073063438d500
+
+
+Dynamic libraries:
+727e00000-733400000 rw-p 00000000 00:00 0 
+733400000-735600000 ---p 00000000 00:00 0 
+735600000-735800000 rw-p 00000000 00:00 0 
+735800000-7ffe00000 ---p 00000000 00:00 0 
+7ffe00000-7fff10000 rw-p 00d86000 103:07 3673542                         /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/server/classes.jsa
+7fff10000-800000000 rw-p 00000000 00:00 0 
+55ec65530000-55ec65531000 r--p 00000000 103:07 3673075                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/bin/java
+55ec65531000-55ec65532000 r-xp 00001000 103:07 3673075                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/bin/java
+55ec65532000-55ec65533000 r--p 00002000 103:07 3673075                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/bin/java
+55ec65533000-55ec65534000 r--p 00002000 103:07 3673075                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/bin/java
+55ec65534000-55ec65535000 rw-p 00003000 103:07 3673075                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/bin/java
+55ec672e8000-55ec67336000 rw-p 00000000 00:00 0                          [heap]
+7304bc000000-7304bc0c4000 rw-p 00000000 00:00 0 
+7304bc0c4000-7304c0000000 ---p 00000000 00:00 0 
+7304c0000000-7304c07b8000 rw-p 00000000 00:00 0 
+7304c07b8000-7304c4000000 ---p 00000000 00:00 0 
+7304c8000000-7304c8021000 rw-p 00000000 00:00 0 
+7304c8021000-7304cc000000 ---p 00000000 00:00 0 
+7304cc000000-7304cc277000 rw-p 00000000 00:00 0 
+7304cc277000-7304d0000000 ---p 00000000 00:00 0 
+7304d4000000-7304d4021000 rw-p 00000000 00:00 0 
+7304d4021000-7304d8000000 ---p 00000000 00:00 0 
+7304d8000000-7304d80d6000 rw-p 00000000 00:00 0 
+7304d80d6000-7304dc000000 ---p 00000000 00:00 0 
+7304e0000000-7304e0067000 rw-p 00000000 00:00 0 
+7304e0067000-7304e4000000 ---p 00000000 00:00 0 
+7304e4000000-7304e4138000 rw-p 00000000 00:00 0 
+7304e4138000-7304e8000000 ---p 00000000 00:00 0 
+7304ec000000-7304ec0b2000 rw-p 00000000 00:00 0 
+7304ec0b2000-7304f0000000 ---p 00000000 00:00 0 
+7304f0000000-7304f0021000 rw-p 00000000 00:00 0 
+7304f0021000-7304f4000000 ---p 00000000 00:00 0 
+7304f8000000-7304f8021000 rw-p 00000000 00:00 0 
+7304f8021000-7304fc000000 ---p 00000000 00:00 0 
+7304fc000000-7304fc021000 rw-p 00000000 00:00 0 
+7304fc021000-730500000000 ---p 00000000 00:00 0 
+730504000000-730504021000 rw-p 00000000 00:00 0 
+730504021000-730508000000 ---p 00000000 00:00 0 
+730508000000-73050804b000 rw-p 00000000 00:00 0 
+73050804b000-73050c000000 ---p 00000000 00:00 0 
+730510000000-730510021000 rw-p 00000000 00:00 0 
+730510021000-730514000000 ---p 00000000 00:00 0 
+730514000000-730514092000 rw-p 00000000 00:00 0 
+730514092000-730518000000 ---p 00000000 00:00 0 
+73051c000000-73051c58f000 rw-p 00000000 00:00 0 
+73051c58f000-730520000000 ---p 00000000 00:00 0 
+730520000000-7305200bd000 rw-p 00000000 00:00 0 
+7305200bd000-730524000000 ---p 00000000 00:00 0 
+730528000000-7305286f0000 rw-p 00000000 00:00 0 
+7305286f0000-7305287f0000 rw-p 00000000 00:00 0 
+7305287f0000-730529bb0000 rw-p 00000000 00:00 0 
+730529bb0000-730529bf0000 rw-p 00000000 00:00 0 
+730529bf0000-730529ef0000 rw-p 00000000 00:00 0 
+730529ef0000-730529ff0000 rw-p 00000000 00:00 0 
+730529ff0000-73052a6f0000 rw-p 00000000 00:00 0 
+73052a6f0000-73052a7f0000 rw-p 00000000 00:00 0 
+73052a7f0000-73052aaf0000 rw-p 00000000 00:00 0 
+73052aaf0000-73052ab90000 rw-p 00000000 00:00 0 
+73052ab90000-73052ac00000 ---p 00000000 00:00 0 
+73052ac00000-73052b0a0000 rw-p 00000000 00:00 0 
+73052b0a0000-73052c000000 ---p 00000000 00:00 0 
+73052c000000-73052c021000 rw-p 00000000 00:00 0 
+73052c021000-730530000000 ---p 00000000 00:00 0 
+730530000000-730530206000 rw-p 00000000 00:00 0 
+730530206000-730534000000 ---p 00000000 00:00 0 
+730538000000-73053951d000 rw-p 00000000 00:00 0 
+73053951d000-73053c000000 ---p 00000000 00:00 0 
+73053c000000-73053c3b5000 rw-p 00000000 00:00 0 
+73053c3b5000-730540000000 ---p 00000000 00:00 0 
+730544000000-730544532000 rw-p 00000000 00:00 0 
+730544532000-730548000000 ---p 00000000 00:00 0 
+730548000000-730549666000 rw-p 00000000 00:00 0 
+730549666000-73054c000000 ---p 00000000 00:00 0 
+730550000000-730552035000 rw-p 00000000 00:00 0 
+730552035000-730554000000 ---p 00000000 00:00 0 
+730554000000-7305560cb000 rw-p 00000000 00:00 0 
+7305560cb000-730558000000 ---p 00000000 00:00 0 
+73055c000000-73055d8c7000 rw-p 00000000 00:00 0 
+73055d8c7000-730560000000 ---p 00000000 00:00 0 
+730560000000-730560028000 rw-p 00000000 00:00 0 
+730560028000-730564000000 ---p 00000000 00:00 0 
+730568000000-730568024000 rw-p 00000000 00:00 0 
+730568024000-73056c000000 ---p 00000000 00:00 0 
+73056c000000-73056c061000 rw-p 00000000 00:00 0 
+73056c061000-730570000000 ---p 00000000 00:00 0 
+730574000000-730574021000 rw-p 00000000 00:00 0 
+730574021000-730578000000 ---p 00000000 00:00 0 
+730578000000-730578021000 rw-p 00000000 00:00 0 
+730578021000-73057c000000 ---p 00000000 00:00 0 
+730580000000-730580021000 rw-p 00000000 00:00 0 
+730580021000-730584000000 ---p 00000000 00:00 0 
+730584000000-730584021000 rw-p 00000000 00:00 0 
+730584021000-730588000000 ---p 00000000 00:00 0 
+73058c000000-73058e6e1000 rw-p 00000000 00:00 0 
+73058e6e1000-730590000000 ---p 00000000 00:00 0 
+730590000000-73059373e000 rw-p 00000000 00:00 0 
+73059373e000-730594000000 ---p 00000000 00:00 0 
+730598000000-730598021000 rw-p 00000000 00:00 0 
+730598021000-73059c000000 ---p 00000000 00:00 0 
+73059c000000-73059c631000 rw-p 00000000 00:00 0 
+73059c631000-7305a0000000 ---p 00000000 00:00 0 
+7305a4000000-7305a59da000 rw-p 00000000 00:00 0 
+7305a59da000-7305a8000000 ---p 00000000 00:00 0 
+7305a8000000-7305a8021000 rw-p 00000000 00:00 0 
+7305a8021000-7305ac000000 ---p 00000000 00:00 0 
+7305b0000000-7305b0063000 rw-p 00000000 00:00 0 
+7305b0063000-7305b4000000 ---p 00000000 00:00 0 
+7305b4000000-7305b4021000 rw-p 00000000 00:00 0 
+7305b4021000-7305b8000000 ---p 00000000 00:00 0 
+7305bc000000-7305bc021000 rw-p 00000000 00:00 0 
+7305bc021000-7305c0000000 ---p 00000000 00:00 0 
+7305c0000000-7305c0021000 rw-p 00000000 00:00 0 
+7305c0021000-7305c4000000 ---p 00000000 00:00 0 
+7305c8000000-7305c804a000 rw-p 00000000 00:00 0 
+7305c804a000-7305cc000000 ---p 00000000 00:00 0 
+7305cc000000-7305cc021000 rw-p 00000000 00:00 0 
+7305cc021000-7305d0000000 ---p 00000000 00:00 0 
+7305d4000000-7305d4021000 rw-p 00000000 00:00 0 
+7305d4021000-7305d8000000 ---p 00000000 00:00 0 
+7305d8000000-7305d8021000 rw-p 00000000 00:00 0 
+7305d8021000-7305dc000000 ---p 00000000 00:00 0 
+7305e0000000-7305e0021000 rw-p 00000000 00:00 0 
+7305e0021000-7305e4000000 ---p 00000000 00:00 0 
+7305e4000000-7305e6709000 rw-p 00000000 00:00 0 
+7305e6709000-7305e8000000 ---p 00000000 00:00 0 
+7305ec000000-7305eed00000 rw-p 00000000 00:00 0 
+7305eed00000-7305f0000000 ---p 00000000 00:00 0 
+7305f0000000-7305f0024000 rw-p 00000000 00:00 0 
+7305f0024000-7305f4000000 ---p 00000000 00:00 0 
+7305f8000000-7305f8021000 rw-p 00000000 00:00 0 
+7305f8021000-7305fc000000 ---p 00000000 00:00 0 
+7305fc000000-7305fc021000 rw-p 00000000 00:00 0 
+7305fc021000-730600000000 ---p 00000000 00:00 0 
+730604000000-730604021000 rw-p 00000000 00:00 0 
+730604021000-730608000000 ---p 00000000 00:00 0 
+730608000000-730608027000 rw-p 00000000 00:00 0 
+730608027000-73060c000000 ---p 00000000 00:00 0 
+730610000000-730610021000 rw-p 00000000 00:00 0 
+730610021000-730614000000 ---p 00000000 00:00 0 
+730614000000-730614021000 rw-p 00000000 00:00 0 
+730614021000-730618000000 ---p 00000000 00:00 0 
+73061c000000-73061c388000 rw-p 00000000 00:00 0 
+73061c388000-730620000000 ---p 00000000 00:00 0 
+730620000000-7306226e4000 rw-p 00000000 00:00 0 
+7306226e4000-730624000000 ---p 00000000 00:00 0 
+730628000000-730628021000 rw-p 00000000 00:00 0 
+730628021000-73062c000000 ---p 00000000 00:00 0 
+73062c000000-73062caa1000 rw-p 00000000 00:00 0 
+73062caa1000-730630000000 ---p 00000000 00:00 0 
+730634000000-730634c28000 rw-p 00000000 00:00 0 
+730634c28000-730638000000 ---p 00000000 00:00 0 
+730638000000-73063acfd000 rw-p 00000000 00:00 0 
+73063acfd000-73063c000000 ---p 00000000 00:00 0 
+730640000000-730640021000 rw-p 00000000 00:00 0 
+730640021000-730644000000 ---p 00000000 00:00 0 
+730644000000-73064408d000 rw-p 00000000 00:00 0 
+73064408d000-730648000000 ---p 00000000 00:00 0 
+73064c000000-73064c021000 rw-p 00000000 00:00 0 
+73064c021000-730650000000 ---p 00000000 00:00 0 
+730650000000-730650021000 rw-p 00000000 00:00 0 
+730650021000-730654000000 ---p 00000000 00:00 0 
+730658000000-730658021000 rw-p 00000000 00:00 0 
+730658021000-73065c000000 ---p 00000000 00:00 0 
+73065c000000-73065d304000 rw-p 00000000 00:00 0 
+73065d304000-730660000000 ---p 00000000 00:00 0 
+730664000000-7306643f0000 rw-p 00000000 00:00 0 
+7306643f0000-730664430000 rw-p 00000000 00:00 0 
+730664430000-730664470000 rw-p 00000000 00:00 0 
+730664470000-7306644f0000 rw-p 00000000 00:00 0 
+7306644f0000-730664670000 rw-p 00000000 00:00 0 
+730664670000-7306646f0000 rw-p 00000000 00:00 0 
+7306646f0000-7306648f0000 rw-p 00000000 00:00 0 
+7306648f0000-7306649f0000 rw-p 00000000 00:00 0 
+7306649f0000-730664b70000 rw-p 00000000 00:00 0 
+730664b70000-730664bf0000 rw-p 00000000 00:00 0 
+730664bf0000-730664d70000 rw-p 00000000 00:00 0 
+730664d70000-730664df0000 rw-p 00000000 00:00 0 
+730664df0000-7306651f0000 rw-p 00000000 00:00 0 
+7306651f0000-7306652f0000 rw-p 00000000 00:00 0 
+7306652f0000-7306653f0000 rw-p 00000000 00:00 0 
+7306653f0000-730665cf0000 rw-p 00000000 00:00 0 
+730665cf0000-730665df0000 rw-p 00000000 00:00 0 
+730665df0000-730666ef0000 rw-p 00000000 00:00 0 
+730666ef0000-730666ff0000 rw-p 00000000 00:00 0 
+730666ff0000-730667330000 rw-p 00000000 00:00 0 
+730667330000-730667370000 rw-p 00000000 00:00 0 
+730667370000-7306674f0000 rw-p 00000000 00:00 0 
+7306674f0000-730667570000 rw-p 00000000 00:00 0 
+730667570000-7306675f0000 rw-p 00000000 00:00 0 
+7306675f0000-730668000000 rw-p 00000000 00:00 0 
+730668000000-730668021000 rw-p 00000000 00:00 0 
+730668021000-73066c000000 ---p 00000000 00:00 0 
+73066f000000-73066fd44000 rw-p 00001000 103:07 3673542                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/server/classes.jsa
+73066fd44000-730670000000 ---p 00000000 00:00 0 
+730670000000-730670010000 rw-p 00000000 00:00 0 
+730670010000-730670030000 rw-p 00000000 00:00 0 
+730670030000-730670090000 rw-p 00000000 00:00 0 
+730670090000-7306700b0000 rw-p 00000000 00:00 0 
+7306700b0000-730670130000 rw-p 00000000 00:00 0 
+730670130000-730670170000 rw-p 00000000 00:00 0 
+730670170000-730670370000 rw-p 00000000 00:00 0 
+730670370000-7306707b0000 rw-p 00000000 00:00 0 
+7306707b0000-730670830000 rw-p 00000000 00:00 0 
+730670830000-730670870000 rw-p 00000000 00:00 0 
+730670870000-730671030000 rw-p 00000000 00:00 0 
+730671030000-730671060000 rw-p 00000000 00:00 0 
+730671060000-730671080000 ---p 00000000 00:00 0 
+730671080000-730671140000 rw-p 00000000 00:00 0 
+730671140000-7306b0000000 ---p 00000000 00:00 0 
+7306b0000000-7306b0021000 rw-p 00000000 00:00 0 
+7306b0021000-7306b4000000 ---p 00000000 00:00 0 
+7306b4000000-7306b4021000 rw-p 00000000 00:00 0 
+7306b4021000-7306b8000000 ---p 00000000 00:00 0 
+7306b9400000-7306b9404000 ---p 00000000 00:00 0 
+7306b9404000-7306b9500000 rw-p 00000000 00:00 0 
+7306b9500000-7306b9504000 ---p 00000000 00:00 0 
+7306b9504000-7306b9600000 rw-p 00000000 00:00 0 
+7306b9600000-7306b9604000 ---p 00000000 00:00 0 
+7306b9604000-7306b9700000 rw-p 00000000 00:00 0 
+7306b9700000-7306b9704000 ---p 00000000 00:00 0 
+7306b9704000-7306b9800000 rw-p 00000000 00:00 0 
+7306b9800000-7306b9804000 ---p 00000000 00:00 0 
+7306b9804000-7306b9900000 rw-p 00000000 00:00 0 
+7306b9900000-7306b9904000 ---p 00000000 00:00 0 
+7306b9904000-7306b9a00000 rw-p 00000000 00:00 0 
+7306b9a00000-7306b9a04000 ---p 00000000 00:00 0 
+7306b9a04000-7306b9b00000 rw-p 00000000 00:00 0 
+7306b9b00000-7306b9b04000 ---p 00000000 00:00 0 
+7306b9b04000-7306b9c00000 rw-p 00000000 00:00 0 
+7306b9c00000-7306b9c04000 ---p 00000000 00:00 0 
+7306b9c04000-7306b9d00000 rw-p 00000000 00:00 0 
+7306b9d00000-7306b9d04000 ---p 00000000 00:00 0 
+7306b9d04000-7306b9e00000 rw-p 00000000 00:00 0 
+7306b9e00000-7306b9e04000 ---p 00000000 00:00 0 
+7306b9e04000-7306b9f00000 rw-p 00000000 00:00 0 
+7306b9f00000-7306b9f04000 ---p 00000000 00:00 0 
+7306b9f04000-7306ba000000 rw-p 00000000 00:00 0 
+7306ba000000-7306ba004000 ---p 00000000 00:00 0 
+7306ba004000-7306ba100000 rw-p 00000000 00:00 0 
+7306ba100000-7306ba104000 ---p 00000000 00:00 0 
+7306ba104000-7306ba200000 rw-p 00000000 00:00 0 
+7306ba200000-7306ba204000 ---p 00000000 00:00 0 
+7306ba204000-7306ba300000 rw-p 00000000 00:00 0 
+7306ba300000-7306ba304000 ---p 00000000 00:00 0 
+7306ba304000-7306ba400000 rw-p 00000000 00:00 0 
+7306ba400000-7306ba404000 ---p 00000000 00:00 0 
+7306ba404000-7306ba500000 rw-p 00000000 00:00 0 
+7306ba500000-7306ba504000 ---p 00000000 00:00 0 
+7306ba504000-7306ba600000 rw-p 00000000 00:00 0 
+7306ba600000-7306ba604000 ---p 00000000 00:00 0 
+7306ba604000-7306ba700000 rw-p 00000000 00:00 0 
+7306ba700000-7306ba704000 ---p 00000000 00:00 0 
+7306ba704000-7306ba800000 rw-p 00000000 00:00 0 
+7306ba800000-7306ba804000 ---p 00000000 00:00 0 
+7306ba804000-7306ba900000 rw-p 00000000 00:00 0 
+7306ba900000-7306ba904000 ---p 00000000 00:00 0 
+7306ba904000-7306baa00000 rw-p 00000000 00:00 0 
+7306baa00000-7306baa04000 ---p 00000000 00:00 0 
+7306baa04000-7306bab00000 rw-p 00000000 00:00 0 
+7306bab00000-7306bab04000 ---p 00000000 00:00 0 
+7306bab04000-7306bac00000 rw-p 00000000 00:00 0 
+7306bacf6000-7306bacfa000 ---p 00000000 00:00 0 
+7306bacfa000-7306badf6000 rw-p 00000000 00:00 0 
+7306badf6000-7306badfa000 ---p 00000000 00:00 0 
+7306badfa000-7306baef6000 rw-p 00000000 00:00 0 
+7306baef6000-7306baefa000 ---p 00000000 00:00 0 
+7306baefa000-7306baff6000 rw-p 00000000 00:00 0 
+7306baff6000-7306baff7000 ---p 00000000 00:00 0 
+7306baff7000-7306bb0f7000 rw-p 00000000 00:00 0 
+7306bb0f7000-7306bb0f8000 ---p 00000000 00:00 0 
+7306bb0f8000-7306bb1f8000 rw-p 00000000 00:00 0 
+7306bb1f8000-7306bb1f9000 ---p 00000000 00:00 0 
+7306bb1f9000-7306bb2f9000 rw-p 00000000 00:00 0 
+7306bb2f9000-7306bb2fa000 ---p 00000000 00:00 0 
+7306bb2fa000-7306bb3fa000 rw-p 00000000 00:00 0 
+7306bb3fa000-7306bb3fb000 ---p 00000000 00:00 0 
+7306bb3fb000-7306bb4fb000 rw-p 00000000 00:00 0 
+7306bb4fb000-7306bb4fc000 ---p 00000000 00:00 0 
+7306bb4fc000-7306bb5fc000 rw-p 00000000 00:00 0 
+7306bb5fc000-7306bb5fd000 ---p 00000000 00:00 0 
+7306bb5fd000-7306bb6fd000 rw-p 00000000 00:00 0 
+7306bb6fd000-7306bb701000 ---p 00000000 00:00 0 
+7306bb701000-7306bb7fd000 rw-p 00000000 00:00 0 
+7306bb7fd000-7306bb801000 ---p 00000000 00:00 0 
+7306bb801000-7306bb8fd000 rw-p 00000000 00:00 0 
+7306bb8fd000-7306bb901000 ---p 00000000 00:00 0 
+7306bb901000-7306bb9fd000 rw-p 00000000 00:00 0 
+7306bb9fd000-7306bba01000 ---p 00000000 00:00 0 
+7306bba01000-7306bbafd000 rw-p 00000000 00:00 0 
+7306bbafd000-7306bbb01000 ---p 00000000 00:00 0 
+7306bbb01000-7306bbbfd000 rw-p 00000000 00:00 0 
+7306bbbfd000-7306bbbfe000 ---p 00000000 00:00 0 
+7306bbbfe000-7306bbcfe000 rw-p 00000000 00:00 0 
+7306bbcfe000-7306bbcff000 ---p 00000000 00:00 0 
+7306bbcff000-7306bbdff000 rw-p 00000000 00:00 0 
+7306bbdff000-7306bbe00000 ---p 00000000 00:00 0 
+7306bbe00000-7306bbf00000 rw-p 00000000 00:00 0 
+7306bbf00000-7306bbf04000 ---p 00000000 00:00 0 
+7306bbf04000-7306bc000000 rw-p 00000000 00:00 0 
+7306bc000000-7306bc025000 rw-p 00000000 00:00 0 
+7306bc025000-7306c0000000 ---p 00000000 00:00 0 
+7306c0000000-7306c0021000 rw-p 00000000 00:00 0 
+7306c0021000-7306c4000000 ---p 00000000 00:00 0 
+7306c40fc000-7306c4100000 ---p 00000000 00:00 0 
+7306c4100000-7306c41fc000 rw-p 00000000 00:00 0 
+7306c41fc000-7306c4200000 ---p 00000000 00:00 0 
+7306c4200000-7306c42fc000 rw-p 00000000 00:00 0 
+7306c42fc000-7306c4300000 ---p 00000000 00:00 0 
+7306c4300000-7306c43fc000 rw-p 00000000 00:00 0 
+7306c43fc000-7306c4400000 ---p 00000000 00:00 0 
+7306c4400000-7306c44fc000 rw-p 00000000 00:00 0 
+7306c44fc000-7306c4500000 ---p 00000000 00:00 0 
+7306c4500000-7306c45fc000 rw-p 00000000 00:00 0 
+7306c45fc000-7306c4600000 ---p 00000000 00:00 0 
+7306c4600000-7306c46fc000 rw-p 00000000 00:00 0 
+7306c46fc000-7306c4700000 ---p 00000000 00:00 0 
+7306c4700000-7306c47fc000 rw-p 00000000 00:00 0 
+7306c47fc000-7306c4800000 ---p 00000000 00:00 0 
+7306c4800000-7306c48fc000 rw-p 00000000 00:00 0 
+7306c48fc000-7306c48fd000 ---p 00000000 00:00 0 
+7306c48fd000-7306c49fd000 rw-p 00000000 00:00 0 
+7306c49fd000-7306c49fe000 ---p 00000000 00:00 0 
+7306c49fe000-7306c4afe000 rw-p 00000000 00:00 0 
+7306c4afe000-7306c4aff000 ---p 00000000 00:00 0 
+7306c4aff000-7306c4bff000 rw-p 00000000 00:00 0 
+7306c4bff000-7306c4c00000 ---p 00000000 00:00 0 
+7306c4c00000-7306c4d00000 rw-p 00000000 00:00 0 
+7306c4d00000-7306c4d04000 ---p 00000000 00:00 0 
+7306c4d04000-7306c4e00000 rw-p 00000000 00:00 0 
+7306c4e00000-7306c4e04000 ---p 00000000 00:00 0 
+7306c4e04000-7306c4f00000 rw-p 00000000 00:00 0 
+7306c4f00000-7306c4f04000 ---p 00000000 00:00 0 
+7306c4f04000-7306c5000000 rw-p 00000000 00:00 0 
+7306c5000000-7306c5004000 ---p 00000000 00:00 0 
+7306c5004000-7306c5100000 rw-p 00000000 00:00 0 
+7306c5100000-7306c5104000 ---p 00000000 00:00 0 
+7306c5104000-7306c5200000 rw-p 00000000 00:00 0 
+7306c5200000-7306c5204000 ---p 00000000 00:00 0 
+7306c5204000-7306c5300000 rw-p 00000000 00:00 0 
+7306c5300000-7306c5304000 ---p 00000000 00:00 0 
+7306c5304000-7306c5400000 rw-p 00000000 00:00 0 
+7306c5400000-7306c5404000 ---p 00000000 00:00 0 
+7306c5404000-7306c5500000 rw-p 00000000 00:00 0 
+7306c5500000-7306c5504000 ---p 00000000 00:00 0 
+7306c5504000-7306c5600000 rw-p 00000000 00:00 0 
+7306c5600000-7306c5e42000 r--p 00000000 103:02 1353099                   /usr/lib/locale/locale-archive
+7306c5f00000-7306c5f04000 ---p 00000000 00:00 0 
+7306c5f04000-7306c6000000 rw-p 00000000 00:00 0 
+7306c6000000-7306c8000000 rw-p 00000000 00:00 0 
+7306c8000000-7306c8021000 rw-p 00000000 00:00 0 
+7306c8021000-7306cc000000 ---p 00000000 00:00 0 
+7306cc0d8000-7306cc0dc000 ---p 00000000 00:00 0 
+7306cc0dc000-7306cc1d8000 rw-p 00000000 00:00 0 
+7306cc1d8000-7306cc1dc000 ---p 00000000 00:00 0 
+7306cc1dc000-7306cc2d8000 rw-p 00000000 00:00 0 
+7306cc2d8000-7306cc2dc000 ---p 00000000 00:00 0 
+7306cc2dc000-7306cc3d8000 rw-p 00000000 00:00 0 
+7306cc3d8000-7306cc3dc000 ---p 00000000 00:00 0 
+7306cc3dc000-7306cc4d8000 rw-p 00000000 00:00 0 
+7306cc4d8000-7306cc4d9000 ---p 00000000 00:00 0 
+7306cc4d9000-7306cc5d9000 rw-p 00000000 00:00 0 
+7306cc5d9000-7306cc5da000 ---p 00000000 00:00 0 
+7306cc5da000-7306cc6da000 rw-p 00000000 00:00 0 
+7306cc7f4000-7306cc7f5000 ---p 00000000 00:00 0 
+7306cc7f5000-7306cc8f5000 rw-p 00000000 00:00 0 
+7306cc8f5000-7306cc8f6000 ---p 00000000 00:00 0 
+7306cc8f6000-7306cc9f6000 rw-p 00000000 00:00 0 
+7306cc9f6000-7306cd6d8000 rw-p 00000000 00:00 0 
+7306cd6d8000-7306cd760000 ---p 00000000 00:00 0 
+7306cd760000-7306cd768000 rw-p 00000000 00:00 0 
+7306cd768000-7306d0a00000 ---p 00000000 00:00 0 
+7306d0a00000-7306d0a08000 rw-p 00000000 00:00 0 
+7306d0aff000-7306d0c00000 rw-p 00000000 00:00 0 
+7306d0c00000-7306d2970000 rwxp 00000000 00:00 0 
+7306d2970000-7306d805f000 ---p 00000000 00:00 0 
+7306d805f000-7306d840f000 rwxp 00000000 00:00 0 
+7306d840f000-7306d87a0000 ---p 00000000 00:00 0 
+7306d87a0000-7306d9390000 rwxp 00000000 00:00 0 
+7306d9390000-7306dfc00000 ---p 00000000 00:00 0 
+7306dfc00000-7306e3f0b000 r--s 00000000 103:07 3673589                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/modules
+7306e4000000-7306e4cce000 rw-p 00000000 00:00 0 
+7306e4cce000-7306e8000000 ---p 00000000 00:00 0 
+7306e802a000-7306e802f000 r--p 00000000 103:07 3673563                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjsvml.so
+7306e802f000-7306e8070000 r-xp 00005000 103:07 3673563                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjsvml.so
+7306e8070000-7306e80f9000 r--p 00046000 103:07 3673563                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjsvml.so
+7306e80f9000-7306e80fa000 r--p 000ce000 103:07 3673563                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjsvml.so
+7306e80fa000-7306e80fb000 rw-p 000cf000 103:07 3673563                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjsvml.so
+7306e80fb000-7306e82fd000 rw-p 00000000 00:00 0 
+7306e82fd000-7306e82fe000 ---p 00000000 00:00 0 
+7306e82fe000-7306e83fe000 rw-p 00000000 00:00 0 
+7306e83fe000-7306e83ff000 ---p 00000000 00:00 0 
+7306e83ff000-7306e84ff000 rw-p 00000000 00:00 0 
+7306e84ff000-7306e8500000 ---p 00000000 00:00 0 
+7306e8500000-7306e8600000 rw-p 00000000 00:00 0 
+7306e8600000-7306e865b000 rw-p 00000000 00:00 0 
+7306e865b000-7306e866c000 ---p 00000000 00:00 0 
+7306e866c000-7306e866d000 rw-p 00000000 00:00 0 
+7306e866d000-7306e8cc0000 ---p 00000000 00:00 0 
+7306e8cc0000-7306e8cc1000 rw-p 00000000 00:00 0 
+7306e8cd9000-7306e8e5b000 rw-p 00000000 00:00 0 
+7306e8e5b000-7306e8e6c000 ---p 00000000 00:00 0 
+7306e8e6c000-7306e8e6d000 rw-p 00000000 00:00 0 
+7306e8e6d000-7306e94c0000 ---p 00000000 00:00 0 
+7306e94c0000-7306e94c1000 rw-p 00000000 00:00 0 
+7306e951c000-7306e9520000 r--p 00000000 103:07 3673579                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libverify.so
+7306e9520000-7306e9527000 r-xp 00004000 103:07 3673579                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libverify.so
+7306e9527000-7306e9529000 r--p 0000b000 103:07 3673579                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libverify.so
+7306e9529000-7306e952b000 r--p 0000c000 103:07 3673579                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libverify.so
+7306e952b000-7306e952c000 rw-p 00000000 00:00 0 
+7306e952c000-7306e952d000 r--p 00000000 103:07 3673513                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libextnet.so
+7306e952d000-7306e952e000 r-xp 00001000 103:07 3673513                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libextnet.so
+7306e952e000-7306e952f000 r--p 00002000 103:07 3673513                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libextnet.so
+7306e952f000-7306e9530000 r--p 00002000 103:07 3673513                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libextnet.so
+7306e9530000-7306e9531000 rw-p 00000000 00:00 0 
+7306e9531000-7306e9533000 r--p 00000000 103:07 3673546                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libmanagement_ext.so
+7306e9533000-7306e9536000 r-xp 00002000 103:07 3673546                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libmanagement_ext.so
+7306e9536000-7306e9537000 r--p 00005000 103:07 3673546                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libmanagement_ext.so
+7306e9537000-7306e9538000 ---p 00006000 103:07 3673546                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libmanagement_ext.so
+7306e9538000-7306e9539000 r--p 00006000 103:07 3673546                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libmanagement_ext.so
+7306e9539000-7306ea25f000 rw-p 00000000 00:00 0 
+7306ea25f000-7306ea330000 ---p 00000000 00:00 0 
+7306ea330000-7306ea36b000 rw-p 00000000 00:00 0 
+7306ea36b000-7306ea419000 ---p 00000000 00:00 0 
+7306ea419000-7306ea41d000 ---p 00000000 00:00 0 
+7306ea41d000-7306ea519000 rw-p 00000000 00:00 0 
+7306ea519000-7306ea527000 r--p 00000000 103:02 1313129                   /usr/lib/x86_64-linux-gnu/libm.so.6
+7306ea527000-7306ea5a3000 r-xp 0000e000 103:02 1313129                   /usr/lib/x86_64-linux-gnu/libm.so.6
+7306ea5a3000-7306ea5fe000 r--p 0008a000 103:02 1313129                   /usr/lib/x86_64-linux-gnu/libm.so.6
+7306ea5fe000-7306ea5ff000 r--p 000e4000 103:02 1313129                   /usr/lib/x86_64-linux-gnu/libm.so.6
+7306ea5ff000-7306ea600000 rw-p 000e5000 103:02 1313129                   /usr/lib/x86_64-linux-gnu/libm.so.6
+7306ea600000-7306ea898000 r--p 00000000 103:07 3673543                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/server/libjvm.so
+7306ea898000-7306eb70f000 r-xp 00298000 103:07 3673543                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/server/libjvm.so
+7306eb70f000-7306eb9f1000 r--p 0110f000 103:07 3673543                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/server/libjvm.so
+7306eb9f1000-7306ebac2000 r--p 013f0000 103:07 3673543                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/server/libjvm.so
+7306ebac2000-7306ebaf2000 rw-p 014c1000 103:07 3673543                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/server/libjvm.so
+7306ebaf2000-7306ebb68000 rw-p 00000000 00:00 0 
+7306ebb69000-7306ebb6b000 r--p 00000000 103:07 3673534                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libmanagement.so
+7306ebb6b000-7306ebb6c000 r-xp 00002000 103:07 3673534                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libmanagement.so
+7306ebb6c000-7306ebb6d000 r--p 00003000 103:07 3673534                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libmanagement.so
+7306ebb6d000-7306ebb6e000 r--p 00003000 103:07 3673534                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libmanagement.so
+7306ebb6e000-7306ebb6f000 rw-p 00000000 00:00 0 
+7306ebb6f000-7306ebb72000 r--p 00000000 103:07 3673594                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libnet.so
+7306ebb72000-7306ebb7a000 r-xp 00003000 103:07 3673594                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libnet.so
+7306ebb7a000-7306ebb7c000 r--p 0000b000 103:07 3673594                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libnet.so
+7306ebb7c000-7306ebb7d000 ---p 0000d000 103:07 3673594                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libnet.so
+7306ebb7d000-7306ebb7e000 r--p 0000d000 103:07 3673594                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libnet.so
+7306ebb7e000-7306ebb7f000 rw-p 00000000 00:00 0 
+7306ebb7f000-7306ebb86000 r--p 00000000 103:07 3673536                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libnio.so
+7306ebb86000-7306ebb8f000 r-xp 00007000 103:07 3673536                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libnio.so
+7306ebb8f000-7306ebb93000 r--p 00010000 103:07 3673536                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libnio.so
+7306ebb93000-7306ebb94000 ---p 00014000 103:07 3673536                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libnio.so
+7306ebb94000-7306ebb95000 r--p 00014000 103:07 3673536                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libnio.so
+7306ebb95000-7306ebb96000 rw-p 00015000 103:07 3673536                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libnio.so
+7306ebb96000-7306ebb97000 r--p 00000000 103:07 3673537                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libdt_socket.so
+7306ebb97000-7306ebb9a000 r-xp 00001000 103:07 3673537                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libdt_socket.so
+7306ebb9a000-7306ebb9b000 r--p 00004000 103:07 3673537                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libdt_socket.so
+7306ebb9b000-7306ebb9c000 ---p 00005000 103:07 3673537                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libdt_socket.so
+7306ebb9c000-7306ebb9d000 r--p 00005000 103:07 3673537                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libdt_socket.so
+7306ebb9d000-7306ebb9e000 rw-p 00006000 103:07 3673537                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libdt_socket.so
+7306ebb9e000-7306ebba5000 r--s 00000000 103:02 1313484                   /usr/lib/x86_64-linux-gnu/gconv/gconv-modules.cache
+7306ebba5000-7306ebc00000 rw-p 00000000 00:00 0 
+7306ebc00000-7306ebc28000 r--p 00000000 103:02 1313108                   /usr/lib/x86_64-linux-gnu/libc.so.6
+7306ebc28000-7306ebdbd000 r-xp 00028000 103:02 1313108                   /usr/lib/x86_64-linux-gnu/libc.so.6
+7306ebdbd000-7306ebe15000 r--p 001bd000 103:02 1313108                   /usr/lib/x86_64-linux-gnu/libc.so.6
+7306ebe15000-7306ebe16000 ---p 00215000 103:02 1313108                   /usr/lib/x86_64-linux-gnu/libc.so.6
+7306ebe16000-7306ebe1a000 r--p 00215000 103:02 1313108                   /usr/lib/x86_64-linux-gnu/libc.so.6
+7306ebe1a000-7306ebe1c000 rw-p 00219000 103:02 1313108                   /usr/lib/x86_64-linux-gnu/libc.so.6
+7306ebe1c000-7306ebe29000 rw-p 00000000 00:00 0 
+7306ebe2c000-7306ebe2e000 r--p 00000000 103:07 3673590                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libzip.so
+7306ebe2e000-7306ebe32000 r-xp 00002000 103:07 3673590                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libzip.so
+7306ebe32000-7306ebe34000 r--p 00006000 103:07 3673590                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libzip.so
+7306ebe34000-7306ebe35000 r--p 00007000 103:07 3673590                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libzip.so
+7306ebe35000-7306ebe36000 rw-p 00000000 00:00 0 
+7306ebe5a000-7306ebe5b000 r--p 00000000 103:02 1337788                   /usr/lib/x86_64-linux-gnu/libnss_mdns4_minimal.so.2
+7306ebe5b000-7306ebe5d000 r-xp 00001000 103:02 1337788                   /usr/lib/x86_64-linux-gnu/libnss_mdns4_minimal.so.2
+7306ebe5d000-7306ebe5e000 r--p 00003000 103:02 1337788                   /usr/lib/x86_64-linux-gnu/libnss_mdns4_minimal.so.2
+7306ebe5e000-7306ebe5f000 r--p 00003000 103:02 1337788                   /usr/lib/x86_64-linux-gnu/libnss_mdns4_minimal.so.2
+7306ebe5f000-7306ebe60000 rw-p 00004000 103:02 1337788                   /usr/lib/x86_64-linux-gnu/libnss_mdns4_minimal.so.2
+7306ebe77000-7306ebe7f000 rw-p 00000000 00:00 0 
+7306ebe7f000-7306ebe86000 ---p 00000000 00:00 0 
+7306ebe86000-7306ebe93000 r--p 00000000 103:07 3673573                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjava.so
+7306ebe93000-7306ebea1000 r-xp 0000d000 103:07 3673573                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjava.so
+7306ebea1000-7306ebea6000 r--p 0001b000 103:07 3673573                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjava.so
+7306ebea6000-7306ebea7000 ---p 00020000 103:07 3673573                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjava.so
+7306ebea7000-7306ebea8000 r--p 00020000 103:07 3673573                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjava.so
+7306ebea8000-7306ebea9000 rw-p 00021000 103:07 3673573                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjava.so
+7306ebea9000-7306ebeaa000 rw-p 00000000 00:00 0 
+7306ebeaa000-7306ebead000 r--p 00000000 103:07 3673575                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjdwp.so
+7306ebead000-7306ebedc000 r-xp 00003000 103:07 3673575                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjdwp.so
+7306ebedc000-7306ebeeb000 r--p 00032000 103:07 3673575                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjdwp.so
+7306ebeeb000-7306ebeec000 r--p 00040000 103:07 3673575                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjdwp.so
+7306ebeec000-7306ebeed000 rw-p 00041000 103:07 3673575                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjdwp.so
+7306ebeed000-7306ebeee000 rw-p 00000000 00:00 0 
+7306ebeee000-7306ebef1000 r--p 00000000 103:07 3673572                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjimage.so
+7306ebef1000-7306ebf05000 r-xp 00003000 103:07 3673572                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjimage.so
+7306ebf05000-7306ebf0b000 r--p 00017000 103:07 3673572                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjimage.so
+7306ebf0b000-7306ebf0d000 r--p 0001c000 103:07 3673572                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjimage.so
+7306ebf0d000-7306ebf0e000 rw-p 0001e000 103:07 3673572                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjimage.so
+7306ebf0e000-7306ebf0f000 r--p 00000000 103:02 1313170                   /usr/lib/x86_64-linux-gnu/librt.so.1
+7306ebf0f000-7306ebf10000 r-xp 00001000 103:02 1313170                   /usr/lib/x86_64-linux-gnu/librt.so.1
+7306ebf10000-7306ebf11000 r--p 00002000 103:02 1313170                   /usr/lib/x86_64-linux-gnu/librt.so.1
+7306ebf11000-7306ebf12000 r--p 00002000 103:02 1313170                   /usr/lib/x86_64-linux-gnu/librt.so.1
+7306ebf12000-7306ebf13000 rw-p 00003000 103:02 1313170                   /usr/lib/x86_64-linux-gnu/librt.so.1
+7306ebf13000-7306ebf17000 rw-p 00000000 00:00 0 
+7306ebf17000-7306ebf18000 r--p 00000000 103:02 1313123                   /usr/lib/x86_64-linux-gnu/libdl.so.2
+7306ebf18000-7306ebf19000 r-xp 00001000 103:02 1313123                   /usr/lib/x86_64-linux-gnu/libdl.so.2
+7306ebf19000-7306ebf1a000 r--p 00002000 103:02 1313123                   /usr/lib/x86_64-linux-gnu/libdl.so.2
+7306ebf1a000-7306ebf1b000 r--p 00002000 103:02 1313123                   /usr/lib/x86_64-linux-gnu/libdl.so.2
+7306ebf1b000-7306ebf1c000 rw-p 00003000 103:02 1313123                   /usr/lib/x86_64-linux-gnu/libdl.so.2
+7306ebf1c000-7306ebf1d000 r--p 00000000 103:02 1313158                   /usr/lib/x86_64-linux-gnu/libpthread.so.0
+7306ebf1d000-7306ebf1e000 r-xp 00001000 103:02 1313158                   /usr/lib/x86_64-linux-gnu/libpthread.so.0
+7306ebf1e000-7306ebf1f000 r--p 00002000 103:02 1313158                   /usr/lib/x86_64-linux-gnu/libpthread.so.0
+7306ebf1f000-7306ebf20000 r--p 00002000 103:02 1313158                   /usr/lib/x86_64-linux-gnu/libpthread.so.0
+7306ebf20000-7306ebf21000 rw-p 00003000 103:02 1313158                   /usr/lib/x86_64-linux-gnu/libpthread.so.0
+7306ebf21000-7306ebf23000 r--p 00000000 103:07 3673585                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjli.so
+7306ebf23000-7306ebf2d000 r-xp 00002000 103:07 3673585                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjli.so
+7306ebf2d000-7306ebf30000 r--p 0000c000 103:07 3673585                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjli.so
+7306ebf30000-7306ebf31000 ---p 0000f000 103:07 3673585                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjli.so
+7306ebf31000-7306ebf32000 r--p 0000f000 103:07 3673585                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjli.so
+7306ebf32000-7306ebf33000 rw-p 00010000 103:07 3673585                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libjli.so
+7306ebf33000-7306ebf35000 r--p 00000000 103:02 1338451                   /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7306ebf35000-7306ebf46000 r-xp 00002000 103:02 1338451                   /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7306ebf46000-7306ebf4c000 r--p 00013000 103:02 1338451                   /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7306ebf4c000-7306ebf4d000 ---p 00019000 103:02 1338451                   /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7306ebf4d000-7306ebf4e000 r--p 00019000 103:02 1338451                   /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7306ebf4e000-7306ebf4f000 rw-p 0001a000 103:02 1338451                   /usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+7306ebf4f000-7306ebf57000 rw-s 00000000 103:02 655433                    /tmp/hsperfdata_ta2khu75/38659
+7306ebf57000-7306ebf59000 r--p 00000000 103:07 3673558                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libinstrument.so
+7306ebf59000-7306ebf5f000 r-xp 00002000 103:07 3673558                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libinstrument.so
+7306ebf5f000-7306ebf62000 r--p 00008000 103:07 3673558                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libinstrument.so
+7306ebf62000-7306ebf63000 r--p 0000a000 103:07 3673558                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libinstrument.so
+7306ebf63000-7306ebf64000 rw-p 0000b000 103:07 3673558                   /home/ta2khu75/.sdkman/candidates/java/21.0.3-jbr/lib/libinstrument.so
+7306ebf64000-7306ebf65000 ---p 00000000 00:00 0 
+7306ebf65000-7306ebf66000 r--p 00000000 00:00 0 
+7306ebf66000-7306ebf68000 rw-p 00000000 00:00 0 
+7306ebf68000-7306ebf6a000 r--p 00000000 103:02 1313095                   /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+7306ebf6a000-7306ebf94000 r-xp 00002000 103:02 1313095                   /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+7306ebf94000-7306ebf9f000 r--p 0002c000 103:02 1313095                   /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+7306ebf9f000-7306ebfa0000 ---p 00000000 00:00 0 
+7306ebfa0000-7306ebfa2000 r--p 00037000 103:02 1313095                   /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+7306ebfa2000-7306ebfa4000 rw-p 00039000 103:02 1313095                   /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+7ffd798b4000-7ffd798dd000 rw-p 00000000 00:00 0                          [stack]
+7ffd799d0000-7ffd799d4000 r--p 00000000 00:00 0                          [vvar]
+7ffd799d4000-7ffd799d6000 r-xp 00000000 00:00 0                          [vdso]
+ffffffffff600000-ffffffffff601000 --xp 00000000 00:00 0                  [vsyscall]
+Total number of mappings: 545
+
+
+VM Arguments:
+jvm_args: -XX:+ShowCodeDetailsInExceptionMessages -agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:36081 -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=33057 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=localhost -Dspring.jmx.enabled=true -Dmanagement.endpoints.jmx.exposure.include=* -Dspring.application.admin.enabled=true -Djava.security.egd=file:/dev/./urandom -Dspring.boot.project.name=back-end -javaagent:/home/ta2khu75/App/sts-4.24.0.RELEASE/configuration/org.eclipse.osgi/265/0/.cp/lib/javaagent-shaded.jar -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -Dstderr.encoding=UTF-8 -Dawt.toolkit.name=XToolkit 
+java_command: com.ta2khu75.quiz.BackEndApplication --spring.output.ansi.enabled=always
+java_class_path (initial): /home/ta2khu75/Documents/project/quiz/back-end/bin/main:/home/ta2khu75/Documents/project/quiz/back-end/bin/default:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.34/ec547ef414ab1d2c040118fb9c1c265ada63af14/lombok-1.18.34.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.mapstruct/mapstruct-processor/1.5.5.Final/897f6f115930b936287bef552bf5fe28cc64717d/mapstruct-processor-1.5.5.Final.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.querydsl/querydsl-apt/5.0.0/d48657412f2b96d787bbe5ae393e33815c94b4d0/querydsl-apt-5.0.0-jakarta.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-data-jpa/3.3.2/2731d74dfc18fb905c29930cf55493980c2cee5a/spring-boot-starter-data-jpa-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.hibernate.orm/hibernate-core/6.5.2.Final/e9e0cc47f6cd2b2553968aee66bd9e55e7485221/hibernate-core-6.5.2.Final.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/jakarta.persistence/jakarta.persistence-api/3.1.0/66901fa1c373c6aff65c13791cc11da72060a8d6/jakarta.persistence-api-3.1.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-mail/3.3.2/51649a6f99d3ea3c2790dc33797cb54ba7f0a389/spring-boot-starter-mail-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-data-redis/3.3.2/5049caa90ba98c96f126c0497d7f9265a21b5e1f/spring-boot-starter-data-redis-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-oauth2-resource-server/3.3.2/d0c4ce4936269600657e2b4715589cdab2f8e522/spring-boot-starter-oauth2-resource-server-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-actuator/3.3.2/7b70dce8bfd1c81341c1c55fe1cec3613ad6e842/spring-boot-starter-actuator-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-validation/3.3.2/81ee06b318ed35c2a3f4882a0f7b9946a39e1b39/spring-boot-starter-validation-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-web/3.3.2/720418538668a8742d0ae24097811d5250cf5c32/spring-boot-starter-web-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-aop/3.3.2/26d996e253768d3121bb3ffbef28cefc07fdbddb/spring-boot-starter-aop-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-jdbc/3.3.2/544775d745288972598ab2e872e5a4816b6d9b39/spring-boot-starter-jdbc-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-json/3.3.2/d8b8b73e7820092b4e41d730eeb968add7957c45/spring-boot-starter-json-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter/3.3.2/f9377a223dab5c4afe7aead05bf6ac567cf565ab/spring-boot-starter-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.data/spring-data-jpa/3.3.2/cfa9cd077f3f15d0657bbb6d7c8e1c7c7da7e6e2/spring-data-jpa-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-tomcat/3.3.2/37ccb53cd5207fffd7a6fc1b591687f8cb1350df/spring-boot-starter-tomcat-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/jakarta.annotation/jakarta.annotation-api/2.1.1/48b9bda22b091b1f48b13af03fe36db3be6e1ae3/jakarta.annotation-api-2.1.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.firebase/firebase-admin/9.3.0/cb04b93e881b223f831712594d7c4e6e25b2bce4/firebase-admin-9.3.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.cloudinary/cloudinary-http44/1.39.0/ccc6aca916135d65fab908ea105c7e500894ba54/cloudinary-http44-1.39.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.mapstruct/mapstruct/1.5.5.Final/2ca3cbe39b6e9ea8d5ea521965a89bef2a1e8eeb/mapstruct-1.5.5.Final.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.querydsl/querydsl-jpa/5.0.0/2a653852848dee41b967d3520be3339f0f92f1ea/querydsl-jpa-5.0.0-jakarta.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.querydsl/querydsl-codegen/5.1.0/a8504ea51fbc2258543cedab6a37fe6039b2d20a/querydsl-codegen-5.1.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client-gson/2.4.0/ac6a1aacfe76cba8972b3cc8adf551b0150bda05/google-api-client-gson-2.4.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-storage/2.38.0/ea43563754309103c6cfe46c00233dbed7c7b126/google-cloud-storage-2.38.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.api-client/google-api-client/2.4.0/1fc68ff50f1ffca280393854385e1197faf798eb/google-api-client-2.4.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-firestore/3.21.1/36f5f2a62a90c7a2ff8681d633d06579fa4f6ba9/google-cloud-firestore-3.21.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.auth/google-auth-library-oauth2-http/1.23.0/f9ebd75a55b8e2cfa62e1f66d04a62b46a2f3b70/google-auth-library-oauth2-http-1.23.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.oauth-client/google-oauth-client/1.35.0/2f52003156e40ba8be5f349a2716a77428896e69/google-oauth-client-1.35.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-gson/1.44.1/f3b8967c6f7078da6380687859d0873105f84d39/google-http-client-gson-1.44.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-apache-v2/1.44.1/6d34f55cb53182254dc0e81e58bbb55fb65737d/google-http-client-apache-v2-1.44.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client/1.44.1/d8956bacb8a4011365fa15a690482c49a70c78c5/google-http-client-1.44.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.cloud/proto-google-cloud-firestore-bundle-v1/3.21.1/3d723b4be42cbb9ede3393e8ba3e5af142ed9328/proto-google-cloud-firestore-bundle-v1-3.21.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.api/api-common/2.31.0/a559a225c748f2b1f488d0bacb8f28c5d6791295/api-common-2.31.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.opencensus/opencensus-contrib-http-util/0.31.1/3c13fc5715231fadb16a9b74a44d9d59c460cfa8/opencensus-contrib-http-util-0.31.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/33.1.0-jre/9b7ed39143d59e8eabcc6f91ffe4d23db2efe558/guava-33.1.0-jre.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.data/spring-data-redis/3.3.2/f78461a8c69369e6c04dcb5e33e891de2d47cae5/spring-data-redis-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.data/spring-data-keyvalue/3.3.2/65bb7f530ee4cab3ef4c870938d0150e0a576740/spring-data-keyvalue-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.zaxxer/HikariCP/5.1.0/8c96e36c14461fc436bb02b264b96ef3ca5dca8c/HikariCP-5.1.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.data/spring-data-commons/3.3.2/5f08fd077c957fd561bef09b08ef6cdf54e1c826/spring-data-commons-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-starter-logging/3.3.2/b685c97f3c24dc30c53ae18151a798f701f2a640/spring-boot-starter-logging-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-classic/1.5.6/afc75d260d838a3bddfb8f207c2805ed7d1b34f9/logback-classic-1.5.6.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-to-slf4j/2.23.1/425ad1eb8a39904d2830e907a324e956fb456520/log4j-to-slf4j-2.23.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.slf4j/jul-to-slf4j/2.0.13/a3bcd9d9dd50c71ce69f06b1fd05e40fdeff6ba5/jul-to-slf4j-2.0.13.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/2.0.13/80229737f704b121a318bba5d5deacbcf395bc77/slf4j-api-2.0.13.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec-http/4.1.111.Final/c6ecbc452321e632bf3cea0f9758839b650455c7/netty-codec-http-4.1.111.Final.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.lettuce/lettuce-core/6.3.2.RELEASE/29b2aac09256c5fc2e9e9ad1df41c65dad5e557a/lettuce-core-6.3.2.RELEASE.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.netty/netty-handler/4.1.111.Final/2bc6a58ad2e9e279634b6e55022e8dcd3c175cc4/netty-handler-4.1.111.Final.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.netty/netty-codec/4.1.111.Final/a6762ec00a6d268f9980741f5b755838bcd658bf/netty-codec-4.1.111.Final.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-unix-common/4.1.111.Final/acafc128cddafa021bc0b48b0788eb0e118add5e/netty-transport-native-unix-common-4.1.111.Final.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport/4.1.111.Final/24e97cf14ea9d80afe4c5ab69066b587fccc154a/netty-transport-4.1.111.Final.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework/spring-context-support/6.1.11/bd903b63a6b74327521d5634d2e07474ce58e695/spring-context-support-6.1.11.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.eclipse.angus/jakarta.mail/2.0.3/3dea6aeee9603f573687b0d4da5dc1316d921bb7/jakarta.mail-2.0.3.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.cloudinary/cloudinary-core/1.39.0/b6d1c6843076ba2fbf47dd9b2799c7862f48a05a/cloudinary-core-1.39.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-lang3/3.14.0/1ed471194b02f2c6cb734a0cd6f6f107c673afae/commons-lang3-3.14.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpmime/4.4/54646f004d5b4c37a5a75b1d416c59a3075204e2/httpmime-4.4.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpclient/4.5.14/1194890e6f56ec29177673f2f12d0b8e627dec98/httpclient-4.5.14.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-config/6.3.1/e4f6c1cf4f8969c9e5ed26121f0fbd7ee35a7ca4/spring-security-config-6.3.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-oauth2-resource-server/6.3.1/cfde67bb939df6b9683f0779b82c2e007733f265/spring-security-oauth2-resource-server-6.3.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-oauth2-jose/6.3.1/442a8af56b7f108473e146af0b21bd3b1538e194/spring-security-oauth2-jose-6.3.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-oauth2-core/6.3.1/2f68a3b5a10022599b72430eb89bde5e6630975c/spring-security-oauth2-core-6.3.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-web/6.3.1/aff43933f28c808252b2d31f768b92fa61b634f6/spring-security-web-6.3.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-core/6.3.1/598c2461a17c29705ca7fd8c02efd23a1f650ccd/spring-security-core-6.3.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-actuator-autoconfigure/3.3.2/f7bb120c04c0a4dfa83ae4eeff3e1a2ba3833ac0/spring-boot-actuator-autoconfigure-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-jakarta9/1.13.2/c734f3de7e3f1864f77dc8cc278e5cd613357f39/micrometer-jakarta9-1.13.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework/spring-webmvc/6.1.11/9ec4c2a5e28bf7b2d60e254e976940b12c8ba32a/spring-webmvc-6.1.11.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework/spring-web/6.1.11/8910d08f15492273543d2c8032b2b895e08ed9e/spring-web-6.1.11.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-autoconfigure/3.3.2/6a9ab910b00f0b504a5903e3680ac10018da6247/spring-boot-autoconfigure-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-actuator/3.3.2/a29d4372b12458d43a92ebf08e5628edb98efb9f/spring-boot-actuator-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot/3.3.2/72a257d5518b2b8b9949a26543cdb3a4e67de5f8/spring-boot-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework/spring-context/6.1.11/8fc69f776333713aa26be8821af8c6355ccad8d8/spring-context-6.1.11.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-core/1.13.2/1e2b777c3cf49f497b42371bd128678cbd732b83/micrometer-core-1.13.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-observation/1.13.2/a498ee0871596f41a61679a29bc8390defba4245/micrometer-observation-1.13.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework/spring-aspects/6.1.11/141d92094a460f338aa0999023ca7a25861d49a1/spring-aspects-6.1.11.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-el/10.1.26/5a5cbcb3e51fcd557b164736e9920a3dd2ac1e33/tomcat-embed-el-10.1.26.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.hibernate.validator/hibernate-validator/8.0.1.Final/e49e116b3d3928060599b176b3538bb848718e95/hibernate-validator-8.0.1.Final.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.querydsl/querydsl-core/5.1.0/be322c3fe98de8e7c204afb8860bfabd81a3bafd/querydsl-core-5.1.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.querydsl/codegen-utils/5.1.0/ba401554d613760617992eafb6cdba175c811e6f/codegen-utils-5.1.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/javax.inject/javax.inject/1/6975da39a7040257bd51d21a231b76c915872d38/javax.inject-1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.github.classgraph/classgraph/4.8.146/360448a09bfa5689d89cfa97fea53b3fdefa9c23/classgraph-4.8.146.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/commons-codec/commons-codec/1.16.1/47bd4d333fba53406f6c6c51884ddbca435c8862/commons-codec-1.16.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.auth/google-auth-library-credentials/1.23.0/a50ee3611922a0eea9d421c6ddb1db031972a7dc/google-auth-library-credentials-1.23.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.apache.httpcomponents/httpcore/4.4.16/51cf043c87253c9f58b539c9f7e44c8894223850/httpcore-4.4.16.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-cloud-firestore-v1/3.21.1/223e4b7bc98c3630b922c28a076bb86019fe6615/proto-google-cloud-firestore-v1-3.21.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.code.findbugs/jsr305/3.0.2/25ea2e8b0c338a877313bd4672d3fe056ea78f0d/jsr305-3.0.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.errorprone/error_prone_annotations/2.26.1/c1fde57694bdc14e8618899aaa6e857d9465d7de/error_prone_annotations-2.26.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.j2objc/j2objc-annotations/3.0.0/7399e65dd7e9ff3404f4535b2f017093bdb134c7/j2objc-annotations-3.0.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.opencensus/opencensus-api/0.31.1/66a60c7201c2b8b20ce495f0295b32bb0ccbbc57/opencensus-api-0.31.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-context/1.62.2/69e86c35140b3b1718d65635bb54ccecc4c12f14/grpc-context-1.62.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.auto.value/auto-value-annotations/1.10.4/9679de8286eb0a151db6538ba297a8951c4a1224/auto-value-annotations-1.10.4.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/javax.annotation/javax.annotation-api/1.3.2/934c04d3cfef185a8008e7bf34331b79730a9d43/javax.annotation-api-1.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.guava/failureaccess/1.0.2/c4a06a64e650562f30b7bf9aaec1bfed43aca12b/failureaccess-1.0.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/b421526c5f297295adef1c886e5246c39d4ac629/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-jackson2/1.44.1/3f1947de0fd9eb250af16abe6103c11e68d11635/google-http-client-jackson2-1.44.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.apis/google-api-services-storage/v1-rev20240319-2.0.0/1c2c884d3af0571552e7c8178d3cac20175bf634/google-api-services-storage-v1-rev20240319-2.0.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.10.1/b3add478d4382b78ea20b1671390a858002feb6c/gson-2.10.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-core/2.38.0/61ec4b85365f499e62889e0b10692a600288a918/google-cloud-core-2.38.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-core-http/2.38.0/24173acd19e360d7d46d1fcee08295d5986adcbf/google-cloud-core-http-2.38.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.http-client/google-http-client-appengine/1.44.1/da4f9f691edb7a9f00cd806157a4990cb7e07711/google-http-client-appengine-1.44.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.api/gax-httpjson/2.48.0/157856d9d115e44f2695f69e19b387dbe239cce0/gax-httpjson-2.48.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.cloud/google-cloud-core-grpc/2.38.0/68fcd33b2f54a23ea059b705ee5d5aed18e1cda2/google-cloud-core-grpc-2.38.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.api/gax/2.48.0/d5a77025803514b79a2b778653e7feb6e7b33ce3/gax-2.48.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.api/gax-grpc/2.48.0/3df9788c0403d089b1dd319575a80c5590979d18/gax-grpc-2.48.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-inprocess/1.62.2/eff7a21027f8205334c22629cd8c2d38619b95cf/grpc-inprocess-1.62.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-alts/1.62.2/539c66c5fc83ed2fd356c4a94b41d8b1a2373ad6/grpc-alts-1.62.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-grpclb/1.62.2/6007272964ba7afd0ee926f8de8d3badc7ab9f4e/grpc-grpclb-1.62.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.conscrypt/conscrypt-openjdk-uber/2.5.2/d858f142ea189c62771c505a6548d8606ac098fe/conscrypt-openjdk-uber-2.5.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-auth/1.62.2/5bc444f4e23ed7a8bafdf5eca700d0fd28a44c8f/grpc-auth-1.62.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-iam-v1/1.34.0/a76b65f0ac9032bed4492d0d8fb0ff418546b538/proto-google-iam-v1-1.34.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java/3.25.3/d3200261955f3298e0d85c9892201e70492ce8eb/protobuf-java-3.25.3.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.protobuf/protobuf-java-util/3.25.3/c2284abc8c484d64ee5cb79bf61d5b7a819f6d50/protobuf-java-util-3.25.3.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-core/1.62.2/5808049a5e33eba6f248a68d58e75399a68f2784/grpc-core-1.62.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-protobuf/1.62.2/15aaf31c8d16c3c1c695223d3bd22b75c6405a83/grpc-protobuf-1.62.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-common-protos/2.39.0/1d35833629c1533c9ce5e4028e183153239b8226/proto-google-common-protos-2.39.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.threeten/threetenbp/1.6.9/39c822e33f202e7c25b54172d8235d484b4966fc/threetenbp-1.6.9.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/proto-google-cloud-storage-v2/2.38.0-alpha/7a54adb8d1d6ea2cc75bd3824a57583611d6eca2/proto-google-cloud-storage-v2-2.38.0-alpha.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/grpc-google-cloud-storage-v2/2.38.0-alpha/a98ddb62b8b47cd89bb2e822d422cad8ab320925/grpc-google-cloud-storage-v2-2.38.0-alpha.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.api.grpc/gapic-google-cloud-storage-v2/2.38.0-alpha/355156927465bbdbb2897653c4b489e54b5bf905/gapic-google-cloud-storage-v2-2.38.0-alpha.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.datatype/jackson-datatype-jsr310/2.17.2/267b85e9ba2892a37be6d80aa9ca1438a0d8c210/jackson-datatype-jsr310-2.17.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.module/jackson-module-parameter-names/2.17.2/d27b9f95ccce98984c1ba58d61c5a9c072b1ad95/jackson-module-parameter-names-2.17.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-annotations/2.17.2/147b7b9412ffff24339f8aba080b292448e08698/jackson-annotations-2.17.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.datatype/jackson-datatype-jdk8/2.17.2/efd3dd0e1d0db8bc72abbe71c15e697bb83b4b45/jackson-datatype-jdk8-2.17.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.17.2/e6deb029e5901e027c129341fac39e515066b68c/jackson-databind-2.17.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-core/2.17.2/969a35cb35c86512acbadcdbbbfb044c877db814/jackson-core-2.17.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-api/1.62.2/a93b6ee3761d48edd9a9279f20a58be1a245ad01/grpc-api-1.62.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-stub/1.62.2/fc1e85697502d96d6c912e8dd2a56f46f1aba050/grpc-stub-1.62.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.checkerframework/checker-qual/3.42.0/638ec33f363a94d41a4f03c3e7d3dcfba64e402d/checker-qual-3.42.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.opencensus/opencensus-contrib-grpc-util/0.31.1/89b1d2f8f64749256983446cbdfae25da5450de7/opencensus-contrib-grpc-util-0.31.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-netty-shaded/1.62.2/a714ecbed7be23639d861015125b6b921481bc97/grpc-netty-shaded-1.62.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.netty/netty-buffer/4.1.111.Final/b54863f578939e135d3b3aea610284ae57c188cf/netty-buffer-4.1.111.Final.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.netty/netty-resolver/4.1.111.Final/3493179999f211dc49714319f81da2be86523a3b/netty-resolver-4.1.111.Final.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.netty/netty-common/4.1.111.Final/58210befcb31adbcadd5724966a061444db91863/netty-common-4.1.111.Final.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework/spring-orm/6.1.11/b96b83839b970f3a5d2ad2f86845924654a17886/spring-orm-6.1.11.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jdbc/6.1.11/92b9f712206993c56c56903547c6b695a4a70128/spring-jdbc-6.1.11.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework/spring-tx/6.1.11/2e38b3218ae80d0b5401a4ef299c4cfbc3a73ed7/spring-tx-6.1.11.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework/spring-oxm/6.1.11/2825740197db37901d09b91704e1be3575a237c1/spring-oxm-6.1.11.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework/spring-aop/6.1.11/3503ef99b759b81f8b0b3d5260bf4842e393a581/spring-aop-6.1.11.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework/spring-beans/6.1.11/266176d132ab2bbf8e69e4aa6d7f47ec746ddc9a/spring-beans-6.1.11.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework/spring-expression/6.1.11/7c12cf1cd39289cfab7c5933eda9e4704a7f2799/spring-expression-6.1.11.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework/spring-core/6.1.11/90fce4311852c68c1e87c65adf60db9add1a6dcb/spring-core-6.1.11.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.yaml/snakeyaml/2.2/3af797a25458550a16bf89acc8e4ab2b7f2bfce0/snakeyaml-2.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/jakarta.activation/jakarta.activation-api/2.1.3/fa165bd70cda600368eee31555222776a46b881f/jakarta.activation-api-2.1.3.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.projectreactor/reactor-core/3.6.8/f3d0192db20e929d5a6552990269ae2993a93a58/reactor-core-3.6.8.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.security/spring-security-crypto/6.3.1/3e66321782db499cca3884830188a091058121f3/spring-security-crypto-6.3.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.nimbusds/nimbus-jose-jwt/9.37.3/700f71ffefd60c16bd8ce711a956967ea9071cec/nimbus-jose-jwt-9.37.3.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.micrometer/micrometer-commons/1.13.2/b2b69f7887f9bf6f5ae42e86a67a62367056aa3c/micrometer-commons-1.13.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.aspectj/aspectjweaver/1.9.22.1/bca243d0af0db4758fbae45c5f4995cb5dabb612/aspectjweaver-1.9.22.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/jakarta.transaction/jakarta.transaction-api/2.0.1/51a520e3fae406abb84e2e1148e6746ce3f80a1a/jakarta.transaction-api-2.0.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.antlr/antlr4-runtime/4.13.0/5a02e48521624faaf5ff4d99afc88b01686af655/antlr4-runtime-4.13.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/jakarta.validation/jakarta.validation-api/3.0.2/92b6631659ba35ca09e44874d3eb936edfeee532/jakarta.validation-api-3.0.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.jboss.logging/jboss-logging/3.5.3.Final/c88fc1d8a96d4c3491f55d4317458ccad53ca663/jboss-logging-3.5.3.Final.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.fasterxml/classmate/1.7.0/e98374da1f2143ac8e6e0a95036994bb19137a3/classmate-1.7.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-websocket/10.1.26/3b147d7e5566e9361e86422f9e49fdd56a429637/tomcat-embed-websocket-10.1.26.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.apache.tomcat.embed/tomcat-embed-core/10.1.26/5e0fa06ca373ef0ca55e603291ea51b590c377ea/tomcat-embed-core-10.1.26.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.mysema.commons/mysema-commons-lang/0.2.4/d09c8489d54251a6c22fbce804bdd4a070557317/mysema-commons-lang-0.2.4.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.eclipse.jdt/ecj/3.26.0/4837be609a3368a0f7e7cf0dc1bdbc7fe94993de/ecj-3.26.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/commons-logging/commons-logging/1.2/4bfc12adfe4842bf07b657f0369c4cb522955686/commons-logging-1.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework/spring-jcl/6.1.11/97b34c6b72c8084759e71cd09a7dad16bfb8f1da/spring-jcl-6.1.11.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.reactivestreams/reactive-streams/1.0.4/3864a1320d97d7b045f729a326e1e077661f31b7/reactive-streams-1.0.4.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.github.stephenc.jcip/jcip-annotations/1.0-1/ef31541dd28ae2cefdd17c7ebf352d93e9058c63/jcip-annotations-1.0-1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/ch.qos.logback/logback-core/1.5.6/41cbe874701200c5624c19e0ab50d1b88dfcc77d/logback-core-1.5.6.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.apache.logging.log4j/log4j-api/2.23.1/9c15c29c526d9c6783049c0a77722693c66706e1/log4j-api-2.23.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-devtools/3.3.2/ff9e444f433eeafd6bc88025909459f835631038/spring-boot-devtools-3.3.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.postgresql/postgresql/42.7.3/24f3e9f7231428cd20eb4dde00dd3fce44e05464/postgresql-42.7.3.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.microsoft.sqlserver/mssql-jdbc/12.6.3.jre11/88e2be5bc1ac4debaef4cd768a65c76808f3e532/mssql-jdbc-12.6.3.jre11.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.android/annotations/4.1.1.4/a1678ba907bf92691d879fef34e1a187038f9259/annotations-4.1.1.4.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.codehaus.mojo/animal-sniffer-annotations/1.23/3c0daebd5f0e1ce72cc50c818321ac957aeb5d70/animal-sniffer-annotations-1.23.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.perfmark/perfmark-api/0.27.0/f86f575a41b091786a4b027cd9c0c1d2e3fc1c01/perfmark-api-0.27.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-protobuf-lite/1.62.2/9d807d2a0e34bd7284a5336186f57cf241090920/grpc-protobuf-lite-1.62.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-util/1.62.2/98c4138f09fb57c3ad6cbeffb31ed73e302038f7/grpc-util-1.62.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-googleapis/1.62.2/b70a7127144ca2a38dacc18b96c9ad2cdc047676/grpc-googleapis-1.62.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-xds/1.62.2/40d7036c6ae1aa694d754fde3560a5b29eda9574/grpc-xds-1.62.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.opencensus/opencensus-proto/0.2.0/c05b6b32b69d5d9144087ea0ebc6fab183fb9151/opencensus-proto-0.2.0.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-services/1.62.2/9c323306c41d52641114987aff2ef2adcb889080/grpc-services-1.62.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.google.re2j/re2j/1.7/2949632c1b4acce0d7784f28e3152e9cf3c2ec7a/re2j-1.7.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.grpc/grpc-rls/1.62.2/a7f6aa7a5793c2ce9ed5dff546de243b09a57422/grpc-rls-1.62.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.glassfish.jaxb/jaxb-runtime/4.0.5/ca84c2a7169b5293e232b9d00d1e4e36d4c3914a/jaxb-runtime-4.0.5.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.glassfish.jaxb/jaxb-core/4.0.5/7b4b11ea5542eea4ad55e1080b23be436795b3/jaxb-core-4.0.5.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.eclipse.angus/angus-activation/2.0.2/41f1e0ddd157c856926ed149ab837d110955a9fc/angus-activation-2.0.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/jakarta.xml.bind/jakarta.xml.bind-api/4.0.2/6cd5a999b834b63238005b7144136379dc36cad2/jakarta.xml.bind-api-4.0.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.hibernate.common/hibernate-commons-annotations/6.0.6.Final/77a5f94b56d49508e0ee334751db5b78e5ccd50c/hibernate-commons-annotations-6.0.6.Final.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/io.smallrye/jandex/3.1.2/a6c1c89925c7df06242b03dddb353116ceb9584c/jandex-3.1.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy/1.14.18/81e9b9a20944626e6757b5950676af901c2485/byte-buddy-1.14.18.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/jakarta.inject/jakarta.inject-api/2.0.1/4c28afe1991a941d7702fe1362c365f0a8641d1e/jakarta.inject-api-2.0.1.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.hdrhistogram/HdrHistogram/2.2.2/7959933ebcc0f05b2eaa5af0a0c8689fa257b15c/HdrHistogram-2.2.2.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.latencyutils/LatencyUtils/2.0.3/769c0b82cb2421c8256300e907298a9410a2a3d3/LatencyUtils-2.0.3.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/org.glassfish.jaxb/txw2/4.0.5/f36a4ef12120a9bb06d766d6a0e54b144fd7ed98/txw2-4.0.5.jar:/home/ta2khu75/.gradle/caches/modules-2/files-2.1/com.sun.istack/istack-commons-runtime/4.1.2/18ec117c85f3ba0ac65409136afa8e42bc74e739/istack-commons-runtime-4.1.2.jar
+Launcher Type: SUN_STANDARD
+
+[Global flags]
+     intx CICompilerCount                          = 12                                        {product} {ergonomic}
+     uint ConcGCThreads                            = 3                                         {product} {ergonomic}
+     uint G1ConcRefinementThreads                  = 13                                        {product} {ergonomic}
+   size_t G1HeapRegionSize                         = 2097152                                   {product} {ergonomic}
+    uintx GCDrainStackTargetSize                   = 64                                        {product} {ergonomic}
+   size_t InitialHeapSize                          = 228589568                                 {product} {ergonomic}
+     bool ManagementServer                         = true                                      {product} {command line}
+   size_t MarkStackSize                            = 4194304                                   {product} {ergonomic}
+   size_t MaxHeapSize                              = 3625975808                                {product} {ergonomic}
+   size_t MaxNewSize                               = 2174746624                                {product} {ergonomic}
+   size_t MinHeapDeltaBytes                        = 2097152                                   {product} {ergonomic}
+   size_t MinHeapSize                              = 8388608                                   {product} {ergonomic}
+    uintx NonNMethodCodeHeapSize                   = 7602480                                {pd product} {ergonomic}
+    uintx NonProfiledCodeHeapSize                  = 122027880                              {pd product} {ergonomic}
+    uintx ProfiledCodeHeapSize                     = 122027880                              {pd product} {ergonomic}
+    uintx ReservedCodeCacheSize                    = 251658240                              {pd product} {ergonomic}
+     bool SegmentedCodeCache                       = true                                      {product} {ergonomic}
+     bool ShowCodeDetailsInExceptionMessages       = true                                   {manageable} {command line}
+   size_t SoftMaxHeapSize                          = 3625975808                             {manageable} {ergonomic}
+     bool UseCompressedOops                        = true                           {product lp64_product} {ergonomic}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags foldmultilines=false
+ #1: stderr all=off uptime,level,tags foldmultilines=false
+
+Environment Variables:
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+SHELL=/usr/bin/zsh
+DISPLAY=:0
+LANG=en_US.UTF-8
+LC_NUMERIC=vi_VN
+LC_TIME=vi_VN
+
+Active Locale:
+LC_ALL=LC_CTYPE=en_US.UTF-8;LC_NUMERIC=vi_VN;LC_TIME=vi_VN;LC_COLLATE=en_US.UTF-8;LC_MONETARY=vi_VN;LC_MESSAGES=en_US.UTF-8;LC_PAPER=vi_VN;LC_NAME=vi_VN;LC_ADDRESS=vi_VN;LC_TELEPHONE=vi_VN;LC_MEASUREMENT=vi_VN;LC_IDENTIFICATION=vi_VN
+LC_COLLATE=en_US.UTF-8
+LC_CTYPE=en_US.UTF-8
+LC_MESSAGES=en_US.UTF-8
+LC_MONETARY=vi_VN
+LC_NUMERIC=vi_VN
+LC_TIME=vi_VN
+
+Signal Handlers:
+   SIGSEGV: crash_handler in libjvm.so, mask=11100100010111111101111111111110, flags=SA_RESTART|SA_SIGINFO, unblocked
+    SIGBUS: crash_handler in libjvm.so, mask=11100100010111111101111111111110, flags=SA_RESTART|SA_SIGINFO, unblocked
+    SIGFPE: crash_handler in libjvm.so, mask=11100100010111111101111111111110, flags=SA_RESTART|SA_SIGINFO, unblocked
+   SIGPIPE: javaSignalHandler in libjvm.so, mask=11100100010111111101111111111110, flags=SA_RESTART|SA_SIGINFO, blocked
+   SIGXFSZ: javaSignalHandler in libjvm.so, mask=11100100010111111101111111111110, flags=SA_RESTART|SA_SIGINFO, blocked
+    SIGILL: crash_handler in libjvm.so, mask=11100100010111111101111111111110, flags=SA_RESTART|SA_SIGINFO, unblocked
+   SIGUSR2: SR_handler in libjvm.so, mask=00000000000000000000000000000000, flags=SA_RESTART|SA_SIGINFO, blocked
+    SIGHUP: UserHandler in libjvm.so, mask=11100100010111111101111111111110, flags=SA_RESTART|SA_SIGINFO, blocked
+    SIGINT: UserHandler in libjvm.so, mask=11100100010111111101111111111110, flags=SA_RESTART|SA_SIGINFO, blocked
+   SIGTERM: UserHandler in libjvm.so, mask=11100100010111111101111111111110, flags=SA_RESTART|SA_SIGINFO, blocked
+   SIGQUIT: UserHandler in libjvm.so, mask=11100100010111111101111111111110, flags=SA_RESTART|SA_SIGINFO, blocked
+   SIGTRAP: crash_handler in libjvm.so, mask=11100100010111111101111111111110, flags=SA_RESTART|SA_SIGINFO, unblocked
+
+
+Periodic native trim disabled
+
+JNI global refs:
+JNI global refs: 185, weak refs: 577
+
+JNI global refs memory usage: 2123, weak refs: 6609
+
+Process memory usage:
+Resident Set Size: 927244K (6% of 14156704K total physical memory with 2494100K free physical memory)
+
+OOME stack traces (most recent first):
+Classloader memory used:
+Loader jdk.internal.loader.ClassLoaders$AppClassLoader                                 : 101898K
+Loader bootstrap                                                                       : 22941K
+Loader org.springframework.boot.devtools.restart.classloader.RestartClassLoader        : 5463K
+Loader jdk.internal.loader.ClassLoaders$PlatformClassLoader                            : 766K
+Loader jdk.internal.reflect.DelegatingClassLoader                                      : 198K
+Loader sun.reflect.misc.MethodUtil                                                     : 3088B
+Loader org.springframework.boot.web.embedded.tomcat.TomcatEmbeddedWebappClassLoader    : 2904B
+Loader net.bytebuddy.utility.dispatcher.JavaDispatcher$DynamicClassLoader              : 2392B
+
+Classes loaded by more than one classloader:
+Class com.ta2khu75.quiz.BackEndApplication                                            : loaded 3 times (x 69B)
+Class com.ta2khu75.quiz.mapper.CommentMapperImpl                                      : loaded 2 times (x 81B)
+Class com.ta2khu75.quiz.model.group.Create                                            : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.service.impl.PermissionGroupServiceImpl                       : loaded 2 times (x 74B)
+Class com.ta2khu75.quiz.controller.AuthController                                     : loaded 2 times (x 74B)
+Class com.ta2khu75.quiz.repository.UserAnswerRepository                               : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.service.impl.CommentServiceImpl                               : loaded 2 times (x 88B)
+Class com.ta2khu75.quiz.interceptor.InterceptorAuthorization                          : loaded 2 times (x 78B)
+Class [Lcom.ta2khu75.quiz.model.HTTPMethod;                                           : loaded 2 times (x 67B)
+Class [Lcom.ta2khu75.quiz.model.ExamStatus;                                           : loaded 2 times (x 67B)
+Class com.ta2khu75.quiz.event.listener.RoleChangeListener                             : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.service.util.FileUtil$$SpringCGLIB$$0                         : loaded 2 times (x 117B)
+Class com.ta2khu75.quiz.controller.AccountController$$SpringCGLIB$$0                  : loaded 2 times (x 125B)
+Class com.ta2khu75.quiz.service.util.EndpointUtil$$SpringCGLIB$$0                     : loaded 2 times (x 117B)
+Class com.ta2khu75.quiz.service.RoleService                                           : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.repository.CommentRepository                                  : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.aop.LoggingAspect                                             : loaded 2 times (x 73B)
+Class com.ta2khu75.quiz.controller.BlogController                                     : loaded 2 times (x 79B)
+Class com.ta2khu75.quiz.configuration.AuthenticationEntryPointImpl                    : loaded 2 times (x 74B)
+Class com.ta2khu75.quiz.model.request.update.AccountInfoRequest                       : loaded 2 times (x 79B)
+Class com.ta2khu75.quiz.model.entity.PermissionGroup$PermissionGroupBuilder           : loaded 2 times (x 74B)
+Class com.ta2khu75.quiz.mapper.ExamMapper                                             : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.controller.AuthController$$SpringCGLIB$$0                     : loaded 2 times (x 120B)
+Class com.ta2khu75.quiz.mapper.ExamResultMapper                                       : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.controller.ExamResultController                               : loaded 2 times (x 74B)
+Class com.ta2khu75.quiz.service.util.CloudinaryUtil$$SpringCGLIB$$0                   : loaded 2 times (x 118B)
+Class com.ta2khu75.quiz.repository.QuizRepository                                     : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.controller.CommentController                                  : loaded 2 times (x 75B)
+Class com.ta2khu75.quiz.mapper.RoleMapperImpl                                         : loaded 2 times (x 82B)
+Class com.ta2khu75.quiz.configuration.SecurityJwtConfig$$SpringCGLIB$$FastClass$$0    : loaded 2 times (x 85B)
+Class com.ta2khu75.quiz.mapper.PermissionMapper                                       : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.controller.ExamController                                     : loaded 2 times (x 79B)
+Class com.ta2khu75.quiz.configuration.SecurityJwtConfig                               : loaded 2 times (x 72B)
+Class com.ta2khu75.quiz.model.request.QuizRequest                                     : loaded 2 times (x 81B)
+Class com.ta2khu75.quiz.configuration.SecurityJwtConfig$$SpringCGLIB$$FastClass$$1    : loaded 2 times (x 85B)
+Class com.ta2khu75.quiz.configuration.SecurityConfig$$SpringCGLIB$$FastClass$$0       : loaded 2 times (x 85B)
+Class com.ta2khu75.quiz.controller.ExamCategoryController$$SpringCGLIB$$0             : loaded 2 times (x 120B)
+Class com.ta2khu75.quiz.model.request.AuthRequest                                     : loaded 2 times (x 75B)
+Class com.ta2khu75.quiz.configuration.SecurityConfig$$SpringCGLIB$$FastClass$$1       : loaded 2 times (x 85B)
+Class com.ta2khu75.quiz.configuration.SecurityConfig$$SpringCGLIB$$0                  : loaded 2 times (x 80B)
+Class com.ta2khu75.quiz.repository.AnswerRepository                                   : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.model.entity.Permission$PermissionBuilder                     : loaded 2 times (x 76B)
+Class com.ta2khu75.quiz.configuration.RedisConfig$$SpringCGLIB$$0                     : loaded 2 times (x 76B)
+Class com.ta2khu75.quiz.service.impl.AccountServiceImpl                               : loaded 2 times (x 92B)
+Class com.ta2khu75.quiz.model.response.QuizResponse                                   : loaded 2 times (x 79B)
+Class com.ta2khu75.quiz.model.response.AnswerResponse                                 : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.model.response.InfoResponse                                   : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.model.entity.Follow                                           : loaded 2 times (x 79B)
+Class com.ta2khu75.quiz.mapper.BlogMapper                                             : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.service.util.RedisUtil                                        : loaded 2 times (x 73B)
+Class com.ta2khu75.quiz.model.response.AuthResponse                                   : loaded 2 times (x 79B)
+Class com.ta2khu75.quiz.model.request.RoleRequest                                     : loaded 2 times (x 75B)
+Class com.ta2khu75.quiz.model.entity.Exam                                             : loaded 2 times (x 104B)
+Class com.ta2khu75.quiz.exception.NotFoundException                                   : loaded 2 times (x 80B)
+Class com.ta2khu75.quiz.mapper.ExamResultMapperImpl                                   : loaded 2 times (x 91B)
+Class com.ta2khu75.quiz.service.impl.BlogTagServiceImpl                               : loaded 2 times (x 76B)
+Class com.ta2khu75.quiz.model.base.AnswerBase                                         : loaded 2 times (x 75B)
+Class com.ta2khu75.quiz.mapper.FollowMapperImpl                                       : loaded 2 times (x 74B)
+Class com.ta2khu75.quiz.service.util.CloudinaryUtil                                   : loaded 2 times (x 72B)
+Class com.ta2khu75.quiz.repository.BlogRepository                                     : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.service.impl.RoleServiceImpl                                  : loaded 2 times (x 90B)
+Class com.ta2khu75.quiz.service.impl.AnswerServiceImpl                                : loaded 2 times (x 90B)
+Class com.ta2khu75.quiz.configuration.RedisConfig$$SpringCGLIB$$FastClass$$0          : loaded 2 times (x 85B)
+Class com.ta2khu75.quiz.service.CommentService                                        : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.model.request.CommentRequest                                  : loaded 2 times (x 75B)
+Class com.ta2khu75.quiz.configuration.RedisConfig$$SpringCGLIB$$FastClass$$1          : loaded 2 times (x 85B)
+Class com.ta2khu75.quiz.service.util.FileUtil$Folder                                  : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.mapper.InfoMapperImpl                                         : loaded 2 times (x 73B)
+Class com.ta2khu75.quiz.service.BlogTagService                                        : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.model.entity.ExamResult$ExamResultBuilder                     : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.repository.ExamRepository                                     : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.service.impl.AuthServiceImpl$$SpringCGLIB$$0                  : loaded 2 times (x 127B)
+Class com.ta2khu75.quiz.controller.FollowController$$SpringCGLIB$$0                   : loaded 2 times (x 119B)
+Class com.ta2khu75.quiz.model.request.ExamResultRequest                               : loaded 2 times (x 73B)
+Class com.ta2khu75.quiz.exception.NotMatchesException                                 : loaded 2 times (x 80B)
+Class com.ta2khu75.quiz.service.impl.AccountServiceImpl$$SpringCGLIB$$0               : loaded 2 times (x 138B)
+Class com.ta2khu75.quiz.model.request.update.AccountStatusRequest                     : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.repository.PermissionRepository                               : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.configuration.RedisConfig                                     : loaded 2 times (x 70B)
+Class com.ta2khu75.quiz.model.response.details.AccountAuthDetailsResponse             : loaded 2 times (x 90B)
+Class [Lcom.ta2khu75.quiz.model.QuizType;                                             : loaded 2 times (x 67B)
+Class com.ta2khu75.quiz.model.entity.EntityBase                                       : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.exception.AdviceException$ApiResponse$ApiResponseBuilder      : loaded 2 times (x 76B)
+Class com.ta2khu75.quiz.model.response.PermissionGroupResponse                        : loaded 2 times (x 75B)
+Class com.ta2khu75.quiz.mapper.UserAnswerMapperImpl                                   : loaded 2 times (x 76B)
+Class com.ta2khu75.quiz.model.HTTPMethod                                              : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.model.entity.Answer                                           : loaded 2 times (x 81B)
+Class com.ta2khu75.quiz.model.request.search.BlogSearchRequest                        : loaded 2 times (x 89B)
+Class com.ta2khu75.quiz.model.QuizType                                                : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.configuration.CloudinaryConfig                                : loaded 2 times (x 71B)
+Class com.ta2khu75.quiz.util.StringUtil                                               : loaded 2 times (x 69B)
+Class com.ta2khu75.quiz.mapper.ExamCategoryMapper                                     : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.mapper.AccountMapper                                          : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.mapper.AnswerMapper                                           : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.service.util.JWTUtil                                          : loaded 2 times (x 74B)
+Class com.ta2khu75.quiz.controller.RoleController                                     : loaded 2 times (x 72B)
+Class com.ta2khu75.quiz.configuration.SecurityConfig                                  : loaded 2 times (x 74B)
+Class com.ta2khu75.quiz.service.impl.QuizServiceImpl$$SpringCGLIB$$0                  : loaded 2 times (x 143B)
+Class com.ta2khu75.quiz.model.entity.Account                                          : loaded 2 times (x 126B)
+Class com.ta2khu75.quiz.model.response.FollowResponse                                 : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.model.response.details.UserAnswerResponse                     : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.model.response.ExamCategoryResponse                           : loaded 2 times (x 75B)
+Class com.ta2khu75.quiz.configuration.ApplicationConfig$$SpringCGLIB$$0               : loaded 2 times (x 115B)
+Class com.ta2khu75.quiz.model.entity.ExamResult                                       : loaded 2 times (x 89B)
+Class com.ta2khu75.quiz.exception.AdviceException$ApiResponse                         : loaded 2 times (x 81B)
+Class com.ta2khu75.quiz.interceptor.InterceptorAuthorization$$SpringCGLIB$$0          : loaded 2 times (x 124B)
+Class com.ta2khu75.quiz.service.util.FirebaseUtil$$SpringCGLIB$$0                     : loaded 2 times (x 117B)
+Class com.ta2khu75.quiz.configuration.CloudinaryConfig$$SpringCGLIB$$FastClass$$0     : loaded 2 times (x 85B)
+Class com.ta2khu75.quiz.configuration.ApplicationConfig$$SpringCGLIB$$FastClass$$0    : loaded 2 times (x 85B)
+Class com.ta2khu75.quiz.model.entity.Blog                                             : loaded 2 times (x 98B)
+Class com.ta2khu75.quiz.configuration.CloudinaryConfig$$SpringCGLIB$$FastClass$$1     : loaded 2 times (x 85B)
+Class com.ta2khu75.quiz.configuration.ApplicationConfig$$SpringCGLIB$$FastClass$$1    : loaded 2 times (x 85B)
+Class com.ta2khu75.quiz.model.base.SearchRequestBase                                  : loaded 2 times (x 83B)
+Class com.ta2khu75.quiz.model.response.RoleResponse                                   : loaded 2 times (x 75B)
+Class com.ta2khu75.quiz.repository.PermissionGroupRepository                          : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.model.response.details.ExamResultDetailsResponse              : loaded 2 times (x 85B)
+Class com.ta2khu75.quiz.model.entity.UserAnswer$UserAnswerBuilder                     : loaded 2 times (x 75B)
+Class com.ta2khu75.quiz.service.util.FileUtil                                         : loaded 2 times (x 71B)
+Class [Lcom.ta2khu75.quiz.model.ExamLevel;                                            : loaded 2 times (x 67B)
+Class [Lcom.ta2khu75.quiz.model.AccessModifier;                                       : loaded 2 times (x 67B)
+Class com.ta2khu75.quiz.service.impl.CommentServiceImpl$$SpringCGLIB$$0               : loaded 2 times (x 134B)
+Class com.ta2khu75.quiz.model.response.details.RoleDetailsResponse                    : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.mapper.AnswerMapperImpl                                       : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.service.impl.BlogServiceImpl                                  : loaded 2 times (x 94B)
+Class com.ta2khu75.quiz.scheduling.UpdateExamHistoryScheduling                        : loaded 2 times (x 71B)
+Class [Lcom.ta2khu75.quiz.service.util.EndpointUtil$EndpointType;                     : loaded 2 times (x 67B)
+Class com.ta2khu75.quiz.service.ExamService                                           : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.util.SecurityUtil                                             : loaded 2 times (x 69B)
+Class com.ta2khu75.quiz.configuration.RunnerConfig$$SpringCGLIB$$FastClass$$0         : loaded 2 times (x 85B)
+Class com.ta2khu75.quiz.service.AnswerService                                         : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.configuration.RunnerConfig$$SpringCGLIB$$FastClass$$1         : loaded 2 times (x 85B)
+Class com.ta2khu75.quiz.model.entity.ExamCategory                                     : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.mapper.ExamCategoryMapperImpl                                 : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.service.FollowService                                         : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.controller.BlogTagController$$SpringCGLIB$$0                  : loaded 2 times (x 117B)
+Class com.ta2khu75.quiz.service.impl.RoleServiceImpl$$SpringCGLIB$$0                  : loaded 2 times (x 136B)
+Class com.ta2khu75.quiz.model.ExamLevel                                               : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.configuration.RunnerConfig$$SpringCGLIB$$0                    : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.controller.ExamController$$SpringCGLIB$$0                     : loaded 2 times (x 125B)
+Class com.ta2khu75.quiz.model.entity.ExamCategory$ExamCategoryBuilder                 : loaded 2 times (x 74B)
+Class com.ta2khu75.quiz.model.entity.Permission                                       : loaded 2 times (x 81B)
+Class com.ta2khu75.quiz.service.impl.ExamResultServiceImpl$$SpringCGLIB$$0            : loaded 2 times (x 128B)
+Class com.ta2khu75.quiz.mapper.UserAnswerMapper                                       : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.mapper.AccountMapperImpl                                      : loaded 2 times (x 92B)
+Class com.ta2khu75.quiz.event.RoleChangeEvent                                         : loaded 2 times (x 73B)
+Class com.ta2khu75.quiz.repository.RoleRepository                                     : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.mapper.PermissionMapperImpl                                   : loaded 2 times (x 73B)
+Class com.ta2khu75.quiz.service.impl.PermissonServiceImpl$$SpringCGLIB$$0             : loaded 2 times (x 120B)
+Class com.ta2khu75.quiz.service.impl.PermissionGroupServiceImpl$$SpringCGLIB$$0       : loaded 2 times (x 120B)
+Class com.ta2khu75.quiz.service.util.EndpointUtil$EndpointType                        : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.model.entity.UserAnswer                                       : loaded 2 times (x 79B)
+Class com.ta2khu75.quiz.mapper.QuizMapperImpl                                         : loaded 2 times (x 81B)
+Class com.ta2khu75.quiz.service.BaseFileService                                       : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.controller.BlogController$$SpringCGLIB$$0                     : loaded 2 times (x 125B)
+Class com.ta2khu75.quiz.exception.AdviceException                                     : loaded 2 times (x 82B)
+Class com.ta2khu75.quiz.model.response.ExamResultResponse                             : loaded 2 times (x 83B)
+Class com.ta2khu75.quiz.model.entity.Role$RoleBuilder                                 : loaded 2 times (x 75B)
+Class com.ta2khu75.quiz.service.impl.BaseServiceImpl                                  : loaded 2 times (x 70B)
+Class com.ta2khu75.quiz.controller.ExamResultController$$SpringCGLIB$$0               : loaded 2 times (x 120B)
+Class com.ta2khu75.quiz.BackEndApplication$$SpringCGLIB$$0                            : loaded 2 times (x 75B)
+Class com.ta2khu75.quiz.mapper.PermissionGroupMapper                                  : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.model.entity.Account$AccountBuilder                           : loaded 2 times (x 88B)
+Class com.ta2khu75.quiz.service.AccountService                                        : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.model.request.ExamRequest                                     : loaded 2 times (x 87B)
+Class com.ta2khu75.quiz.model.response.AccountAuthResponse                            : loaded 2 times (x 79B)
+Class com.ta2khu75.quiz.model.request.update.AccountPasswordRequest                   : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.model.request.AccountRequest                                  : loaded 2 times (x 83B)
+Class com.ta2khu75.quiz.service.util.FirebaseUtil                                     : loaded 2 times (x 71B)
+Class com.ta2khu75.quiz.service.impl.ExamCategoryServiceImpl$$SpringCGLIB$$0          : loaded 2 times (x 134B)
+Class com.ta2khu75.quiz.repository.AccountRepository                                  : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.service.impl.FollowServiceImpl                                : loaded 2 times (x 80B)
+Class com.ta2khu75.quiz.model.request.UserAnswerRequest                               : loaded 2 times (x 75B)
+Class com.ta2khu75.quiz.model.base.CommentBase                                        : loaded 2 times (x 73B)
+Class com.ta2khu75.quiz.service.BlogService                                           : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.exception.InValidDataException                                : loaded 2 times (x 80B)
+Class com.ta2khu75.quiz.model.entity.Comment                                          : loaded 2 times (x 85B)
+Class com.ta2khu75.quiz.service.impl.AnswerServiceImpl$$SpringCGLIB$$0                : loaded 2 times (x 136B)
+Class com.ta2khu75.quiz.service.util.RedisUtil$$SpringCGLIB$$0                        : loaded 2 times (x 119B)
+Class com.ta2khu75.quiz.model.entity.PermissionGroup                                  : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.mapper.RoleMapper                                             : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.scheduling.SendMailScheduling                                 : loaded 2 times (x 74B)
+Class com.ta2khu75.quiz.controller.AccountController                                  : loaded 2 times (x 79B)
+Class com.ta2khu75.quiz.model.base.QuizBase                                           : loaded 2 times (x 75B)
+Class com.ta2khu75.quiz.model.response.CommentResponse                                : loaded 2 times (x 79B)
+Class com.ta2khu75.quiz.model.response.details.AccountDetailsResponse                 : loaded 2 times (x 89B)
+Class com.ta2khu75.quiz.configuration.CloudinaryConfig$$SpringCGLIB$$0                : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.model.response.BlogResponse                                   : loaded 2 times (x 88B)
+Class com.ta2khu75.quiz.model.entity.BlogTag                                          : loaded 2 times (x 73B)
+Class com.ta2khu75.quiz.mapper.BlogMapperImpl                                         : loaded 2 times (x 88B)
+Class com.ta2khu75.quiz.configuration.RunnerConfig                                    : loaded 2 times (x 71B)
+Class com.ta2khu75.quiz.service.impl.FollowServiceImpl$$SpringCGLIB$$0                : loaded 2 times (x 126B)
+Class com.ta2khu75.quiz.service.PermissionService                                     : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.mapper.PermissionGroupMapperImpl                              : loaded 2 times (x 75B)
+Class com.ta2khu75.quiz.service.impl.ExamServiceImpl$$SpringCGLIB$$0                  : loaded 2 times (x 140B)
+Class com.ta2khu75.quiz.service.impl.BlogServiceImpl$$SpringCGLIB$$0                  : loaded 2 times (x 140B)
+Class com.ta2khu75.quiz.service.util.JWTUtil$$SpringCGLIB$$0                          : loaded 2 times (x 120B)
+Class com.ta2khu75.quiz.exception.UnAuthorizedException                               : loaded 2 times (x 80B)
+Class com.ta2khu75.quiz.repository.BlogTagRepository                                  : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.mapper.InfoMapper                                             : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.controller.PermissionGroupController                          : loaded 2 times (x 71B)
+Class com.ta2khu75.quiz.mapper.ExamMapperImpl                                         : loaded 2 times (x 85B)
+Class com.ta2khu75.quiz.model.response.PageResponse                                   : loaded 2 times (x 79B)
+Class com.ta2khu75.quiz.model.base.AccountBase                                        : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.controller.BlogTagController                                  : loaded 2 times (x 71B)
+Class com.ta2khu75.quiz.service.impl.QuizServiceImpl                                  : loaded 2 times (x 97B)
+Class com.ta2khu75.quiz.service.impl.BlogTagServiceImpl$$SpringCGLIB$$0               : loaded 2 times (x 122B)
+Class com.ta2khu75.quiz.service.impl.PermissonServiceImpl                             : loaded 2 times (x 74B)
+Class com.ta2khu75.quiz.repository.FollowRepository                                   : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.repository.ExamCategoryRepository                             : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.controller.FollowController                                   : loaded 2 times (x 73B)
+Class com.ta2khu75.quiz.model.entity.Role                                             : loaded 2 times (x 79B)
+Class com.ta2khu75.quiz.model.request.BlogRequest                                     : loaded 2 times (x 79B)
+Class com.ta2khu75.quiz.service.impl.ExamCategoryServiceImpl                          : loaded 2 times (x 88B)
+Class com.ta2khu75.quiz.model.request.ExamCategoryRequest                             : loaded 2 times (x 73B)
+Class com.ta2khu75.quiz.repository.ExamResultRepository                               : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.controller.MyController                                       : loaded 2 times (x 70B)
+Class com.ta2khu75.quiz.model.group.Update                                            : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.controller.CommentController$$SpringCGLIB$$0                  : loaded 2 times (x 121B)
+Class com.ta2khu75.quiz.model.entity.Quiz                                             : loaded 2 times (x 85B)
+Class com.ta2khu75.quiz.model.entity.id.FollowId                                      : loaded 2 times (x 75B)
+Class com.ta2khu75.quiz.service.ExamCategoryService                                   : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.model.response.ExamResponse                                   : loaded 2 times (x 91B)
+Class com.ta2khu75.quiz.service.PermissionGroupService                                : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.model.request.AnswerRequest                                   : loaded 2 times (x 79B)
+Class com.ta2khu75.quiz.configuration.SecurityJwtConfig$$SpringCGLIB$$0               : loaded 2 times (x 78B)
+Class com.ta2khu75.quiz.mapper.CommentMapper                                          : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.model.response.details.QuizDetaislResponse                    : loaded 2 times (x 81B)
+Class com.ta2khu75.quiz.model.AccessModifier                                          : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.service.impl.AuthServiceImpl                                  : loaded 2 times (x 81B)
+Class com.ta2khu75.quiz.model.base.BlogBase                                           : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.mapper.QuizMapper                                             : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.service.impl.ExamServiceImpl                                  : loaded 2 times (x 94B)
+Class com.ta2khu75.quiz.service.BaseService                                           : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.model.ExamStatus                                              : loaded 2 times (x 77B)
+Class com.ta2khu75.quiz.exception.ExistingException                                   : loaded 2 times (x 80B)
+Class com.ta2khu75.quiz.model.response.details.ExamDetailsResponse                    : loaded 2 times (x 93B)
+Class com.ta2khu75.quiz.service.util.EndpointUtil                                     : loaded 2 times (x 71B)
+Class com.ta2khu75.quiz.service.impl.ExamResultServiceImpl                            : loaded 2 times (x 82B)
+Class com.ta2khu75.quiz.configuration.ApplicationConfig                               : loaded 2 times (x 109B)
+Class com.ta2khu75.quiz.model.response.details.BlogDetailsResponse                    : loaded 2 times (x 90B)
+Class com.ta2khu75.quiz.mapper.FollowMapper                                           : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.service.QuizService                                           : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.controller.ExamCategoryController                             : loaded 2 times (x 74B)
+Class com.ta2khu75.quiz.model.response.PermissionResponse                             : loaded 2 times (x 75B)
+Class com.ta2khu75.quiz.model.base.ExamBase                                           : loaded 2 times (x 83B)
+Class com.ta2khu75.quiz.model.request.search.ExamSearchRequest                        : loaded 2 times (x 91B)
+Class com.ta2khu75.quiz.model.response.AccountResponse                                : loaded 2 times (x 83B)
+Class com.ta2khu75.quiz.service.ExamResultService                                     : loaded 2 times (x 68B)
+Class com.ta2khu75.quiz.service.AuthService                                           : loaded 2 times (x 68B)
+
+---------------  S Y S T E M  ---------------
+
+OS:
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=22.04
+DISTRIB_CODENAME=jammy
+DISTRIB_DESCRIPTION="Ubuntu 22.04.5 LTS"
+uname: Linux 6.8.0-45-generic #45~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Wed Sep 11 15:25:05 UTC 2 x86_64
+OS uptime: 0 days 2:02 hours
+libc: glibc 2.35 NPTL 2.35 
+rlimit (soft/hard): STACK 8192k/infinity , CORE 0k/infinity , NPROC 54785/54785 , NOFILE 1048576/1048576 , AS infinity/infinity , CPU infinity/infinity , DATA infinity/infinity , FSIZE infinity/infinity , MEMLOCK 1769588k/1769588k
+load average: 1,56 1,71 1,61
+
+/proc/meminfo:
+MemTotal:       14156704 kB
+MemFree:         1263464 kB
+MemAvailable:    2489104 kB
+Buffers:           45176 kB
+Cached:          1809108 kB
+SwapCached:        68900 kB
+Active:          4953856 kB
+Inactive:        6688928 kB
+Active(anon):    4486176 kB
+Inactive(anon):  5834140 kB
+Active(file):     467680 kB
+Inactive(file):   854788 kB
+Unevictable:         240 kB
+Mlocked:             240 kB
+SwapTotal:       8000508 kB
+SwapFree:         154172 kB
+Zswap:                 0 kB
+Zswapped:              0 kB
+Dirty:               796 kB
+Writeback:             0 kB
+AnonPages:       9722756 kB
+Mapped:          1223788 kB
+Shmem:            531944 kB
+KReclaimable:     231688 kB
+Slab:             513412 kB
+SReclaimable:     231688 kB
+SUnreclaim:       281724 kB
+KernelStack:       42944 kB
+PageTables:       150556 kB
+SecPageTables:      6328 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:    15078860 kB
+Committed_AS:   25779288 kB
+VmallocTotal:   34359738367 kB
+VmallocUsed:      166804 kB
+VmallocChunk:          0 kB
+Percpu:            14336 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:         0 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+FileHugePages:         0 kB
+FilePmdMapped:         0 kB
+Unaccepted:            0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+Hugetlb:               0 kB
+DirectMap4k:     1683908 kB
+DirectMap2M:    12845056 kB
+DirectMap1G:           0 kB
+
+/sys/kernel/mm/transparent_hugepage/enabled: always [madvise] never
+/sys/kernel/mm/transparent_hugepage/hpage_pmd_size: 2097152
+/sys/kernel/mm/transparent_hugepage/defrag (defrag/compaction efforts parameter): always defer defer+madvise [madvise] never
+
+Process Memory:
+Virtual Size: 10345200K (peak: 10346420K)
+Resident Set Size: 927244K (peak: 927244K) (anon: 887184K, file: 40060K, shmem: 0K)
+Swapped out: 0K
+C-Heap outstanding allocations: 128102K, retained: 426561K
+glibc malloc tunables: (default)
+
+/proc/sys/kernel/threads-max (system-wide limit on the number of threads): 109570
+/proc/sys/vm/max_map_count (maximum number of memory map areas a process may have): 65530
+/proc/sys/kernel/pid_max (system-wide limit on number of process identifiers): 4194304
+
+container (cgroup) information:
+container_type: cgroupv2
+cpu_cpuset_cpus: not supported
+cpu_memory_nodes: not supported
+active_processor_count: 16
+cpu_quota: not supported
+cpu_period: not supported
+cpu_shares: not supported
+memory_limit_in_bytes: unlimited
+memory_and_swap_limit_in_bytes: unlimited
+memory_soft_limit_in_bytes: unlimited
+memory_usage_in_bytes: 4852180 k
+memory_max_usage_in_bytes: not supported
+memory_swap_current_in_bytes: 1850676 k
+memory_swap_max_limit_in_bytes: unlimited
+maximum number of tasks: 16435
+current number of tasks: 646
+
+Steal ticks since vm start: 0
+Steal ticks percentage since vm start:  0,000
+
+CPU: total 16 (initial active 16) (16 cores per cpu, 2 threads per core) family 25 model 80 stepping 0 microcode 0xa50000c, cx8, cmov, fxsr, ht, mmx, 3dnowpref, sse, sse2, sse3, ssse3, sse4a, sse4.1, sse4.2, popcnt, lzcnt, tsc, tscinvbit, avx, avx2, aes, erms, clmul, bmi1, bmi2, adx, sha, fma, vzeroupper, clflush, clflushopt, rdtscp, rdpid, fsrm, f16c, pku, ospke, cet_ss
+CPU Model and flags from /proc/cpuinfo:
+model name	: AMD Ryzen 7 5800H with Radeon Graphics
+flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_legacy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs skinit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb cat_l3 cdp_l3 hw_pstate ssbd mba ibrs ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local user_shstk clzero irperf xsaveerptr rdpru wbnoinvd cppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decodeassists pausefilter pfthreshold avic v_vmsave_vmload vgif v_spec_ctrl umip pku ospke vaes vpclmulqdq rdpid overflow_recov succor smca fsrm debug_swap
+
+Online cpus: 0-15
+Offline cpus: 
+BIOS frequency limitation: <Not Available>
+Frequency switch latency (ns): 0
+Available cpu frequencies: <Not Available>
+Current governor: powersave
+Core performance/turbo boost: <Not Available>
+
+Memory: 4k page, physical 14156704k(2489104k free), swap 8000508k(154172k free)
+Page Sizes: 4k
+
+vm_info: OpenJDK 64-Bit Server VM (21.0.3+13-b453.2) for linux-amd64 JRE (21.0.3+13-b453.2), built on 2024-05-15 by "builduser" with gcc 10.2.1 20210130 (Red Hat 10.2.1-11)
+
+END.

@@ -5,7 +5,7 @@ import AccountService from "../../../service/AccountService";
 const ChangePasswordForm = () => {
   const [form] = Form.useForm<AccountPasswordRequest>();
   const onFinish: FormProps<AccountPasswordRequest>["onFinish"] = (values) => {
-    AccountService.changePassword(values).then((d) => {
+    AccountService.updateMyPassword(values).then((d) => {
       if (d.success) {
         toast.success("Changed password successfully");
         form.resetFields();

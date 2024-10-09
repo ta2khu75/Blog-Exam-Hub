@@ -7,6 +7,7 @@ import quizExamReducer from './slice/quizExamSlice';
 import quizReducer from './slice/quizSlice';
 import imageReducer from './slice/imageSlice';
 import blogHistoryReducer from './slice/blogHistorySlice';
+import  routerRedirectReducer  from './slice/routerRedirect';
 // Import other slices as needed
 
 // Combine all your slices into one root slice
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   quiz: quizReducer,
   image: imageReducer,
   blogHistory: blogHistoryReducer,
+  routerRedirect: routerRedirectReducer
   // socialAccount: socialAccountReducer
   // Add other slices here
 });

@@ -1,74 +1,65 @@
-import { useEffect, useMemo, useState } from "react"
-import AuthService from "../../../service/AuthService";
-import { BlogService } from "../../../service/BlogService";
-import ExamService from "../../../service/ExamService";
+import { useEffect, useState } from "react"
+import { NavLink, Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import AccountService from "../../../service/AccountService";
+import { FollowService } from "../../../service/FollowService";
+import { toast } from "react-toastify";
+import { useAppSelector } from "../../../redux/hooks";
 import ModalElement from "../../element/ModalElement";
 import ChangeInfoForm from "../../element/form/ChangeInfoForm";
 import ChangePasswordForm from "../../element/form/ChangePasswordForm";
-import { useLocation } from "react-router-dom";
-import { Tabs, TabsProps } from "antd";
-import BlogListPage from "../BlogListPage";
-import ExamListPage from "../ExamListPage";
-import ManagerBlogChild from "./child/ManagerBlogChild";
-import ManagerExamChild from "./child/ManagerExamChild";
-import ExamResultChild from "./child/ExamResultChild";
-import AvatarElement from "../../element/AvatarElement";
 
 const ProfilePage = () => {
-    const { pathname } = useLocation()
-    const [account, setAccount] = useState<AccountResponse>();
-    const [countBlog, setCountBlog] = useState(0);
-    const [countExam, setCountExam] = useState(0);
+    const { id } = useParams();
+    const navigate = useNavigate()
+    const { pathname } = useLocation();
+    const accountAuth = useAppSelector((state) => state.account.account)
+    const [account, setAccount] = useState<AccountDetailsResponse>();
+    const [follow, setFollow] = useState<FollowResponse>()
     const [openChangeInfo, setOpenChangeInfo] = useState(false);
     const [openChangePassword, setOpenChangePassword] = useState(false);
     useEffect(() => {
-        fetchInit();
-        fetchMyAccount();
-    }, [])
-    const fetchMyAccount = () => {
-        AuthService.myAccount().then((data) => {
+        if (id) {
+            fetchReadAuthor(id);
+            fetchInit(id);
+        }
+    }, [id])
+    const fetchReadAuthor = (id: string) => {
+        AccountService.readDetailsById(id).then((data) => {
             if (data.success) {
                 setAccount(data.data);
             }
         })
     }
-    const fetchInit = () => {
-        BlogService.myCount().then((data) => {
-            if (data.success) {
-                setCountBlog(data.data.total_element);
-            }
-        })
-        ExamService.myCount().then((data) => {
-            if (data.success) {
-                setCountExam(data.data.total_element);
-            }
-        })
-    }
-    const tab = () => {
-        const items: TabsProps['items'] = [
-            {
-                key: 'blog-tab',
-                label: 'Blogs',
-                children: pathname === "/profile" ? <ManagerBlogChild /> : <BlogListPage />,
-            },
-            {
-                key: 'exam-tab',
-                label: 'Exams',
-                children: pathname === "/profile" ? <ManagerExamChild /> : <ExamListPage />,
-            },
-        ];
-        if (pathname === "/profile") {
-            items.push({
-                key: 'exam-result-tab',
-                label: 'Exam results',
-                children: <ExamResultChild />
+    const fetchInit = (id: string) => {
+        if (accountAuth?.id !== id)
+            FollowService.checkFollowing(id).then((response) => {
+                if (response.success) {
+                    setFollow(response.data)
+                }
             })
-        }
-        return items;
     }
-    const tabMemo = useMemo(() => {
-        return tab();
-    }, [pathname])
+    const handleFollowClick = () => {
+        if (id) {
+            if (accountAuth?.id) {
+                if (!follow)
+                    FollowService.follow(id).then((response) => {
+                        if (response.success) {
+                            setFollow(response.data)
+                            toast.success("Following successfully")
+                        }
+                    });
+                else
+                    FollowService.unFollow(id).then((response) => {
+                        if (response.success) {
+                            setFollow(undefined)
+                            toast.success("UnFollowing successfully")
+                        }
+                    })
+            } else {
+                navigate("/login")
+            }
+        }
+    }
     const handleChangeInfoCancel = () => {
         setOpenChangeInfo(false);
     }
@@ -84,18 +75,18 @@ const ProfilePage = () => {
                             <div className="d-flex align-items-center justify-content-around m-4">
                                 <div className="text-center">
                                     <i className="fa fa-file fs-6 d-block mb-2" />
-                                    <h4 className="mb-0 fw-semibold lh-1">{countBlog}</h4>
-                                    <p className="mb-0 fs-4">Blogs</p>
+                                    <h4 className="mb-0 fw-semibold lh-1">{account?.blog_count}</h4>
+                                    <p className="mb-0 fs-4"><NavLink className={`${`/profile/${id}` === pathname ? "active" : ""}`} aria-current="page" to={`/profile/${id}/blog`}>Blogs</NavLink></p>
                                 </div>
                                 <div className="text-center">
                                     <i className="fa fa-user fs-6 d-block mb-2" />
-                                    <h4 className="mb-0 fw-semibold lh-1">{countExam}</h4>
-                                    <p className="mb-0 fs-4">Exams</p>
+                                    <h4 className="mb-0 fw-semibold lh-1">{account?.exam_count}</h4>
+                                    <p className="mb-0 fs-4"><NavLink to={`/profile/${id}/exam`}>Exams</NavLink></p>
                                 </div>
                                 <div className="text-center">
                                     <i className="fa fa-check fs-6 d-block mb-2" />
-                                    <h4 className="mb-0 fw-semibold lh-1">2,659</h4>
-                                    <p className="mb-0 fs-4">Following</p>
+                                    <h4 className="mb-0 fw-semibold lh-1">{account?.follow_count}</h4>
+                                    <p className="mb-0 fs-4"><NavLink to={`/profile/${id}/follower`}>Followers</NavLink></p>
                                 </div>
                             </div>
                         </div>
@@ -103,7 +94,9 @@ const ProfilePage = () => {
                             <div className="mt-n5">
                                 <div className="d-flex align-items-center justify-content-center mb-2">
                                     <div className="linear-gradient d-flex align-items-center justify-content-center rounded-circle" style={{ width: 110, height: 110 }} >
-                                        {account && <AvatarElement username={account.username} />}
+                                        <div className="border border-4 border-white d-flex align-items-center justify-content-center rounded-circle overflow-hidden" style={{ width: 100, backgroundColor: "#4F98A4", height: 100 }} >
+                                            <h1 className="text-light">{account?.username?.[0]?.toUpperCase()}</h1>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -116,18 +109,20 @@ const ProfilePage = () => {
                                 <li><b>Birth day</b>: {account?.birthday}</li>
                             </ul>
                         </div>
-                        {pathname === "/profile" &&
-                            <div className="col-lg-4 order-last">
-                                <ul className="list-unstyled d-flex align-items-center justify-content-center justify-content-lg-start my-3 gap-3">
+                        <div className="col-lg-4 order-last">
+                            <ul className="list-unstyled d-flex align-items-center justify-content-center justify-content-lg-start my-3 gap-3">
+                                {accountAuth?.id === id && <>
                                     <li><button className="btn btn-primary" onClick={() => setOpenChangeInfo(true)}>Change info</button></li>
                                     <li><button className="btn btn-primary" onClick={() => setOpenChangePassword(true)}>Change password</button></li>
-                                </ul>
-                            </div>
-                        }
+                                </>}
+                                {accountAuth?.id !== id &&
+                                    <li><button className="btn btn-primary" onClick={() => handleFollowClick()}>{!follow ? "Follow" : "Un Follow"}</button></li>}
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                <Tabs defaultActiveKey="1" items={tabMemo} />
             </div>
+            <Outlet />
             {account &&
                 <ModalElement title="Change info" handleCancel={handleChangeInfoCancel} open={openChangeInfo}>
                     <ChangeInfoForm account={account} setAccount={setAccount} />

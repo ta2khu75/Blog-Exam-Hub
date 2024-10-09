@@ -9,7 +9,7 @@ export default class AuthService {
   static login(authRequest: AuthRequest): Promise<ApiResponse<AuthResponse>> {
     return instance.post(`${basePath}/login`, authRequest);
   }
-  static myAccount():Promise<ApiResponse<AccountResponse>> {
+  static myAccount():Promise<ApiResponse<AccountDetailsResponse>> {
     return instance.get(`${basePath}/account`);
   }
   static refreshToken() {

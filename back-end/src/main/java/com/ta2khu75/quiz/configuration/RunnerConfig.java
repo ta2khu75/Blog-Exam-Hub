@@ -31,6 +31,7 @@ import com.ta2khu75.quiz.util.StringUtil;
 public class RunnerConfig {
 	@Value("${app.api-prefix}")
 	private String apiPrefix;
+
 	@Bean
 	CommandLineRunner init(AccountRepository accountRepository, RoleRepository roleRepository,
 			PermissionRepository permissionRepository, PermissionGroupRepository permissionGroupRepository,
@@ -42,11 +43,11 @@ public class RunnerConfig {
 						.displayName("root").firstName("root").lastName("root").enabled(true).birthday(LocalDate.now())
 						.role(initRole(roleRepository)).build();
 				accountRepository.save(account);
+			} else {
+				initPermission(permissionRepository, permissionGroupRepository, applicationContext);
 			}
 		};
 	}
-
-	
 
 	private Role initRole(RoleRepository roleRepository) {
 		List<Role> roles = List.of(Role.builder().name("USER").build(), Role.builder().name("ADMIN").build(),
@@ -79,6 +80,7 @@ public class RunnerConfig {
 				if (group == null) {
 					group = permissionGroupRepository.save(PermissionGroup.builder().name(permissionGroup).build());
 				}
+				try {
 				@SuppressWarnings("null")
 				Permission permission = Permission.builder()
 						.name(StringUtil.convertCamelCaseToReadable(handlerMethod.getMethod().getName())).path(path)
@@ -86,6 +88,11 @@ public class RunnerConfig {
 								requestMappingInfo.getMethodsCondition().getMethods().iterator().next().name()))
 						.permissionGroup(group).build();
 				permissionRepository.save(permission);
+				} catch (Exception e) {
+					// TODO: handle exception
+//					e.printStackTrace();
+					continue;
+				}
 			}
 		}
 	}

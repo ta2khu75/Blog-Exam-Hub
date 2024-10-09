@@ -22,11 +22,6 @@ configurations {
 		extendsFrom annotationProcessor	
 	}
 }
-compileJava {
-    options.annotationProcessorPath = configurations.annotationProcessor
-    options.setAnnotationProcessorGeneratedSourcesDirectory(file("$projectDir/src/generated/java"))
-
-}
 
 repositories {
 	mavenCentral()
@@ -50,11 +45,6 @@ dependencies {
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 	
-	implementation "com.querydsl:querydsl-jpa:${querydslVersion}:jakarta"
-    annotationProcessor "com.querydsl:querydsl-apt:${querydslVersion}:jakarta"	
-    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
-    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-    	
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
 	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc'
@@ -65,14 +55,4 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
-}
-tasks.withType(JavaCompile) {
-    options.annotationProcessorGeneratedSourcesDirectory = file("build/generated")
-}
-sourceSets {
-    main {
-        java {
-            srcDirs 'src/main/java', 'build/generated'
-        }
-    }
 }

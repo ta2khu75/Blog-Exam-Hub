@@ -6,8 +6,8 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 const dateFormat = 'YYYY-MM-DD';
 type Props = {
-  account: AccountResponse;
-  setAccount: React.Dispatch<React.SetStateAction<AccountResponse | undefined>>;
+  account: AccountDetailsResponse;
+  setAccount: React.Dispatch<React.SetStateAction<AccountDetailsResponse | undefined>>;
 }
 dayjs.extend(customParseFormat);
 const ChangeInfoForm = ({ account, setAccount }: Props) => {
@@ -21,7 +21,9 @@ const ChangeInfoForm = ({ account, setAccount }: Props) => {
   const onFinish: FormProps<AccountInfoRequest>["onFinish"] = (values) => {
     AccountService.updateMyInfo(values).then((d) => {
       if (d.success) {
-        setAccount(d.data)
+        setAccount(account => {
+          return { ...account, ...d.data, blog_count: account?.blog_count ?? 0, exam_count: account?.exam_count ?? 0, follow_count: account?.follow_count ?? 0 }
+        })
         toast.success("Update info successfully");
       } else {
         toast.error(d.message_error);

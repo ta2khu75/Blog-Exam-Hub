@@ -12,6 +12,6 @@ import lombok.experimental.FieldDefaults;
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AccountInfoRequest extends AccountBase {
-	@NotBlank
+	@NotBlank(message = "Username must not be blank")
 	String username;
 }

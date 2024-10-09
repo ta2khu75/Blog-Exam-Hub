@@ -1,21 +1,19 @@
 import { useEffect, useState } from "react"
 import ExamCategoryService from "../../service/ExamCategoryService"
-import { useSearchParams } from "react-router-dom"
+import { useParams, useSearchParams } from "react-router-dom"
 import { Button, Checkbox, Form, FormProps, Input, Space } from "antd"
 import ExamService from "../../service/ExamService"
 import { ExamSearchRequest } from "../../types/request/search/ExamSearchRequest"
 import { ExamLevel } from "../../types/ExamLevel"
 import ExamPageElement from "../element/exam/ExamPageElements"
 import StringUtil from "../../util/StringUtil"
-type Props = {
-    authorId?: string
-}
-const ExamListPage = ({ authorId }: Props) => {
+const ExamListPage = () => {
+    const { authorId } = useParams()
     const [form] = Form.useForm<ExamSearchRequest>()
+    const [page, setPage] = useState(1);
     const [searchParams, setSearchParams] = useSearchParams()
     const [examCategories, setExamCategories] = useState<ExamCategoryResponse[]>([]);
     const [examPage, setExamPage] = useState<PageResponse<ExamResponse>>();
-    const [page, setPage] = useState(1);
     useEffect(() => {
         for (const [key, value] of searchParams.entries()) {
             form.setFieldValue(key, value);
@@ -25,7 +23,6 @@ const ExamListPage = ({ authorId }: Props) => {
     useEffect(() => {
         fetchExamCategories();
     }, []);
-
     const fetchExamPage = () => {
         ExamService.search({ ...form.getFieldsValue(), authorId, page }).then(response => {
             if (response.success) {
@@ -116,7 +113,7 @@ const ExamListPage = ({ authorId }: Props) => {
                                                 </div>
                                             </div>
                                             <Form.Item>
-                                                <Button htmlType="submit" className="w-100"  >Apply</Button>
+                                                <Button htmlType="submit" className="w-100">Apply</Button>
                                             </Form.Item>
                                         </div>
                                     </div>

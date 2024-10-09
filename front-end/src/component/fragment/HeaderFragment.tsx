@@ -1,4 +1,4 @@
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import AuthService from "../../service/AuthService";
 import { resetAccount } from "../../redux/slice/accountSlice";
@@ -11,11 +11,13 @@ import { resetQuiz } from "../../redux/slice/quizSlice";
 import { resetImages } from "../../redux/slice/imageSlice";
 import { resetBlogHistory } from "../../redux/slice/blogHistorySlice";
 import AvatarElement from "../element/AvatarElement";
+import { resetRouterRedirect } from "../../redux/slice/routerRedirect";
 
 const HeaderFragment = () => {
   const { pathname } = useLocation();
   const account = useAppSelector((state) => state.account);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate()
   const quizzes = useAppSelector((state) => state.quiz.value)
   useEffect(() => {
     const element = document.getElementById('top');
@@ -38,10 +40,14 @@ const HeaderFragment = () => {
         dispatch(resetImages());
         dispatch(resetBlogHistory());
         toast.success("logout successful");
-        window.location.reload();
+        // window.location.reload();
       }
     });
   };
+  const handleLoginClick = () => {
+    dispatch(resetRouterRedirect())
+    navigate("/login")
+  }
   return (
     <nav className="navbar navbar-expand-lg d-block" id="top" style={{ background: "#4B94A1" }}>
       <div className="container">
@@ -107,9 +113,15 @@ const HeaderFragment = () => {
                 aria-labelledby="account-action"
               >
                 <li>
-                  <NavLink className="dropdown-item" to="login">
+                  {/* <NavLink className="dropdown-item" to="login">
                     Login
-                  </NavLink>
+                  </NavLink> */}
+                  <button
+                    className="dropdown-item"
+                    onClick={() => handleLoginClick()}
+                  >
+                    Login
+                  </button>
                 </li>
                 <li>
                   <NavLink className="dropdown-item" to="register">
@@ -124,7 +136,7 @@ const HeaderFragment = () => {
                 aria-labelledby="account-action"
               >
                 <li>
-                  <NavLink className="dropdown-item" to="/profile">
+                  <NavLink className="dropdown-item" to={`/profile/${account.account?.id}`}>
                     Profile
                   </NavLink>
                 </li>

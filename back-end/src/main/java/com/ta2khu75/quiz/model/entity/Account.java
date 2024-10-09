@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -21,7 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ToString(exclude = {"exams","comments","blogs", "examResults"})
+@ToString(exclude = { "exams", "comments", "blogs", "examResults" })
 public class Account extends EntityBase implements UserDetails {
 	private static final long serialVersionUID = -6436446209727776976L;
 	@Column(unique = true, nullable = false)
@@ -51,6 +52,10 @@ public class Account extends EntityBase implements UserDetails {
 	List<Exam> exams;
 	@OneToMany(mappedBy = "account")
 	List<ExamResult> examResults;
+	@OneToMany(mappedBy = "follower")
+	Set<Follow> followers;
+	@OneToMany(mappedBy = "following")
+	Set<Follow> following;
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

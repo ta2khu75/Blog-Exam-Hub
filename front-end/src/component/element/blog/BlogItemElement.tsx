@@ -15,11 +15,11 @@ const BlogItemElement = ({ blog, handleDelete, handleEdit }: Props) => {
             <div className='row align-items-center small'>
                 <div className={`col-${handleEdit || handleDelete ? "11" : "12"}`}>
                     <div className='d-flex align-items-center'>
-                        <Link to={`/author/${author.info.id}`}>
+                        <Link to={`/profile/${author.info.id}/blog`}>
                             <AvatarElement username={blog.author.username} size={50} />
                         </Link>
                         <div className='d-flex align-items-center'>
-                            <Link to={`/author/${author.info.id}`}>
+                            <Link to={`/profile/${author.info.id}/blog`}>
                                 <div className='d-flex align-items-center'>
                                     <b>{blog.author.username}</b>
                                 </div>

@@ -8,10 +8,10 @@ import lombok.experimental.FieldDefaults;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AccountStatusRequest {
-	@NotNull
+	@NotNull(message = "Enabled must not be null")
 	Boolean enabled;
-	@NotNull
+	@NotNull(message = "Non locked must not be null")
 	Boolean nonLocked;
-	@NotNull
+	@NotNull(message = "Role id must not be null")
 	Long roleId;
 }
