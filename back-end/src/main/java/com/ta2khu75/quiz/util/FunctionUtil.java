@@ -3,6 +3,7 @@ package com.ta2khu75.quiz.util;
 import java.util.Optional;
 import java.util.function.Function;
 
+import com.cloudinary.provisioning.Account;
 import com.ta2khu75.quiz.exception.NotFoundException;
 
 public class FunctionUtil {
@@ -14,4 +15,5 @@ public class FunctionUtil {
 		return findFunction.apply(key).orElseThrow(
 				() -> new NotFoundException("Could not found %s with key ".formatted(clazz.getSimpleName()) + key));
 	}
+
 }

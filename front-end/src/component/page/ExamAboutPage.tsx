@@ -7,7 +7,7 @@ const ExamAboutPage = () => {
     const [examResponse, setExamResponse] = useState<ExamResponse>();
     useEffect(() => {
         fetchExam();
-    }, [])
+    }, [id])
     const fetchExam = () => {
         if (id) {
             ExamService.readById(id).then((d) => {

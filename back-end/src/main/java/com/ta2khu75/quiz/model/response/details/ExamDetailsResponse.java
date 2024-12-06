@@ -10,5 +10,4 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class ExamDetailsResponse extends ExamResponse {
 	private List<QuizDetaislResponse> quizzes;
-
 }

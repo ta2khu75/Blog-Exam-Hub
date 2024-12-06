@@ -2,10 +2,12 @@ import type { FormProps } from "antd";
 import { Button, Form, Input } from "antd";
 import AuthService from "../../service/AuthService";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setAccount } from "../../redux/slice/accountSlice";
 import { resetRouterRedirect } from "../../redux/slice/routerRedirect";
+import { useState } from "react";
+import ModalElement from "../element/ModalElement";
 
 export type AuthRequest = {
   email?: string;
@@ -13,6 +15,8 @@ export type AuthRequest = {
 };
 
 const LoginPage = () => {
+  const [searchParams] = useSearchParams();
+  const [verified, setVerified] = useState<boolean>(searchParams.get('verified') === 'true' || false);
   const dispatch = useAppDispatch()
   const navigate = useNavigate();
   const routerRedirect = useAppSelector(state => state.routerRedirect.value)
@@ -99,6 +103,12 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
+      <ModalElement open={verified} handleCancel={() => setVerified(false)} >
+        <div>
+          <h2>Account Verification</h2>
+          <p>Your account has been verified. You can now login.</p>
+        </div>
+      </ModalElement>
     </section>
   );
 };

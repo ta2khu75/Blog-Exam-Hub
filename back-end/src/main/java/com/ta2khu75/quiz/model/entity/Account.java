@@ -15,6 +15,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Data
 @Entity
 @Builder
@@ -45,16 +49,24 @@ public class Account extends EntityBase implements UserDetails {
 	@ManyToOne
 	Role role;
 	@OneToMany(mappedBy = "author")
+	@JsonIgnore
+//	@JsonManagedReference("account-blog")
 	List<Blog> blogs;
 	@OneToMany(mappedBy = "author")
+//	@JsonManagedReference("account-comment")
+	@JsonIgnore
 	List<Comment> comments;
 	@OneToMany(mappedBy = "author")
+	@JsonIgnore
 	List<Exam> exams;
 	@OneToMany(mappedBy = "account")
+	@JsonIgnore
 	List<ExamResult> examResults;
-	@OneToMany(mappedBy = "follower")
-	Set<Follow> followers;
 	@OneToMany(mappedBy = "following")
+	@JsonIgnore
+	Set<Follow> followers;
+	@OneToMany(mappedBy = "follower")
+	@JsonIgnore
 	Set<Follow> following;
 
 	@Override

@@ -12,6 +12,8 @@ import { resetImages } from "../../redux/slice/imageSlice";
 import { resetBlogHistory } from "../../redux/slice/blogHistorySlice";
 import AvatarElement from "../element/AvatarElement";
 import { resetRouterRedirect } from "../../redux/slice/routerRedirect";
+import { Popover } from "antd";
+import NotificationElement from "../element/NotificationElement";
 
 const HeaderFragment = () => {
   const { pathname } = useLocation();
@@ -98,7 +100,14 @@ const HeaderFragment = () => {
             </li>
           </ul>
           <div className="d-none d-lg-block dropdown">
-            <div className="d-flex align-items-center">
+            <Popover className="d-flex align-items-center"
+              content={<NotificationElement />}
+              // title="Title"
+              trigger="click"
+            // open={open}
+            // onOpenChange={handleOpenChange}
+            >
+
               {!account.account?.username && <span
                 className="navbar-icon bi-person smoothscroll"
                 id="account-action"
@@ -106,16 +115,13 @@ const HeaderFragment = () => {
               {account.account?.username && <AvatarElement username={account.account.username} size={50} />}
 
               <span className="ms-2 text-light">{account.account?.username ? `Hello ${account.account.username}` : ""}</span>
-            </div>
+            </Popover>
             {!account.authenticated && (
               <ul
                 className="dropdown-menu dropdown-menu-light"
                 aria-labelledby="account-action"
               >
                 <li>
-                  {/* <NavLink className="dropdown-item" to="login">
-                    Login
-                  </NavLink> */}
                   <button
                     className="dropdown-item"
                     onClick={() => handleLoginClick()}

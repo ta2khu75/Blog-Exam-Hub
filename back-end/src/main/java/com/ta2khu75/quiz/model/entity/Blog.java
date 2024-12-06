@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ta2khu75.quiz.model.AccessModifier;
 
 import jakarta.persistence.Column;
@@ -42,8 +44,10 @@ public class Blog extends EntityBase {
 	@OneToMany(mappedBy = "blog")
 	List<Exam> exams;
 	@ManyToOne
+//	@JsonBackReference("account-blog")
 	Account author;
 	@OneToMany(mappedBy = "blog")
+//	@JsonManagedReference("blog-comment")
 	List<Comment> comments;
 	@ManyToMany
 	List<BlogTag> blogTags;

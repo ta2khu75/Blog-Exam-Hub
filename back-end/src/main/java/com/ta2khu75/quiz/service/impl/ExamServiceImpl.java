@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,10 +20,13 @@ import com.ta2khu75.quiz.model.request.search.ExamSearchRequest;
 import com.ta2khu75.quiz.model.response.ExamResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
+import com.ta2khu75.quiz.event.BlogExamEvent;
 import com.ta2khu75.quiz.exception.NotFoundException;
+import com.ta2khu75.quiz.exception.UnAuthorizedException;
 import com.ta2khu75.quiz.mapper.ExamMapper;
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.ExamStatus;
+import com.ta2khu75.quiz.model.TargetType;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Exam;
 import com.ta2khu75.quiz.model.entity.ExamCategory;
@@ -36,6 +40,7 @@ import com.ta2khu75.quiz.service.ExamService;
 import com.ta2khu75.quiz.service.QuizService;
 import com.ta2khu75.quiz.service.util.FileUtil;
 import com.ta2khu75.quiz.service.util.FileUtil.Folder;
+import com.ta2khu75.quiz.util.FunctionUtil;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
 import java.io.IOException;
@@ -58,6 +63,7 @@ public class ExamServiceImpl implements ExamService {
 	ExamResultRepository examHistoryRepository;
 	QuizService quizService;
 	FileUtil fileUtil;
+	ApplicationEventPublisher applicationEventPublisher;
 
 	private ExamCategory findExamCategoryById(Long id) {
 		return examCategoryRepository.findById(id)
@@ -72,20 +78,19 @@ public class ExamServiceImpl implements ExamService {
 	@Transactional
 	@Validated(value = { Default.class })
 	public ExamResponse create(@Valid ExamRequest examRequest, MultipartFile file) throws IOException {
+		String email=SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new UnAuthorizedException("You must be login"));
+		Account account=FunctionUtil.findOrThrow(email, Account.class, accountRepository::findByEmail);
 		Exam exam = mapper.toEntity(examRequest);
 		fileUtil.saveFile(exam, file, Folder.EXAM_FOLDER, Exam::setImagePath);
 		exam.setExamCategory(this.findExamCategoryById(examRequest.getExamCategoryId()));
-		exam.setAuthor(accountRepository
-				.findByEmail(SecurityUtil.getCurrentUserLogin()
-						.orElseThrow(() -> new NotFoundException("Could not find account")))
-				.orElseThrow(() -> new NotFoundException("Could not find account")));
+		exam.setAuthor(account);
 		Exam examSaved = repository.save(exam);
 		examRequest.getQuizzes().forEach(quiz -> {
 			quiz.setExam(examSaved);
 			quizService.create(quiz);
 		});
+		applicationEventPublisher.publishEvent(new BlogExamEvent(this, examSaved.getId(), TargetType.EXAM));
 		return mapper.toResponse(repository.save(exam));
-//		return null;
 	}
 
 	@Override

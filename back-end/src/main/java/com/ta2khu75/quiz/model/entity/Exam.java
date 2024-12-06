@@ -51,6 +51,4 @@ public class Exam extends EntityBase {
 	List<Quiz> quizzes;
 	@OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
 	List<ExamResult> examResults;
-
-	
 }

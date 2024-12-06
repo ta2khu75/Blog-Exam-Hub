@@ -8,15 +8,19 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ta2khu75.quiz.event.BlogExamEvent;
 import com.ta2khu75.quiz.exception.NotFoundException;
+import com.ta2khu75.quiz.exception.UnAuthorizedException;
 import com.ta2khu75.quiz.mapper.BlogMapper;
 import com.ta2khu75.quiz.model.AccessModifier;
+import com.ta2khu75.quiz.model.TargetType;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Blog;
 import com.ta2khu75.quiz.model.entity.BlogTag;
@@ -43,13 +47,15 @@ public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper>
 	private final FileUtil fileUtil;
 	private final AccountRepository accountRepository;
 	private final BlogTagRepository blogTagRepository;
+	private final ApplicationEventPublisher applicationEventPublisher;
 
 	public BlogServiceImpl(BlogRepository repository, BlogMapper mapper, FileUtil fileUtil,
-			AccountRepository accountRepository, BlogTagRepository blogTagRepository) {
+			AccountRepository accountRepository, BlogTagRepository blogTagRepository, ApplicationEventPublisher applicationEventPublisher) {
 		super(repository, mapper);
 		this.fileUtil = fileUtil;
 		this.accountRepository = accountRepository;
 		this.blogTagRepository = blogTagRepository;
+		this.applicationEventPublisher = applicationEventPublisher;
 	}
 
 	private List<BlogTag> saveAll(List<String> blogTags) {
@@ -72,13 +78,15 @@ public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper>
 	@Transactional
 	public BlogResponse create(@Valid BlogRequest request, MultipartFile file) throws IOException {
 		Blog blog = mapper.toEntity(request);
-		String email = SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new NotFoundException("Email not found"));
+		String email = SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new UnAuthorizedException("You must be login"));
 		Account account = FunctionUtil.findOrThrow(email, Account.class, accountRepository::findByEmail);
 		blog.setAuthor(account);
 		fileUtil.saveFile(blog, file, Folder.BLOG_FOLDER, Blog::setImagePath);
 		List<BlogTag> blogTags = this.saveAll(request.getBlogTags());
 		blog.setBlogTags(blogTags);
-		return save(repository.save(blog));
+		blog=repository.save(blog);
+		applicationEventPublisher.publishEvent(new BlogExamEvent(this, blog.getId(), TargetType.BLOG));
+		return save(blog);
 	}
 
 	private BlogResponse save(Blog blog) {

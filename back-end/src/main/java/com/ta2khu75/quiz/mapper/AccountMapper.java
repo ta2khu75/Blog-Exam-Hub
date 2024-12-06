@@ -46,7 +46,7 @@ public interface AccountMapper {
 	@Mapping(target = "info", source = "account", qualifiedByName = "toInfoResponse")
 	@Mapping(target = "blogCount", expression = "java(account.getBlogs() != null ? account.getBlogs().size() : 0)")
 	@Mapping(target = "examCount", expression = "java(account.getExams() != null ? account.getExams().size() : 0)")
-	@Mapping(target = "followCount", expression = "java(account.getFollowing() != null ? account.getFollowing().size() : 0)")
+	@Mapping(target = "followCount", expression = "java(account.getFollowers() != null ? account.getFollowers().size() : 0)")
 	AccountDetailsResponse toDetailsResponse(Account account);
 
 	@Mapping(target = "role", source = "role.name")

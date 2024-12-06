@@ -15,6 +15,7 @@ type Params = {
 const ExamDetailPage = () => {
   const { examId } = useParams<Params>();
   const navigate = useNavigate();
+  const account = useAppSelector(state => state.account)
   const [openResult, setOpenResult] = useState(false);
   const quizResponseList = useAppSelector((state) => state.exams?.[examId ?? ""]) ?? [];
   const answerListUser = useAppSelector((state) => state.userExams?.[examId ?? ""]) ?? [];
@@ -113,7 +114,7 @@ const ExamDetailPage = () => {
       dispatch(deleteQuizExam(examId));
       dispatch(deleteExam(examId));
     }
-    navigate("/profile");
+    navigate("/profile/" + account.account?.id);
     toast.success("Successfully finished the exam");
   };
   return (

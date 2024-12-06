@@ -1,4 +1,4 @@
-import { Button, Form, FormProps, Input, Radio, Space } from 'antd';
+import { Button, Form, FormProps, Input, Radio, Select, Space } from 'antd';
 import { useEffect, useState } from 'react'
 import ReactQuill from 'react-quill'
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
@@ -9,6 +9,8 @@ import { BlogService } from '../../../service/BlogService';
 import { toast } from 'react-toastify';
 import BlogUploadImage from './BlogUploadImage';
 import ModalElement from '../../element/ModalElement';
+import useDebounce from '../../../hook/useDebounce';
+import ExamService from '../../../service/ExamService';
 const BlogPage = () => {
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -37,6 +39,10 @@ const BlogPage = () => {
     const [errorContent, setErrorContent] = useState(false);
     const [image, setImage] = useState<File>()
     const [content, setContent] = useState("");
+    const [keyword, setKeyword] = useState("")
+    const search = useDebounce(keyword);
+    const [examList, setExamList] = useState<ExamResponse[]>([])
+    // const [examSelected, setExamSelected] = useState<{ label: string, value: string }[]>([])
     const onFinish: FormProps<BlogRequest>["onFinish"] = (values) => {
         if (!(/^\s*$/.test(content))) {
             if (blogId) {
@@ -66,11 +72,22 @@ const BlogPage = () => {
         if (blogId) fetchBlog(blogId);
         handleResetClick()
     }, [blogId])
+    useEffect(() => {
+        if (examList.length > 0) fetchMyExam()
+    }, [keyword])
+    // const
     const fetchBlog = (blogId: string) => {
         BlogService.readDetails(blogId).then((response) => {
             if (response.success) {
                 form.setFieldsValue({ title: response.data.title, access_modifier: response.data.access_modifier, blog_tags: response.data.blog_tags })
                 setContent(response.data.content)
+            }
+        })
+    }
+    const fetchMyExam = () => {
+        ExamService.mySearch({ keyword: search, page: 1, size: 10 }).then(response => {
+            if (response.success && response.data.content) {
+                setExamList(response.data.content)
             }
         })
     }
@@ -89,6 +106,20 @@ const BlogPage = () => {
     const handleShowUploadImageClick = () => {
         setOpenImageContent(true)
     }
+    const handleExamClick = () => {
+        if (examList.length == 0) fetchMyExam()
+    }
+    // const handleExamChange = (value: string[], option: {
+    //     label: string;
+    //     value: string;
+    // } | {
+    //     label: string;
+    //     value: string;
+    // }[]) => {
+    //     if (Array.isArray(option)) {
+    //         setExamSelected(option)
+    //     }
+    // }
     return <div className='container'>
         <h2>Create Blog</h2>
         <Form
@@ -139,6 +170,18 @@ const BlogPage = () => {
                     <Radio.Group>
                         {Object.keys(AccessModifier).map(access => <Radio key={`radio-${access}`} value={access}>{access}</Radio>)}
                     </Radio.Group>
+                </Form.Item>
+                <Form.Item<BlogRequest> label="Exams" name={"exam_ids"}>
+                    <Select
+                        mode="multiple"
+                        onClick={() => handleExamClick()}
+                        allowClear
+                        style={{ width: '300px', }}
+                        placeholder="Please select"
+                        onSearch={(value) => setKeyword(value)}
+                        options={examList.map((exam) => ({ label: exam.title, value: exam.info.id }))}
+                        // onChange={handleExamChange}
+                    />
                 </Form.Item>
                 <Form.Item<BlogRequest> label="Image blog" rules={[
                     { required: true, message: "please input access_modifier" }
