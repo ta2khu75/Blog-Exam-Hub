@@ -1,5 +1,5 @@
 import { Button, Form, FormProps, Input, Radio, Select, Space } from 'antd';
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import ReactQuill from 'react-quill'
 import { PlusOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import 'react-quill/dist/quill.snow.css';
@@ -36,36 +36,32 @@ const BlogPage = () => {
     const modules = { toolbar: toolbarOptions }
     const [openImageContent, setOpenImageContent] = useState(false)
     const [form] = Form.useForm<BlogRequest>();
-    const [errorContent, setErrorContent] = useState(false);
     const [image, setImage] = useState<File>()
-    const [content, setContent] = useState("");
+    // const [content, setContent] = useState("");
     const [keyword, setKeyword] = useState("")
     const search = useDebounce(keyword);
     const [examList, setExamList] = useState<ExamResponse[]>([])
     // const [examSelected, setExamSelected] = useState<{ label: string, value: string }[]>([])
     const onFinish: FormProps<BlogRequest>["onFinish"] = (values) => {
-        if (!(/^\s*$/.test(content))) {
-            if (blogId) {
-                BlogService.update(blogId, { ...values, content }, image).then((data) => {
-                    if (data.success) {
-                        toast.success("Successfully");
-                        navigate(`/profile`)
-                    } else {
-                        toast.error(data.message_error);
-                    }
-                });
-            } else {
-                BlogService.create({ ...values, content }, image).then((data) => {
-                    if (data.success) {
-                        toast.success("Successfully to create");
-                        navigate(`/profile`)
-                    } else {
-                        toast.error(data.message_error);
-                    }
-                });
-            }
+        console.log(values);
+        if (blogId) {
+            BlogService.update(blogId, values, image).then((data) => {
+                if (data.success) {
+                    toast.success("Successfully");
+                    navigate(`/profile`)
+                } else {
+                    toast.error(data.message_error);
+                }
+            });
         } else {
-            setErrorContent(true);
+            BlogService.create(values, image).then((data) => {
+                if (data.success) {
+                    toast.success("Successfully to create");
+                    navigate(`/profile`)
+                } else {
+                    toast.error(data.message_error);
+                }
+            });
         }
     };
     useEffect(() => {
@@ -75,17 +71,18 @@ const BlogPage = () => {
     useEffect(() => {
         if (examList.length > 0) fetchMyExam()
     }, [keyword])
-    // const
     const fetchBlog = (blogId: string) => {
         BlogService.readDetails(blogId).then((response) => {
             if (response.success) {
-                form.setFieldsValue({ title: response.data.title, access_modifier: response.data.access_modifier, blog_tags: response.data.blog_tags })
-                setContent(response.data.content)
+                form.setFieldsValue({ ...response.data, exam_ids: response.data.exams.map(exam => exam.info.id) })
+                if (response.data.exams.length > 0) {
+                    setExamList(response.data.exams)
+                }
             }
         })
     }
     const fetchMyExam = () => {
-        ExamService.mySearch({ keyword: search, page: 1, size: 10 }).then(response => {
+        ExamService.mySearchBlogNull(search).then(response => {
             if (response.success && response.data.content) {
                 setExamList(response.data.content)
             }
@@ -97,8 +94,7 @@ const BlogPage = () => {
         }
     }
     const handleResetClick = () => {
-        form.setFieldsValue({ title: "", content: "", access_modifier: AccessModifier.PRIVATE, blog_tags: [""] })
-        setErrorContent(false);
+        form.resetFields() //setFieldsValue({ title: "", content: "", access_modifier: AccessModifier.PRIVATE, blog_tags: [""] })
     }
     const handleCancelUploadImageClick = () => {
         setOpenImageContent(false)
@@ -109,17 +105,12 @@ const BlogPage = () => {
     const handleExamClick = () => {
         if (examList.length == 0) fetchMyExam()
     }
-    // const handleExamChange = (value: string[], option: {
-    //     label: string;
-    //     value: string;
-    // } | {
-    //     label: string;
-    //     value: string;
-    // }[]) => {
-    //     if (Array.isArray(option)) {
-    //         setExamSelected(option)
-    //     }
-    // }
+    const optionExam = useMemo(() => {
+        return examList.map((exam) => ({ label: exam.title, value: exam.info.id }))
+    }, [examList])
+    const handleAddImageToContent = (image: string) => {
+        form.setFieldValue("content", `${form.getFieldValue("content")}${image}`)
+    }
     return <div className='container'>
         <h2>Create Blog</h2>
         <Form
@@ -179,8 +170,7 @@ const BlogPage = () => {
                         style={{ width: '300px', }}
                         placeholder="Please select"
                         onSearch={(value) => setKeyword(value)}
-                        options={examList.map((exam) => ({ label: exam.title, value: exam.info.id }))}
-                        // onChange={handleExamChange}
+                        options={optionExam}
                     />
                 </Form.Item>
                 <Form.Item<BlogRequest> label="Image blog" rules={[
@@ -190,13 +180,14 @@ const BlogPage = () => {
                 </Form.Item>
             </div>
             <ModalElement width={1500} open={openImageContent} handleCancel={handleCancelUploadImageClick}>
-                <BlogUploadImage setOpen={setOpenImageContent} setContent={setContent} />
+                <BlogUploadImage setOpen={setOpenImageContent} handleAddImage={handleAddImageToContent} />
             </ModalElement>
             <Form.Item>
                 <Button onClick={() => handleShowUploadImageClick()}>Upload image content</Button>
             </Form.Item>
-            {errorContent && <p className="text-danger">Please input Content</p>}
-            <ReactQuill modules={modules} className='vh-100' theme="snow" value={content} onChange={setContent} />
+            <Form.Item<BlogRequest> name="content" label="Content" rules={[{ required: true }]}>
+                <ReactQuill modules={modules} className='vh-100' theme="snow" />
+            </Form.Item>
         </Form >
     </div >
 }

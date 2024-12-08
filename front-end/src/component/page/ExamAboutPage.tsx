@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom"
 import ExamService from "../../service/ExamService";
+import BlogItemElement from "../element/blog/BlogItemElement";
 
 const ExamAboutPage = () => {
     const { id } = useParams();
@@ -63,6 +64,14 @@ const ExamAboutPage = () => {
                     </div>
                 </div>
             </section>
+            {
+                examResponse?.blog && <div>
+                    <h1>
+                        Blog related to this exam
+                    </h1>
+                    <BlogItemElement blog={examResponse.blog} />
+                </div>
+            }
         </div>
     )
 }

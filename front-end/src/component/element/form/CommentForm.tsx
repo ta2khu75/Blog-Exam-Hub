@@ -46,12 +46,16 @@ const CommentForm = ({ blogId, setCommentPage }: Props) => {
         })
     };
     const handleReset = () => {
-        setContent("")
+        form.resetFields()
     }
+    const handleAddImage = (value: string) => {
+        form.setFieldValue("content", `${form.getFieldValue("content")}${value}`)
+    }
+
     return (
         <>
             <Form form={form} onFinish={onFinish} layout="vertical">
-                <Form.Item label="Content">
+                <Form.Item<CommentRequest> name={"content"} label="Content">
                     <ReactQuill modules={modules} theme="snow" value={content} onChange={setContent} />
                 </Form.Item>
                 <Form.Item >
@@ -62,7 +66,7 @@ const CommentForm = ({ blogId, setCommentPage }: Props) => {
                 <Button type="primary" htmlType="submit">Submit comment</Button>
             </Form>
             <ModalElement width={1500} open={openImageContent} handleCancel={handleCancelUploadImageClick}>
-                <BlogUploadImage setOpen={setOpenImageContent} setContent={setContent} />
+                <BlogUploadImage setOpen={setOpenImageContent} handleAddImage={handleAddImage} />
             </ModalElement>
         </>
     )

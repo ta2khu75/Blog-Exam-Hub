@@ -6,10 +6,11 @@ import PopoverActionElement from "../../element/PopoverActionElement";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { addImages, deleteImages } from "../../../redux/slice/imageSlice";
 type Props = {
-    setContent?: React.Dispatch<React.SetStateAction<string>>
+    // setContent?: React.Dispatch<React.SetStateAction<string>>
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
+    handleAddImage: (value: string) => void
 }
-const BlogUploadImage = ({ setContent, setOpen }: Props) => {
+const BlogUploadImage = ({ handleAddImage, setOpen }: Props) => {
     const images = useAppSelector(state => state.image.value)
     const dispatch = useAppDispatch()
     const handleUploadChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,8 +27,9 @@ const BlogUploadImage = ({ setContent, setOpen }: Props) => {
         dispatch(deleteImages(index))
     }
     const handleAddImageToContent = (image: string) => {
-        if (setContent)
-            setContent(content => content + `![Image](${image})`);
+        // if (setContent)
+        handleAddImage(`![Image](${image})`)
+        // setContent(content => content + );
         setOpen(false)
     }
     return (

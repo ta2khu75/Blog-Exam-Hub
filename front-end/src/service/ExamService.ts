@@ -13,6 +13,12 @@ export default class ExamService {
     static mySearch(examSearch: ExamSearchRequest): Promise<ApiResponse<PageResponse<ExamResponse>>> {
         return instance.get(`${basePath}/my-exam`, { params: { ...examSearch } })
     }
+    static mySearchBlogNull(keyword: string, page = 1, size = 10): Promise<ApiResponse<PageResponse<ExamResponse>>> {
+        return instance.get(`${basePath}/my-exam/blog-null`, { params: { keyword, page, size } })
+    }
+    static myReadAllById(ids: string[]): Promise<ApiResponse<ExamResponse[]>> {
+        return instance.get(`${basePath}/my-exam/ids`, { params: { ids } })
+    }
     static create(data: ExamRequest, image: File): Promise<ApiResponse<ExamResponse>> {
         const form = new FormData();
         form.append("image", image)

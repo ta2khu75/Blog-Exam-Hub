@@ -7,6 +7,7 @@ import { setBlogHistory } from "../../redux/slice/blogHistorySlice";
 import CommentForm from "../element/form/CommentForm";
 import { CommentService } from "../../service/CommentService";
 import CommentPageElement from "../element/comment/CommentPageElement";
+import ExamCartElement from "../element/exam/ExamCartElement";
 
 const BlogDetailsPage = () => {
     const { blogId } = useParams()
@@ -73,7 +74,14 @@ const BlogDetailsPage = () => {
 
                     {/* Blog Content */}
                     <div className="my-4" dangerouslySetInnerHTML={{ __html: StringUtil.replaceMarkdownWithImgTag(blog?.content ?? "") }}></div>
-
+                    <h5>You can take exams to remember knowledge</h5>
+                    <div className="row">
+                        {
+                            blog?.exams.map(exam =>
+                                <ExamCartElement exam={exam} />
+                            )
+                        }
+                    </div>
                     {/* Share Buttons */}
                     <div className="mt-4 text-center">
                         <h5>Share this article:</h5>
