@@ -1,10 +1,12 @@
 package com.ta2khu75.quiz.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -12,7 +14,7 @@ import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.ExamLevel;
 import com.ta2khu75.quiz.model.entity.Exam;
 
-public interface ExamRepository extends JpaRepository<Exam, String> {
+public interface ExamRepository extends JpaRepository<Exam, String>, JpaSpecificationExecutor<Exam>{
 	@Query("SELECT e FROM Exam e WHERE "
 			+ "(:keyword IS NULL OR e.title LIKE %:keyword% OR e.description LIKE %:keyword% OR e.author.displayName LIKE %:keyword% OR e.examCategory.name LIKE %:keyword%) "
 			+ "AND (:examCategoryIds IS NULL OR e.examCategory.id IN (:examCategoryIds)) "
@@ -27,7 +29,9 @@ public interface ExamRepository extends JpaRepository<Exam, String> {
 			@Param("examLevels") List<ExamLevel> examLevel, @Param("minDuration") Integer minDuration,
 			@Param("maxDuration") Integer maxDuration, @Param("accessModifier") AccessModifier accessModifier,
 			Pageable pageable);
-
+	@Query("SELECT e FROM Exam e WHERE (:keyword IS NULL OR e.title LIKE %:keyword%) AND e.author.email = :authorEmail AND e.blog IS NULL")
+	Page<Exam> mySearchExamBlogNull(@Param("authorEmail") String id, @Param("keyword") String keyword, Pageable pageable);
+	Set<Exam> findByBlogId(String blogId);
 	Long countByAuthorIdAndAccessModifier(String authorId, AccessModifier accessModifier);
 
 	Long countByAuthorEmail(String authorEmail);

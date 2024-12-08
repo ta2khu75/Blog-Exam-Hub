@@ -1,5 +1,9 @@
 package com.ta2khu75.quiz.service;
 
+import java.util.List;
+
+import org.springframework.data.domain.Pageable;
+
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.request.ExamRequest;
 import com.ta2khu75.quiz.model.request.search.ExamSearchRequest;
@@ -9,7 +13,9 @@ import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
 
 public interface ExamService extends BaseFileService<String, ExamRequest, ExamResponse> {
 	PageResponse<ExamResponse> searchExam(ExamSearchRequest examSearchRequest);
+	PageResponse<ExamResponse> mySearchExamNull(String keyword, Pageable pageable);
 	ExamDetailsResponse readDetail(String id);
+	List<ExamResponse> myReadAllById(List<String> ids);
 	Long countByAuthorEmail(String authorEmail);
 	Long countByAuthorIdAndAccessModifier(String authorId, AccessModifier accessModifier);
 }

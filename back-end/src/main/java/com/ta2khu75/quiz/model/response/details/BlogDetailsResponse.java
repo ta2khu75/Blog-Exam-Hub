@@ -1,6 +1,9 @@
 package com.ta2khu75.quiz.model.response.details;
 
+import java.util.List;
+
 import com.ta2khu75.quiz.model.response.BlogResponse;
+import com.ta2khu75.quiz.model.response.ExamResponse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,4 +12,5 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class BlogDetailsResponse extends BlogResponse {
 	private String content;
+	private List<ExamResponse> exams;
 }

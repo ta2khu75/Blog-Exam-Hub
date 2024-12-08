@@ -15,4 +15,5 @@ public class ExamResponse extends ExamBase {
 	AccountResponse author;
 	ExamCategoryResponse examCategory;
 	InfoResponse info;
+	BlogResponse blog;
 }

@@ -1,13 +1,13 @@
 package com.ta2khu75.quiz.model.entity;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ta2khu75.quiz.model.AccessModifier;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -27,7 +27,7 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true, exclude = { "author", "exams", "comments", "blogTags" })
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EntityListeners(AuditingEntityListener.class)
 public class Blog extends EntityBase {
@@ -41,14 +41,22 @@ public class Blog extends EntityBase {
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	AccessModifier accessModifier;
-	@OneToMany(mappedBy = "blog")
-	List<Exam> exams;
+	@OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
+	Set<Exam> exams;
 	@ManyToOne
-//	@JsonBackReference("account-blog")
 	Account author;
-	@OneToMany(mappedBy = "blog")
-//	@JsonManagedReference("blog-comment")
+	@OneToMany(mappedBy = "blog", orphanRemoval = true, cascade = CascadeType.REMOVE)
 	List<Comment> comments;
 	@ManyToMany
 	List<BlogTag> blogTags;
+
+	public void addExam(Exam exam) {
+		exams.add(exam);
+		exam.setBlog(this);
+	}
+
+	public void removeExam(Exam exam) {
+		exams.remove(exam);
+		exam.setBlog(null);
+	}
 }

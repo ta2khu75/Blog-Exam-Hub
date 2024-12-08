@@ -10,7 +10,6 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import java.util.List;
-
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.ExamLevel;
 import com.ta2khu75.quiz.model.ExamStatus;
@@ -19,11 +18,11 @@ import com.ta2khu75.quiz.model.ExamStatus;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = { "author","blog", "examCategory", "quizzes", "examResults" })
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ToString(exclude = {"author","blog", "quizzes","examCategory", "examResults"})
+@ToString(exclude = { "author", "blog", "quizzes", "examCategory", "examResults" })
 public class Exam extends EntityBase {
-	@Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")	
+	@Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
 	String title;
 	@Column(nullable = false)
 	Integer duration;
@@ -47,8 +46,8 @@ public class Exam extends EntityBase {
 	Blog blog;
 	@ManyToOne
 	ExamCategory examCategory;
-	@OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "exam", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	List<Quiz> quizzes;
-	@OneToMany(mappedBy = "exam", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "exam", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	List<ExamResult> examResults;
 }

@@ -19,11 +19,13 @@ import com.ta2khu75.quiz.event.BlogExamEvent;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.exception.UnAuthorizedException;
 import com.ta2khu75.quiz.mapper.BlogMapper;
+import com.ta2khu75.quiz.mapper.ExamMapper;
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.TargetType;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Blog;
 import com.ta2khu75.quiz.model.entity.BlogTag;
+import com.ta2khu75.quiz.model.entity.Exam;
 import com.ta2khu75.quiz.model.request.BlogRequest;
 import com.ta2khu75.quiz.model.request.search.BlogSearchRequest;
 import com.ta2khu75.quiz.model.response.BlogResponse;
@@ -32,6 +34,7 @@ import com.ta2khu75.quiz.model.response.details.BlogDetailsResponse;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.BlogRepository;
 import com.ta2khu75.quiz.repository.BlogTagRepository;
+import com.ta2khu75.quiz.repository.ExamRepository;
 import com.ta2khu75.quiz.service.BlogService;
 import com.ta2khu75.quiz.service.util.FileUtil;
 import com.ta2khu75.quiz.service.util.FileUtil.Folder;
@@ -47,15 +50,20 @@ public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper>
 	private final FileUtil fileUtil;
 	private final AccountRepository accountRepository;
 	private final BlogTagRepository blogTagRepository;
+	private final ExamRepository examRepository;
+	private final ExamMapper examMapper;
 	private final ApplicationEventPublisher applicationEventPublisher;
 
-	public BlogServiceImpl(BlogRepository repository, BlogMapper mapper, FileUtil fileUtil,
-			AccountRepository accountRepository, BlogTagRepository blogTagRepository, ApplicationEventPublisher applicationEventPublisher) {
+	public BlogServiceImpl(BlogRepository repository, BlogMapper mapper, FileUtil fileUtil, ExamMapper examMapper,
+			AccountRepository accountRepository, BlogTagRepository blogTagRepository, ExamRepository examRepository,
+			ApplicationEventPublisher applicationEventPublisher) {
 		super(repository, mapper);
 		this.fileUtil = fileUtil;
+		this.examMapper = examMapper;
 		this.accountRepository = accountRepository;
 		this.blogTagRepository = blogTagRepository;
 		this.applicationEventPublisher = applicationEventPublisher;
+		this.examRepository = examRepository;
 	}
 
 	private List<BlogTag> saveAll(List<String> blogTags) {
@@ -78,13 +86,24 @@ public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper>
 	@Transactional
 	public BlogResponse create(@Valid BlogRequest request, MultipartFile file) throws IOException {
 		Blog blog = mapper.toEntity(request);
-		String email = SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new UnAuthorizedException("You must be login"));
+		String email = SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new UnAuthorizedException("You must be login"));
 		Account account = FunctionUtil.findOrThrow(email, Account.class, accountRepository::findByEmail);
 		blog.setAuthor(account);
 		fileUtil.saveFile(blog, file, Folder.BLOG_FOLDER, Blog::setImagePath);
 		List<BlogTag> blogTags = this.saveAll(request.getBlogTags());
 		blog.setBlogTags(blogTags);
-		blog=repository.save(blog);
+		if (request.getExamIds() != null && !request.getExamIds().isEmpty()) {
+			List<Exam> exams = examRepository.findAllById(request.getExamIds());
+			for (Exam exam : exams) {
+				blog.addExam(exam); // Đồng bộ hai chiều
+			}
+		}
+		if (request.getExamIds() != null && !request.getExamIds().isEmpty()) {
+			List<Exam> exams = examRepository.findAllById(request.getExamIds());
+			blog.setExams(new HashSet<>(exams));
+		}
+		blog = repository.save(blog);
 		applicationEventPublisher.publishEvent(new BlogExamEvent(this, blog.getId(), TargetType.BLOG));
 		return save(blog);
 	}
@@ -95,13 +114,22 @@ public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper>
 
 	@Override
 	@Validated({ Default.class })
+	@Transactional
 	public BlogResponse update(String id, @Valid BlogRequest request, MultipartFile file) throws IOException {
 		Blog blog = FunctionUtil.findOrThrow(id, Blog.class, repository::findById);
 		mapper.update(request, blog);
 		fileUtil.saveFile(blog, file, Folder.BLOG_FOLDER, Blog::setImagePath);
 		List<BlogTag> blogTags = saveAll(request.getBlogTags());
 		blog.setBlogTags(blogTags);
-//		blog.setLastModifiedAt(LocalDateTime.now());
+		// Xóa các Exams cũ
+		blog.getExams().forEach(exam -> exam.setBlog(null));
+		blog.getExams().clear();
+		if (request.getExamIds() != null && !request.getExamIds().isEmpty()) {
+			List<Exam> exams = examRepository.findAllById(request.getExamIds());
+			for (Exam exam : exams) {
+				blog.addExam(exam); // Đồng bộ hai chiều
+			}
+		}
 		return save(repository.save(blog));
 	}
 
@@ -125,10 +153,11 @@ public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper>
 	@Override
 	public PageResponse<BlogResponse> searchBlog(BlogSearchRequest blogSearchRequest) {
 		Pageable pageable = Pageable.ofSize(blogSearchRequest.getSize()).withPage(blogSearchRequest.getPage() - 1);
-		return mapper
-				.toPageResponse(repository.searchBlog(blogSearchRequest.getBlogTagNames(), blogSearchRequest.getKeyword(),
-						blogSearchRequest.getAuthorEmail(), blogSearchRequest.getAuthorId(), blogSearchRequest.getMinView(), blogSearchRequest.getMaxView(), blogSearchRequest.getAccessModifier(), pageable));
-		}
+		return mapper.toPageResponse(repository.searchBlog(blogSearchRequest.getBlogTagNames(),
+				blogSearchRequest.getKeyword(), blogSearchRequest.getAuthorEmail(), blogSearchRequest.getAuthorId(),
+				blogSearchRequest.getMinView(), blogSearchRequest.getMaxView(), blogSearchRequest.getAccessModifier(),
+				pageable));
+	}
 
 	@Override
 	public Long countByAuthorEmail(String authorEmail) {

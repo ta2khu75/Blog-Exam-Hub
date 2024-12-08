@@ -15,18 +15,16 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Data
 @Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true)
+@ToString(exclude = { "role", "blogs", "exams", "followers", "following" })
+@EqualsAndHashCode(callSuper = true, exclude = { "role", "blogs", "exams", "followers", "following" })
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ToString(exclude = { "exams", "comments", "blogs", "examResults" })
 public class Account extends EntityBase implements UserDetails {
 	private static final long serialVersionUID = -6436446209727776976L;
 	@Column(unique = true, nullable = false)
@@ -46,22 +44,14 @@ public class Account extends EntityBase implements UserDetails {
 	boolean enabled;
 	@Builder.Default
 	boolean nonLocked = true;
+
 	@ManyToOne
 	Role role;
 	@OneToMany(mappedBy = "author")
-	@JsonIgnore
-//	@JsonManagedReference("account-blog")
 	List<Blog> blogs;
-	@OneToMany(mappedBy = "author")
-//	@JsonManagedReference("account-comment")
-	@JsonIgnore
-	List<Comment> comments;
 	@OneToMany(mappedBy = "author")
 	@JsonIgnore
 	List<Exam> exams;
-	@OneToMany(mappedBy = "account")
-	@JsonIgnore
-	List<ExamResult> examResults;
 	@OneToMany(mappedBy = "following")
 	@JsonIgnore
 	Set<Follow> followers;

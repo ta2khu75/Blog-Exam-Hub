@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +47,7 @@ import com.ta2khu75.quiz.util.SecurityUtil;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -78,8 +80,9 @@ public class ExamServiceImpl implements ExamService {
 	@Transactional
 	@Validated(value = { Default.class })
 	public ExamResponse create(@Valid ExamRequest examRequest, MultipartFile file) throws IOException {
-		String email=SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new UnAuthorizedException("You must be login"));
-		Account account=FunctionUtil.findOrThrow(email, Account.class, accountRepository::findByEmail);
+		String email = SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new UnAuthorizedException("You must be login"));
+		Account account = FunctionUtil.findOrThrow(email, Account.class, accountRepository::findByEmail);
 		Exam exam = mapper.toEntity(examRequest);
 		fileUtil.saveFile(exam, file, Folder.EXAM_FOLDER, Exam::setImagePath);
 		exam.setExamCategory(this.findExamCategoryById(examRequest.getExamCategoryId()));
@@ -153,7 +156,7 @@ public class ExamServiceImpl implements ExamService {
 		Exam exam = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));
 		ExamResult examHistory = ExamResult.builder().account(account).exam(exam)
-				.endTime(Instant.now().plusSeconds((exam.getDuration()*60L) + 60)).build();
+				.endTime(Instant.now().plusSeconds((exam.getDuration() * 60L) + 60)).build();
 		examHistoryRepository.save(examHistory);
 		return mapper.toDetailsResponse(exam);
 	}
@@ -161,10 +164,10 @@ public class ExamServiceImpl implements ExamService {
 	@Override
 	public PageResponse<ExamResponse> searchExam(ExamSearchRequest examSearchRequest) {
 		Pageable pageable = Pageable.ofSize(examSearchRequest.getSize()).withPage(examSearchRequest.getPage() - 1);
-		return mapper.toPageResponse(
-				repository.searchExam(examSearchRequest.getKeyword(), examSearchRequest.getExamCategoryIds(),
-						examSearchRequest.getAuthorEmail(), examSearchRequest.getAuthorId(),
-						examSearchRequest.getExamLevels(), examSearchRequest.getMinDuration(), examSearchRequest.getMaxDuration(), examSearchRequest.getAccessModifier(), pageable));
+		return mapper.toPageResponse(repository.searchExam(examSearchRequest.getKeyword(),
+				examSearchRequest.getExamCategoryIds(), examSearchRequest.getAuthorEmail(),
+				examSearchRequest.getAuthorId(), examSearchRequest.getExamLevels(), examSearchRequest.getMinDuration(),
+				examSearchRequest.getMaxDuration(), examSearchRequest.getAccessModifier(), pageable));
 	}
 
 	@Override
@@ -175,5 +178,17 @@ public class ExamServiceImpl implements ExamService {
 	@Override
 	public Long countByAuthorIdAndAccessModifier(String authorId, AccessModifier accessModifier) {
 		return repository.countByAuthorIdAndAccessModifier(authorId, accessModifier);
+	}
+
+	@Override
+	public List<ExamResponse> myReadAllById(List<String> ids) {
+		return repository.findAllById(ids).stream().map(mapper::toResponse).collect(Collectors.toList());
+	}
+
+	@Override
+	public PageResponse<ExamResponse> mySearchExamNull(String keyword, Pageable pageable) {
+		String email = SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new UnAuthorizedException("You must login first!"));
+		Page<Exam> response = repository.mySearchExamBlogNull(email, keyword, pageable);
+		return mapper.toPageResponse(response);
 	}
 }

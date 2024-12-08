@@ -19,5 +19,4 @@ public abstract class BlogBase {
 	AccessModifier accessModifier;
 	@NotEmpty(message = "Blog tags must not be empty")
 	List<String> blogTags;
-	List<String> examIds;
 }

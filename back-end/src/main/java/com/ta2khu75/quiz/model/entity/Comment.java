@@ -1,7 +1,5 @@
 package com.ta2khu75.quiz.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -20,9 +18,7 @@ public class Comment extends EntityBase {
 	String content;
 	String filePath;
 	@ManyToOne
-//	@JsonBackReference("account-comment")
 	Account author;
-//	@JsonBackReference("blog-comment")
 	@ManyToOne
 	Blog blog;
 }

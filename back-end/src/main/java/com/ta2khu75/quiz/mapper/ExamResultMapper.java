@@ -12,17 +12,14 @@ import com.ta2khu75.quiz.model.response.ExamResultResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.ExamResultDetailsResponse;
 
-@Mapper(componentModel = "spring", uses = { AccountMapper.class, InfoMapper.class, ExamMapper.class })
+@Mapper(componentModel = "spring", uses = { InfoMapper.class, ExamMapper.class, AccountMapper.class })
 public interface ExamResultMapper {
 	@Named("toExamHistoryResponse")
-	@Mapping(target = "exam.author", source = "exam.author", qualifiedByName = "toAccountResponse")
-	@Mapping(target = "exam.quizzes", source = "exam.quizzes")
 	@Mapping(target = "info", source = "examResult", qualifiedByName = "toInfoResponse")
 	@Mapping(target = "account", source = "account", qualifiedByName = "toAccountResponse")
 	@Mapping(target = "exam", source = "exam", qualifiedByName = "toExamDetailsResponse")
 	ExamResultResponse toResponse(ExamResult examResult);
 
-	@Mapping(target = "exam.author", source = "exam.author", qualifiedByName = "toAccountResponse")
 	@Mapping(target = "info", source = "examResult", qualifiedByName = "toInfoResponse")
 	@Mapping(target = "account", source = "account", qualifiedByName = "toAccountResponse")
 	@Mapping(target = "exam", source = "exam", qualifiedByName = "toExamDetailsResponse")
@@ -40,10 +37,4 @@ public interface ExamResultMapper {
 		answerResponse.setAnswer(answer.getAnswerString());
 		return answerResponse;
 	}
-//
-//	default String toResponse(Role role) {
-//		if (role == null)
-//			return null;
-//		return role.getName();
-//	}
 }

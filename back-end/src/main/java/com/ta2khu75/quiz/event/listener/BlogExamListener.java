@@ -48,8 +48,8 @@ public class BlogExamListener implements ApplicationListener<BlogExamEvent> {
 			return notification;
 		}).collect(Collectors.toSet());
 		List<Notification> notifications = repository.saveAll(notificationSet);
-		notifications.forEach(notification -> {
-			messagingTemplate.convertAndSendToUser(notification.getAccount().getUsername(),"/queue/notifications", notification);
-		});
+//		notifications.forEach(notification -> {
+//			messagingTemplate.convertAndSendToUser(notification.getAccount().getUsername(),"/queue/notifications", notification);
+//		});
 	}
 }

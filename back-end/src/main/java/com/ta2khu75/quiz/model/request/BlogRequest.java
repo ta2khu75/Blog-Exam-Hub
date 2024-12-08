@@ -1,6 +1,8 @@
 package com.ta2khu75.quiz.model.request;
 
 
+import java.util.List;
+
 import com.ta2khu75.quiz.model.base.BlogBase;
 
 import jakarta.validation.constraints.NotNull;
@@ -14,4 +16,5 @@ import lombok.experimental.FieldDefaults;
 public class BlogRequest extends BlogBase {
 	@NotNull(message = "Content must not be null")
 	String content;
+	List<String> examIds;
 }

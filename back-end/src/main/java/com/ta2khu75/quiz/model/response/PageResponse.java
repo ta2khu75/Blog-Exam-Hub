@@ -2,8 +2,6 @@ package com.ta2khu75.quiz.model.response;
 
 import java.util.List;
 
-import com.google.auto.value.AutoValue.Builder;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
