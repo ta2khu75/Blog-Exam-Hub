@@ -148,7 +148,9 @@ const router = createBrowserRouter([
         children: [{
           path: "create",
           element: <ExamCreateChild />
-        }, { path: ":examId", element: <ExamCreateChild /> }]
+        },
+        { path: ":examId", element: <ExamCreateChild /> }
+        ]
       }, {
         path: "manager-blog/create",
         element: (

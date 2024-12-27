@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -66,6 +67,7 @@ public class BlogController {
 		BlogRequest blogRequest = mapper.readValue(request, BlogRequest.class);
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(blogRequest, file));
 	}
+	@PreAuthorize("@ownerSecurity.isBlogOwner(#id)")
 	@PutMapping(path = "/{id}", consumes = "multipart/form-data")
 	public ResponseEntity<BlogResponse> updateBlog(@PathVariable("id") String id, @RequestPart("blog") String request,
 			@RequestPart(name = "image", required = false) MultipartFile file) throws IOException {
@@ -74,6 +76,7 @@ public class BlogController {
 	}
 
 	@DeleteMapping("/{id}")
+	@PreAuthorize("@ownerSecurity.isBlogOwner(#id) or hasRole('ROOT')")
 	public ResponseEntity<BlogResponse> deleteBlog(@PathVariable("id") String id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();

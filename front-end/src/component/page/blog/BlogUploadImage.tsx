@@ -1,5 +1,5 @@
 import { getDownloadURL, ref, uploadBytes, UploadResult } from "firebase/storage";
-import { fireBaseStorage } from "../../../config/FirebaseConfig";
+import { firebaseStorage } from "../../../config/FirebaseConfig";
 import { v4 as uuidv4 } from 'uuid';
 import FileUtil from "../../../util/FileUtil";
 import PopoverActionElement from "../../element/PopoverActionElement";
@@ -16,7 +16,7 @@ const BlogUploadImage = ({ handleAddImage, setOpen }: Props) => {
     const handleUploadChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files ? Array.from(e.target.files) : [];
         files.forEach(async (file: File) => {
-            const imgRef = ref(fireBaseStorage, `/frontend/images/${uuidv4()}.${FileUtil.getFileExtension(file)}`);
+            const imgRef = ref(firebaseStorage, `/frontend/images/${uuidv4()}.${FileUtil.getFileExtension(file)}`);
             const uploadResult: UploadResult = await uploadBytes(imgRef, file);
             const downloadUrl = await getDownloadURL(uploadResult.ref);
             console.log(uploadResult);

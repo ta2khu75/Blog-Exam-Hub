@@ -16,10 +16,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ta2khu75.quiz.event.BlogExamEvent;
-import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.exception.UnAuthorizedException;
 import com.ta2khu75.quiz.mapper.BlogMapper;
-import com.ta2khu75.quiz.mapper.ExamMapper;
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.TargetType;
 import com.ta2khu75.quiz.model.entity.Account;
@@ -51,15 +49,13 @@ public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper>
 	private final AccountRepository accountRepository;
 	private final BlogTagRepository blogTagRepository;
 	private final ExamRepository examRepository;
-	private final ExamMapper examMapper;
 	private final ApplicationEventPublisher applicationEventPublisher;
 
-	public BlogServiceImpl(BlogRepository repository, BlogMapper mapper, FileUtil fileUtil, ExamMapper examMapper,
+	public BlogServiceImpl(BlogRepository repository, BlogMapper mapper, FileUtil fileUtil,
 			AccountRepository accountRepository, BlogTagRepository blogTagRepository, ExamRepository examRepository,
 			ApplicationEventPublisher applicationEventPublisher) {
 		super(repository, mapper);
 		this.fileUtil = fileUtil;
-		this.examMapper = examMapper;
 		this.accountRepository = accountRepository;
 		this.blogTagRepository = blogTagRepository;
 		this.applicationEventPublisher = applicationEventPublisher;

@@ -34,9 +34,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class InterceptorAuthorization implements HandlerInterceptor {
-	AccountRepository accountRepository;
 	@NonFinal
 	AntPathMatcher pathMatcher = new AntPathMatcher();
+	AccountRepository accountRepository;
 	EndpointUtil endpointUtil;
 	RedisUtil redisUtil;
 	RoleService roleService;

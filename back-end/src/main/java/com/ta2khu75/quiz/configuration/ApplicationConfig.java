@@ -9,16 +9,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+//import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.ta2khu75.quiz.interceptor.InterceptorAuthorization;
+//import com.ta2khu75.quiz.interceptor.InterceptorAuthorization;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig implements WebMvcConfigurer {
-	private final InterceptorAuthorization interceptorAuthorization;
+//	private final InterceptorAuthorization interceptorAuthorization;
 	private final List<String> MEDIA_TYPES = Arrays.asList(MediaType.APPLICATION_JSON_VALUE);
 
 	@Override
@@ -27,10 +27,10 @@ public class ApplicationConfig implements WebMvcConfigurer {
 				.allowCredentials(true);
 	}
 
-	@Override
-	public void addInterceptors(@NonNull InterceptorRegistry registry) {
-		registry.addInterceptor(interceptorAuthorization);
-	}
+//	@Override
+//	public void addInterceptors(@NonNull InterceptorRegistry registry) {
+//		registry.addInterceptor(interceptorAuthorization);
+//	}
 
 	@Bean
 	EndpointMediaTypes endpointMediaTypes() {

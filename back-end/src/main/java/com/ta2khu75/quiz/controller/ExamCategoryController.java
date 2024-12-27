@@ -32,7 +32,6 @@ public class ExamCategoryController {
 	public ResponseEntity<List<ExamCategoryResponse>> readAllExamCategory() {
 		return ResponseEntity.ok(examCategoryService.readAll());
 	}
-
 	@PostMapping
 	public ResponseEntity<ExamCategoryResponse> createExamCategory(@RequestBody ExamCategoryRequest request) {
 		return ResponseEntity.ok(examCategoryService.create(request));

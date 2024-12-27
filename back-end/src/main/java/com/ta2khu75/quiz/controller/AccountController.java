@@ -43,6 +43,7 @@ public class AccountController {
 	}
 
 	@GetMapping
+	
 	public ResponseEntity<PageResponse<AccountAuthDetailsResponse>> readPage(
 			@RequestParam(name = "search", required = false, defaultValue = "") String search,
 			@RequestParam(name = "size", required = false, defaultValue = "5") int size,

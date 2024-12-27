@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -65,6 +66,7 @@ public class ExamController {
 	}
 
 	@PutMapping(path = "{id}", consumes = "multipart/form-data")
+	@PreAuthorize("@ownerSecurity.isExamOwner(#id)")
 	public ResponseEntity<ExamResponse> updateExam(@PathVariable(name = "id") String id,
 			@RequestPart("exam_request") String examRequestString,
 			@RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
@@ -73,6 +75,7 @@ public class ExamController {
 	}
 
 	@DeleteMapping("{id}")
+	@PreAuthorize("@ownerSecurity.isExamOwner(#id) or hasRole('ROOT')")
 	public ResponseEntity<Void> deleteExam(@PathVariable("id") String id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();

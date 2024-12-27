@@ -27,6 +27,10 @@ public final class SecurityUtil {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(extractPrincipal(securityContext.getAuthentication()));
     }
+//    public static Optional<String> getCurrentUser() {
+//        SecurityContext securityContext = SecurityContextHolder.getContext();
+//        return Optional.ofNullable(extractPrincipal(securityContext.getAuthentication()));
+//    }
 
     private static String extractPrincipal(Authentication authentication) {
         if (authentication == null) {

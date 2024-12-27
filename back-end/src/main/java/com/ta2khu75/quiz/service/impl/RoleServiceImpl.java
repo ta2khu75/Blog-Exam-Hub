@@ -19,6 +19,7 @@ import com.ta2khu75.quiz.repository.RoleRepository;
 import com.ta2khu75.quiz.service.RoleService;
 import com.ta2khu75.quiz.service.util.RedisUtil;
 
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -26,7 +27,7 @@ import lombok.experimental.FieldDefaults;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class RoleServiceImpl  implements RoleService {
+public class RoleServiceImpl implements RoleService {
 	RoleRepository repository;
 	PermissionRepository permissionRepository;
 	ApplicationEventPublisher eventPublisher;
@@ -36,6 +37,7 @@ public class RoleServiceImpl  implements RoleService {
 	@Override
 	public RoleDetailsResponse create(RoleRequest request) {
 		Role role = mapper.toEntity(request);
+		role.setName(role.getName().toUpperCase());
 		role.setPermissions(new HashSet<>(permissionRepository.findAllById(request.getPermissionIds())));
 		return mapper.toDetailsResponse(repository.save(role));
 	}
@@ -44,24 +46,14 @@ public class RoleServiceImpl  implements RoleService {
 	public RoleDetailsResponse update(Long id, RoleRequest request) {
 		Role role = this.find(id);
 		mapper.update(request, role);
-		if (request.getPermissionIds().size() != role.getPermissions().size() || !role.getPermissions().stream().map(Permission::getId).collect(Collectors.toSet()).equals(request.getPermissionIds())) {
+		role.setName(role.getName().toUpperCase());
+		if (request.getPermissionIds().size() != role.getPermissions().size() || !role.getPermissions().stream()
+				.map(Permission::getId).collect(Collectors.toSet()).equals(request.getPermissionIds())) {
 			role.setPermissions(new HashSet<>(permissionRepository.findAllById(request.getPermissionIds())));
 		}
 		role = repository.save(role);
 		eventPublisher.publishEvent(new RoleChangeEvent(this, role.getId()));
 		return mapper.toDetailsResponse(role);
-	}
-
-	@Override
-	public Role find(Long id) {
-		Role role = redisUtil.read(id.toString(), Role.class);
-		if (role == null) {
-			role = repository.findById(id)
-					.orElseThrow(() -> new NotFoundException("Could not found role with id: " + id));
-			role.getPermissions().size();
-			redisUtil.create(id.toString(), role);
-		}
-		return role;
 	}
 
 	@Override
@@ -77,6 +69,32 @@ public class RoleServiceImpl  implements RoleService {
 	@Override
 	public List<RoleDetailsResponse> readAll() {
 		return repository.findAll().stream().map(mapper::toDetailsResponse).toList();
+	}
+
+	@Override
+	public Role find(Long id) {
+		Role role = redisUtil.read(id.toString(), Role.class);
+		if (role == null) {
+			role = repository.findById(id)
+					.orElseThrow(() -> new NotFoundException("Could not found role with id: " + id));
+			role.getPermissions().size();
+			redisUtil.create(role.getName(), role);
+		}
+		return role;
+	}
+
+	@Override
+	@Transactional
+	public Role readByName(String roleName) {
+		Role role = redisUtil.read(roleName, Role.class);
+		System.out.println(role==null);
+		if (role == null) {
+			role = repository.findByName(roleName) .orElseThrow(() -> new NotFoundException("Could not found role with name: " + roleName));
+			role.getPermissions().size();
+			redisUtil.create(role.getName(), role);
+		}
+		System.out.println(role.toString());
+		return role;
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.ta2khu75.quiz.repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.domain.Page;
@@ -35,4 +36,5 @@ public interface ExamRepository extends JpaRepository<Exam, String>, JpaSpecific
 	Long countByAuthorIdAndAccessModifier(String authorId, AccessModifier accessModifier);
 
 	Long countByAuthorEmail(String authorEmail);
+	Optional<Exam> findByIdAndAuthorEmail(String examId, String email);
 }

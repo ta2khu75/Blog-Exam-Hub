@@ -18,9 +18,9 @@ import com.ta2khu75.quiz.model.ExamStatus;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = { "author","blog", "examCategory", "quizzes", "examResults" })
+@EqualsAndHashCode(callSuper = true, exclude = { "author","blog", "examCategory", "quizzes"})
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ToString(exclude = { "author", "blog", "quizzes", "examCategory", "examResults" })
+@ToString(exclude = { "author", "blog", "quizzes", "examCategory"})
 public class Exam extends EntityBase {
 	@Column(nullable = false, columnDefinition = "NVARCHAR(MAX)")
 	String title;
@@ -48,6 +48,4 @@ public class Exam extends EntityBase {
 	ExamCategory examCategory;
 	@OneToMany(mappedBy = "exam", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	List<Quiz> quizzes;
-	@OneToMany(mappedBy = "exam", cascade = CascadeType.REMOVE, orphanRemoval = true)
-	List<ExamResult> examResults;
 }

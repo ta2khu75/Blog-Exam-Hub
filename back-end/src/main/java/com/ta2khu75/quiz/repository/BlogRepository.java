@@ -1,6 +1,7 @@
 package com.ta2khu75.quiz.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,4 +26,5 @@ public interface BlogRepository extends JpaRepository<Blog, String> {
 			@Param("accessModifier") AccessModifier accessModifier, Pageable pageable);
 	Long countByAuthorIdAndAccessModifier(String authorId, AccessModifier accessModifier);
 	Long countByAuthorEmail(String authorEmail);
+	Optional<Blog> findByIdAndAuthorEmail(String blogId, String email);
 }

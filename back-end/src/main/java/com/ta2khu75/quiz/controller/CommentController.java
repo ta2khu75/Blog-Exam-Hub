@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,6 +48,7 @@ public class CommentController {
 	}
 
 	@DeleteMapping("/{id}")
+	@PreAuthorize("@ownerSecurity.isCommentOwner(#id) or hasRole('ROOT')")
 	public ResponseEntity<BlogResponse> deleteComment(@PathVariable("id") String id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
@@ -59,6 +61,7 @@ public class CommentController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(commentRequest, file));
 	}
 
+	@PreAuthorize("@ownerSecurity.isCommentOwner(#id)")
 	@PutMapping(path = "/{id}", consumes = "multipart/form-data")
 	public ResponseEntity<CommentResponse> updateComment(@PathVariable("id") String id, @RequestPart("comment") String request,
 			@RequestPart(name = "image", required = false) MultipartFile file) throws IOException {

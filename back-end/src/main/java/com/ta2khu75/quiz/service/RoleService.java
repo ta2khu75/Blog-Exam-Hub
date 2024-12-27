@@ -9,4 +9,5 @@ import com.ta2khu75.quiz.model.response.details.RoleDetailsResponse;
 public interface RoleService extends BaseService<Long, RoleRequest, RoleDetailsResponse> {
 	List<RoleDetailsResponse> readAll();
 	Role find(Long id);
+	Role readByName(String roleName);
 }

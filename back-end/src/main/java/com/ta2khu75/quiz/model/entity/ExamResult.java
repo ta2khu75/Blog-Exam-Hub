@@ -25,6 +25,7 @@ public class ExamResult extends EntityBase {
 	@ManyToOne
 	Account account;
 	@ManyToOne
+	@JoinColumn(nullable = false)
 	Exam exam;
 	@OneToMany(mappedBy = "examResult", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	List<UserAnswer> userAnswers;
