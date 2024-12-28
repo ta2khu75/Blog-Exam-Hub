@@ -2,8 +2,6 @@ package com.ta2khu75.quiz.util;
 
 import java.util.Optional;
 import java.util.function.Function;
-
-import com.cloudinary.provisioning.Account;
 import com.ta2khu75.quiz.exception.NotFoundException;
 
 public class FunctionUtil {

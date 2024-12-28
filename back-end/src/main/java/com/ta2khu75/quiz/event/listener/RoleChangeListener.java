@@ -5,8 +5,8 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import com.ta2khu75.quiz.event.RoleChangeEvent;
-import com.ta2khu75.quiz.model.entity.Role;
 import com.ta2khu75.quiz.service.util.RedisUtil;
+import com.ta2khu75.quiz.service.util.RedisUtil.NameModel;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +21,6 @@ public class RoleChangeListener implements ApplicationListener<RoleChangeEvent> 
 	RedisUtil redisUtil;
 	@Override
 	public void onApplicationEvent(@NonNull RoleChangeEvent event) {
-		redisUtil.delete(event.getRoleId().toString(), Role.class);
+		redisUtil.create(NameModel.ROLE, event.getRole().getName(), event.getRole());
 	}
 }

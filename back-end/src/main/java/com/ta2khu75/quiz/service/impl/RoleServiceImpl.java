@@ -18,6 +18,7 @@ import com.ta2khu75.quiz.repository.PermissionRepository;
 import com.ta2khu75.quiz.repository.RoleRepository;
 import com.ta2khu75.quiz.service.RoleService;
 import com.ta2khu75.quiz.service.util.RedisUtil;
+import com.ta2khu75.quiz.service.util.RedisUtil.NameModel;
 
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -52,7 +53,7 @@ public class RoleServiceImpl implements RoleService {
 			role.setPermissions(new HashSet<>(permissionRepository.findAllById(request.getPermissionIds())));
 		}
 		role = repository.save(role);
-		eventPublisher.publishEvent(new RoleChangeEvent(this, role.getId()));
+		eventPublisher.publishEvent(new RoleChangeEvent(this, role));
 		return mapper.toDetailsResponse(role);
 	}
 
@@ -73,12 +74,12 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public Role find(Long id) {
-		Role role = redisUtil.read(id.toString(), Role.class);
+		Role role = redisUtil.read(NameModel.ROLE,id, Role.class);
 		if (role == null) {
 			role = repository.findById(id)
 					.orElseThrow(() -> new NotFoundException("Could not found role with id: " + id));
 			role.getPermissions().size();
-			redisUtil.create(role.getName(), role);
+			redisUtil.create(NameModel.ROLE, role.getName(), role);
 		}
 		return role;
 	}
@@ -86,12 +87,11 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	@Transactional
 	public Role readByName(String roleName) {
-		Role role = redisUtil.read(roleName, Role.class);
-		System.out.println(role==null);
+		Role role=redisUtil.read(NameModel.ROLE, roleName, Role.class);
 		if (role == null) {
 			role = repository.findByName(roleName) .orElseThrow(() -> new NotFoundException("Could not found role with name: " + roleName));
 			role.getPermissions().size();
-			redisUtil.create(role.getName(), role);
+			redisUtil.create(NameModel.ROLE, roleName, role);
 		}
 		System.out.println(role.toString());
 		return role;

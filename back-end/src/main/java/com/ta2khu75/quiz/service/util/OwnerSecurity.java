@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import com.ta2khu75.quiz.exception.UnAuthenticationException;
-import com.ta2khu75.quiz.exception.UnAuthorizedException;
 import com.ta2khu75.quiz.repository.BlogRepository;
 import com.ta2khu75.quiz.repository.CommentRepository;
 import com.ta2khu75.quiz.repository.ExamRepository;
@@ -37,9 +36,6 @@ public class OwnerSecurity {
 		Optional<?> optional= commentRepository.findByIdAndAuthorEmail(commentId, username);
 		return optional.isPresent();
 	}
-//	private boolean isAdmin(String usename) {
-//		return true;
-//	}
 	private String getUsername() {
 		return SecurityUtil.getCurrentUserLogin().orElseThrow(()->new UnAuthenticationException("You must be login"));
 	}
