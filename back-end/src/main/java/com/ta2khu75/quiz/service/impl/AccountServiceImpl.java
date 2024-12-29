@@ -30,6 +30,7 @@ import com.ta2khu75.quiz.repository.RoleRepository;
 import com.ta2khu75.quiz.scheduling.SendMailScheduling;
 import com.ta2khu75.quiz.service.AccountService;
 import com.ta2khu75.quiz.util.EmailTemplateUtil;
+import com.ta2khu75.quiz.util.FunctionUtil;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
 import jakarta.mail.MessagingException;
@@ -137,7 +138,7 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public AccountDetailsResponse readMyAccount() {
+	public AccountDetailsResponse readMe() {
 		String email = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new NotFoundException("Could not find email"));
 		Account account = repository.findByEmail(email)
@@ -150,6 +151,14 @@ public class AccountServiceImpl implements AccountService {
 		Account account = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found account with id: " + id));
 		return mapper.toDetailsResponse(account);
+	}
+
+	@Override
+	public AccountAuthDetailsResponse updateLock(String id) {
+		Account account=FunctionUtil.findOrThrow(id, Account.class, repository::findById);
+		account.setNonLocked(!account.isNonLocked());
+		return mapper.toAuthDetailsResponse(repository.save(account));
+		
 	}
 
 }

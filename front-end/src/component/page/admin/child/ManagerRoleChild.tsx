@@ -28,6 +28,13 @@ const ManagerRoleChild = () => {
                     handleCancelClick()
                 }
             })
+        }else{
+            RoleService.create(values).then(response => {
+                if (response.success) {
+                    setRoles([...roles, response.data])
+                    handleCancelClick()
+                }
+            })
         }
     };
     const [open, setOpen] = useState(false);
@@ -61,6 +68,10 @@ const ManagerRoleChild = () => {
         setRole(d);
         setOpen(true);
     }
+    const handleAddClick = () => {
+        form.resetFields();
+        setOpen(true);
+    }
     const handleCancelClick = () => {
         setOpen(false);
         setRole(undefined);
@@ -81,7 +92,9 @@ const ManagerRoleChild = () => {
     };
     return (
         <div>
-            <h2>Manager Role</h2>
+            <div className="d-flex align-items-center">
+                <h2>Manager Role</h2><Button className="ms-5" type="primary" onClick={() => handleAddClick()}>Add Role</Button>
+            </div>
             <ModalElement width={1500} open={open} handleCancel={handleCancelClick} >
                 <Form
                     form={form}
@@ -92,7 +105,7 @@ const ManagerRoleChild = () => {
                         label="Name"
                         name={'name'}
                     >
-                        <Input disabled />
+                        <Input readOnly={form.getFieldValue("name")?true:false} />
                     </Form.Item>
                     <Form.Item
                         label="Permissions"

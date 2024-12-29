@@ -25,12 +25,22 @@ const LoginPage = () => {
       if (d.success) {
         dispatch(setAccount(d.data))
         toast.success("login successful");
-        if (routerRedirect.length > 0) {
+        if (routerRedirect.length > 0 && !routerRedirect.startsWith("/admin")) {
           navigate(routerRedirect)
           dispatch(resetRouterRedirect())
         } else {
           navigate("/")
         }
+        // if (d.data.account?.role == "ROOT") {
+        //   navigate("/admin")
+        // } else {
+        //   if (routerRedirect.length > 0 && routerRedirect.startsWith("/admin")) {
+        //     navigate(routerRedirect)
+        //     dispatch(resetRouterRedirect())
+        //   } else {
+        //     navigate("/")
+        //   }
+        // }
       } else {
         toast.error(d.message_error);
       }

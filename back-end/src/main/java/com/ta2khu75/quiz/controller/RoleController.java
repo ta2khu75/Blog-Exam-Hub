@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,4 +35,9 @@ public class RoleController {
 	public ResponseEntity<RoleResponse> updateRole(@PathVariable("id") Long id, @Valid @RequestBody RoleRequest request) {
 		return ResponseEntity.ok(roleService.update(id, request));
 	}
+	@PostMapping
+	public ResponseEntity<RoleResponse> createRole(@Valid @RequestBody RoleRequest request) {
+		return ResponseEntity.ok(roleService.create(request));
+	}
+	
 }

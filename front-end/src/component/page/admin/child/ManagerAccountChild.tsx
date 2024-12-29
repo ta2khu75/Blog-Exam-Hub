@@ -85,6 +85,7 @@ const ManagerAccountChild = () => {
   }
   return (
     <>
+      <h2>Manager Account</h2>
       <Input size='large' className='mb-5' placeholder='Search' value={search} type='text' onChange={(e) => handleSearchChange(e.target.value)} />
       <ModalElement width={1500} handleCancel={handleCancelClick} open={openEdit}>
         <Form

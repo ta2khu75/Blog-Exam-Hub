@@ -2,7 +2,7 @@ package com.ta2khu75.quiz.service.util;
 
 import java.util.Optional;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.ta2khu75.quiz.exception.UnAuthenticationException;
 import com.ta2khu75.quiz.repository.BlogRepository;
@@ -14,7 +14,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-@Service
+@Component
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class OwnerSecurity {

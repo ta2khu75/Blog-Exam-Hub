@@ -43,6 +43,7 @@ const ManagerExamCategoryChild = () => {
     }
     return (
         <>
+            <h2>Manager Exam Category</h2>
             <Button onClick={() => handleCreateClick()}> Create Exam Category</Button>
             <ModalElement handleCancel={handleCancelClick} open={open} >
                 <ExamCategoryForm examCategory={examCategory} setExamCategories={setExamCategories} />

@@ -23,7 +23,8 @@ public interface AccountService {
     PageResponse<AccountAuthDetailsResponse> readPage(String search,Pageable pageable);
     AccountResponse updateInfo(AccountInfoRequest request);
     boolean verify(String code);
-    AccountDetailsResponse readMyAccount();
+    AccountDetailsResponse readMe();
     AccountDetailsResponse readDetails(String id);
+    AccountAuthDetailsResponse updateLock(String id);
 //    AccountDetailsResponse update(String id,AccountPermissionRequest request);
 }

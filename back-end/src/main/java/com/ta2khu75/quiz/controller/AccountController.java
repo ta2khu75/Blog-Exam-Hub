@@ -43,7 +43,6 @@ public class AccountController {
 	}
 
 	@GetMapping
-	
 	public ResponseEntity<PageResponse<AccountAuthDetailsResponse>> readPage(
 			@RequestParam(name = "search", required = false, defaultValue = "") String search,
 			@RequestParam(name = "size", required = false, defaultValue = "5") int size,
@@ -86,8 +85,13 @@ public class AccountController {
 		return new RedirectView(clientRedirectUrl);
 	}
 	@GetMapping("/{id}/details")
-	@Transactional
 	public ResponseEntity<AccountDetailsResponse> readAccountDetails(@PathVariable("id") String id) {
 		return ResponseEntity.ok(service.readDetails(id));
 	}
+	@PatchMapping("/lock/{id}")
+	public ResponseEntity<AccountAuthDetailsResponse> updateLockAccount(@PathVariable("id") String id){
+		return ResponseEntity.ok(service.updateLock(id));
+		
+	}
+	
 }

@@ -31,6 +31,7 @@ import FollowerPageElement from "./component/element/account/FollowerPageElement
 import BlogChild from "./component/page/profile/child/BlogChild";
 import ExamChild from "./component/page/profile/child/ExamChild";
 import ProfilePage from "./component/page/profile/ProfilePage";
+import RootRouterElement from "./component/element/RootRouterElement";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -188,7 +189,9 @@ const router = createBrowserRouter([
     path: "/admin",
     element: (
       <PrivateRouterElement>
-        <AdminComponent />
+        <RootRouterElement>
+          <AdminComponent />
+        </RootRouterElement>
       </PrivateRouterElement>
     ),
     children: [

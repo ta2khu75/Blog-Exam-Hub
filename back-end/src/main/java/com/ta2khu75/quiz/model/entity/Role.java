@@ -1,6 +1,5 @@
 package com.ta2khu75.quiz.model.entity;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,8 +27,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @ToString(exclude = { "accounts" })
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Role implements Serializable{
-	private static final long serialVersionUID = -7989925749730079027L;
+public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;

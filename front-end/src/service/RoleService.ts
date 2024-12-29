@@ -4,7 +4,7 @@ export default class RoleService{
     static readAll():Promise<ApiResponse<RoleDetailsResponse[]>>{
         return instance.get(basePath);
     }
-    static create(role:RoleRequest):Promise<ApiResponse<RoleResponse>>{
+    static create(role:RoleRequest):Promise<ApiResponse<RoleDetailsResponse>>{
         return instance.post(basePath, role);
     }
     static update(id:number, role:RoleRequest):Promise<ApiResponse<RoleDetailsResponse>>{
