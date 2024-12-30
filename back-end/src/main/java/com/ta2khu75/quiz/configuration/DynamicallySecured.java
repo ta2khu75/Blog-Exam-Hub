@@ -3,6 +3,8 @@ package com.ta2khu75.quiz.configuration;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
+import org.springframework.security.access.AccessDeniedException;
+//import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
@@ -10,10 +12,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 
 import com.ta2khu75.quiz.model.HTTPMethod;
+import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Role;
 import com.ta2khu75.quiz.service.RoleService;
 import com.ta2khu75.quiz.service.util.EndpointUtil;
 import com.ta2khu75.quiz.service.util.EndpointUtil.EndpointType;
+import com.ta2khu75.quiz.service.util.RedisUtil;
+import com.ta2khu75.quiz.service.util.RedisUtil.NameModel;
+import com.ta2khu75.quiz.util.SecurityUtil;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.AccessLevel;
@@ -24,11 +31,12 @@ import lombok.experimental.NonFinal;
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
-public class DynamicallySecured implements AuthorizationManager<HttpServletRequest>{
+public class DynamicallySecured implements AuthorizationManager<HttpServletRequest> {
 	@NonFinal
 	AntPathMatcher pathMatcher = new AntPathMatcher();
 	EndpointUtil endpointUtil;
 	RoleService roleService;
+	RedisUtil redisUtil;
 
 	private boolean isRootUser(String roleName) {
 		return "ROOT".equals(roleName);
@@ -50,22 +58,25 @@ public class DynamicallySecured implements AuthorizationManager<HttpServletReque
 	public AuthorizationDecision check(Supplier<Authentication> authentication, HttpServletRequest object) {
 		String requestUrl = object.getRequestURI();
 		String httpMethod = object.getMethod();
+		String email = SecurityUtil.getCurrentUserLogin().orElse("anonymousUser");
+		Account account = redisUtil.read(NameModel.ACCOUNT, email, Account.class);
+		if (account != null) {
+			throw new AccessDeniedException("Account locked");
+		}
 		if (isPublicEndpoint(requestUrl, httpMethod)) {
 			return new AuthorizationDecision(true);
 		}
-		String roleName = authentication.get().getAuthorities().stream().map(t -> t.getAuthority()).toList()
-				.getFirst();
-		if (roleName.equals("ROLE_ANONYMOUS")) {
-			return new AuthorizationDecision(false);
+		String roleName = authentication.get().getAuthorities().stream().map(t -> t.getAuthority()).toList().getFirst();
+		if (!roleName.equals("ROLE_ANONYMOUS")) {
+			roleName = roleName.replace("ROLE_", "");
+			if (isRootUser(roleName)) {
+				return new AuthorizationDecision(true);
+			}
+			Role role = roleService.readByName(roleName);
+			if (isAllowedEndpoint(role, requestUrl, httpMethod)) {
+				return new AuthorizationDecision(true);
+			}
 		}
-		roleName = roleName.replace("ROLE_", "");
-		if (isRootUser(roleName)) {
-			return new AuthorizationDecision(true);
-		}
-		Role role = roleService.readByName(roleName);
-		if (isAllowedEndpoint(role, requestUrl, httpMethod)) {
-			return new AuthorizationDecision(true);
-		}
-		return new AuthorizationDecision(false);
+		throw new AccessDeniedException("Access denied");
 	}
 }

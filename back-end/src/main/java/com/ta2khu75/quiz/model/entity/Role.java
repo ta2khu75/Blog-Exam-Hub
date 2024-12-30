@@ -16,6 +16,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
@@ -25,8 +26,9 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = { "accounts" })
+@ToString(exclude = { "accounts"})
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@EqualsAndHashCode( exclude = {"permissions", "accounts"})
 public class Role {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

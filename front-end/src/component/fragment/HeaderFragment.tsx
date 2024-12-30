@@ -1,6 +1,6 @@
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import AuthService from "../../service/AuthService";
+// import AuthService from "../../service/AuthService";
 import { resetAccount } from "../../redux/slice/accountSlice";
 import { toast } from "react-toastify";
 import { resetExam } from "../../redux/slice/examSlice";
@@ -33,18 +33,18 @@ const HeaderFragment = () => {
     }
   }, [pathname]);
   const handleLogoutClick = () => {
-    AuthService.logout().then((d) => {
-      if (d.success) {
-        dispatch(resetExam());
-        dispatch(resetQuizExam());
-        dispatch(resetUserExam());
-        dispatch(resetAccount());
-        dispatch(resetImages());
-        dispatch(resetBlogHistory());
-        toast.success("logout successful");
-        // window.location.reload();
-      }
-    });
+    dispatch(resetExam());
+    dispatch(resetQuizExam());
+    dispatch(resetUserExam());
+    dispatch(resetAccount());
+    dispatch(resetImages());
+    dispatch(resetBlogHistory());
+    toast.success("logout successful");
+    // AuthService.logout().then((d) => {
+    //   if (d.success) {
+    //     // window.location.reload();
+    //   }
+    // });
   };
   const handleLoginClick = () => {
     dispatch(resetRouterRedirect())

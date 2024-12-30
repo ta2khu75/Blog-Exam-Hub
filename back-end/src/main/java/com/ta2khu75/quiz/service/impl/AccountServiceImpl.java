@@ -29,6 +29,8 @@ import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.RoleRepository;
 import com.ta2khu75.quiz.scheduling.SendMailScheduling;
 import com.ta2khu75.quiz.service.AccountService;
+import com.ta2khu75.quiz.service.util.RedisUtil;
+import com.ta2khu75.quiz.service.util.RedisUtil.NameModel;
 import com.ta2khu75.quiz.util.EmailTemplateUtil;
 import com.ta2khu75.quiz.util.FunctionUtil;
 import com.ta2khu75.quiz.util.SecurityUtil;
@@ -45,6 +47,7 @@ public class AccountServiceImpl implements AccountService {
 	RoleRepository roleRepository;
 	PasswordEncoder passwordEncoder;
 	SendMailScheduling sendMailScheduling;
+	RedisUtil redisUtil;
 
 	@Override
 	public AccountResponse create(AccountRequest request) throws MessagingException {
@@ -77,7 +80,13 @@ public class AccountServiceImpl implements AccountService {
 			account.setRole(roleRepository.findById(request.getRoleId())
 					.orElseThrow(() -> new NotFoundException("Could not found role with id: " + request.getRoleId())));
 		}
-		return mapper.toAuthDetailsResponse(repository.save(account));
+		account=repository.save(account);
+		if(account.isNonLocked()) {
+			redisUtil.delete(NameModel.ACCOUNT, account.getEmail());
+		}else {
+			redisUtil.create(NameModel.ACCOUNT, account.getEmail(), account);
+		}
+		return mapper.toAuthDetailsResponse(account);
 	}
 
 	@Override

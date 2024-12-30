@@ -58,11 +58,11 @@ public class Account extends EntityBase implements UserDetails {
 	@OneToMany(mappedBy = "follower")
 	@JsonIgnore
 	Set<Follow> following;
-
+	@JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-		authorities.add(new SimpleGrantedAuthority(String.format("ROLE_%s", role))); // Add role as authority
+		authorities.add(new SimpleGrantedAuthority(String.format("ROLE_%s", role.getName()))); // Add role as authority
 
 		authorities.addAll(role.getPermissions().stream()
 				.map(permission -> new SimpleGrantedAuthority(permission.getName())).collect(Collectors.toList()));
