@@ -7,8 +7,8 @@ import lombok.experimental.FieldDefaults;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AccountAuthResponse {
-	String id;
 	String username;
 	String email;
 	String role;
+	InfoResponse info;
 }

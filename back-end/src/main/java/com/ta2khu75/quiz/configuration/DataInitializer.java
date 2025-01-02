@@ -53,7 +53,6 @@ public class DataInitializer implements CommandLineRunner {
 				.orElseThrow(() -> new NotFoundException("Not found role name ROOT"));
 	}
 
-	@SuppressWarnings({ "null" })
 	private void initPermission(PermissionRepository permissionRepository,
 			PermissionGroupRepository permissionGroupRepository, ApplicationContext applicationContext) {
 		Map<String, RequestMappingHandlerMapping> allRequestMappings = applicationContext
@@ -77,7 +76,6 @@ public class DataInitializer implements CommandLineRunner {
 					group = permissionGroupRepository.save(PermissionGroup.builder().name(permissionGroup).build());
 				}
 				try {
-					@SuppressWarnings("null")
 					Permission permission = Permission.builder()
 							.name(StringUtil.convertCamelCaseToReadable(handlerMethod.getMethod().getName())).path(path)
 							.method(HTTPMethod.valueOf(
@@ -86,7 +84,6 @@ public class DataInitializer implements CommandLineRunner {
 					permissionRepository.save(permission);
 				} catch (Exception e) {
 //					e.printStackTrace();
-					continue;
 				}
 			}
 		}

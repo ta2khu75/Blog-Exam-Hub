@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.function.Supplier;
 
 import org.springframework.security.access.AccessDeniedException;
-//import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.core.Authentication;
@@ -31,7 +30,7 @@ import lombok.experimental.NonFinal;
 @Component
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
-public class DynamicallySecured implements AuthorizationManager<HttpServletRequest> {
+public class DynamicallySecurityConfig implements AuthorizationManager<HttpServletRequest> {
 	@NonFinal
 	AntPathMatcher pathMatcher = new AntPathMatcher();
 	EndpointUtil endpointUtil;

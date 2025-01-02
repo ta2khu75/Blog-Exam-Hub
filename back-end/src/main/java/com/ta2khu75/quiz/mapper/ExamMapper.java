@@ -37,7 +37,6 @@ public interface ExamMapper {
 	@Mapping(target = "blog", ignore = true)
 	@Mapping(target = "deleted", ignore = true)
 	@Mapping(target = "examCategory", ignore = true)
-	@Mapping(target = "examResults", ignore = true)
 	@Mapping(target = "imagePath", ignore = true)
 	@Mapping(target = "quizzes", ignore = true)
 	Exam toEntity(ExamRequest request);
@@ -49,7 +48,6 @@ public interface ExamMapper {
 	@Mapping(target = "blog", ignore = true)
 	@Mapping(target = "deleted", ignore = true)
 	@Mapping(target = "examCategory", ignore = true)
-	@Mapping(target = "examResults", ignore = true)
 	@Mapping(target = "imagePath", ignore = true)
 	@Mapping(target = "quizzes", ignore = true)
 	void update(ExamRequest request, @MappingTarget Exam exam);

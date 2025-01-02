@@ -3,15 +3,13 @@ package com.ta2khu75.quiz.model.entity;
 import java.time.Instant;
 
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.ta2khu75.quiz.model.NotificationStatus;
+import com.ta2khu75.quiz.model.ReportTargetType;
 import com.ta2khu75.quiz.model.TargetType;
-import com.ta2khu75.quiz.model.entity.id.NotificationId;
+import com.ta2khu75.quiz.model.entity.id.ReportTargetId;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
@@ -28,23 +26,23 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@IdClass(NotificationId.class)
+@IdClass(ReportTargetId.class)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@EntityListeners(AuditingEntityListener.class)
-public class Notification {
+public class ReportTarget {
 	@Id
-	String accountId;
+	String authorId;
 	@Id
 	String targetId;
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	TargetType targetType;
+	ReportTargetType reportTargetType;
+	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	NotificationStatus status=NotificationStatus.UNREAD;
+	TargetType targetType;
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
 	Instant createdDate;
 	@ManyToOne
-	@MapsId("accountId")
-	Account account;
+	@MapsId("authorId")
+	Account author;
 }

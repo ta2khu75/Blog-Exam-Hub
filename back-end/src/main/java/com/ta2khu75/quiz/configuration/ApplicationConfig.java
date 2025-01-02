@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig implements WebMvcConfigurer {
-//	private final InterceptorAuthorization interceptorAuthorization;
 	private final List<String> MEDIA_TYPES = Arrays.asList(MediaType.APPLICATION_JSON_VALUE);
 
 	@Override
@@ -26,11 +25,6 @@ public class ApplicationConfig implements WebMvcConfigurer {
 		registry.addMapping("/api/**").allowedOrigins("http://localhost:5173").allowedMethods("*").allowedHeaders("*")
 				.allowCredentials(true);
 	}
-
-//	@Override
-//	public void addInterceptors(@NonNull InterceptorRegistry registry) {
-//		registry.addInterceptor(interceptorAuthorization);
-//	}
 
 	@Bean
 	EndpointMediaTypes endpointMediaTypes() {
