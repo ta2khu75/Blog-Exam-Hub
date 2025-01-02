@@ -3,8 +3,9 @@ package com.ta2khu75.quiz.service.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ta2khu75.quiz.exception.UnAuthenticationException;
 import com.ta2khu75.quiz.exception.UnAuthorizedException;
-import com.ta2khu75.quiz.mapper.ReportTargetMap;
+import com.ta2khu75.quiz.mapper.ReportTargetMapper;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Blog;
 import com.ta2khu75.quiz.model.entity.Exam;
@@ -29,7 +30,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ReportTargetServiceImpl implements ReportTargetService {
 	ReportTargetRepository repository;
-//	ReportTargetMapper mapper;
+	ReportTargetMapper mapper;
 	AccountRepository accountRepository;
 	BlogRepository blogRepository;
 	ExamRepository examRepository;
@@ -52,20 +53,18 @@ public class ReportTargetServiceImpl implements ReportTargetService {
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + request.getTargetType());
 		}
-
-//		ReportTarget reportTarget=mapper.toEntity(request);
-//		reportTarget.setAuthorId(account.getId());
-//		return mapper.toResponse(repository.save(reportTarget));
-		return null;
+		
+		ReportTarget reportTarget = mapper.toEntity(request);
+		reportTarget.setAuthorId(account.getId());
+		return mapper.toResponse(repository.save(reportTarget));
 	}
 
-//}
-
 	@Override
-	public void delete(ReportTargetId reportTargetId) {
-
-//		repository.deleteById();
-
+	public void delete(String id) {
+		String email = SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new UnAuthenticationException("You must be login"));
+		Account account = FunctionUtil.findOrThrow(email, Account.class, accountRepository::findByEmail);
+		repository.deleteById(new ReportTargetId(account.getId(), id));
 	}
 
 }

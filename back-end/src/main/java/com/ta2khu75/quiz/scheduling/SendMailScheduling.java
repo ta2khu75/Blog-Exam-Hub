@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-
 @Component
 @RequiredArgsConstructor
 public class SendMailScheduling {
@@ -38,12 +37,6 @@ public class SendMailScheduling {
 	}
 	@Scheduled(fixedDelay = 5000)
 	public void run() throws MessagingException {
-//		MimeMessage message = javaMailSender.createMimeMessage();
-//		MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-//		helper.setTo("boomkings474@gmail.com");
-//		helper.setText(EmailTemplateEnv.EMAIL_VERIFICATION, true);
-//		helper.setSubject("Email Verification");
-//		javaMailSender.send(message);
 		while (!list.isEmpty()) {
 			MimeMessage mail = list.remove(0);
 			try {
