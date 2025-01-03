@@ -9,7 +9,10 @@ export default class AuthService {
   static login(authRequest: AuthRequest): Promise<ApiResponse<AuthResponse>> {
     return instance.post(`${basePath}/login`, authRequest);
   }
-  static myAccount():Promise<ApiResponse<AccountDetailsResponse>> {
+  static register(account: AccountRequest): Promise<ApiResponse<AccountResponse>> {
+    return instance.post(`${basePath}/register`, account);
+  }
+  static myAccount(): Promise<ApiResponse<AccountDetailsResponse>> {
     return instance.get(`${basePath}/account`);
   }
   static refreshToken() {
@@ -30,10 +33,10 @@ export default class AuthService {
         return Promise.reject(error);
       });
   }
-  static logout():Promise<ApiResponse<void>> {
+  static logout(): Promise<ApiResponse<void>> {
     return instance.get(`${basePath}/logout`);
   }
-  static refetchToken(){
+  static refetchToken() {
     return axios.get("http://localhost:8080/api/v1/auth/refresh-token", {
       withCredentials: true,
     });

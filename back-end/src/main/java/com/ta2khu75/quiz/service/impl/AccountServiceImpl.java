@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.UUID;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import com.ta2khu75.quiz.model.request.AccountRequest;
 import com.ta2khu75.quiz.model.request.update.AccountInfoRequest;
-import com.ta2khu75.quiz.model.request.update.AccountPasswordRequest;
 import com.ta2khu75.quiz.model.request.update.AccountStatusRequest;
 import com.ta2khu75.quiz.model.response.AccountResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
@@ -27,11 +25,9 @@ import com.ta2khu75.quiz.mapper.AccountMapper;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.RoleRepository;
-import com.ta2khu75.quiz.scheduling.SendMailScheduling;
 import com.ta2khu75.quiz.service.AccountService;
 import com.ta2khu75.quiz.service.util.RedisUtil;
 import com.ta2khu75.quiz.service.util.RedisUtil.NameModel;
-import com.ta2khu75.quiz.util.EmailTemplateUtil;
 import com.ta2khu75.quiz.util.FunctionUtil;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
@@ -46,26 +42,26 @@ public class AccountServiceImpl implements AccountService {
 	AccountMapper mapper;
 	RoleRepository roleRepository;
 	PasswordEncoder passwordEncoder;
-	SendMailScheduling sendMailScheduling;
 	RedisUtil redisUtil;
 
 	@Override
 	public AccountResponse create(AccountRequest request) throws MessagingException {
 		if (request.getPassword().equals(request.getConfirmPassword())) {
+			if (repository.existsByEmail(request.getEmail())) {
+				throw new ExistingException("Email already exists");
+			}
 			Account account = mapper.toEntity(request);
 			account.setEmail(account.getEmail().toLowerCase());
 			account.setPassword(passwordEncoder.encode(account.getPassword()));
 			account.setRole(roleRepository.findByName("USER")
 					.orElseThrow(() -> new NotFoundException("Could not find role with name: USER")));
-			account.setCodeVerify(UUID.randomUUID().toString());
+			account.setEnabled(true);
 			account.setDisplayName(account.getFirstName() + " " + account.getLastName());
 			try {
 				account = repository.save(account);
 			} catch (DataIntegrityViolationException e) {
 				throw new ExistingException("Email already exists");
 			}
-			sendMailScheduling.addMail(account.getEmail(), "Confirm your email",
-					EmailTemplateUtil.getVerify(account.getCodeVerify()), true);
 			return mapper.toResponse(account);
 		}
 		throw new NotMatchesException("password and confirm password not matches");
@@ -80,10 +76,10 @@ public class AccountServiceImpl implements AccountService {
 			account.setRole(roleRepository.findById(request.getRoleId())
 					.orElseThrow(() -> new NotFoundException("Could not found role with id: " + request.getRoleId())));
 		}
-		account=repository.save(account);
-		if(account.isNonLocked()) {
+		account = repository.save(account);
+		if (account.isNonLocked()) {
 			redisUtil.delete(NameModel.ACCOUNT, account.getEmail());
-		}else {
+		} else {
 			redisUtil.create(NameModel.ACCOUNT, account.getEmail(), account);
 		}
 		return mapper.toAuthDetailsResponse(account);
@@ -108,21 +104,6 @@ public class AccountServiceImpl implements AccountService {
 		return response;
 	}
 
-	@Override
-	public AccountResponse updatePassword(AccountPasswordRequest request) {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new NotFoundException("Could not find email"));
-		Account account = repository.findByEmail(email)
-				.orElseThrow(() -> new NotFoundException("Could not find account with email: " + email));
-		if (passwordEncoder.matches(request.getPassword(), account.getPassword())) {
-			if (request.getNewPassword().equals(request.getConfirmPassword())) {
-				account.setPassword(passwordEncoder.encode(request.getNewPassword()));
-				return mapper.toResponse(repository.save(account));
-			}
-			throw new NotMatchesException("New password and confirm password not matches");
-		}
-		throw new NotMatchesException("Password not matches");
-	}
 
 	@Override
 	public AccountResponse updateInfo(AccountInfoRequest request) {
@@ -132,18 +113,6 @@ public class AccountServiceImpl implements AccountService {
 				.orElseThrow(() -> new NotFoundException("Could not find account with email: " + email));
 		mapper.update(request, account);
 		return mapper.toResponse(repository.save(account));
-	}
-
-	@Override
-	public boolean verify(String code) {
-		Account account = repository.findByCodeVerify(code).orElse(null);
-		if (account != null) {
-			account.setCodeVerify(null);
-			account.setEnabled(true);
-			repository.save(account);
-			return true;
-		}
-		return false;
 	}
 
 	@Override
@@ -164,10 +133,10 @@ public class AccountServiceImpl implements AccountService {
 
 	@Override
 	public AccountAuthDetailsResponse updateLock(String id) {
-		Account account=FunctionUtil.findOrThrow(id, Account.class, repository::findById);
+		Account account = FunctionUtil.findOrThrow(id, Account.class, repository::findById);
 		account.setNonLocked(!account.isNonLocked());
 		return mapper.toAuthDetailsResponse(repository.save(account));
-		
+
 	}
 
 }

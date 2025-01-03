@@ -17,14 +17,11 @@ import jakarta.mail.MessagingException;
 public interface AccountService {
     AccountResponse create(AccountRequest request) throws MessagingException;
     AccountAuthDetailsResponse updateStatus(String id,AccountStatusRequest request);
-    AccountResponse updatePassword(AccountPasswordRequest request);
     void delete(String id);
     AccountResponse read(String id);
     PageResponse<AccountAuthDetailsResponse> readPage(String search,Pageable pageable);
     AccountResponse updateInfo(AccountInfoRequest request);
-    boolean verify(String code);
     AccountDetailsResponse readMe();
     AccountDetailsResponse readDetails(String id);
     AccountAuthDetailsResponse updateLock(String id);
-//    AccountDetailsResponse update(String id,AccountPermissionRequest request);
 }

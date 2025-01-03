@@ -11,11 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.ta2khu75.quiz.model.request.AccountRequest;
 import com.ta2khu75.quiz.model.request.update.AccountInfoRequest;
-import com.ta2khu75.quiz.model.request.update.AccountPasswordRequest;
 import com.ta2khu75.quiz.model.request.update.AccountStatusRequest;
 import com.ta2khu75.quiz.model.response.AccountResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
@@ -30,7 +28,7 @@ import com.ta2khu75.quiz.service.AccountService;
 public class AccountController {
 	AccountService service;
 
-	@PostMapping()
+	@PostMapping
 	public ResponseEntity<AccountResponse> createAccount(@Valid @RequestBody AccountRequest request)
 			throws MessagingException {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
@@ -39,15 +37,6 @@ public class AccountController {
 	@PutMapping
 	public ResponseEntity<AccountResponse> updateMyInfoAccount(@Valid @RequestBody AccountInfoRequest request) {
 		return ResponseEntity.ok(service.updateInfo(request));
-	}
-
-	@GetMapping
-	public ResponseEntity<PageResponse<AccountAuthDetailsResponse>> readPage(
-			@RequestParam(name = "search", required = false, defaultValue = "") String search,
-			@RequestParam(name = "size", required = false, defaultValue = "5") int size,
-			@RequestParam(name = "page", required = false, defaultValue = "1") int page) {
-		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-		return ResponseEntity.ok(service.readPage(search, pageable));
 	}
 
 	@GetMapping("/{id}")
@@ -61,36 +50,31 @@ public class AccountController {
 		return ResponseEntity.ok(service.updateStatus(id, request));
 	}
 
+	@GetMapping
+	public ResponseEntity<PageResponse<AccountAuthDetailsResponse>> readPage(
+			@RequestParam(name = "search", required = false, defaultValue = "") String search,
+			@RequestParam(name = "size", required = false, defaultValue = "5") int size,
+			@RequestParam(name = "page", required = false, defaultValue = "1") int page) {
+		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
+		return ResponseEntity.ok(service.readPage(search, pageable));
+	}
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteOtherAccount(@PathVariable("id") String id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping("/change-password")
-	public ResponseEntity<AccountResponse> updateMyPasswordAccount(@RequestBody AccountPasswordRequest request) {
-		return ResponseEntity.ok(service.updatePassword(request));
-	}
 
-	@GetMapping("/verify")
-	public RedirectView verifyAccount(@RequestParam(name = "code") String code) {
-		boolean isVerified = service.verify(code);
-		String clientRedirectUrl;
-		if (isVerified) {
-			clientRedirectUrl = "http://localhost:5173/login?verified=true";
-		} else {
-			clientRedirectUrl = "http://localhost:5173/login";
-		}
-		return new RedirectView(clientRedirectUrl);
-	}
 	@GetMapping("/{id}/details")
 	public ResponseEntity<AccountDetailsResponse> readAccountDetails(@PathVariable("id") String id) {
 		return ResponseEntity.ok(service.readDetails(id));
 	}
-	@PatchMapping("/lock/{id}")
-	public ResponseEntity<AccountAuthDetailsResponse> updateLockAccount(@PathVariable("id") String id){
+
+	@PatchMapping("/{id}/lock")
+	public ResponseEntity<AccountAuthDetailsResponse> updateLockAccount(@PathVariable("id") String id) {
 		return ResponseEntity.ok(service.updateLock(id));
-		
+
 	}
-	
+
 }

@@ -41,15 +41,13 @@ public class BlogController {
 	ObjectMapper mapper;
 
 	@GetMapping
-	public ResponseEntity<PageResponse<BlogResponse>> searchBlog(@ModelAttribute // có hay khong co cung khong sao neu
-																					// validation thì cần
+	public ResponseEntity<PageResponse<BlogResponse>> searchBlog(@ModelAttribute
+	// có hay khong co cung khong sao neu validation thì cần
 	BlogSearchRequest blogSearchRequest) {
 		blogSearchRequest.setAccessModifier(AccessModifier.PUBLIC);
 		blogSearchRequest.setAuthorEmail(null);
 		return ResponseEntity.ok(service.searchBlog(blogSearchRequest));
 	}
-
-	
 
 	@GetMapping("/{id}")
 	public ResponseEntity<BlogResponse> readBlog(@PathVariable("id") String id) {
@@ -57,7 +55,7 @@ public class BlogController {
 	}
 
 	@GetMapping("/{id}/details")
-	public ResponseEntity<BlogDetailsResponse> readDetailsBlog(@PathVariable("id") String id) {
+	public ResponseEntity<BlogDetailsResponse> readBlogDetails(@PathVariable("id") String id) {
 		return ResponseEntity.ok(service.readDetail(id));
 	}
 
@@ -67,6 +65,7 @@ public class BlogController {
 		BlogRequest blogRequest = mapper.readValue(request, BlogRequest.class);
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(blogRequest, file));
 	}
+
 	@PreAuthorize("@ownerSecurity.isBlogOwner(#id)")
 	@PutMapping(path = "/{id}", consumes = "multipart/form-data")
 	public ResponseEntity<BlogResponse> updateBlog(@PathVariable("id") String id, @RequestPart("blog") String request,
@@ -81,12 +80,15 @@ public class BlogController {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
+
 	@GetMapping("my-blog/count")
 	public ResponseEntity<CountResponse> countMyBlog() {
-		String email=SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new UnAuthorizedException("You must login first!"));
+		String email = SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
 		return ResponseEntity.ok(new CountResponse(service.countByAuthorEmail(email)));
 	}
-	@GetMapping("my-blog")
+
+	@GetMapping("my/blog")
 	public ResponseEntity<PageResponse<BlogResponse>> searchMyBlog(
 			@ModelAttribute BlogSearchRequest blogSearchRequest) {
 		blogSearchRequest.setAccessModifier(null);
@@ -95,9 +97,10 @@ public class BlogController {
 				.orElseThrow(() -> new UnAuthorizedException("You must login first!")));
 		return ResponseEntity.ok(service.searchBlog(blogSearchRequest));
 	}
+
 	@GetMapping("{authorId}/count")
 	public ResponseEntity<CountResponse> countBlogAuthor(@PathVariable("authorId") String id) {
-		return ResponseEntity.ok(new CountResponse(service.countByAuthorIdAndAccessModifier(id, AccessModifier.PUBLIC)));
+		return ResponseEntity
+				.ok(new CountResponse(service.countByAuthorIdAndAccessModifier(id, AccessModifier.PUBLIC)));
 	}
-
 }

@@ -19,7 +19,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = InfoMapper.class)
 public interface AccountMapper {
-
 	@Named("toAccountResponse")
 	@Mapping(target = "username", source = "displayName")
 	@Mapping(target = "info", source = "account", qualifiedByName = "toInfoResponse")
@@ -50,6 +49,7 @@ public interface AccountMapper {
 
 	@Mapping(target = "role", source = "role.name")
 	@Mapping(target = "username", source = "displayName")
+	@Mapping(target = "info", source = "account", qualifiedByName = "toInfoResponse")
 	AccountAuthResponse toAuthResponse(Account account);
 
 	@Mapping(target = "followers", ignore = true)

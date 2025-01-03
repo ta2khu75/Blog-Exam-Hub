@@ -5,9 +5,7 @@ export default class AccountService {
   static readPage(search = "", page = 0, size = 10): Promise<ApiResponse<PageResponse<AccountAuthDetailsResponse>>> {
     return instance.get(`${basePath}`, { params: { search, page, size } });
   }
-  static create(
-    account: AccountRequest
-  ): Promise<ApiResponse<AccountResponse>> {
+  static create(account: AccountRequest): Promise<ApiResponse<AccountResponse>> {
     return instance.post(basePath, account);
   }
   static updateStatus(id: string, account: AccountStatusRequest): Promise<ApiResponse<AccountAuthDetailsResponse>> {

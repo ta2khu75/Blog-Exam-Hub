@@ -32,8 +32,9 @@ public class JWTUtil {
 		Instant now = Instant.now();
 		Instant validity = now.plus(this.expiration, ChronoUnit.SECONDS);
 		JwtClaimsSet claims = JwtClaimsSet.builder().issuer("com.ta2khu75").issuedAt(now).expiresAt(validity)
-				.subject(response.getEmail())
-			    .claim("id", response.getInfo().getId())
+				.subject(response.getInfo().getId())
+//				.subject(response.getEmail())
+//			    .claim("id", response.getInfo().getId())
 				.claim("scope", "ROLE_" + response.getRole()).build();// .build();
 		JwsHeader jwsHeader = JwsHeader.with(SecurityJwtConfig.JWT_ALGORITHM).build();
 		return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();

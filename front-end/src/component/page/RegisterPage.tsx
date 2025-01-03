@@ -2,15 +2,15 @@ import type { FormProps } from "antd";
 import { Button, DatePicker, Form, Input } from "antd";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
-import AccountService from "../../service/AccountService";
 import { Link, useNavigate } from "react-router-dom";
+import AuthService from "../../service/AuthService";
 
 const AccountCrud = () => {
   const [form] = Form.useForm<AccountRequest>();
   const navigate = useNavigate()
   useEffect(() => { }, []);
   const onFinish: FormProps<AccountRequest>["onFinish"] = (values) => {
-    AccountService.create(values).then((data) => {
+    AuthService.register(values).then((data) => {
       if (data.success) {
         toast.success("successfully");
         navigate("/login")
