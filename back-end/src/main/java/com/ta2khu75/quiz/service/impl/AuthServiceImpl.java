@@ -3,7 +3,6 @@ package com.ta2khu75.quiz.service.impl;
 import java.util.UUID;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -18,7 +17,6 @@ import com.ta2khu75.quiz.model.request.update.AccountPasswordRequest;
 import com.ta2khu75.quiz.model.response.AccountAuthResponse;
 import com.ta2khu75.quiz.model.response.AccountResponse;
 import com.ta2khu75.quiz.model.response.AuthResponse;
-import com.ta2khu75.quiz.model.response.details.AccountDetailsResponse;
 import com.ta2khu75.quiz.exception.ExistingException;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.exception.NotMatchesException;

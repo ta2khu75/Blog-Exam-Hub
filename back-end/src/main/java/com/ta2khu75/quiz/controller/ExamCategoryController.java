@@ -10,42 +10,46 @@ import com.ta2khu75.quiz.model.request.ExamCategoryRequest;
 import com.ta2khu75.quiz.model.response.ExamCategoryResponse;
 import com.ta2khu75.quiz.service.ExamCategoryService;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import jakarta.validation.Valid;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequiredArgsConstructor
-@RequestMapping("${app.api-prefix}/exam-category")
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ExamCategoryController {
-	ExamCategoryService examCategoryService;
+@RequestMapping("${app.api-prefix}/exam-categories")
+public class ExamCategoryController
+		extends BaseController<ExamCategoryRequest, ExamCategoryResponse, Long, ExamCategoryService> {
+
+	protected ExamCategoryController(ExamCategoryService service) {
+		super(service);
+	}
 
 	@GetMapping
 	public ResponseEntity<List<ExamCategoryResponse>> readAllExamCategory() {
-		return ResponseEntity.ok(examCategoryService.readAll());
-	}
-	@PostMapping
-	public ResponseEntity<ExamCategoryResponse> createExamCategory(@RequestBody ExamCategoryRequest request) {
-		return ResponseEntity.ok(examCategoryService.create(request));
+		return ResponseEntity.ok(service.readAll());
 	}
 
-	@PutMapping("{id}")
-	public ResponseEntity<ExamCategoryResponse> updateExamCategory(@PathVariable("id") Long id,
-			@RequestBody ExamCategoryRequest request) {
-		return ResponseEntity.ok(examCategoryService.update(id, request));
+	@Override
+	ResponseEntity<ExamCategoryResponse> create(@Valid @RequestBody ExamCategoryRequest request) {
+		return ResponseEntity.ok(service.create(request));
 	}
-	@DeleteMapping("{id}")
-	public ResponseEntity<Void> deleteExamCategory(@PathVariable("id") Long id) {
-		examCategoryService.delete(id);
+
+	@Override
+	ResponseEntity<ExamCategoryResponse> update(@PathVariable Long id,
+			@Valid @RequestBody ExamCategoryRequest request) {
+		return ResponseEntity.ok(service.update(id, request));
+	}
+
+	@Override
+	ResponseEntity<Void> delete(@PathVariable Long id) {
+		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
-	
+
+	@Override
+	ResponseEntity<ExamCategoryResponse> read(@PathVariable Long id) {
+		return ResponseEntity.ok(service.read(id));
+	}
+
 }

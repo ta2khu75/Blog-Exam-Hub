@@ -10,7 +10,6 @@ import lombok.experimental.FieldDefaults;
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentResponse extends CommentBase {
-	String filePath;
 	AccountResponse author;
 	InfoResponse info;
 }

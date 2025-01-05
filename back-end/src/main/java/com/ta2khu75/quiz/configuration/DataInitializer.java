@@ -104,7 +104,7 @@ public class DataInitializer implements CommandLineRunner {
 					.role(initRole(roleRepository)).build();
 			accountRepository.save(account);
 		} else {
-			initPermission(permissionRepository, permissionGroupRepository, applicationContext);
+//			initPermission(permissionRepository, permissionGroupRepository, applicationContext);
 		}
 	}
 }

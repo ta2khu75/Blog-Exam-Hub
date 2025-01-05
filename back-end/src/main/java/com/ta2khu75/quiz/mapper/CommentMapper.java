@@ -16,7 +16,6 @@ public interface CommentMapper {
 	@Mapping(target = "author", ignore = true)
 	@Mapping(target = "blog", ignore = true)
 	@Mapping(target = "createdAt", ignore = true)
-	@Mapping(target = "filePath", ignore = true)
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "updatedAt", ignore = true)
 	Comment toEntity(CommentRequest request);
@@ -24,7 +23,6 @@ public interface CommentMapper {
 	@Mapping(target = "author", ignore = true)
 	@Mapping(target = "blog", ignore = true)
 	@Mapping(target = "createdAt", ignore = true)
-	@Mapping(target = "filePath", ignore = true)
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "updatedAt", ignore = true)
 	void update(CommentRequest request, @MappingTarget Comment entity);

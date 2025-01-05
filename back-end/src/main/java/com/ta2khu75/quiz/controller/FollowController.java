@@ -20,7 +20,7 @@ import lombok.experimental.FieldDefaults;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("${app.api-prefix}/follow")
+@RequestMapping("${app.api-prefix}/follows")
 public class FollowController {
 	FollowService followService;
 
@@ -29,7 +29,7 @@ public class FollowController {
 		return ResponseEntity.ok(followService.create(accountId));
 	}
 
-	@DeleteMapping("/account/{accountId}/delete")
+	@DeleteMapping("/account/{accountId}")
 	public ResponseEntity<Void> unFollow(@PathVariable("accountId") String accountId) {
 		followService.delete(accountId);
 		return ResponseEntity.noContent().build();

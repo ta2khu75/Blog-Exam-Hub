@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import com.ta2khu75.quiz.model.request.AnswerRequest;
@@ -23,15 +22,15 @@ import jakarta.validation.groups.Default;
 
 @Service
 @Validated
-@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class AnswerServiceImpl implements AnswerService {
-	AnswerRepository repository;
-	AnswerMapper mapper;
+public class AnswerServiceImpl extends BaseServiceImpl<AnswerRepository, AnswerMapper> implements AnswerService {
+	protected AnswerServiceImpl(AnswerRepository repository, AnswerMapper mapper) {
+		super(repository, mapper);
+	}
 
 	@Override
-	@Validated({ Default.class, Create.class }) 
-	public AnswerResponse create( AnswerRequest request) {
+	@Validated({ Default.class, Create.class })
+	public AnswerResponse create(AnswerRequest request) {
 		Answer answer = mapper.toEntity(request);
 		return this.save(answer);
 	}
@@ -70,6 +69,5 @@ public class AnswerServiceImpl implements AnswerService {
 	@Override
 	public void deleteByQuizId(Long id) {
 		repository.deleteByQuizId(id);
-		
 	}
 }

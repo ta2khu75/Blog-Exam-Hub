@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @RestController
-@RequestMapping("${app.api-prefix}/blog-tag")
+@RequestMapping("${app.api-prefix}/blog-tags")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal  = true)
 public class BlogTagController {

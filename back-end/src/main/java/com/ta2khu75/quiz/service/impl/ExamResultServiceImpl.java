@@ -33,21 +33,25 @@ import com.ta2khu75.quiz.repository.UserAnswerRepository;
 import com.ta2khu75.quiz.service.ExamResultService;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-
 @Service
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ExamResultServiceImpl implements ExamResultService {
-	ExamResultMapper mapper;
-	ExamResultRepository repository;
-	ExamRepository examRepository;
-	QuizRepository quizRepository;
-	AnswerRepository answerRepository;
-	UserAnswerRepository userAnswerRepository;
-	AccountRepository accountRepository;
+public class ExamResultServiceImpl extends BaseServiceImpl<ExamResultRepository, ExamResultMapper>
+		implements ExamResultService {
+	private final ExamRepository examRepository;
+	private final QuizRepository quizRepository;
+	private final AnswerRepository answerRepository;
+	private final UserAnswerRepository userAnswerRepository;
+	private final AccountRepository accountRepository;
+
+	public ExamResultServiceImpl(ExamResultRepository repository, ExamResultMapper mapper,
+			ExamRepository examRepository, QuizRepository quizRepository, AnswerRepository answerRepository,
+			UserAnswerRepository userAnswerRepository, AccountRepository accountRepository) {
+		super(repository, mapper);
+		this.examRepository = examRepository;
+		this.quizRepository = quizRepository;
+		this.answerRepository = answerRepository;
+		this.userAnswerRepository = userAnswerRepository;
+		this.accountRepository = accountRepository;
+	}
 
 	@Override
 	public ExamResultResponse readByExamId(String id) {
@@ -112,47 +116,6 @@ public class ExamResultServiceImpl implements ExamResultService {
 		examResult.setPoint((float) Math.round(averageScore * 10)); // Đã thay đổi để đơn giản hóa
 	}
 
-//	private void score(ExamResult examHistory, Set<UserAnswerRequest> userAnswerRequests) {
-//		float score = 0;
-//
-//		// Truy xuất tất cả câu hỏi và đáp án một lần
-//		List<Quiz> quizzes = quizRepository.findByExamId(examHistory.getExam().getId());
-////		Map<Long, Quiz> quizMap = quizzes.stream().collect(Collectors.toMap(Quiz::getId, q -> q));
-//
-//		// Lấy danh sách quizId từ các yêu cầu trả lời
-//		Set<Long> quizIds = userAnswerRequests.stream().map(UserAnswerRequest::getQuizId).collect(Collectors.toSet());
-//
-//		// Truy xuất tất cả các đáp án cho các quizId
-//		List<Answer> answers = answerRepository.findByQuizIdIn(quizIds);
-//		Map<Long, List<Answer>> answerMap = answers.stream()
-//				.collect(Collectors.groupingBy(answer -> answer.getQuiz().getId()));
-//
-//		// Tạo Map từ quizId đến AnswerUserRequest
-//		Map<Long, UserAnswerRequest> answerUserRequestMap = userAnswerRequests.stream().collect(Collectors.toMap(UserAnswerRequest::getQuizId, ar -> ar));
-//
-//		// Tính điểm cho từng quiz
-//		for (Quiz quiz : quizzes) {
-//			UserAnswerRequest answerUserRequest = answerUserRequestMap.get(quiz.getId());
-//			if (answerUserRequest != null) {
-//				List<Answer> quizAnswers = answerMap.get(quiz.getId());
-//				if (quizAnswers == null) {
-//					continue; // Nếu không có đáp án cho câu hỏi, bỏ qua
-//				}
-//				saveUserAnswer(examHistory, quiz, quizAnswers, answerUserRequest.getAnswerIds());
-//				if (quiz.getQuizType() == QuizType.SINGLE_CHOICE) {
-//					score += caculateScoreQuizSingleChoice(quizAnswers, answerUserRequest.getAnswerIds());
-//				} else {
-//					score += caculateScoreQuizMultiChoice(quizAnswers, answerUserRequest.getAnswerIds());
-//				}
-//			}
-//		}
-//
-//		examHistory.setCorrectCount((int) score);
-//		// Tính điểm cho một lần
-//		float num = score / quizzes.size();
-//		examHistory.setPoint((float) (Math.round(num * 100) / 10));
-//	}
-
 	private void saveUserAnswer(ExamResult examHistory, Quiz quiz, List<Answer> answers, Set<Long> answerIds) {
 		UserAnswer userAnswer = new UserAnswer();
 		userAnswer.setExamResult(examHistory);
@@ -179,12 +142,6 @@ public class ExamResultServiceImpl implements ExamResultService {
 			return 1; // Điểm tối đa cho câu hỏi
 		} else {
 			return 0;
-//			double fractionCorrect = (double) correctSelected / correctAnswers.size();
-//			double fractionIncorrect = (double) incorrectSelected / (correctAnswers.size() + 1);
-//			double maxPoints = 1;
-//			double points = maxPoints * fractionCorrect - (fractionIncorrect * 0.5);
-//			points = Math.max(points, 0);
-//			return points;
 		}
 	}
 
@@ -213,4 +170,5 @@ public class ExamResultServiceImpl implements ExamResultService {
 				.endTime(Instant.now().plusSeconds(exam.getDuration() * 60L).plusSeconds(30)).build();
 		return mapper.toResponse(repository.save(examResult));
 	}
+
 }

@@ -11,7 +11,7 @@ import com.ta2khu75.quiz.model.response.ExamResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
 
-public interface ExamService extends BaseFileService<String, ExamRequest, ExamResponse> {
+public interface ExamService extends BaseFileService<ExamRequest, ExamResponse, String> {
 	PageResponse<ExamResponse> searchExam(ExamSearchRequest examSearchRequest);
 	PageResponse<ExamResponse> mySearchExamNull(String keyword, Pageable pageable);
 	ExamDetailsResponse readDetail(String id);

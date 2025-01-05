@@ -14,16 +14,12 @@ import com.ta2khu75.quiz.repository.ExamCategoryRepository;
 import com.ta2khu75.quiz.service.ExamCategoryService;
 import com.ta2khu75.quiz.util.StringUtil;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-
 @Service
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ExamCategoryServiceImpl implements ExamCategoryService {
-	ExamCategoryRepository repository;
-	ExamCategoryMapper mapper;
+public class ExamCategoryServiceImpl extends BaseServiceImpl<ExamCategoryRepository, ExamCategoryMapper>
+		implements ExamCategoryService {
+	protected ExamCategoryServiceImpl(ExamCategoryRepository repository, ExamCategoryMapper mapper) {
+		super(repository, mapper);
+	}
 
 	@Override
 	@Transactional

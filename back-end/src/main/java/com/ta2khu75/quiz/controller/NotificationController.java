@@ -19,7 +19,7 @@ import lombok.experimental.FieldDefaults;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("${app.api-prefix}/notification")
+@RequestMapping("${app.api-prefix}/notifications")
 public class NotificationController {
 	NotificationService notificationService;
 

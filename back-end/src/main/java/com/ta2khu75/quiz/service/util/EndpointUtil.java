@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 public class EndpointUtil {
 	@Value("${app.api-prefix}")
 	private String apiPrefix;
-	private final String[] PUBLIC_POST_ENDPOINT = { "/account", "/auth/login", "/auth/register", "/blog/test" };
-	private final String[] PUBLIC_GET_ENDPOINT = { "/auth/refresh-token", "/account/verify", "/actuator/mappings",
+	private final String[] PUBLIC_POST_ENDPOINT = { "/accounts", "/auth/login", "/auth/register", "/blog/test" };
+	private final String[] PUBLIC_GET_ENDPOINT = { "/accounts/*","/auth/refresh-token", "/account/verify", "/actuator/mappings",
 			"/actuator/custommappings", "/auth/logout", "/account/*/details",  "/blog", "/blog/**", "/exam-category","/blog-tag", "/exam", "/exam/*" };
 
 	public String[] getPublicEndpoint(EndpointType endpointType) {

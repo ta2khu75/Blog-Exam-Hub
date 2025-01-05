@@ -16,7 +16,7 @@ public abstract class AccountBase {
 
 	@NotBlank(message = "Last name must not be blank")
 	String lastName;
-
+	
 	@NotNull(message = "Birthday must not be null")
 	LocalDate birthday;
 }

@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -18,26 +16,38 @@ import com.ta2khu75.quiz.service.RoleService;
 
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Controller
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
-@RequestMapping("${app.api-prefix}/role")
-public class RoleController {
-	RoleService roleService;
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequestMapping("${app.api-prefix}/roles")
+public class RoleController extends BaseController<RoleRequest, RoleResponse, Long, RoleService> {
+	protected RoleController(RoleService service) {
+		super(service);
+	}
 	@GetMapping
 	public ResponseEntity<List<RoleDetailsResponse>> readAllRole() {
-		return ResponseEntity.ok(roleService.readAll());
+		return ResponseEntity.ok(service.readAll());
 	}
-	@PutMapping("{id}")
-	public ResponseEntity<RoleResponse> updateRole(@PathVariable("id") Long id, @Valid @RequestBody RoleRequest request) {
-		return ResponseEntity.ok(roleService.update(id, request));
+
+	@Override
+	ResponseEntity<RoleResponse> create(@Valid @RequestBody RoleRequest request) {
+		return ResponseEntity.ok(service.create(request));
 	}
-	@PostMapping
-	public ResponseEntity<RoleResponse> createRole(@Valid @RequestBody RoleRequest request) {
-		return ResponseEntity.ok(roleService.create(request));
+
+	@Override
+	ResponseEntity<RoleResponse> update(@PathVariable Long id, @Valid @RequestBody RoleRequest request) {
+		return ResponseEntity.ok(service.update(id, request));
 	}
-	
+
+	@Override
+	ResponseEntity<Void> delete(@PathVariable Long id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build(); 
+	}
+
+	@Override
+	ResponseEntity<RoleResponse> read(@PathVariable Long id) {
+		return ResponseEntity.ok(service.read(id));
+	}
 }

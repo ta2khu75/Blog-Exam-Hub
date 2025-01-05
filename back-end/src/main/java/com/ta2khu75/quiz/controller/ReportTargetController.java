@@ -19,7 +19,7 @@ import lombok.experimental.FieldDefaults;
 @Controller
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("${app.api-prefix}/report-target")
+@RequestMapping("${app.api-prefix}/report-targets")
 public class ReportTargetController {
 	ReportTargetService reportTargetService;
 

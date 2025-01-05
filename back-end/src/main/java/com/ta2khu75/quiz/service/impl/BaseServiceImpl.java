@@ -1,11 +1,11 @@
 package com.ta2khu75.quiz.service.impl;
 
-public abstract class BaseServiceImpl<Y , R> {
-	public BaseServiceImpl(Y repository, R mapper) {
+public abstract class BaseServiceImpl<Repository, Mapper> {
+	protected BaseServiceImpl(Repository repository, Mapper mapper) {
 		super();
 		this.repository = repository;
 		this.mapper = mapper;
 	}
-	protected final Y repository;
-	protected final R mapper;
+	protected final Repository repository;
+	protected final Mapper mapper;
 }

@@ -1,10 +1,8 @@
 package com.ta2khu75.quiz.service.impl;
 
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
@@ -31,21 +29,24 @@ import com.ta2khu75.quiz.service.util.RedisUtil.NameModel;
 import com.ta2khu75.quiz.util.FunctionUtil;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
-import jakarta.mail.MessagingException;
-
 @Slf4j
 @Service
-@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class AccountServiceImpl implements AccountService {
-	AccountRepository repository;
-	AccountMapper mapper;
+public class AccountServiceImpl extends BaseServiceImpl<AccountRepository, AccountMapper> implements AccountService {
 	RoleRepository roleRepository;
 	PasswordEncoder passwordEncoder;
 	RedisUtil redisUtil;
 
+	public AccountServiceImpl(AccountRepository repository, AccountMapper mapper, RoleRepository roleRepository,
+			PasswordEncoder passwordEncoder, RedisUtil redisUtil) {
+		super(repository, mapper);
+		this.roleRepository = roleRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.redisUtil = redisUtil;
+	}
+
 	@Override
-	public AccountResponse create(AccountRequest request) throws MessagingException {
+	public AccountResponse create(AccountRequest request) {
 		if (request.getPassword().equals(request.getConfirmPassword())) {
 			if (repository.existsByEmail(request.getEmail())) {
 				throw new ExistingException("Email already exists");
@@ -68,6 +69,23 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
+	public AccountResponse update(String id, AccountRequest request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AccountResponse read(String id) {
+		return mapper.toResponse(repository.findById(id)
+				.orElseThrow(() -> new NotFoundException("Could not found account with id: " + id)));
+	}
+
+	@Override
+	public void delete(String id) {
+		repository.deleteById(id);
+	}
+
+	@Override
 	public AccountAuthDetailsResponse updateStatus(String id, AccountStatusRequest request) {
 		Account account = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found account with id: " + id));
@@ -86,24 +104,12 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public void delete(String id) {
-		repository.deleteById(id);
-	}
-
-	@Override
-	public AccountResponse read(String id) {
-		return mapper.toResponse(repository.findById(id)
-				.orElseThrow(() -> new NotFoundException("Could not found account with id: " + id)));
-	}
-
-	@Override
 	public PageResponse<AccountAuthDetailsResponse> readPage(String search, Pageable pageable) {
 		PageResponse<AccountAuthDetailsResponse> response = mapper
 				.toPageResponse(repository.searchByDisplayNameOrEmail(search, pageable));
 		response.setNumber(response.getNumber() + 1);
 		return response;
 	}
-
 
 	@Override
 	public AccountResponse updateInfo(AccountInfoRequest request) {
@@ -113,15 +119,6 @@ public class AccountServiceImpl implements AccountService {
 				.orElseThrow(() -> new NotFoundException("Could not find account with email: " + email));
 		mapper.update(request, account);
 		return mapper.toResponse(repository.save(account));
-	}
-
-	@Override
-	public AccountDetailsResponse readMe() {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new NotFoundException("Could not find email"));
-		Account account = repository.findByEmail(email)
-				.orElseThrow(() -> new NotFoundException("Could not find account with email: " + email));
-		return mapper.toDetailsResponse(account);
 	}
 
 	@Override

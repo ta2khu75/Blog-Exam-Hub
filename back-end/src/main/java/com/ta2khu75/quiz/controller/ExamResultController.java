@@ -26,7 +26,7 @@ import lombok.experimental.FieldDefaults;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("${app.api-prefix}/exam-result")
+@RequestMapping("${app.api-prefix}/exam-results")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExamResultController {
 	ExamResultService service;

@@ -20,24 +20,21 @@ import com.ta2khu75.quiz.repository.FollowRepository;
 import com.ta2khu75.quiz.service.FollowService;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-
 @Service
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class FollowServiceImpl implements FollowService {
-	FollowRepository followRepository;
-	AccountRepository accountRepository;
-	FollowMapper mapper;
+public class FollowServiceImpl extends BaseServiceImpl<FollowRepository, FollowMapper> implements FollowService {
+	private final AccountRepository accountRepository;
+
+	public FollowServiceImpl(FollowRepository repository, FollowMapper mapper, AccountRepository accountRepository) {
+		super(repository, mapper);
+		this.accountRepository = accountRepository;
+	}
 
 	@Override
 	@Transactional
 	public FollowResponse create(String followingId) {
 		String followerEmail = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new NotFoundException("You are not logged in"));
-		Optional<Follow> existingFollow = followRepository.findByFollowingIdAndFollowerEmail(followingId,
+		Optional<Follow> existingFollow = repository.findByFollowingIdAndFollowerEmail(followingId,
 				followerEmail);
 		if (existingFollow.isPresent()) {
 			throw new ExistingException("Already following this user");
@@ -51,7 +48,7 @@ public class FollowServiceImpl implements FollowService {
 		follow.setFollower(follower);
 		follow.setFollowing(following);
 		follow.setFollowTime(Instant.now());
-		return mapper.toResponse(followRepository.save(follow));
+		return mapper.toResponse(repository.save(follow));
 	}
 
 	@Override
@@ -59,23 +56,23 @@ public class FollowServiceImpl implements FollowService {
 	public void delete(String followingId) {
 		String followerEmail = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new NotFoundException("You are not logged in"));
-		Follow existingFollow = followRepository.findByFollowingIdAndFollowerEmail(followingId, followerEmail)
+		Follow existingFollow = repository.findByFollowingIdAndFollowerEmail(followingId, followerEmail)
 				.orElseThrow(() -> new NotFoundException("Can't find follow"));
-		followRepository.delete(existingFollow);
+		repository.delete(existingFollow);
 	}
 
 	@Override
 	public FollowResponse read(String followingId) {
 		String followerEmail = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new NotFoundException("You are not logged in"));
-		Follow existingFollow = followRepository.findByFollowingIdAndFollowerEmail(followingId, followerEmail)
+		Follow existingFollow = repository.findByFollowingIdAndFollowerEmail(followingId, followerEmail)
 				.orElseThrow(() -> new NotFoundException("Can't find follow"));
 		return mapper.toResponse(existingFollow);
 	}
 
 	@Override
 	public PageResponse<FollowResponse> readPage(String followingId, Pageable pageable) {
-		return mapper.toPageResponse(followRepository.findByFollowingId(followingId, pageable));
+		return mapper.toPageResponse(repository.findByFollowingId(followingId, pageable));
 	}
 
 }

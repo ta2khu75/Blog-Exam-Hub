@@ -1,71 +1,58 @@
 package com.ta2khu75.quiz.controller;
 
-import java.io.IOException;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ta2khu75.quiz.model.request.CommentRequest;
-import com.ta2khu75.quiz.model.response.BlogResponse;
 import com.ta2khu75.quiz.model.response.CommentResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.service.CommentService;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
+import jakarta.validation.Valid;
 
 @RestController
-@RequiredArgsConstructor
-@RequestMapping("${app.api-prefix}/comment")
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class CommentController {
-	CommentService service;
-	ObjectMapper mapper;
-
-	@GetMapping("/{id}")
-	public ResponseEntity<CommentResponse> readComment(@PathVariable("id") String id) {
-		return ResponseEntity.ok(service.read(id));
-	}
-	@GetMapping("/blog/{id}")
-	public ResponseEntity<PageResponse<CommentResponse>> readPageCommentBlog(@PathVariable("id") String id, @RequestParam(name = "size", required = false, defaultValue = "5") int size,
-			@RequestParam(name = "page", required = false, defaultValue = "1") int page	) {
-		Pageable pageable = Pageable.ofSize(size).withPage(page-1);
-		return ResponseEntity.ok(service.readPageByBlogId(id, pageable));
+@RequestMapping("${app.api-prefix}/comments")
+public class CommentController extends BaseController<CommentRequest, CommentResponse, String, CommentService> {
+	protected CommentController(CommentService service) {
+		super(service);
 	}
 
-	@DeleteMapping("/{id}")
+	@GetMapping("/blog/{blogId}")
+	public ResponseEntity<PageResponse<CommentResponse>> readPageCommentBlog(@PathVariable("blogId") String blogId,
+			@RequestParam(name = "size", required = false, defaultValue = "5") int size,
+			@RequestParam(name = "page", required = false, defaultValue = "1") int page) {
+		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
+		return ResponseEntity.ok(service.readPageByBlogId(blogId, pageable));
+	}
+
+	@Override
+	ResponseEntity<CommentResponse> create(@Valid @RequestBody CommentRequest request) {
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
+	}
+
+	@Override
+	@PreAuthorize("@ownerSecurity.isCommentOwner(#id)")
+	ResponseEntity<CommentResponse> update(@PathVariable String id, @Valid @RequestBody CommentRequest request) {
+		return ResponseEntity.ok(service.update(id, request));
+	}
+
+	@Override
 	@PreAuthorize("@ownerSecurity.isCommentOwner(#id) or hasRole('ROOT')")
-	public ResponseEntity<BlogResponse> deleteComment(@PathVariable("id") String id) {
+	ResponseEntity<Void> delete(String id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
-	@PostMapping(consumes = "multipart/form-data")
-	public ResponseEntity<CommentResponse> createComment(@RequestPart("comment") String request,
-			@RequestPart(name = "image", required = false) MultipartFile file) throws IOException {
-		CommentRequest commentRequest = mapper.readValue(request, CommentRequest.class);
-		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(commentRequest, file));
-	}
-
-	@PreAuthorize("@ownerSecurity.isCommentOwner(#id)")
-	@PutMapping(path = "/{id}", consumes = "multipart/form-data")
-	public ResponseEntity<CommentResponse> updateComment(@PathVariable("id") String id, @RequestPart("comment") String request,
-			@RequestPart(name = "image", required = false) MultipartFile file) throws IOException {
-		CommentRequest commentRequest = mapper.readValue(request, CommentRequest.class);
-		return ResponseEntity.ok(service.update(id, commentRequest, file));
+	@Override
+	ResponseEntity<CommentResponse> read(String id) {
+		return ResponseEntity.ok(service.read(id));
 	}
 }

@@ -12,9 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 import com.ta2khu75.quiz.model.request.AnswerRequest;
@@ -36,13 +33,16 @@ import jakarta.validation.groups.Default;
 @Service
 @Slf4j
 @Validated
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class QuizServiceImpl implements QuizService {
-	QuizMapper mapper;
-	QuizRepository repository;
-	AnswerService answerService;
-	UserAnswerRepository userAnswerRepository;
+public class QuizServiceImpl extends BaseServiceImpl<QuizRepository, QuizMapper> implements QuizService {
+	private final AnswerService answerService;
+	private final UserAnswerRepository userAnswerRepository;
+
+	public QuizServiceImpl(QuizRepository repository, QuizMapper mapper, AnswerService answerService,
+			UserAnswerRepository userAnswerRepository) {
+		super(repository, mapper);
+		this.answerService = answerService;
+		this.userAnswerRepository = userAnswerRepository;
+	}
 
 	private Quiz findById(Long id) {
 		return repository.findById(id).orElseThrow(() -> new NotFoundException("Could not found quiz with id " + id));

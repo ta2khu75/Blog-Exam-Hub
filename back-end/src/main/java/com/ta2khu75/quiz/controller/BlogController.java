@@ -22,7 +22,6 @@ import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.request.BlogRequest;
 import com.ta2khu75.quiz.model.request.search.BlogSearchRequest;
 import com.ta2khu75.quiz.model.response.BlogResponse;
-import com.ta2khu75.quiz.model.response.CountResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.BlogDetailsResponse;
 import com.ta2khu75.quiz.service.BlogService;
@@ -34,18 +33,26 @@ import lombok.experimental.FieldDefaults;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("${app.api-prefix}/blog")
+@RequestMapping("${app.api-prefix}/blogs")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class BlogController {
 	BlogService service;
 	ObjectMapper mapper;
 
 	@GetMapping
-	public ResponseEntity<PageResponse<BlogResponse>> searchBlog(@ModelAttribute
-	// có hay khong co cung khong sao neu validation thì cần
-	BlogSearchRequest blogSearchRequest) {
+	public ResponseEntity<PageResponse<BlogResponse>> searchBlog(@ModelAttribute BlogSearchRequest blogSearchRequest) {
 		blogSearchRequest.setAccessModifier(AccessModifier.PUBLIC);
 		blogSearchRequest.setAuthorEmail(null);
+		return ResponseEntity.ok(service.searchBlog(blogSearchRequest));
+	}
+
+	@GetMapping("mine")
+	public ResponseEntity<PageResponse<BlogResponse>> searchMyBlog(
+			@ModelAttribute BlogSearchRequest blogSearchRequest) {
+		blogSearchRequest.setAccessModifier(null);
+		blogSearchRequest.setAuthorId(null);
+		blogSearchRequest.setAuthorEmail(SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new UnAuthorizedException("You must login first!")));
 		return ResponseEntity.ok(service.searchBlog(blogSearchRequest));
 	}
 
@@ -54,8 +61,8 @@ public class BlogController {
 		return ResponseEntity.ok(service.read(id));
 	}
 
-	@GetMapping("/{id}/details")
-	public ResponseEntity<BlogDetailsResponse> readBlogDetails(@PathVariable("id") String id) {
+	@GetMapping("/{id}/detail")
+	public ResponseEntity<BlogDetailsResponse> readBlogDetail(@PathVariable("id") String id) {
 		return ResponseEntity.ok(service.readDetail(id));
 	}
 
@@ -81,26 +88,16 @@ public class BlogController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@GetMapping("my-blog/count")
-	public ResponseEntity<CountResponse> countMyBlog() {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
-		return ResponseEntity.ok(new CountResponse(service.countByAuthorEmail(email)));
-	}
+//	@GetMapping("my-blog/count")
+//	public ResponseEntity<CountResponse> countMyBlog() {
+//		String email = SecurityUtil.getCurrentUserLogin()
+//				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
+//		return ResponseEntity.ok(new CountResponse(service.countByAuthorEmail(email)));
+//	}
 
-	@GetMapping("my/blog")
-	public ResponseEntity<PageResponse<BlogResponse>> searchMyBlog(
-			@ModelAttribute BlogSearchRequest blogSearchRequest) {
-		blogSearchRequest.setAccessModifier(null);
-		blogSearchRequest.setAuthorId(null);
-		blogSearchRequest.setAuthorEmail(SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthorizedException("You must login first!")));
-		return ResponseEntity.ok(service.searchBlog(blogSearchRequest));
-	}
-
-	@GetMapping("{authorId}/count")
-	public ResponseEntity<CountResponse> countBlogAuthor(@PathVariable("authorId") String id) {
-		return ResponseEntity
-				.ok(new CountResponse(service.countByAuthorIdAndAccessModifier(id, AccessModifier.PUBLIC)));
-	}
+//	@GetMapping("{authorId}/count")
+//	public ResponseEntity<CountResponse> countBlogAuthor(@PathVariable("authorId") String id) {
+//		return ResponseEntity
+//				.ok(new CountResponse(service.countByAuthorIdAndAccessModifier(id, AccessModifier.PUBLIC)));
+//	}
 }

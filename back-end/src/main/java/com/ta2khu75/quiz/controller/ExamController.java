@@ -1,15 +1,11 @@
 package com.ta2khu75.quiz.controller;
 
 import java.io.IOException;
-import java.util.List;
-
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +19,6 @@ import com.ta2khu75.quiz.exception.UnAuthorizedException;
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.request.ExamRequest;
 import com.ta2khu75.quiz.model.request.search.ExamSearchRequest;
-import com.ta2khu75.quiz.model.response.CountResponse;
 import com.ta2khu75.quiz.model.response.ExamResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
@@ -37,7 +32,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("${app.api-prefix}/exam")
+@RequestMapping("${app.api-prefix}/exams")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExamController {
 	ExamService service;
@@ -55,18 +50,13 @@ public class ExamController {
 		return ResponseEntity.ok(service.read(id));
 	}
 
-	@GetMapping("my-exam/ids")
-	public ResponseEntity<List<ExamResponse>> myReadAllById(@RequestParam("ids") List<String> ids) {
-		return ResponseEntity.ok(service.myReadAllById(ids));
-	}
-
 	@GetMapping("{id}/details")
 	public ResponseEntity<ExamDetailsResponse> readDetailExam(@PathVariable("id") String id) {
 		return ResponseEntity.ok(service.readDetail(id));
 	}
 
-	@PutMapping(path = "{id}", consumes = "multipart/form-data")
 	@PreAuthorize("@ownerSecurity.isExamOwner(#id)")
+	@PutMapping(path = "{id}", consumes = "multipart/form-data")
 	public ResponseEntity<ExamResponse> updateExam(@PathVariable(name = "id") String id,
 			@RequestPart("exam_request") String examRequestString,
 			@RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
@@ -82,26 +72,14 @@ public class ExamController {
 	}
 
 	@GetMapping
-	public ResponseEntity<PageResponse<ExamResponse>> searchExam(ExamSearchRequest examSearchRequest) {
+	public ResponseEntity<PageResponse<ExamResponse>> searchExams(ExamSearchRequest examSearchRequest) {
 		examSearchRequest.setAccessModifier(AccessModifier.PUBLIC);
 		examSearchRequest.setAuthorEmail(null);
 		return ResponseEntity.ok(service.searchExam(examSearchRequest));
 	}
-	@GetMapping("my-exam/blog-null")
-	public ResponseEntity<PageResponse<ExamResponse>> mySearchExamBlogNull(@RequestParam("keyword") String keyword, @RequestParam(name = "page", defaultValue  = "1", required = false) int page, @RequestParam(name="size", defaultValue = "5", required = false) int size) {
-		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
-		return ResponseEntity.ok(service.mySearchExamNull(keyword, pageable));
-	}
 
-	@GetMapping("my-exam/count")
-	public ResponseEntity<CountResponse> countMyExam() {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
-		return ResponseEntity.ok(new CountResponse(service.countByAuthorEmail(email)));
-	}
-
-	@GetMapping("my-exam")
-	public ResponseEntity<PageResponse<ExamResponse>> searchMyExam(ExamSearchRequest examSearchRequest) {
+	@GetMapping("mine")
+	public ResponseEntity<PageResponse<ExamResponse>> searchMyExams(ExamSearchRequest examSearchRequest) {
 		String email = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
 		examSearchRequest.setAuthorEmail(email);
@@ -110,9 +88,28 @@ public class ExamController {
 		return ResponseEntity.ok(service.searchExam(examSearchRequest));
 	}
 
-	@GetMapping("{authorId}/count")
-	public ResponseEntity<CountResponse> countExamAuthor(@PathVariable("authorId") String id) {
-		return ResponseEntity
-				.ok(new CountResponse(service.countByAuthorIdAndAccessModifier(id, AccessModifier.PUBLIC)));
-	}
+//	@GetMapping("mine/ids")
+//	public ResponseEntity<List<ExamResponse>> myReadAllById(@RequestParam("ids") List<String> ids) {
+//		return ResponseEntity.ok(service.myReadAllById(ids));
+//	}
+//	@GetMapping("mine/blog-null")
+//	public ResponseEntity<PageResponse<ExamResponse>> readExamBlogNull(@RequestParam("keyword") String keyword,
+//			@RequestParam(name = "page", defaultValue = "1", required = false) int page,
+//			@RequestParam(name = "size", defaultValue = "5", required = false) int size) {
+//		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
+//		return ResponseEntity.ok(service.mySearchExamNull(keyword, pageable));
+//	}
+
+//	@GetMapping("my-exam/count")
+//	public ResponseEntity<CountResponse> countMyExam() {
+//		String email = SecurityUtil.getCurrentUserLogin()
+//				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
+//		return ResponseEntity.ok(new CountResponse(service.countByAuthorEmail(email)));
+//	}
+
+//	@GetMapping("{authorId}/count")
+//	public ResponseEntity<CountResponse> countExamAuthor(@PathVariable("authorId") String id) {
+//		return ResponseEntity
+//				.ok(new CountResponse(service.countByAuthorIdAndAccessModifier(id, AccessModifier.PUBLIC)));
+//	}
 }

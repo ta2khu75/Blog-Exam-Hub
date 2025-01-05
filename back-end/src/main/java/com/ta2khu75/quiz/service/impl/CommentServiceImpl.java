@@ -1,12 +1,8 @@
 package com.ta2khu75.quiz.service.impl;
 
-import java.io.IOException;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.ta2khu75.quiz.exception.UnAuthorizedException;
 import com.ta2khu75.quiz.mapper.CommentMapper;
@@ -20,51 +16,38 @@ import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.BlogRepository;
 import com.ta2khu75.quiz.repository.CommentRepository;
 import com.ta2khu75.quiz.service.CommentService;
-import com.ta2khu75.quiz.service.util.FileUtil;
-import com.ta2khu75.quiz.service.util.FileUtil.Folder;
 import com.ta2khu75.quiz.util.FunctionUtil;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
-import jakarta.validation.Valid;
-import jakarta.validation.groups.Default;
-import lombok.AccessLevel;
-import lombok.experimental.FieldDefaults;
-
 @Service
-@Validated
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CommentServiceImpl extends BaseServiceImpl<CommentRepository, CommentMapper> implements CommentService {
-	FileUtil fileUtil;
-	BlogRepository blogRepository;
-	AccountRepository accountRepository;
+	private final BlogRepository blogRepository;
+	private final AccountRepository accountRepository;
 
-	public CommentServiceImpl(CommentRepository repository, CommentMapper mapper, FileUtil fileUtil,
-			BlogRepository blogRepository, AccountRepository accountRepository) {
+	public CommentServiceImpl(CommentRepository repository, CommentMapper mapper, BlogRepository blogRepository,
+			AccountRepository accountRepository) {
 		super(repository, mapper);
-		this.fileUtil = fileUtil;
 		this.blogRepository = blogRepository;
-		this.accountRepository=accountRepository;
+		this.accountRepository = accountRepository;
 	}
 
 	@Override
-	@Validated(Default.class)
 	@Transactional
-	public CommentResponse create(@Valid CommentRequest request, MultipartFile file) throws IOException {
-		String email=SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new UnAuthorizedException("You must login first!"));
-		Account account=accountRepository.findByEmail(email).orElseThrow(()->new UnAuthorizedException("You must login first!"));
+	public CommentResponse create(CommentRequest request) {
+		String email = SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
+		Account account = accountRepository.findByEmail(email)
+				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
 		Comment comment = mapper.toEntity(request);
 		comment.setAuthor(account);
 		comment.setBlog(FunctionUtil.findOrThrow(request.getBlogId(), Blog.class, blogRepository::findById));
-		fileUtil.saveFile(comment, file, Folder.COMMENT_FOLDER, Comment::setFilePath);
 		return mapper.toResponse(repository.save(comment));
 	}
 
 	@Override
-	@Validated(Default.class)
-	public CommentResponse update(String id, @Valid CommentRequest request, MultipartFile file) throws IOException {
+	public CommentResponse update(String id, CommentRequest request) {
 		Comment comment = FunctionUtil.findOrThrow(id, Comment.class, repository::findById);
 		mapper.update(request, comment);
-		fileUtil.saveFile(comment, file, Folder.COMMENT_FOLDER, Comment::setFilePath);
 		return mapper.toResponse(repository.save(comment));
 	}
 

@@ -7,7 +7,7 @@ import com.ta2khu75.quiz.model.response.BlogResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.BlogDetailsResponse;
 
-public interface BlogService extends BaseFileService<String, BlogRequest, BlogResponse> {
+public interface BlogService extends BaseFileService<BlogRequest, BlogResponse, String> {
 	PageResponse<BlogResponse> searchBlog(BlogSearchRequest blogSearchRequest);
 	BlogDetailsResponse readDetail(String id);
 	Long countByAuthorEmail(String authorEmail);

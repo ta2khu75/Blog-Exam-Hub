@@ -16,7 +16,7 @@ import lombok.experimental.FieldDefaults;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("${app.api-prefix}/permission-group")
+@RequestMapping("${app.api-prefix}/permission-groups")
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PermissionGroupController {
 	PermissionGroupService service;

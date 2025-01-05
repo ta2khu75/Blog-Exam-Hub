@@ -6,7 +6,7 @@ import com.ta2khu75.quiz.model.entity.Role;
 import com.ta2khu75.quiz.model.request.RoleRequest;
 import com.ta2khu75.quiz.model.response.details.RoleDetailsResponse;
 
-public interface RoleService extends BaseService<Long, RoleRequest, RoleDetailsResponse> {
+public interface RoleService extends BaseService<RoleRequest, RoleDetailsResponse, Long> {
 	List<RoleDetailsResponse> readAll();
 	Role find(Long id);
 	Role readByName(String roleName);

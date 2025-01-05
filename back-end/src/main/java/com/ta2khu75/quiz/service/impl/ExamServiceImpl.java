@@ -2,9 +2,6 @@ package com.ta2khu75.quiz.service.impl;
 
 import jakarta.validation.Valid;
 import jakarta.validation.groups.Default;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -55,17 +52,24 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @Validated
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ExamServiceImpl implements ExamService {
-	ExamRepository repository;
-	AccountRepository accountRepository;
-	ExamMapper mapper;
-	ExamCategoryRepository examCategoryRepository;
-	ExamResultRepository examHistoryRepository;
-	QuizService quizService;
-	FileUtil fileUtil;
-	ApplicationEventPublisher applicationEventPublisher;
+public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, ExamMapper> implements ExamService {
+	private final AccountRepository accountRepository;
+	private final ExamCategoryRepository examCategoryRepository;
+	private final ExamResultRepository examHistoryRepository;
+	private final QuizService quizService;
+	private final FileUtil fileUtil;
+	private final ApplicationEventPublisher applicationEventPublisher;
+	public ExamServiceImpl(ExamRepository repository, ExamMapper mapper, AccountRepository accountRepository,
+			ExamCategoryRepository examCategoryRepository, ExamResultRepository examHistoryRepository,
+			QuizService quizService, FileUtil fileUtil, ApplicationEventPublisher applicationEventPublisher) {
+		super(repository, mapper);
+		this.accountRepository = accountRepository;
+		this.examCategoryRepository = examCategoryRepository;
+		this.examHistoryRepository = examHistoryRepository;
+		this.quizService = quizService;
+		this.fileUtil = fileUtil;
+		this.applicationEventPublisher = applicationEventPublisher;
+	}
 
 	private ExamCategory findExamCategoryById(Long id) {
 		return examCategoryRepository.findById(id)

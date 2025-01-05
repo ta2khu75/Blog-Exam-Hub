@@ -16,7 +16,6 @@ import lombok.Setter;
 public class Comment extends EntityBase {
 	@Column(nullable = false, columnDefinition = "NVARCHAR(255)")
 	String content;
-	String filePath;
 	@ManyToOne
 	Account author;
 	@ManyToOne

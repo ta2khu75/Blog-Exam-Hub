@@ -21,19 +21,21 @@ import com.ta2khu75.quiz.service.util.RedisUtil;
 import com.ta2khu75.quiz.service.util.RedisUtil.NameModel;
 
 import jakarta.transaction.Transactional;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 
 @Service
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class RoleServiceImpl implements RoleService {
-	RoleRepository repository;
-	PermissionRepository permissionRepository;
-	ApplicationEventPublisher eventPublisher;
-	RoleMapper mapper;
-	RedisUtil redisUtil;
+public class RoleServiceImpl extends BaseServiceImpl<RoleRepository, RoleMapper> implements RoleService {
+
+	private final PermissionRepository permissionRepository;
+	private final ApplicationEventPublisher eventPublisher;
+	private final RedisUtil redisUtil;
+
+	public RoleServiceImpl(RoleRepository repository, RoleMapper mapper, PermissionRepository permissionRepository,
+			ApplicationEventPublisher eventPublisher, RedisUtil redisUtil) {
+		super(repository, mapper);
+		this.permissionRepository = permissionRepository;
+		this.eventPublisher = eventPublisher;
+		this.redisUtil = redisUtil;
+	}
 
 	@Override
 	public RoleDetailsResponse create(RoleRequest request) {
@@ -74,7 +76,7 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	public Role find(Long id) {
-		Role role = redisUtil.read(NameModel.ROLE,id, Role.class);
+		Role role = redisUtil.read(NameModel.ROLE, id, Role.class);
 		if (role == null) {
 			role = repository.findById(id)
 					.orElseThrow(() -> new NotFoundException("Could not found role with id: " + id));
@@ -87,9 +89,10 @@ public class RoleServiceImpl implements RoleService {
 	@Override
 	@Transactional
 	public Role readByName(String roleName) {
-		Role role=redisUtil.read(NameModel.ROLE, roleName, Role.class);
+		Role role = redisUtil.read(NameModel.ROLE, roleName, Role.class);
 		if (role == null) {
-			role = repository.findByName(roleName) .orElseThrow(() -> new NotFoundException("Could not found role with name: " + roleName));
+			role = repository.findByName(roleName)
+					.orElseThrow(() -> new NotFoundException("Could not found role with name: " + roleName));
 			role.getPermissions().size();
 			redisUtil.create(NameModel.ROLE, roleName, role);
 		}
