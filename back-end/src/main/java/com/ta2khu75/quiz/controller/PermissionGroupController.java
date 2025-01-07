@@ -7,21 +7,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.ta2khu75.quiz.anotation.EndpointMapping;
 import com.ta2khu75.quiz.model.response.PermissionGroupResponse;
 import com.ta2khu75.quiz.service.PermissionGroupService;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-
 @Controller
-@RequiredArgsConstructor
 @RequestMapping("${app.api-prefix}/permission-groups")
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class PermissionGroupController {
-	PermissionGroupService service;
+public class PermissionGroupController extends BaseController<PermissionGroupService> {
+	public PermissionGroupController(PermissionGroupService service) {
+		super(service);
+	}
+
 	@GetMapping
-	public ResponseEntity<List<PermissionGroupResponse>> readAllPermissionGroup() {
+	@EndpointMapping(name="Read all permission group")
+	public ResponseEntity<List<PermissionGroupResponse>> readAll() {
 		return ResponseEntity.ok(service.readAll());
 	}
 }

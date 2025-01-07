@@ -1,6 +1,5 @@
 package com.ta2khu75.quiz.controller;
 
-
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -14,42 +13,50 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ta2khu75.quiz.anotation.EndpointMapping;
 import com.ta2khu75.quiz.model.request.ExamResultRequest;
 import com.ta2khu75.quiz.model.response.ExamResultResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.ExamResultDetailsResponse;
+import com.ta2khu75.quiz.model.response.details.ExamResultDetailResponse;
 import com.ta2khu75.quiz.service.ExamResultService;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("${app.api-prefix}/exam-results")
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ExamResultController {
-	ExamResultService service;
-	@GetMapping("exam/{id}")
-	public ResponseEntity<ExamResultResponse> takeExam(@PathVariable("id") String id) {
-		ExamResultResponse response = service.readByExamId(id);
+public class ExamResultController extends BaseController<ExamResultService> {
+	public ExamResultController(ExamResultService service) {
+		super(service);
+	}
+
+	@GetMapping("exam/{examId}")
+	@EndpointMapping(name="Take exam")
+	public ResponseEntity<ExamResultResponse> create(@PathVariable String examId) {
+		ExamResultResponse response = service.readByExamId(examId);
 		if (response == null) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(service.createByExamId(id));
+			return ResponseEntity.status(HttpStatus.CREATED).body(service.createByExamId(examId));
 		}
 		return ResponseEntity.ok(response);
 	}
-	@PutMapping("{id}")	
-	public ResponseEntity<ExamResultDetailsResponse> submitExam(@PathVariable("id") String examHistoryId, @RequestBody ExamResultRequest examResultRequest) {
-		return ResponseEntity.ok(service.scoreByExamId(examHistoryId, examResultRequest));
+
+	@PutMapping("{id}")
+	@EndpointMapping(name="Submit exam")
+	public ResponseEntity<ExamResultDetailResponse> update(@PathVariable String id,
+			@RequestBody ExamResultRequest examResultRequest) {
+		return ResponseEntity.ok(service.scoreByExamId(id, examResultRequest));
 	}
+
 	@GetMapping("/page")
-	public ResponseEntity<PageResponse<ExamResultResponse>> readPageExamResult(@RequestParam(name="size", required = false, defaultValue = "5") int size, @RequestParam(name="page", required = false, defaultValue = "0") int page) {
+	@EndpointMapping(name="Read page exam result")
+	public ResponseEntity<PageResponse<ExamResultResponse>> readPage(
+			@RequestParam(required = false, defaultValue = "5") int size,
+			@RequestParam(required = false, defaultValue = "0") int page) {
 		Sort sort = Sort.by(Sort.Direction.DESC, "lastModifiedDate");
 		Pageable pageable = PageRequest.of(page, size, sort);
 		return ResponseEntity.ok(service.readPage(pageable));
 	}
+
 	@GetMapping("{id}")
-	public ResponseEntity<ExamResultDetailsResponse> readExamResult(@PathVariable("id") String id) {
+	@EndpointMapping(name="Read exam result")
+	public ResponseEntity<ExamResultDetailResponse> read(@PathVariable String id) {
 		return ResponseEntity.ok(service.read(id));
 	}
 }

@@ -28,12 +28,13 @@ import com.ta2khu75.quiz.model.request.BlogRequest;
 import com.ta2khu75.quiz.model.request.search.BlogSearchRequest;
 import com.ta2khu75.quiz.model.response.BlogResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.BlogDetailsResponse;
+import com.ta2khu75.quiz.model.response.details.BlogDetailResponse;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.BlogRepository;
 import com.ta2khu75.quiz.repository.BlogTagRepository;
 import com.ta2khu75.quiz.repository.ExamRepository;
 import com.ta2khu75.quiz.service.BlogService;
+import com.ta2khu75.quiz.service.base.BaseFileService;
 import com.ta2khu75.quiz.service.util.FileUtil;
 import com.ta2khu75.quiz.service.util.FileUtil.Folder;
 import com.ta2khu75.quiz.util.FunctionUtil;
@@ -44,8 +45,7 @@ import jakarta.validation.groups.Default;
 
 @Service
 @Validated
-public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper> implements BlogService {
-	private final FileUtil fileUtil;
+public class BlogServiceImpl extends BaseFileService<BlogRepository, BlogMapper> implements BlogService {
 	private final AccountRepository accountRepository;
 	private final BlogTagRepository blogTagRepository;
 	private final ExamRepository examRepository;
@@ -54,8 +54,7 @@ public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper>
 	public BlogServiceImpl(BlogRepository repository, BlogMapper mapper, FileUtil fileUtil,
 			AccountRepository accountRepository, BlogTagRepository blogTagRepository, ExamRepository examRepository,
 			ApplicationEventPublisher applicationEventPublisher) {
-		super(repository, mapper);
-		this.fileUtil = fileUtil;
+		super(repository, mapper, fileUtil);
 		this.accountRepository = accountRepository;
 		this.blogTagRepository = blogTagRepository;
 		this.applicationEventPublisher = applicationEventPublisher;
@@ -140,7 +139,7 @@ public class BlogServiceImpl extends BaseServiceImpl<BlogRepository, BlogMapper>
 	}
 
 	@Override
-	public BlogDetailsResponse readDetail(String id) {
+	public BlogDetailResponse readDetail(String id) {
 		Blog blog = FunctionUtil.findOrThrow(id, Blog.class, repository::findById);
 		blog.setViewCount(blog.getViewCount() + 1);
 		return mapper.toDetailsResponse(repository.save(blog));

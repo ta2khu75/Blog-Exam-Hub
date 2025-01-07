@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.ta2khu75.quiz.model.request.RoleRequest;
-import com.ta2khu75.quiz.model.response.details.RoleDetailsResponse;
+import com.ta2khu75.quiz.model.response.details.RoleDetailResponse;
 import com.ta2khu75.quiz.event.RoleChangeEvent;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.RoleMapper;
@@ -17,13 +17,14 @@ import com.ta2khu75.quiz.model.entity.Role;
 import com.ta2khu75.quiz.repository.PermissionRepository;
 import com.ta2khu75.quiz.repository.RoleRepository;
 import com.ta2khu75.quiz.service.RoleService;
+import com.ta2khu75.quiz.service.base.BaseService;
 import com.ta2khu75.quiz.service.util.RedisUtil;
 import com.ta2khu75.quiz.service.util.RedisUtil.NameModel;
 
 import jakarta.transaction.Transactional;
 
 @Service
-public class RoleServiceImpl extends BaseServiceImpl<RoleRepository, RoleMapper> implements RoleService {
+public class RoleServiceImpl extends BaseService<RoleRepository, RoleMapper> implements RoleService {
 
 	private final PermissionRepository permissionRepository;
 	private final ApplicationEventPublisher eventPublisher;
@@ -38,15 +39,15 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleRepository, RoleMapper>
 	}
 
 	@Override
-	public RoleDetailsResponse create(RoleRequest request) {
+	public RoleDetailResponse create(RoleRequest request) {
 		Role role = mapper.toEntity(request);
 		role.setName(role.getName().toUpperCase());
 		role.setPermissions(new HashSet<>(permissionRepository.findAllById(request.getPermissionIds())));
-		return mapper.toDetailsResponse(repository.save(role));
+		return mapper.toDetailResponse(repository.save(role));
 	}
 
 	@Override
-	public RoleDetailsResponse update(Long id, RoleRequest request) {
+	public RoleDetailResponse update(Long id, RoleRequest request) {
 		Role role = this.find(id);
 		mapper.update(request, role);
 		role.setName(role.getName().toUpperCase());
@@ -56,12 +57,12 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleRepository, RoleMapper>
 		}
 		role = repository.save(role);
 		eventPublisher.publishEvent(new RoleChangeEvent(this, role));
-		return mapper.toDetailsResponse(role);
+		return mapper.toDetailResponse(role);
 	}
 
 	@Override
-	public RoleDetailsResponse read(Long id) {
-		return mapper.toDetailsResponse(this.find(id));
+	public RoleDetailResponse read(Long id) {
+		return mapper.toDetailResponse(this.find(id));
 	}
 
 	@Override
@@ -70,8 +71,8 @@ public class RoleServiceImpl extends BaseServiceImpl<RoleRepository, RoleMapper>
 	}
 
 	@Override
-	public List<RoleDetailsResponse> readAll() {
-		return repository.findAll().stream().map(mapper::toDetailsResponse).toList();
+	public List<RoleDetailResponse> readAll() {
+		return repository.findAll().stream().map(mapper::toDetailResponse).toList();
 	}
 
 	@Override

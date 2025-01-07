@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AccountDetailsResponse extends AccountResponse{
+public class AccountDetailResponse extends AccountResponse{
 	int blogCount;
 	int examCount;
 	int followCount;

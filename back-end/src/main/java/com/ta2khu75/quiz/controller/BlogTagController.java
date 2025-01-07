@@ -7,21 +7,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ta2khu75.quiz.anotation.EndpointMapping;
 import com.ta2khu75.quiz.model.entity.BlogTag;
 import com.ta2khu75.quiz.service.BlogTagService;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-
 @RestController
 @RequestMapping("${app.api-prefix}/blog-tags")
-@RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal  = true)
-public class BlogTagController {
-	BlogTagService blogTagService;
+public class BlogTagController extends BaseController<BlogTagService> {
+
+	public BlogTagController(BlogTagService service) {
+		super(service);
+	}
+
 	@GetMapping
-	public ResponseEntity<List<BlogTag>> readAllBlogTags() {
-		return ResponseEntity.ok(blogTagService.readAll());
+	@EndpointMapping(name = "Read all blog tags")
+	public ResponseEntity<List<BlogTag>> readAll() {
+		return ResponseEntity.ok(service.readAll());
 	}
 }

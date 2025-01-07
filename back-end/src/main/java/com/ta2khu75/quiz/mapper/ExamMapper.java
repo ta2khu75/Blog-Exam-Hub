@@ -11,7 +11,7 @@ import com.ta2khu75.quiz.model.request.ExamRequest;
 import com.ta2khu75.quiz.model.response.BlogResponse;
 import com.ta2khu75.quiz.model.response.ExamResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
+import com.ta2khu75.quiz.model.response.details.ExamDetailResponse;
 import com.ta2khu75.quiz.model.entity.Blog;
 import com.ta2khu75.quiz.model.entity.Exam;
 
@@ -58,7 +58,7 @@ public interface ExamMapper {
 	@Mapping(target = "info", source = "exam", qualifiedByName = "toInfoResponse")
 	@Mapping(target = "author", source = "author", qualifiedByName = "toAccountResponse")
 	@Mapping(target = "blog", source = "blog")
-	ExamDetailsResponse toDetailsResponse(Exam exam);
+	ExamDetailResponse toDetailResponse(Exam exam);
 
 	@Mapping(target = "content", qualifiedByName = "toExamResponse")
 	PageResponse<ExamResponse> toPageResponse(Page<Exam> page);

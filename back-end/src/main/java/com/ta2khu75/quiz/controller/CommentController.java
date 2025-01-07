@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ta2khu75.quiz.anotation.EndpointMapping;
 import com.ta2khu75.quiz.model.request.CommentRequest;
 import com.ta2khu75.quiz.model.response.CommentResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
@@ -20,13 +21,15 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("${app.api-prefix}/comments")
-public class CommentController extends BaseController<CommentRequest, CommentResponse, String, CommentService> {
-	protected CommentController(CommentService service) {
+public class CommentController extends BaseController<CommentService>
+		implements CrudController<CommentRequest, CommentResponse, String> {
+	public CommentController(CommentService service) {
 		super(service);
 	}
 
 	@GetMapping("/blog/{blogId}")
-	public ResponseEntity<PageResponse<CommentResponse>> readPageCommentBlog(@PathVariable("blogId") String blogId,
+	@EndpointMapping(name = "Read comment blog")
+	public ResponseEntity<PageResponse<CommentResponse>> readPage(@PathVariable("blogId") String blogId,
 			@RequestParam(name = "size", required = false, defaultValue = "5") int size,
 			@RequestParam(name = "page", required = false, defaultValue = "1") int page) {
 		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
@@ -34,25 +37,28 @@ public class CommentController extends BaseController<CommentRequest, CommentRes
 	}
 
 	@Override
-	ResponseEntity<CommentResponse> create(@Valid @RequestBody CommentRequest request) {
+	@EndpointMapping(name = "Comment blog")
+	public ResponseEntity<CommentResponse> create(@Valid @RequestBody CommentRequest request) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(request));
 	}
 
 	@Override
 	@PreAuthorize("@ownerSecurity.isCommentOwner(#id)")
-	ResponseEntity<CommentResponse> update(@PathVariable String id, @Valid @RequestBody CommentRequest request) {
+	@EndpointMapping(name = "Update comment")
+	public ResponseEntity<CommentResponse> update(@PathVariable String id, @Valid @RequestBody CommentRequest request) {
 		return ResponseEntity.ok(service.update(id, request));
 	}
 
 	@Override
 	@PreAuthorize("@ownerSecurity.isCommentOwner(#id) or hasRole('ROOT')")
-	ResponseEntity<Void> delete(String id) {
+	@EndpointMapping(name = "Delete comment")
+	public ResponseEntity<Void> delete(@PathVariable String id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@Override
-	ResponseEntity<CommentResponse> read(String id) {
+	public ResponseEntity<CommentResponse> read(@PathVariable String id) {
 		return ResponseEntity.ok(service.read(id));
 	}
 }

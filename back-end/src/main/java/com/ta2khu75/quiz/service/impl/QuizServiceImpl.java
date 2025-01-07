@@ -27,13 +27,14 @@ import com.ta2khu75.quiz.repository.QuizRepository;
 import com.ta2khu75.quiz.repository.UserAnswerRepository;
 import com.ta2khu75.quiz.service.AnswerService;
 import com.ta2khu75.quiz.service.QuizService;
+import com.ta2khu75.quiz.service.base.BaseService;
 
 import jakarta.validation.groups.Default;
 
 @Service
 @Slf4j
 @Validated
-public class QuizServiceImpl extends BaseServiceImpl<QuizRepository, QuizMapper> implements QuizService {
+public class QuizServiceImpl extends BaseService<QuizRepository, QuizMapper> implements QuizService {
 	private final AnswerService answerService;
 	private final UserAnswerRepository userAnswerRepository;
 

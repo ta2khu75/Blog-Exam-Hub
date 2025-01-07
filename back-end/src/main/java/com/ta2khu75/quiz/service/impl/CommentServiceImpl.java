@@ -16,11 +16,12 @@ import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.BlogRepository;
 import com.ta2khu75.quiz.repository.CommentRepository;
 import com.ta2khu75.quiz.service.CommentService;
+import com.ta2khu75.quiz.service.base.BaseService;
 import com.ta2khu75.quiz.util.FunctionUtil;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
 @Service
-public class CommentServiceImpl extends BaseServiceImpl<CommentRepository, CommentMapper> implements CommentService {
+public class CommentServiceImpl extends BaseService<CommentRepository, CommentMapper> implements CommentService {
 	private final BlogRepository blogRepository;
 	private final AccountRepository accountRepository;
 

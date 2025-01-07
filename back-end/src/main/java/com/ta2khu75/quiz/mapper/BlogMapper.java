@@ -9,7 +9,7 @@ import com.ta2khu75.quiz.model.entity.Blog;
 import com.ta2khu75.quiz.model.request.BlogRequest;
 import com.ta2khu75.quiz.model.response.BlogResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.BlogDetailsResponse;
+import com.ta2khu75.quiz.model.response.details.BlogDetailResponse;
 
 import org.mapstruct.Mapping;
 
@@ -27,7 +27,7 @@ public interface BlogMapper {
 	@Mapping(target = "info", source = "blog", qualifiedByName = "toInfoResponse")
 	@Mapping(target = "author", source = "author", qualifiedByName = "toAccountResponse")
 	@Mapping(target = "exams", source = "exams", qualifiedByName = "toExamResponse")
-	BlogDetailsResponse toDetailsResponse(Blog blog);
+	BlogDetailResponse toDetailsResponse(Blog blog);
 
 	@Mapping(target = "blogTags", ignore = true)
 	@Mapping(target = "createdAt", ignore = true)

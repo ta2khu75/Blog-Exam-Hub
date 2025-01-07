@@ -9,11 +9,10 @@ import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.request.AccountRequest;
 import com.ta2khu75.quiz.model.request.update.AccountInfoRequest;
 import com.ta2khu75.quiz.model.request.update.AccountStatusRequest;
-import com.ta2khu75.quiz.model.response.AccountAuthResponse;
 import com.ta2khu75.quiz.model.response.AccountResponse;
+import com.ta2khu75.quiz.model.response.ManagedAccountResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.AccountAuthDetailsResponse;
-import com.ta2khu75.quiz.model.response.details.AccountDetailsResponse;
+import com.ta2khu75.quiz.model.response.details.AccountDetailResponse;
 
 import org.mapstruct.Mapping;
 
@@ -38,19 +37,14 @@ public interface AccountMapper {
 
 	@Mapping(target = "username", source = "displayName")
 	@Mapping(target = "info", source = "account", qualifiedByName = "toInfoResponse")
-	AccountAuthDetailsResponse toAuthDetailsResponse(Account account);
+	ManagedAccountResponse toManagedResponse(Account account);
 
 	@Mapping(target = "username", source = "displayName")
 	@Mapping(target = "info", source = "account", qualifiedByName = "toInfoResponse")
 	@Mapping(target = "blogCount", expression = "java(account.getBlogs() != null ? account.getBlogs().size() : 0)")
 	@Mapping(target = "examCount", expression = "java(account.getExams() != null ? account.getExams().size() : 0)")
 	@Mapping(target = "followCount", expression = "java(account.getFollowers() != null ? account.getFollowers().size() : 0)")
-	AccountDetailsResponse toDetailsResponse(Account account);
-
-	@Mapping(target = "role", source = "role.name")
-	@Mapping(target = "username", source = "displayName")
-	@Mapping(target = "info", source = "account", qualifiedByName = "toInfoResponse")
-	AccountAuthResponse toAuthResponse(Account account);
+	AccountDetailResponse toDetailsResponse(Account account);
 
 	@Mapping(target = "followers", ignore = true)
 	@Mapping(target = "following", ignore = true)
@@ -105,5 +99,5 @@ public interface AccountMapper {
 	@Mapping(target = "authorities", ignore = true)
 	void update(AccountStatusRequest request, @MappingTarget Account account);
 
-	PageResponse<AccountAuthDetailsResponse> toPageResponse(Page<Account> response);
+	PageResponse<ManagedAccountResponse> toPageResponse(Page<Account> response);
 }

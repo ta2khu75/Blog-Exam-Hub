@@ -9,6 +9,6 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ExamResultDetailsResponse extends ExamResultResponse {
+public class ExamResultDetailResponse extends ExamResultResponse {
 	private List<UserAnswerResponse> userAnswers;
 }

@@ -7,7 +7,7 @@ import org.mapstruct.Named;
 
 import com.ta2khu75.quiz.model.request.QuizRequest;
 import com.ta2khu75.quiz.model.response.QuizResponse;
-import com.ta2khu75.quiz.model.response.details.QuizDetaislResponse;
+import com.ta2khu75.quiz.model.response.details.QuizDetailResponse;
 import com.ta2khu75.quiz.model.entity.Quiz;
 
 @Mapper(componentModel = "spring", uses = { AnswerMapper.class })
@@ -29,5 +29,5 @@ public interface QuizMapper {
 	
 	@Named("toQuizDetailsResponse")
 	@Mapping(target = "answers", source = "answers", qualifiedByName = "toAnswerResponse")
-	QuizDetaislResponse toDetailsResponse(Quiz quiz);
+	QuizDetailResponse toDetailResponse(Quiz quiz);
 }

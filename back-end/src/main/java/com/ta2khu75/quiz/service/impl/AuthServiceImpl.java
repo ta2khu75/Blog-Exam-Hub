@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.ta2khu75.quiz.model.request.AccountRequest;
 import com.ta2khu75.quiz.model.request.AuthRequest;
 import com.ta2khu75.quiz.model.request.update.AccountPasswordRequest;
-import com.ta2khu75.quiz.model.response.AccountAuthResponse;
 import com.ta2khu75.quiz.model.response.AccountResponse;
 import com.ta2khu75.quiz.model.response.AuthResponse;
 import com.ta2khu75.quiz.exception.ExistingException;
@@ -31,23 +30,29 @@ import com.ta2khu75.quiz.util.EmailTemplateUtil;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
 import jakarta.mail.MessagingException;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
-@Slf4j
-@RequiredArgsConstructor
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 public class AuthServiceImpl implements AuthService {
-	JWTUtil jwtUtil;
-	AccountMapper mapper;
-	PasswordEncoder passwordEncoder;
-	RoleRepository roleRepository;
-	AccountRepository repository;
-	AuthenticationManagerBuilder authenticationManagerBuilder;
-	SendMailScheduling sendMailScheduling;
+	private final JWTUtil jwtUtil;
+	private final AccountMapper mapper;
+	private final PasswordEncoder passwordEncoder;
+	private final RoleRepository roleRepository;
+	private final AccountRepository repository;
+	private final AuthenticationManagerBuilder authenticationManagerBuilder;
+	private final SendMailScheduling sendMailScheduling;
+
+	public AuthServiceImpl(JWTUtil jwtUtil, AccountMapper mapper, PasswordEncoder passwordEncoder,
+			RoleRepository roleRepository, AccountRepository repository,
+			AuthenticationManagerBuilder authenticationManagerBuilder, SendMailScheduling sendMailScheduling) {
+		super();
+		this.jwtUtil = jwtUtil;
+		this.mapper = mapper;
+		this.passwordEncoder = passwordEncoder;
+		this.roleRepository = roleRepository;
+		this.repository = repository;
+		this.authenticationManagerBuilder = authenticationManagerBuilder;
+		this.sendMailScheduling = sendMailScheduling;
+	}
 
 	@Override
 	public AuthResponse login(AuthRequest authRequest) {
@@ -67,11 +72,11 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	private AuthResponse makeAuthResponse(Account account) {
-		AccountAuthResponse accountAuthResponse = mapper.toAuthResponse(account);
-		String refreshToken = jwtUtil.createRefreshToken(accountAuthResponse);
+		AccountResponse accountResponse= mapper.toResponse(account);
+		String refreshToken = jwtUtil.createRefreshToken(account);
 		this.updateRefreshToken(account, refreshToken);
-		return new AuthResponse(accountAuthResponse, jwtUtil.createToken(accountAuthResponse),
-				jwtUtil.createRefreshToken(accountAuthResponse), true);
+		return new AuthResponse(accountResponse, jwtUtil.createToken(account),
+				jwtUtil.createRefreshToken(account), true);
 	}
 
 	private void updateRefreshToken(Account account, String refreshToken) {

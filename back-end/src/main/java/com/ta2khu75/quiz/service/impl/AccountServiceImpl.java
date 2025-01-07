@@ -13,9 +13,9 @@ import com.ta2khu75.quiz.model.request.AccountRequest;
 import com.ta2khu75.quiz.model.request.update.AccountInfoRequest;
 import com.ta2khu75.quiz.model.request.update.AccountStatusRequest;
 import com.ta2khu75.quiz.model.response.AccountResponse;
+import com.ta2khu75.quiz.model.response.ManagedAccountResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.AccountAuthDetailsResponse;
-import com.ta2khu75.quiz.model.response.details.AccountDetailsResponse;
+import com.ta2khu75.quiz.model.response.details.AccountDetailResponse;
 import com.ta2khu75.quiz.exception.ExistingException;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.exception.NotMatchesException;
@@ -24,6 +24,7 @@ import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.RoleRepository;
 import com.ta2khu75.quiz.service.AccountService;
+import com.ta2khu75.quiz.service.base.BaseService;
 import com.ta2khu75.quiz.service.util.RedisUtil;
 import com.ta2khu75.quiz.service.util.RedisUtil.NameModel;
 import com.ta2khu75.quiz.util.FunctionUtil;
@@ -32,7 +33,7 @@ import com.ta2khu75.quiz.util.SecurityUtil;
 @Slf4j
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class AccountServiceImpl extends BaseServiceImpl<AccountRepository, AccountMapper> implements AccountService {
+public class AccountServiceImpl extends BaseService<AccountRepository, AccountMapper> implements AccountService {
 	RoleRepository roleRepository;
 	PasswordEncoder passwordEncoder;
 	RedisUtil redisUtil;
@@ -69,14 +70,8 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountRepository, Accou
 	}
 
 	@Override
-	public AccountResponse update(String id, AccountRequest request) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public AccountResponse read(String id) {
-		return mapper.toResponse(repository.findById(id)
+	public AccountDetailResponse read(String id) {
+		return mapper.toDetailsResponse(repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found account with id: " + id)));
 	}
 
@@ -86,7 +81,7 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountRepository, Accou
 	}
 
 	@Override
-	public AccountAuthDetailsResponse updateStatus(String id, AccountStatusRequest request) {
+	public ManagedAccountResponse updateStatus(String id, AccountStatusRequest request) {
 		Account account = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found account with id: " + id));
 		mapper.update(request, account);
@@ -100,12 +95,12 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountRepository, Accou
 		} else {
 			redisUtil.create(NameModel.ACCOUNT, account.getEmail(), account);
 		}
-		return mapper.toAuthDetailsResponse(account);
+		return mapper.toManagedResponse(account);
 	}
 
 	@Override
-	public PageResponse<AccountAuthDetailsResponse> readPage(String search, Pageable pageable) {
-		PageResponse<AccountAuthDetailsResponse> response = mapper
+	public PageResponse<ManagedAccountResponse> readPage(String search, Pageable pageable) {
+		PageResponse<ManagedAccountResponse> response = mapper
 				.toPageResponse(repository.searchByDisplayNameOrEmail(search, pageable));
 		response.setNumber(response.getNumber() + 1);
 		return response;
@@ -121,18 +116,18 @@ public class AccountServiceImpl extends BaseServiceImpl<AccountRepository, Accou
 		return mapper.toResponse(repository.save(account));
 	}
 
-	@Override
-	public AccountDetailsResponse readDetails(String id) {
-		Account account = repository.findById(id)
-				.orElseThrow(() -> new NotFoundException("Could not found account with id: " + id));
-		return mapper.toDetailsResponse(account);
-	}
+//	@Override
+//	public AccountDetailResponse readDetails(String id) {
+//		Account account = repository.findById(id)
+//				.orElseThrow(() -> new NotFoundException("Could not found account with id: " + id));
+//		return mapper.toDetailsResponse(account);
+//	}
 
 	@Override
-	public AccountAuthDetailsResponse updateLock(String id) {
+	public ManagedAccountResponse updateLock(String id) {
 		Account account = FunctionUtil.findOrThrow(id, Account.class, repository::findById);
 		account.setNonLocked(!account.isNonLocked());
-		return mapper.toAuthDetailsResponse(repository.save(account));
+		return mapper.toManagedResponse(repository.save(account));
 
 	}
 

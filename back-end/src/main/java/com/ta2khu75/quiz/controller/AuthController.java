@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.ta2khu75.quiz.anotation.EndpointMapping;
 import com.ta2khu75.quiz.model.request.AccountRequest;
 import com.ta2khu75.quiz.model.request.AuthRequest;
 import com.ta2khu75.quiz.model.request.update.AccountPasswordRequest;
@@ -24,42 +25,48 @@ import com.ta2khu75.quiz.service.AuthService;
 
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("${app.api-prefix}/auth")
-public class AuthController {
-	@Value("${jwt.refresh.expiration}")
-	private long cookieExpiration;
+public class AuthController extends BaseController<AuthService> {
+	private long refreshTokenCookieExpiration;
 
-	private final AuthService service;
+	public AuthController(AuthService service, @Value("${jwt.refresh.expiration}") long refreshTokenCookieExpiration) {
+		super(service);
+		this.refreshTokenCookieExpiration = refreshTokenCookieExpiration;
+	}
 
 	@PostMapping("login")
+	@EndpointMapping(name = "Login")
 	public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
 		AuthResponse response = service.login(request);
-		ResponseCookie cookie = createRefreshTokenCookie(response.getRefreshToken(), cookieExpiration);
+		ResponseCookie cookie = createRefreshTokenCookie(response.getRefreshToken(), refreshTokenCookieExpiration);
 		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(response);
 	}
 
 	@PostMapping("register")
-	public ResponseEntity<AccountResponse> createAccount(@Valid @RequestBody AccountRequest request)
+	@EndpointMapping(name = "Register")
+	public ResponseEntity<AccountResponse> register(@Valid @RequestBody AccountRequest request)
 			throws MessagingException {
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.register(request));
 	}
 
-	@GetMapping("refresh-token")
+	@GetMapping("refresh")
+	@EndpointMapping(name = "Refresh token")
 	public ResponseEntity<AuthResponse> createRefreshToken(@CookieValue("refresh_token") String refreshToken) {
 		AuthResponse response = service.refreshToken(refreshToken);
-		ResponseCookie cookie = createRefreshTokenCookie(response.getRefreshToken(), cookieExpiration);
+		ResponseCookie cookie = createRefreshTokenCookie(response.getRefreshToken(), refreshTokenCookieExpiration);
 		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(response);
 	}
+
 	@PutMapping("/change-password")
+	@EndpointMapping(name = "Change password")
 	public ResponseEntity<AccountResponse> changePassword(@Valid @RequestBody AccountPasswordRequest request) {
 		return ResponseEntity.ok(service.changePassword(request));
 	}
 
 	@GetMapping("logout")
+	@EndpointMapping(name="Logout")
 	public ResponseEntity<Void> logout() {
 		service.logout();
 		ResponseCookie cookie = createRefreshTokenCookie(null, 0);
@@ -67,7 +74,8 @@ public class AuthController {
 	}
 
 	@GetMapping("/verify")
-	public RedirectView verifyAccount(@RequestParam(name = "code") String code) {
+	@EndpointMapping(name="Verify account")
+	public RedirectView verify(@RequestParam String code) {
 		boolean isVerified = service.verify(code);
 		String clientRedirectUrl;
 		if (isVerified) {
@@ -77,6 +85,7 @@ public class AuthController {
 		}
 		return new RedirectView(clientRedirectUrl);
 	}
+
 	private ResponseCookie createRefreshTokenCookie(String refreshToken, long cookieExpiration) {
 		return ResponseCookie.from("refresh_token", refreshToken).httpOnly(true).secure(true).sameSite("None")
 				.maxAge(cookieExpiration).path("/").build();

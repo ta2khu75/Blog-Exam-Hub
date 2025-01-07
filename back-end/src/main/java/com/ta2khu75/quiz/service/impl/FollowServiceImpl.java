@@ -18,10 +18,11 @@ import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.FollowRepository;
 import com.ta2khu75.quiz.service.FollowService;
+import com.ta2khu75.quiz.service.base.BaseService;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
 @Service
-public class FollowServiceImpl extends BaseServiceImpl<FollowRepository, FollowMapper> implements FollowService {
+public class FollowServiceImpl extends BaseService<FollowRepository, FollowMapper> implements FollowService {
 	private final AccountRepository accountRepository;
 
 	public FollowServiceImpl(FollowRepository repository, FollowMapper mapper, AccountRepository accountRepository) {

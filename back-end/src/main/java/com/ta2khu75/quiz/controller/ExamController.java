@@ -10,18 +10,15 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ta2khu75.quiz.anotation.EndpointMapping;
 import com.ta2khu75.quiz.exception.UnAuthorizedException;
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.request.ExamRequest;
 import com.ta2khu75.quiz.model.request.search.ExamSearchRequest;
 import com.ta2khu75.quiz.model.response.ExamResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
+import com.ta2khu75.quiz.model.response.details.ExamDetailResponse;
 import com.ta2khu75.quiz.service.ExamService;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
@@ -31,33 +28,39 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("${app.api-prefix}/exams")
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ExamController {
-	ExamService service;
-	ObjectMapper objectMapper;
+public class ExamController extends BaseController<ExamService> {
+	private final ObjectMapper objectMapper;
 
+	public ExamController(ExamService service, ObjectMapper objectMapper) {
+		super(service);
+		this.objectMapper = objectMapper;
+	}
+
+	@EndpointMapping(name = "Create exam")
 	@PostMapping(consumes = "multipart/form-data")
-	public ResponseEntity<ExamResponse> createExam(@RequestPart("exam_request") String examRequestString,
+	public ResponseEntity<ExamResponse> create(@RequestPart("exam_request") String examRequestString,
 			@RequestPart(name = "image", required = true) MultipartFile image) throws IOException {
 		ExamRequest examRequest = objectMapper.readValue(examRequestString, ExamRequest.class);
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(examRequest, image));
 	}
 
 	@GetMapping("{id}")
-	public ResponseEntity<ExamResponse> readExam(@PathVariable("id") String id) {
+	@EndpointMapping(name = "Read exam")
+	public ResponseEntity<ExamResponse> read(@PathVariable String id) {
 		return ResponseEntity.ok(service.read(id));
 	}
 
-	@GetMapping("{id}/details")
-	public ResponseEntity<ExamDetailsResponse> readDetailExam(@PathVariable("id") String id) {
+	@GetMapping("{id}/detail")
+	@EndpointMapping(name = "Read exam detail")
+	public ResponseEntity<ExamDetailResponse> readDetail(@PathVariable String id) {
 		return ResponseEntity.ok(service.readDetail(id));
 	}
 
-	@PreAuthorize("@ownerSecurity.isExamOwner(#id)")
+	@EndpointMapping(name = "Update exam")
 	@PutMapping(path = "{id}", consumes = "multipart/form-data")
-	public ResponseEntity<ExamResponse> updateExam(@PathVariable(name = "id") String id,
+	@PreAuthorize("@ownerSecurity.isExamOwner(#id)")
+	public ResponseEntity<ExamResponse> update(@PathVariable String id,
 			@RequestPart("exam_request") String examRequestString,
 			@RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
 		ExamRequest examRequest = objectMapper.readValue(examRequestString, ExamRequest.class);
@@ -65,21 +68,24 @@ public class ExamController {
 	}
 
 	@DeleteMapping("{id}")
+	@EndpointMapping(name = "Delete exam")
 	@PreAuthorize("@ownerSecurity.isExamOwner(#id) or hasRole('ROOT')")
-	public ResponseEntity<Void> deleteExam(@PathVariable("id") String id) {
+	public ResponseEntity<Void> delete(@PathVariable String id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@GetMapping
-	public ResponseEntity<PageResponse<ExamResponse>> searchExams(ExamSearchRequest examSearchRequest) {
+	@EndpointMapping(name = "Search exam")
+	public ResponseEntity<PageResponse<ExamResponse>> searchExam(ExamSearchRequest examSearchRequest) {
 		examSearchRequest.setAccessModifier(AccessModifier.PUBLIC);
 		examSearchRequest.setAuthorEmail(null);
 		return ResponseEntity.ok(service.searchExam(examSearchRequest));
 	}
 
 	@GetMapping("mine")
-	public ResponseEntity<PageResponse<ExamResponse>> searchMyExams(ExamSearchRequest examSearchRequest) {
+	@EndpointMapping(name = "Search my exam")
+	public ResponseEntity<PageResponse<ExamResponse>> mySearch(ExamSearchRequest examSearchRequest) {
 		String email = SecurityUtil.getCurrentUserLogin()
 				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
 		examSearchRequest.setAuthorEmail(email);

@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
 import com.ta2khu75.quiz.configuration.SecurityJwtConfig;
-import com.ta2khu75.quiz.model.response.AccountAuthResponse;
+import com.ta2khu75.quiz.model.entity.Account;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,12 +27,12 @@ public class JWTUtil {
 	private final JwtEncoder jwtEncoder;
 	private final JwtDecoder jwtDecoder;
 
-	public String createToken(AccountAuthResponse response) {
+	public String createToken(Account response) {
 //		String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
 		Instant now = Instant.now();
 		Instant validity = now.plus(this.expiration, ChronoUnit.SECONDS);
 		JwtClaimsSet claims = JwtClaimsSet.builder().issuer("com.ta2khu75").issuedAt(now).expiresAt(validity)
-				.subject(response.getInfo().getId())
+				.subject(response.getId())
 //				.subject(response.getEmail())
 //			    .claim("id", response.getInfo().getId())
 				.claim("scope", "ROLE_" + response.getRole()).build();// .build();
@@ -40,11 +40,11 @@ public class JWTUtil {
 		return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
 	}
 
-	public String createRefreshToken(AccountAuthResponse response) {
+	public String createRefreshToken(Account response) {
 		Instant now = Instant.now();
 		Instant validity = now.plus(this.refreshExpiration, ChronoUnit.SECONDS);
 		JwtClaimsSet claims = JwtClaimsSet.builder().issuer("com.ta2khu75").issuedAt(now).expiresAt(validity)
-				.subject(response.getEmail()).build();
+				.subject(response.getId()).build();
 		JwsHeader jwsHeader = JwsHeader.with(SecurityJwtConfig.JWT_ALGORITHM).build();
 		return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, claims)).getTokenValue();
 	}

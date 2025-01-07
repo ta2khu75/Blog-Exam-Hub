@@ -17,13 +17,14 @@ import com.ta2khu75.quiz.model.group.Create;
 import com.ta2khu75.quiz.model.group.Update;
 import com.ta2khu75.quiz.repository.AnswerRepository;
 import com.ta2khu75.quiz.service.AnswerService;
+import com.ta2khu75.quiz.service.base.BaseService;
 
 import jakarta.validation.groups.Default;
 
 @Service
 @Validated
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class AnswerServiceImpl extends BaseServiceImpl<AnswerRepository, AnswerMapper> implements AnswerService {
+public class AnswerServiceImpl extends BaseService<AnswerRepository, AnswerMapper> implements AnswerService {
 	protected AnswerServiceImpl(AnswerRepository repository, AnswerMapper mapper) {
 		super(repository, mapper);
 	}

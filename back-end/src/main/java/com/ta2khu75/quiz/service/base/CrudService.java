@@ -1,7 +1,7 @@
-package com.ta2khu75.quiz.service;
+package com.ta2khu75.quiz.service.base;
 
 import jakarta.validation.Valid;
-public interface BaseService<Request, Response, Id> {
+public interface CrudService<Request, Response, Id> {
 	Response create(@Valid Request request);
 	Response update(Id id, @Valid Request request);
 	Response read(Id id);

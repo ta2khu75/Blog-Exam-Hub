@@ -14,10 +14,11 @@ import com.ta2khu75.quiz.repository.NotificationRepository;
 import com.ta2khu75.quiz.service.BlogService;
 import com.ta2khu75.quiz.service.ExamService;
 import com.ta2khu75.quiz.service.NotificationService;
+import com.ta2khu75.quiz.service.base.BaseService;
 
 
 @Service
-public class NotificationServiceImpl extends BaseServiceImpl<NotificationRepository, NotificationMapper>
+public class NotificationServiceImpl extends BaseService<NotificationRepository, NotificationMapper>
 		implements NotificationService {
 
 	private final BlogService blogService;

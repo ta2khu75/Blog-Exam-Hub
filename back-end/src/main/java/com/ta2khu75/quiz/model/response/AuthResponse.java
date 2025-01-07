@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthResponse {
-	AccountAuthResponse account;
+	AccountResponse account;
 	String accessToken;
 	String refreshToken;
 	boolean authenticated;

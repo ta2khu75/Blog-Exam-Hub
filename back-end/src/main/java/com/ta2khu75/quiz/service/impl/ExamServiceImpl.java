@@ -17,7 +17,7 @@ import com.ta2khu75.quiz.model.request.QuizRequest;
 import com.ta2khu75.quiz.model.request.search.ExamSearchRequest;
 import com.ta2khu75.quiz.model.response.ExamResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.ExamDetailsResponse;
+import com.ta2khu75.quiz.model.response.details.ExamDetailResponse;
 import com.ta2khu75.quiz.event.BlogExamEvent;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.exception.UnAuthorizedException;
@@ -36,6 +36,7 @@ import com.ta2khu75.quiz.repository.ExamResultRepository;
 import com.ta2khu75.quiz.repository.ExamRepository;
 import com.ta2khu75.quiz.service.ExamService;
 import com.ta2khu75.quiz.service.QuizService;
+import com.ta2khu75.quiz.service.base.BaseFileService;
 import com.ta2khu75.quiz.service.util.FileUtil;
 import com.ta2khu75.quiz.service.util.FileUtil.Folder;
 import com.ta2khu75.quiz.util.FunctionUtil;
@@ -52,22 +53,21 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @Validated
-public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, ExamMapper> implements ExamService {
+public class ExamServiceImpl extends BaseFileService<ExamRepository, ExamMapper> implements ExamService {
 	private final AccountRepository accountRepository;
 	private final ExamCategoryRepository examCategoryRepository;
 	private final ExamResultRepository examHistoryRepository;
 	private final QuizService quizService;
-	private final FileUtil fileUtil;
 	private final ApplicationEventPublisher applicationEventPublisher;
+
 	public ExamServiceImpl(ExamRepository repository, ExamMapper mapper, AccountRepository accountRepository,
 			ExamCategoryRepository examCategoryRepository, ExamResultRepository examHistoryRepository,
 			QuizService quizService, FileUtil fileUtil, ApplicationEventPublisher applicationEventPublisher) {
-		super(repository, mapper);
+		super(repository, mapper, fileUtil);
 		this.accountRepository = accountRepository;
 		this.examCategoryRepository = examCategoryRepository;
 		this.examHistoryRepository = examHistoryRepository;
 		this.quizService = quizService;
-		this.fileUtil = fileUtil;
 		this.applicationEventPublisher = applicationEventPublisher;
 	}
 
@@ -132,7 +132,6 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, ExamMapper>
 	}
 
 	@Override
-//	@PostAuthorize("returnObject.author.email== authentication.name")
 	public ExamResponse read(String id) {
 		Exam exam = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));
@@ -152,17 +151,10 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, ExamMapper>
 	}
 
 	@Override
-	public ExamDetailsResponse readDetail(String id) {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new NotFoundException("Could not find email"));
-		Account account = accountRepository.findByEmail(email)
-				.orElseThrow(() -> new NotFoundException("Could not find account with email: " + email));
+	public ExamDetailResponse readDetail(String id) {
 		Exam exam = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));
-		ExamResult examHistory = ExamResult.builder().account(account).exam(exam)
-				.endTime(Instant.now().plusSeconds((exam.getDuration() * 60L) + 60)).build();
-		examHistoryRepository.save(examHistory);
-		return mapper.toDetailsResponse(exam);
+		return mapper.toDetailResponse(exam);
 	}
 
 	@Override
@@ -191,7 +183,8 @@ public class ExamServiceImpl extends BaseServiceImpl<ExamRepository, ExamMapper>
 
 	@Override
 	public PageResponse<ExamResponse> mySearchExamNull(String keyword, Pageable pageable) {
-		String email = SecurityUtil.getCurrentUserLogin().orElseThrow(() -> new UnAuthorizedException("You must login first!"));
+		String email = SecurityUtil.getCurrentUserLogin()
+				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
 		Page<Exam> response = repository.mySearchExamBlogNull(email, keyword, pageable);
 		return mapper.toPageResponse(response);
 	}

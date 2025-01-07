@@ -37,8 +37,8 @@ public class DynamicallySecurityConfig implements AuthorizationManager<HttpServl
 	RoleService roleService;
 	RedisUtil redisUtil;
 
-	private boolean isRootUser(String roleName) {
-		return "ROOT".equals(roleName);
+	private boolean isAdminUser(String roleName) {
+		return "ADMIN".equals(roleName);
 	}
 
 	private boolean isPublicEndpoint(String requestUrl, String httpMethod) {
@@ -68,7 +68,7 @@ public class DynamicallySecurityConfig implements AuthorizationManager<HttpServl
 		String roleName = authentication.get().getAuthorities().stream().map(t -> t.getAuthority()).toList().getFirst();
 		if (!roleName.equals("ROLE_ANONYMOUS")) {
 			roleName = roleName.replace("ROLE_", "");
-			if (isRootUser(roleName)) {
+			if (isAdminUser(roleName)) {
 				return new AuthorizationDecision(true);
 			}
 			Role role = roleService.readByName(roleName);

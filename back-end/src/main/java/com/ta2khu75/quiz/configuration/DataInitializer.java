@@ -1,5 +1,6 @@
 package com.ta2khu75.quiz.configuration;
 
+import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -9,11 +10,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.condition.PathPatternsRequestCondition;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import com.ta2khu75.quiz.anotation.EndpointMapping;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.model.HTTPMethod;
 import com.ta2khu75.quiz.model.entity.Account;
@@ -45,66 +45,95 @@ public class DataInitializer implements CommandLineRunner {
 	PasswordEncoder passwordEncoder;
 	ApplicationContext applicationContext;
 
-	private Role initRole(RoleRepository roleRepository) {
-		List<Role> roles = List.of(Role.builder().name("USER").build(), Role.builder().name("ADMIN").build(),
-				Role.builder().name("ROOT").build());
+	private Role initRole() {
+		List<Role> roles = List.of(Role.builder().name("ANONYMOUS").build(), Role.builder().name("USER").build(), Role.builder().name("ADMIN").build());
 		roles = roleRepository.saveAll(roles);
-		return roles.stream().filter(role -> "ROOT".equals(role.getName())).findFirst()
-				.orElseThrow(() -> new NotFoundException("Not found role name ROOT"));
+		return roles.stream().filter(role -> "ADMIN".equals(role.getName())).findFirst()
+				.orElseThrow(() -> new NotFoundException("Not found role name ADMIN"));
 	}
 
-	private void initPermission(PermissionRepository permissionRepository,
-			PermissionGroupRepository permissionGroupRepository, ApplicationContext applicationContext) {
-		Map<String, RequestMappingHandlerMapping> allRequestMappings = applicationContext
+	private void initPermission() {
+		Map<String, RequestMappingHandlerMapping> requestMappingMap = applicationContext
 				.getBeansOfType(RequestMappingHandlerMapping.class);
-		for (RequestMappingHandlerMapping handlerMapping : allRequestMappings.values()) {
-			Map<RequestMappingInfo, HandlerMethod> handlerMethods = handlerMapping.getHandlerMethods();
-			for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
-				RequestMappingInfo requestMappingInfo = entry.getKey();
-				HandlerMethod handlerMethod = entry.getValue();
-
-				// Extract path from PathPatternsRequestCondition
-				PathPatternsRequestCondition pathPatternsCondition = requestMappingInfo.getPathPatternsCondition();
-				String path = pathPatternsCondition.getPatternValues().iterator().next();// : null;
-				if (isExcludedPath(path)) {
-					continue; // Skip this path
+		for (RequestMappingHandlerMapping handlerMapping : requestMappingMap.values()) {
+			handlerMapping.getHandlerMethods().forEach((requestMappingInfo, handlerMethod) -> {
+				Method method = handlerMethod.getMethod();
+				if (method.isAnnotationPresent(EndpointMapping.class)) {
+					EndpointMapping endpointMapping = method.getAnnotation(EndpointMapping.class);
+					RequestMethod httpMethod = requestMappingInfo.getMethodsCondition().getMethods().iterator().next();
+					String path = requestMappingInfo.getPathPatternsCondition().getPatternValues().iterator().next();
+					String permissionGroupName = StringUtil
+							.convertCamelCaseToReadable(method.getDeclaringClass().getSimpleName());
+					PermissionGroup permissionGroup = permissionGroupRepository.findByName(permissionGroupName);
+					if (permissionGroup == null) {
+						permissionGroup = permissionGroupRepository
+								.save(PermissionGroup.builder().name(permissionGroupName).build());
+					}
+					Permission permission = permissionRepository.findByName(endpointMapping.name());
+					if (permission != null) {
+						permission.setPath(path);
+						permission.setMethod(HTTPMethod.valueOf(httpMethod.name()));
+						permission.setDescription(endpointMapping.description());
+						permission.setPermissionGroup(permissionGroup);
+					} else {
+						permission = Permission.builder().name(endpointMapping.name())
+								.description(endpointMapping.description()).path(path)
+								.method(HTTPMethod.valueOf(httpMethod.name())).permissionGroup(permissionGroup).build();
+					}
+					permission = permissionRepository.save(permission);
+					System.out.println(permission.toString());
 				}
-				Class<?> beanType = handlerMethod.getBeanType();
-				String permissionGroup = StringUtil.convertCamelCaseToReadable(beanType.getSimpleName());
-				PermissionGroup group = permissionGroupRepository.findByName(permissionGroup);
-				if (group == null) {
-					group = permissionGroupRepository.save(PermissionGroup.builder().name(permissionGroup).build());
-				}
-				try {
-					Permission permission = Permission.builder()
-							.name(StringUtil.convertCamelCaseToReadable(handlerMethod.getMethod().getName())).path(path)
-							.method(HTTPMethod.valueOf(
-									requestMappingInfo.getMethodsCondition().getMethods().iterator().next().name()))
-							.permissionGroup(group).build();
-					permissionRepository.save(permission);
-				} catch (Exception e) {
-//					e.printStackTrace();
-				}
-			}
+			});
 		}
 	}
 
-	private boolean isExcludedPath(String path) {
-		return path.startsWith("/v3/api-docs") || path.startsWith("%s/account".formatted(apiPrefix))
-				|| path.startsWith("%s/auth".formatted(apiPrefix)) || path.startsWith("/error")
-				|| path.startsWith("/swagger-ui.html") || path.startsWith("/v3/api-docs.yaml");
-	}
+//		for (RequestMappingHandlerMapping handlerMapping : requestMappingMap.values()) {
+//			Map<RequestMappingInfo, HandlerMethod> handlerMethods = handlerMapping.getHandlerMethods();
+//			for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
+//				RequestMappingInfo requestMappingInfo = entry.getKey();
+//				HandlerMethod handlerMethod = entry.getValue();
+//
+//				// Extract path from PathPatternsRequestCondition
+//				PathPatternsRequestCondition pathPatternsCondition = requestMappingInfo.getPathPatternsCondition();
+//				String path = pathPatternsCondition.getPatternValues().iterator().next();// : null;
+//				if (isExcludedPath(path)) {
+//					continue; // Skip this path
+//				}
+//				Class<?> beanType = handlerMethod.getBeanType();
+//				String permissionGroup = StringUtil.convertCamelCaseToReadable(beanType.getSimpleName());
+//				PermissionGroup group = permissionGroupRepository.findByName(permissionGroup);
+//				if (group == null) {
+//					group = permissionGroupRepository.save(PermissionGroup.builder().name(permissionGroup).build());
+//				}
+//				try {
+//					Permission permission = Permission.builder()
+//							.name(StringUtil.convertCamelCaseToReadable(handlerMethod.getMethod().getName())).path(path)
+//							.method(HTTPMethod.valueOf(
+//									requestMappingInfo.getMethodsCondition().getMethods().iterator().next().name()))
+//							.permissionGroup(group).build();
+//					permissionRepository.save(permission);
+//				} catch (Exception e) {
+////					e.printStackTrace();
+//				}
+//			}
+//		}
+
+//	private boolean isExcludedPath(String path) {
+//		return path.startsWith("/v3/api-docs") || path.startsWith("%s/account".formatted(apiPrefix))
+//				|| path.startsWith("%s/auth".formatted(apiPrefix)) || path.startsWith("/error")
+//				|| path.startsWith("/swagger-ui.html") || path.startsWith("/v3/api-docs.yaml");
+//	}
 
 	@Override
 	public void run(String... args) throws Exception {
 		if (accountRepository.count() == 0) {
-			initPermission(permissionRepository, permissionGroupRepository, applicationContext);
-			Account account = Account.builder().email("root@g.com").password(passwordEncoder.encode("123"))
-					.displayName("root").firstName("root").lastName("root").enabled(true).birthday(LocalDate.now())
-					.role(initRole(roleRepository)).build();
+			initPermission();
+			Account account = Account.builder().email("admin@g.com").password(passwordEncoder.encode("123"))
+					.displayName("admin").firstName("admin").lastName("admin").enabled(true).birthday(LocalDate.now())
+					.role(initRole()).build();
 			accountRepository.save(account);
 		} else {
-//			initPermission(permissionRepository, permissionGroupRepository, applicationContext);
+			initPermission();
 		}
 	}
 }

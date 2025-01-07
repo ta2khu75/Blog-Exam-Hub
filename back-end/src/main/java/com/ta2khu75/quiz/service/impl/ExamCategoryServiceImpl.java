@@ -12,10 +12,11 @@ import com.ta2khu75.quiz.model.request.ExamCategoryRequest;
 import com.ta2khu75.quiz.model.response.ExamCategoryResponse;
 import com.ta2khu75.quiz.repository.ExamCategoryRepository;
 import com.ta2khu75.quiz.service.ExamCategoryService;
+import com.ta2khu75.quiz.service.base.BaseService;
 import com.ta2khu75.quiz.util.StringUtil;
 
 @Service
-public class ExamCategoryServiceImpl extends BaseServiceImpl<ExamCategoryRepository, ExamCategoryMapper>
+public class ExamCategoryServiceImpl extends BaseService<ExamCategoryRepository, ExamCategoryMapper>
 		implements ExamCategoryService {
 	protected ExamCategoryServiceImpl(ExamCategoryRepository repository, ExamCategoryMapper mapper) {
 		super(repository, mapper);

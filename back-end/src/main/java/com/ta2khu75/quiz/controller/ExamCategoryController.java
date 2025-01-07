@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ta2khu75.quiz.anotation.EndpointMapping;
 import com.ta2khu75.quiz.model.request.ExamCategoryRequest;
 import com.ta2khu75.quiz.model.response.ExamCategoryResponse;
 import com.ta2khu75.quiz.service.ExamCategoryService;
@@ -18,37 +19,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("${app.api-prefix}/exam-categories")
-public class ExamCategoryController
-		extends BaseController<ExamCategoryRequest, ExamCategoryResponse, Long, ExamCategoryService> {
+public class ExamCategoryController extends BaseController<ExamCategoryService>
+		implements CrudController<ExamCategoryRequest, ExamCategoryResponse, Long> {
 
-	protected ExamCategoryController(ExamCategoryService service) {
+	public ExamCategoryController(ExamCategoryService service) {
 		super(service);
 	}
 
 	@GetMapping
+	@EndpointMapping(name = "Read all exam category")
 	public ResponseEntity<List<ExamCategoryResponse>> readAllExamCategory() {
 		return ResponseEntity.ok(service.readAll());
 	}
 
 	@Override
-	ResponseEntity<ExamCategoryResponse> create(@Valid @RequestBody ExamCategoryRequest request) {
+	@EndpointMapping(name = "Create exam category")
+	public ResponseEntity<ExamCategoryResponse> create(@Valid @RequestBody ExamCategoryRequest request) {
 		return ResponseEntity.ok(service.create(request));
 	}
 
 	@Override
-	ResponseEntity<ExamCategoryResponse> update(@PathVariable Long id,
+	@EndpointMapping(name = "Update exam category")
+	public ResponseEntity<ExamCategoryResponse> update(@PathVariable Long id,
 			@Valid @RequestBody ExamCategoryRequest request) {
 		return ResponseEntity.ok(service.update(id, request));
 	}
 
 	@Override
-	ResponseEntity<Void> delete(@PathVariable Long id) {
+	@EndpointMapping(name = "Delete exam category")
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@Override
-	ResponseEntity<ExamCategoryResponse> read(@PathVariable Long id) {
+	public ResponseEntity<ExamCategoryResponse> read(@PathVariable Long id) {
 		return ResponseEntity.ok(service.read(id));
 	}
 

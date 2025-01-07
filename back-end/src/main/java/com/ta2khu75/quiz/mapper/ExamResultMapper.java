@@ -10,7 +10,7 @@ import com.ta2khu75.quiz.model.entity.ExamResult;
 import com.ta2khu75.quiz.model.response.AnswerResponse;
 import com.ta2khu75.quiz.model.response.ExamResultResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.ExamResultDetailsResponse;
+import com.ta2khu75.quiz.model.response.details.ExamResultDetailResponse;
 
 @Mapper(componentModel = "spring", uses = { InfoMapper.class, ExamMapper.class, AccountMapper.class })
 public interface ExamResultMapper {
@@ -23,7 +23,7 @@ public interface ExamResultMapper {
 	@Mapping(target = "info", source = "examResult", qualifiedByName = "toInfoResponse")
 	@Mapping(target = "account", source = "account", qualifiedByName = "toAccountResponse")
 	@Mapping(target = "exam", source = "exam", qualifiedByName = "toExamDetailsResponse")
-	ExamResultDetailsResponse toDetailsResponse(ExamResult examResult);
+	ExamResultDetailResponse toDetailResponse(ExamResult examResult);
 
 	@Mapping(target = "content", qualifiedByName = "toExamHistoryResponse")
 	PageResponse<ExamResultResponse> toPageResponse(Page<ExamResult> page);

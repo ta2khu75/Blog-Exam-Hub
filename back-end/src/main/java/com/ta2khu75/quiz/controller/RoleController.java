@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.ta2khu75.quiz.anotation.EndpointMapping;
 import com.ta2khu75.quiz.model.request.RoleRequest;
 import com.ta2khu75.quiz.model.response.RoleResponse;
-import com.ta2khu75.quiz.model.response.details.RoleDetailsResponse;
+import com.ta2khu75.quiz.model.response.details.RoleDetailResponse;
 import com.ta2khu75.quiz.service.RoleService;
 
 import jakarta.validation.Valid;
@@ -21,33 +22,39 @@ import lombok.experimental.FieldDefaults;
 @Controller
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("${app.api-prefix}/roles")
-public class RoleController extends BaseController<RoleRequest, RoleResponse, Long, RoleService> {
-	protected RoleController(RoleService service) {
+public class RoleController extends BaseController<RoleService>
+		implements CrudController<RoleRequest, RoleResponse, Long> {
+	public RoleController(RoleService service) {
 		super(service);
 	}
+
 	@GetMapping
-	public ResponseEntity<List<RoleDetailsResponse>> readAllRole() {
+	@EndpointMapping(name="Read all role")
+	public ResponseEntity<List<RoleDetailResponse>> readAll() {
 		return ResponseEntity.ok(service.readAll());
 	}
 
 	@Override
-	ResponseEntity<RoleResponse> create(@Valid @RequestBody RoleRequest request) {
+	@EndpointMapping(name="Create role")
+	public ResponseEntity<RoleResponse> create(@Valid @RequestBody RoleRequest request) {
 		return ResponseEntity.ok(service.create(request));
 	}
 
 	@Override
-	ResponseEntity<RoleResponse> update(@PathVariable Long id, @Valid @RequestBody RoleRequest request) {
+	@EndpointMapping(name="Update role")
+	public ResponseEntity<RoleResponse> update(@PathVariable Long id, @Valid @RequestBody RoleRequest request) {
 		return ResponseEntity.ok(service.update(id, request));
 	}
 
 	@Override
-	ResponseEntity<Void> delete(@PathVariable Long id) {
+	@EndpointMapping(name="Delete role")
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);
-		return ResponseEntity.noContent().build(); 
+		return ResponseEntity.noContent().build();
 	}
 
 	@Override
-	ResponseEntity<RoleResponse> read(@PathVariable Long id) {
+	public ResponseEntity<RoleResponse> read(@PathVariable Long id) {
 		return ResponseEntity.ok(service.read(id));
 	}
 }

@@ -4,10 +4,11 @@ import java.util.List;
 
 import com.ta2khu75.quiz.model.entity.Role;
 import com.ta2khu75.quiz.model.request.RoleRequest;
-import com.ta2khu75.quiz.model.response.details.RoleDetailsResponse;
+import com.ta2khu75.quiz.model.response.details.RoleDetailResponse;
+import com.ta2khu75.quiz.service.base.CrudService;
 
-public interface RoleService extends BaseService<RoleRequest, RoleDetailsResponse, Long> {
-	List<RoleDetailsResponse> readAll();
+public interface RoleService extends CrudService<RoleRequest, RoleDetailResponse, Long> {
+	List<RoleDetailResponse> readAll();
 	Role find(Long id);
 	Role readByName(String roleName);
 }

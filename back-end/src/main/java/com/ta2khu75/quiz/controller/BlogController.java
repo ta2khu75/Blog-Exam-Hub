@@ -17,37 +17,39 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ta2khu75.quiz.anotation.EndpointMapping;
 import com.ta2khu75.quiz.exception.UnAuthorizedException;
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.request.BlogRequest;
 import com.ta2khu75.quiz.model.request.search.BlogSearchRequest;
 import com.ta2khu75.quiz.model.response.BlogResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.BlogDetailsResponse;
+import com.ta2khu75.quiz.model.response.details.BlogDetailResponse;
 import com.ta2khu75.quiz.service.BlogService;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("${app.api-prefix}/blogs")
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class BlogController {
-	BlogService service;
-	ObjectMapper mapper;
+public class BlogController extends BaseController<BlogService> {
+
+	private final ObjectMapper objectMapper;
+
+	public BlogController(BlogService service, ObjectMapper objectMapper) {
+		super(service);
+		this.objectMapper = objectMapper;
+	}
 
 	@GetMapping
-	public ResponseEntity<PageResponse<BlogResponse>> searchBlog(@ModelAttribute BlogSearchRequest blogSearchRequest) {
+	@EndpointMapping(name = "Search blog")
+	public ResponseEntity<PageResponse<BlogResponse>> search(@ModelAttribute BlogSearchRequest blogSearchRequest) {
 		blogSearchRequest.setAccessModifier(AccessModifier.PUBLIC);
 		blogSearchRequest.setAuthorEmail(null);
 		return ResponseEntity.ok(service.searchBlog(blogSearchRequest));
 	}
 
 	@GetMapping("mine")
-	public ResponseEntity<PageResponse<BlogResponse>> searchMyBlog(
+	@EndpointMapping(name="Search my blog")
+	public ResponseEntity<PageResponse<BlogResponse>> mySearch(
 			@ModelAttribute BlogSearchRequest blogSearchRequest) {
 		blogSearchRequest.setAccessModifier(null);
 		blogSearchRequest.setAuthorId(null);
@@ -57,33 +59,38 @@ public class BlogController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<BlogResponse> readBlog(@PathVariable("id") String id) {
+	@EndpointMapping(name="Read blog")
+	public ResponseEntity<BlogResponse> read(@PathVariable String id) {
 		return ResponseEntity.ok(service.read(id));
 	}
 
 	@GetMapping("/{id}/detail")
-	public ResponseEntity<BlogDetailsResponse> readBlogDetail(@PathVariable("id") String id) {
+	@EndpointMapping(name="Read blog detail")
+	public ResponseEntity<BlogDetailResponse> readDetail(@PathVariable String id) {
 		return ResponseEntity.ok(service.readDetail(id));
 	}
 
 	@PostMapping(consumes = "multipart/form-data")
-	public ResponseEntity<BlogResponse> createBlog(@RequestPart("blog") String request,
+	@EndpointMapping(name="Create blog")
+	public ResponseEntity<BlogResponse> create(@RequestPart("blog") String request,
 			@RequestPart(name = "image", required = false) MultipartFile file) throws IOException {
-		BlogRequest blogRequest = mapper.readValue(request, BlogRequest.class);
+		BlogRequest blogRequest = objectMapper.readValue(request, BlogRequest.class);
 		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(blogRequest, file));
 	}
 
 	@PreAuthorize("@ownerSecurity.isBlogOwner(#id)")
 	@PutMapping(path = "/{id}", consumes = "multipart/form-data")
-	public ResponseEntity<BlogResponse> updateBlog(@PathVariable("id") String id, @RequestPart("blog") String request,
+	@EndpointMapping(name="Update blog")
+	public ResponseEntity<BlogResponse> update(@PathVariable String id, @RequestPart("blog") String request,
 			@RequestPart(name = "image", required = false) MultipartFile file) throws IOException {
-		BlogRequest blogRequest = mapper.readValue(request, BlogRequest.class);
+		BlogRequest blogRequest = objectMapper.readValue(request, BlogRequest.class);
 		return ResponseEntity.ok(service.update(id, blogRequest, file));
 	}
 
 	@DeleteMapping("/{id}")
+	@EndpointMapping(name="Delete blog")
 	@PreAuthorize("@ownerSecurity.isBlogOwner(#id) or hasRole('ROOT')")
-	public ResponseEntity<BlogResponse> deleteBlog(@PathVariable("id") String id) {
+	public ResponseEntity<BlogResponse> delete(@PathVariable String id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}

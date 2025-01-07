@@ -9,6 +9,6 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class RoleDetailsResponse extends RoleResponse {
+public class RoleDetailResponse extends RoleResponse {
 	private Set<Long> permissionIds;
 }

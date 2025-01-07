@@ -34,6 +34,7 @@ public class Permission {
 	Long id;
 	@Column(unique = true, nullable = false)
 	String name;
+	String description;
 	@Column(nullable = false)
 	String path;
 	@Enumerated(EnumType.STRING)

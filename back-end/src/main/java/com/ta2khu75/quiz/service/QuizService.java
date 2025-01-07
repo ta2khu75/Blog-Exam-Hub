@@ -5,10 +5,11 @@ import org.springframework.data.domain.Pageable;
 
 import com.ta2khu75.quiz.model.request.QuizRequest;
 import com.ta2khu75.quiz.model.response.QuizResponse;
+import com.ta2khu75.quiz.service.base.CrudService;
 
 import java.util.List;
 
-public interface QuizService extends BaseService<QuizRequest, QuizResponse, Long> {
+public interface QuizService extends CrudService<QuizRequest, QuizResponse, Long> {
 	void deleteFile(Long id);
 
 	Page<QuizResponse> read(Pageable pageable);

@@ -14,7 +14,7 @@ import com.ta2khu75.quiz.model.request.ExamResultRequest;
 import com.ta2khu75.quiz.model.request.UserAnswerRequest;
 import com.ta2khu75.quiz.model.response.ExamResultResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.ExamResultDetailsResponse;
+import com.ta2khu75.quiz.model.response.details.ExamResultDetailResponse;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.ExamResultMapper;
 import com.ta2khu75.quiz.model.QuizType;
@@ -31,10 +31,11 @@ import com.ta2khu75.quiz.repository.ExamRepository;
 import com.ta2khu75.quiz.repository.QuizRepository;
 import com.ta2khu75.quiz.repository.UserAnswerRepository;
 import com.ta2khu75.quiz.service.ExamResultService;
+import com.ta2khu75.quiz.service.base.BaseService;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
 @Service
-public class ExamResultServiceImpl extends BaseServiceImpl<ExamResultRepository, ExamResultMapper>
+public class ExamResultServiceImpl extends BaseService<ExamResultRepository, ExamResultMapper>
 		implements ExamResultService {
 	private final ExamRepository examRepository;
 	private final QuizRepository quizRepository;
@@ -66,13 +67,13 @@ public class ExamResultServiceImpl extends BaseServiceImpl<ExamResultRepository,
 	}
 
 	@Override
-	public ExamResultDetailsResponse scoreByExamId(String id, ExamResultRequest examResultRequest) {
+	public ExamResultDetailResponse scoreByExamId(String id, ExamResultRequest examResultRequest) {
 		ExamResult examHistory = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id));
 		if (examResultRequest.getUserAnswers().size() != 0) {
 			this.score(examHistory, examResultRequest.getUserAnswers());
 		}
-		return mapper.toDetailsResponse(repository.save(examHistory));
+		return mapper.toDetailResponse(repository.save(examHistory));
 	}
 
 	private void score(ExamResult examResult, Set<UserAnswerRequest> userAnswerRequests) {
@@ -153,8 +154,8 @@ public class ExamResultServiceImpl extends BaseServiceImpl<ExamResultRepository,
 	}
 
 	@Override
-	public ExamResultDetailsResponse read(String id) {
-		return mapper.toDetailsResponse(repository.findById(id)
+	public ExamResultDetailResponse read(String id) {
+		return mapper.toDetailResponse(repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id)));
 	}
 
