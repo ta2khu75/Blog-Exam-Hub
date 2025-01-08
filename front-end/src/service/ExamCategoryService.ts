@@ -1,5 +1,6 @@
+import { BasePath } from "../env/BasePath";
 import instance from "../util/apiInstance";
-const basePath = "exam-category";
+const basePath = BasePath.EXAM_CATEGORY
 export default class ExamCategoryService {
     static readAll(): Promise<ApiResponse<ExamCategoryResponse[]>> {
         return instance.get(basePath);

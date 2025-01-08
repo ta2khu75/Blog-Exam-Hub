@@ -14,5 +14,5 @@ public interface ExamResultService {
 	
 	PageResponse<ExamResultResponse> readPage(Pageable pageable);
 
-	ExamResultDetailResponse read(String id);
+	ExamResultDetailResponse readDetails(String id);
 }

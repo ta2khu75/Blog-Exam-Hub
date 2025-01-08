@@ -32,6 +32,7 @@ import com.ta2khu75.quiz.repository.QuizRepository;
 import com.ta2khu75.quiz.repository.UserAnswerRepository;
 import com.ta2khu75.quiz.service.ExamResultService;
 import com.ta2khu75.quiz.service.base.BaseService;
+import com.ta2khu75.quiz.util.FunctionUtil;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
 @Service
@@ -54,29 +55,7 @@ public class ExamResultServiceImpl extends BaseService<ExamResultRepository, Exa
 		this.accountRepository = accountRepository;
 	}
 
-	@Override
-	public ExamResultResponse readByExamId(String id) {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new NotFoundException("Could not find email"));
-		Optional<ExamResult> history = repository.findByAccountEmailAndExamIdAndEndTimeAfterAndUpdatedAtIsNull(email,
-				id, Instant.now());// IsNull(email, id, LocalDateTime.now());
-		if (history.isPresent()) {
-			return mapper.toResponse(history.get());
-		}
-		return null;
-	}
-
-	@Override
-	public ExamResultDetailResponse scoreByExamId(String id, ExamResultRequest examResultRequest) {
-		ExamResult examHistory = repository.findById(id)
-				.orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id));
-		if (examResultRequest.getUserAnswers().size() != 0) {
-			this.score(examHistory, examResultRequest.getUserAnswers());
-		}
-		return mapper.toDetailResponse(repository.save(examHistory));
-	}
-
-	private void score(ExamResult examResult, Set<UserAnswerRequest> userAnswerRequests) {
+	private void scoreExam(ExamResult examResult, Set<UserAnswerRequest> userAnswerRequests) {
 		float totalScore = 0;
 
 		// Truy xuất tất cả câu hỏi cho bài kiểm tra
@@ -140,33 +119,50 @@ public class ExamResultServiceImpl extends BaseService<ExamResultRepository, Exa
 		long incorrectSelected = answerIds.stream().filter(answerId -> !correctAnswers.contains(answerId)).count();
 
 		if (correctSelected == correctAnswers.size() && incorrectSelected == 0) {
-			return 1; // Điểm tối đa cho câu hỏi
+			return 1;
 		} else {
 			return 0;
 		}
 	}
 
 	@Override
-	public PageResponse<ExamResultResponse> readPage(Pageable pageable) {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new NotFoundException("Could not find email"));
-		return mapper.toPageResponse(repository.findByAccountEmailAndUpdatedAtIsNotNull(email, pageable));
+	public ExamResultDetailResponse scoreByExamId(String id, ExamResultRequest examResultRequest) {
+		ExamResult examHistory = repository.findById(id)
+				.orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id));
+		if (!examResultRequest.getUserAnswers().isEmpty()) {
+			this.scoreExam(examHistory, examResultRequest.getUserAnswers());
+		}
+		return mapper.toDetailResponse(repository.save(examHistory));
 	}
 
 	@Override
-	public ExamResultDetailResponse read(String id) {
+	public PageResponse<ExamResultResponse> readPage(Pageable pageable) {
+		String accountId = SecurityUtil.getCurrentUserLogin();
+		return mapper.toPageResponse(repository.findByAccountIdAndUpdatedAtIsNotNull(accountId, pageable));
+	}
+
+	@Override
+	public ExamResultDetailResponse readDetails(String id) {
 		return mapper.toDetailResponse(repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id)));
 	}
 
 	@Override
+	public ExamResultResponse readByExamId(String id) {
+		String accountId = SecurityUtil.getCurrentUserLogin();
+		Optional<ExamResult> examResult = repository
+				.findByAccountIdAndExamIdAndEndTimeAfterAndUpdatedAtIsNull(accountId, id, Instant.now());
+		if (examResult.isPresent()) {
+			return mapper.toResponse(examResult.get());
+		}
+		return null;
+	}
+
+	@Override
 	public ExamResultResponse createByExamId(String examId) {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new NotFoundException("Could not find email"));
-		Exam exam = examRepository.findById(examId)
-				.orElseThrow(() -> new NotFoundException("Could not found exam with id: " + examId));
-		Account account = accountRepository.findByEmail(email)
-				.orElseThrow(() -> new NotFoundException("Could not find account with email: " + email));
+		Account account = FunctionUtil.findOrThrow(SecurityUtil.getCurrentUserLogin(), Account.class,
+				accountRepository::findById);
+		Exam exam = FunctionUtil.findOrThrow(examId, Exam.class, examRepository::findById);
 		ExamResult examResult = ExamResult.builder().account(account).exam(exam)
 				.endTime(Instant.now().plusSeconds(exam.getDuration() * 60L).plusSeconds(30)).build();
 		return mapper.toResponse(repository.save(examResult));

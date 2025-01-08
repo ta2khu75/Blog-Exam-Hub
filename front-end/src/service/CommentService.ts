@@ -1,5 +1,6 @@
+import { BasePath } from "../env/BasePath";
 import instance from "../util/apiInstance";
-const basePath = "comment";
+const basePath = BasePath.COMMENT
 export class CommentService {
     static read(id: string): Promise<ApiResponse<CommentResponse>> {
         return instance.get(`${basePath}/${id}`);

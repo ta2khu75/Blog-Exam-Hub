@@ -26,5 +26,5 @@ public interface BlogRepository extends JpaRepository<Blog, String> {
 			@Param("accessModifier") AccessModifier accessModifier, Pageable pageable);
 	Long countByAuthorIdAndAccessModifier(String authorId, AccessModifier accessModifier);
 	Long countByAuthorEmail(String authorEmail);
-	Optional<Blog> findByIdAndAuthorEmail(String blogId, String email);
+	Optional<Blog> findByIdAndAuthorId(String blogId, String authorId);
 }

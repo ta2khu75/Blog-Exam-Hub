@@ -13,7 +13,7 @@ import lombok.experimental.FieldDefaults;
 public abstract class SearchRequestDetailsBase extends SearchRequestBase{
 	String keyword;
 	String authorId;
-	String authorEmail;
+	String accountId;
 	AccessModifier accessModifier;
 //	int page = 1;
 //	int size = 10;

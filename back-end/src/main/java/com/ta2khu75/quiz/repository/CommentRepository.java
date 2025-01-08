@@ -10,5 +10,5 @@ import com.ta2khu75.quiz.model.entity.Comment;
 
 public interface CommentRepository extends JpaRepository<Comment, String> {
 	Page<Comment> findByBlogId(String blogId, Pageable pageable);
-	Optional<Comment> findByIdAndAuthorEmail(String comment, String email);
+	Optional<Comment> findByIdAndAuthorId(String comment, String authorId);
 }

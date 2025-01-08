@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ta2khu75.quiz.anotation.EndpointMapping;
-import com.ta2khu75.quiz.exception.UnAuthorizedException;
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.request.ExamRequest;
 import com.ta2khu75.quiz.model.request.search.ExamSearchRequest;
@@ -79,16 +78,14 @@ public class ExamController extends BaseController<ExamService> {
 	@EndpointMapping(name = "Search exam")
 	public ResponseEntity<PageResponse<ExamResponse>> searchExam(ExamSearchRequest examSearchRequest) {
 		examSearchRequest.setAccessModifier(AccessModifier.PUBLIC);
-		examSearchRequest.setAuthorEmail(null);
+		examSearchRequest.setAccountId(null);
 		return ResponseEntity.ok(service.searchExam(examSearchRequest));
 	}
 
 	@GetMapping("mine")
 	@EndpointMapping(name = "Search my exam")
 	public ResponseEntity<PageResponse<ExamResponse>> mySearch(ExamSearchRequest examSearchRequest) {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
-		examSearchRequest.setAuthorEmail(email);
+		examSearchRequest.setAccountId(SecurityUtil.getCurrentUserLogin());
 		examSearchRequest.setAccessModifier(null);
 		examSearchRequest.setAuthorId(null);
 		return ResponseEntity.ok(service.searchExam(examSearchRequest));

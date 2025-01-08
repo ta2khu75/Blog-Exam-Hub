@@ -1,6 +1,7 @@
+import { BasePath } from "../env/BasePath";
 import instance from "../util/apiInstance";
 import qs from "qs";
-const basePath = "blog";
+const basePath = BasePath.BLOG
 export class BlogService {
     static search(blogSearchRequest: BlogSearchRequest): Promise<ApiResponse<PageResponse<BlogResponse>>> {
         return instance.get(`${basePath}`, {

@@ -1,7 +1,8 @@
+import { BasePath } from "../env/BasePath";
 import { ExamSearchRequest } from "../types/request/search/ExamSearchRequest";
 import instance from "../util/apiInstance";
 import qs from 'qs';
-const basePath = "exam";
+const basePath = BasePath.EXAM
 export default class ExamService {
     static search(examSearchRequest: ExamSearchRequest): Promise<ApiResponse<PageResponse<ExamResponse>>> {
         return instance.get(basePath, {

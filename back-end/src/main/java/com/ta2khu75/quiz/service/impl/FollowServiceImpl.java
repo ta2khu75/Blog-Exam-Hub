@@ -19,6 +19,7 @@ import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.FollowRepository;
 import com.ta2khu75.quiz.service.FollowService;
 import com.ta2khu75.quiz.service.base.BaseService;
+import com.ta2khu75.quiz.util.FunctionUtil;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
 @Service
@@ -33,17 +34,13 @@ public class FollowServiceImpl extends BaseService<FollowRepository, FollowMappe
 	@Override
 	@Transactional
 	public FollowResponse create(String followingId) {
-		String followerEmail = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new NotFoundException("You are not logged in"));
-		Optional<Follow> existingFollow = repository.findByFollowingIdAndFollowerEmail(followingId,
-				followerEmail);
+		String followerId = SecurityUtil.getCurrentUserLogin();
+		Optional<Follow> existingFollow = repository.findById(new FollowId(followerId, followingId));
 		if (existingFollow.isPresent()) {
 			throw new ExistingException("Already following this user");
 		}
-		Account following = accountRepository.findById(followingId)
-				.orElseThrow(() -> new NotFoundException("Can't find account"));
-		Account follower = accountRepository.findByEmail(followerEmail)
-				.orElseThrow(() -> new NotFoundException("Can't find account"));
+		Account following = FunctionUtil.findOrThrow(followingId, Account.class, accountRepository::findById);
+		Account follower = FunctionUtil.findOrThrow(followerId, Account.class, accountRepository::findById);
 		Follow follow = new Follow();
 		follow.setId(new FollowId(follower.getId(), following.getId()));
 		follow.setFollower(follower);
@@ -55,20 +52,16 @@ public class FollowServiceImpl extends BaseService<FollowRepository, FollowMappe
 	@Override
 	@Transactional
 	public void delete(String followingId) {
-		String followerEmail = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new NotFoundException("You are not logged in"));
-		Follow existingFollow = repository.findByFollowingIdAndFollowerEmail(followingId, followerEmail)
-				.orElseThrow(() -> new NotFoundException("Can't find follow"));
-		repository.delete(existingFollow);
+		String followerId = SecurityUtil.getCurrentUserLogin();
+		repository.deleteById(new FollowId(followerId, followingId));
 	}
 
 	@Override
 	public FollowResponse read(String followingId) {
-		String followerEmail = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new NotFoundException("You are not logged in"));
-		Follow existingFollow = repository.findByFollowingIdAndFollowerEmail(followingId, followerEmail)
+		String followerId = SecurityUtil.getCurrentUserLogin();
+		Follow follow = repository.findById(new FollowId(followerId, followingId))
 				.orElseThrow(() -> new NotFoundException("Can't find follow"));
-		return mapper.toResponse(existingFollow);
+		return mapper.toResponse(follow);
 	}
 
 	@Override

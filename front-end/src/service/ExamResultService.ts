@@ -1,5 +1,6 @@
+import { BasePath } from "../env/BasePath";
 import instance from "../util/apiInstance";
-const basePath = "exam-result";
+const basePath = BasePath.EXAM_RESULT;
 export default class ExamResultService {
   static readByExamId(examId: string): Promise<ApiResponse<ExamResultResponse>> {
     return instance.get(`${basePath}/exam/${examId}`);

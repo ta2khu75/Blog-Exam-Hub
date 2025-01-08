@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ta2khu75.quiz.anotation.EndpointMapping;
-import com.ta2khu75.quiz.exception.UnAuthorizedException;
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.request.BlogRequest;
 import com.ta2khu75.quiz.model.request.search.BlogSearchRequest;
@@ -43,7 +42,7 @@ public class BlogController extends BaseController<BlogService> {
 	@EndpointMapping(name = "Search blog")
 	public ResponseEntity<PageResponse<BlogResponse>> search(@ModelAttribute BlogSearchRequest blogSearchRequest) {
 		blogSearchRequest.setAccessModifier(AccessModifier.PUBLIC);
-		blogSearchRequest.setAuthorEmail(null);
+		blogSearchRequest.setAccountId(null);
 		return ResponseEntity.ok(service.searchBlog(blogSearchRequest));
 	}
 
@@ -53,8 +52,7 @@ public class BlogController extends BaseController<BlogService> {
 			@ModelAttribute BlogSearchRequest blogSearchRequest) {
 		blogSearchRequest.setAccessModifier(null);
 		blogSearchRequest.setAuthorId(null);
-		blogSearchRequest.setAuthorEmail(SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthorizedException("You must login first!")));
+		blogSearchRequest.setAccountId(SecurityUtil.getCurrentUserLogin());
 		return ResponseEntity.ok(service.searchBlog(blogSearchRequest));
 	}
 

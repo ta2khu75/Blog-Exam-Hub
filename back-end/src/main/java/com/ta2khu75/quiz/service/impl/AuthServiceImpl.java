@@ -20,6 +20,7 @@ import com.ta2khu75.quiz.exception.ExistingException;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.exception.NotMatchesException;
 import com.ta2khu75.quiz.mapper.AccountMapper;
+import com.ta2khu75.quiz.model.RoleDefault;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.RoleRepository;
@@ -27,6 +28,7 @@ import com.ta2khu75.quiz.scheduling.SendMailScheduling;
 import com.ta2khu75.quiz.service.AuthService;
 import com.ta2khu75.quiz.service.util.JWTUtil;
 import com.ta2khu75.quiz.util.EmailTemplateUtil;
+import com.ta2khu75.quiz.util.FunctionUtil;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
 import jakarta.mail.MessagingException;
@@ -72,11 +74,11 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	private AuthResponse makeAuthResponse(Account account) {
-		AccountResponse accountResponse= mapper.toResponse(account);
+		AccountResponse accountResponse = mapper.toResponse(account);
 		String refreshToken = jwtUtil.createRefreshToken(account);
 		this.updateRefreshToken(account, refreshToken);
-		return new AuthResponse(accountResponse, jwtUtil.createToken(account),
-				jwtUtil.createRefreshToken(account), true);
+		return new AuthResponse(accountResponse, jwtUtil.createToken(account), jwtUtil.createRefreshToken(account),
+				true);
 	}
 
 	private void updateRefreshToken(Account account, String refreshToken) {
@@ -85,22 +87,19 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	private Account validateRefreshToken(String email, String refreshToken) {
-		Account account = findAccount(email);
+		Account account = findById();
 		if (!account.getRefreshToken().equals(refreshToken))
 			throw new NotMatchesException("Refresh token not invalid");
 		return account;
 	}
 
-	private Account findAccount(String email) {
-		return repository.findByEmail(email)
-				.orElseThrow(() -> new NotFoundException("Could not found account with email: " + email));
+	private Account findById() {
+		return FunctionUtil.findOrThrow(SecurityUtil.getCurrentRoleLogin(), Account.class, repository::findById);
 	}
 
 	@Override
 	public void logout() {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new NotFoundException("Could not found email"));
-		Account account = findAccount(email);
+		Account account = findById();
 		account.setRefreshToken(null);
 		repository.save(account);
 	}
@@ -108,13 +107,13 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public AccountResponse register(AccountRequest accountRequest) throws MessagingException {
 		if (accountRequest.getPassword().equals(accountRequest.getConfirmPassword())) {
-			 if (repository.existsByEmail(accountRequest.getEmail())) {
-			        throw new ExistingException("Email already exists");
-			    }
+			if (repository.existsByEmail(accountRequest.getEmail())) {
+				throw new ExistingException("Email already exists");
+			}
 			Account account = mapper.toEntity(accountRequest);
 			account.setEmail(account.getEmail().toLowerCase());
 			account.setPassword(passwordEncoder.encode(account.getPassword()));
-			account.setRole(roleRepository.findByName("USER")
+			account.setRole(roleRepository.findByName(RoleDefault.USER.name())
 					.orElseThrow(() -> new NotFoundException("Could not find role with name: USER")));
 			account.setCodeVerify(UUID.randomUUID().toString());
 			account.setDisplayName(account.getFirstName() + " " + account.getLastName());
@@ -132,10 +131,7 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public AccountResponse changePassword(AccountPasswordRequest request) {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new NotFoundException("Could not find email"));
-		Account account = repository.findByEmail(email)
-				.orElseThrow(() -> new NotFoundException("Could not find account with email: " + email));
+		Account account = findById();
 		if (passwordEncoder.matches(request.getPassword(), account.getPassword())) {
 			if (request.getNewPassword().equals(request.getConfirmPassword())) {
 				account.setPassword(passwordEncoder.encode(request.getNewPassword()));
@@ -145,7 +141,7 @@ public class AuthServiceImpl implements AuthService {
 		}
 		throw new NotMatchesException("Password not matches");
 	}
-	
+
 	@Override
 	public boolean verify(String code) {
 		Account account = repository.findByCodeVerify(code).orElse(null);
@@ -156,5 +152,11 @@ public class AuthServiceImpl implements AuthService {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean checkAdmin() {
+		String accountId = SecurityUtil.getCurrentUserLogin();
+		return repository.existsByIdAndRoleName(accountId, RoleDefault.ADMIN.name());
 	}
 }

@@ -16,7 +16,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ta2khu75.quiz.event.BlogExamEvent;
-import com.ta2khu75.quiz.exception.UnAuthorizedException;
 import com.ta2khu75.quiz.mapper.BlogMapper;
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.TargetType;
@@ -81,9 +80,8 @@ public class BlogServiceImpl extends BaseFileService<BlogRepository, BlogMapper>
 	@Transactional
 	public BlogResponse create(@Valid BlogRequest request, MultipartFile file) throws IOException {
 		Blog blog = mapper.toEntity(request);
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthorizedException("You must be login"));
-		Account account = FunctionUtil.findOrThrow(email, Account.class, accountRepository::findByEmail);
+		Account account = FunctionUtil.findOrThrow(SecurityUtil.getCurrentUserLogin(), Account.class,
+				accountRepository::findById);
 		blog.setAuthor(account);
 		fileUtil.saveFile(blog, file, Folder.BLOG_FOLDER, Blog::setImagePath);
 		List<BlogTag> blogTags = this.saveAll(request.getBlogTags());
@@ -149,7 +147,7 @@ public class BlogServiceImpl extends BaseFileService<BlogRepository, BlogMapper>
 	public PageResponse<BlogResponse> searchBlog(BlogSearchRequest blogSearchRequest) {
 		Pageable pageable = Pageable.ofSize(blogSearchRequest.getSize()).withPage(blogSearchRequest.getPage() - 1);
 		return mapper.toPageResponse(repository.searchBlog(blogSearchRequest.getBlogTagNames(),
-				blogSearchRequest.getKeyword(), blogSearchRequest.getAuthorEmail(), blogSearchRequest.getAuthorId(),
+				blogSearchRequest.getKeyword(), blogSearchRequest.getAccountId(), blogSearchRequest.getAuthorId(),
 				blogSearchRequest.getMinView(), blogSearchRequest.getMaxView(), blogSearchRequest.getAccessModifier(),
 				pageable));
 	}

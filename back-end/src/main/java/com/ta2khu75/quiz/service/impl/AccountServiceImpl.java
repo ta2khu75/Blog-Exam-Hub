@@ -20,6 +20,7 @@ import com.ta2khu75.quiz.exception.ExistingException;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.exception.NotMatchesException;
 import com.ta2khu75.quiz.mapper.AccountMapper;
+import com.ta2khu75.quiz.model.RoleDefault;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.RoleRepository;
@@ -55,7 +56,7 @@ public class AccountServiceImpl extends BaseService<AccountRepository, AccountMa
 			Account account = mapper.toEntity(request);
 			account.setEmail(account.getEmail().toLowerCase());
 			account.setPassword(passwordEncoder.encode(account.getPassword()));
-			account.setRole(roleRepository.findByName("USER")
+			account.setRole(roleRepository.findByName(RoleDefault.USER.name())
 					.orElseThrow(() -> new NotFoundException("Could not find role with name: USER")));
 			account.setEnabled(true);
 			account.setDisplayName(account.getFirstName() + " " + account.getLastName());
@@ -108,10 +109,8 @@ public class AccountServiceImpl extends BaseService<AccountRepository, AccountMa
 
 	@Override
 	public AccountResponse updateInfo(AccountInfoRequest request) {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new NotFoundException("Could not find email"));
-		Account account = repository.findByEmail(email)
-				.orElseThrow(() -> new NotFoundException("Could not find account with email: " + email));
+		Account account = FunctionUtil.findOrThrow(SecurityUtil.getCurrentUserLogin(), Account.class,
+				repository::findById);
 		mapper.update(request, account);
 		return mapper.toResponse(repository.save(account));
 	}
@@ -130,5 +129,4 @@ public class AccountServiceImpl extends BaseService<AccountRepository, AccountMa
 		return mapper.toManagedResponse(repository.save(account));
 
 	}
-
 }

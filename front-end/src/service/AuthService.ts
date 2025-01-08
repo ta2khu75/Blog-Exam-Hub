@@ -4,7 +4,8 @@ import { setAccount } from "../redux/slice/accountSlice";
 import { store } from "../redux/store";
 import instance from "../util/apiInstance";
 import axios from "axios";
-const basePath = "/auth";
+import { BasePath } from "../env/BasePath";
+const basePath = BasePath.AUTH
 export default class AuthService {
   static login(authRequest: AuthRequest): Promise<ApiResponse<AuthResponse>> {
     return instance.post(`${basePath}/login`, authRequest);
@@ -12,8 +13,8 @@ export default class AuthService {
   static register(account: AccountRequest): Promise<ApiResponse<AccountResponse>> {
     return instance.post(`${basePath}/register`, account);
   }
-  static myAccount(): Promise<ApiResponse<AccountDetailsResponse>> {
-    return instance.get(`${basePath}/account`);
+  static changePassword(account: AccountPasswordRequest): Promise<ApiResponse<AccountResponse>> {
+    return instance.post(`${basePath}/change-password`, account);
   }
   static refreshToken() {
     axiosRetry(axios, {

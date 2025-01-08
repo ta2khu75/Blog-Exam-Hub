@@ -66,15 +66,23 @@ public class AuthController extends BaseController<AuthService> {
 	}
 
 	@GetMapping("logout")
-	@EndpointMapping(name="Logout")
+	@EndpointMapping(name = "Logout")
 	public ResponseEntity<Void> logout() {
 		service.logout();
 		ResponseCookie cookie = createRefreshTokenCookie(null, 0);
 		return ResponseEntity.noContent().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
 	}
 
+	@GetMapping("check-admin")
+	@EndpointMapping(name = "Check admin")
+	public ResponseEntity<Void> checkAdmin() {
+		service.logout();
+		ResponseCookie cookie = createRefreshTokenCookie(null, 0);
+		return ResponseEntity.noContent().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
+	}
+
 	@GetMapping("/verify")
-	@EndpointMapping(name="Verify account")
+	@EndpointMapping(name = "Verify account")
 	public RedirectView verify(@RequestParam String code) {
 		boolean isVerified = service.verify(code);
 		String clientRedirectUrl;

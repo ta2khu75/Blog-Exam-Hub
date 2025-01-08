@@ -15,26 +15,29 @@ import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.ExamLevel;
 import com.ta2khu75.quiz.model.entity.Exam;
 
-public interface ExamRepository extends JpaRepository<Exam, String>, JpaSpecificationExecutor<Exam>{
+public interface ExamRepository extends JpaRepository<Exam, String>, JpaSpecificationExecutor<Exam> {
 	@Query("SELECT e FROM Exam e WHERE "
 			+ "(:keyword IS NULL OR e.title LIKE %:keyword% OR e.description LIKE %:keyword% OR e.author.displayName LIKE %:keyword% OR e.examCategory.name LIKE %:keyword%) "
 			+ "AND (:examCategoryIds IS NULL OR e.examCategory.id IN (:examCategoryIds)) "
-			+ "AND (:authorEmail IS NULL OR e.author.email= :authorEmail) "
+			+ "AND (:accountId IS NULL OR e.author.id= :accountId) "
 			+ "AND (:authorId IS NULL OR e.author.id= :authorId) "
 			+ "AND (:examLevels IS NULL OR e.examLevel IN (:examLevels))"
 			+ "AND (:minDuration IS NULL OR e.duration >= :minDuration) "
 			+ "AND (:maxDuration IS NULL OR e.duration <= :maxDuration) "
 			+ "AND (:accessModifier IS NULL OR :accessModifier = :accessModifier) ")
 	Page<Exam> searchExam(@Param("keyword") String keyword, @Param("examCategoryIds") List<Long> examCategoryIds,
-			@Param("authorEmail") String authorEmail, @Param("authorId") String authorId,
+			@Param("accountId") String authorEmail, @Param("authorId") String authorId,
 			@Param("examLevels") List<ExamLevel> examLevel, @Param("minDuration") Integer minDuration,
 			@Param("maxDuration") Integer maxDuration, @Param("accessModifier") AccessModifier accessModifier,
 			Pageable pageable);
-	@Query("SELECT e FROM Exam e WHERE (:keyword IS NULL OR e.title LIKE %:keyword%) AND e.author.email = :authorEmail AND e.blog IS NULL")
-	Page<Exam> mySearchExamBlogNull(@Param("authorEmail") String id, @Param("keyword") String keyword, Pageable pageable);
+
+	Page<Exam> findByAuthorIdAndTitleContainingAndBlogIdIsNull(String authorId, String keyword, Pageable pageable);
+
 	Set<Exam> findByBlogId(String blogId);
+
 	Long countByAuthorIdAndAccessModifier(String authorId, AccessModifier accessModifier);
 
 	Long countByAuthorEmail(String authorEmail);
-	Optional<Exam> findByIdAndAuthorEmail(String examId, String email);
+
+	Optional<Exam> findByIdAndAuthorId(String examId, String authorId);
 }

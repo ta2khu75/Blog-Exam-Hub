@@ -4,7 +4,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ta2khu75.quiz.exception.UnAuthorizedException;
 import com.ta2khu75.quiz.mapper.CommentMapper;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Blog;
@@ -35,10 +34,8 @@ public class CommentServiceImpl extends BaseService<CommentRepository, CommentMa
 	@Override
 	@Transactional
 	public CommentResponse create(CommentRequest request) {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
-		Account account = accountRepository.findByEmail(email)
-				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
+		Account account = FunctionUtil.findOrThrow(SecurityUtil.getCurrentRoleLogin(), Account.class,
+				accountRepository::findById);
 		Comment comment = mapper.toEntity(request);
 		comment.setAuthor(account);
 		comment.setBlog(FunctionUtil.findOrThrow(request.getBlogId(), Blog.class, blogRepository::findById));

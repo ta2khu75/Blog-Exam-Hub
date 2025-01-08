@@ -3,8 +3,6 @@ package com.ta2khu75.quiz.service.impl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ta2khu75.quiz.exception.UnAuthenticationException;
-import com.ta2khu75.quiz.exception.UnAuthorizedException;
 import com.ta2khu75.quiz.mapper.ReportTargetMapper;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Blog;
@@ -38,9 +36,8 @@ public class ReportTargetServiceImpl implements ReportTargetService {
 	@Override
 	@Transactional
 	public ReportTargetResponse create(ReportTargetRequest request) {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthorizedException("You must be login"));
-		Account account = FunctionUtil.findOrThrow(email, Account.class, accountRepository::findByEmail);
+		String accountId = SecurityUtil.getCurrentUserLogin();
+		Account account = FunctionUtil.findOrThrow(accountId, Account.class, accountRepository::findByEmail);
 		switch (request.getTargetType()) {
 		case BLOG: {
 			FunctionUtil.findOrThrow(request.getTargetId(), Blog.class, blogRepository::findById);
@@ -53,7 +50,7 @@ public class ReportTargetServiceImpl implements ReportTargetService {
 		default:
 			throw new IllegalArgumentException("Unexpected value: " + request.getTargetType());
 		}
-		
+
 		ReportTarget reportTarget = mapper.toEntity(request);
 		reportTarget.setAuthorId(account.getId());
 		return mapper.toResponse(repository.save(reportTarget));
@@ -61,10 +58,8 @@ public class ReportTargetServiceImpl implements ReportTargetService {
 
 	@Override
 	public void delete(String id) {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthenticationException("You must be login"));
-		Account account = FunctionUtil.findOrThrow(email, Account.class, accountRepository::findByEmail);
-		repository.deleteById(new ReportTargetId(account.getId(), id));
+		String accountId = SecurityUtil.getCurrentUserLogin();
+		repository.deleteById(new ReportTargetId(accountId, id));
 	}
 
 }

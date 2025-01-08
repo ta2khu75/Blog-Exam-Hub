@@ -10,9 +10,16 @@ import jakarta.mail.MessagingException;
 
 public interface AuthService {
 	AuthResponse login(AuthRequest authRequest);
+
 	AccountResponse register(AccountRequest accountRequest) throws MessagingException;
+
 	AuthResponse refreshToken(String token);
+
 	AccountResponse changePassword(AccountPasswordRequest request);
-    boolean verify(String code);
+
+	boolean verify(String code);
+
 	void logout();
+
+	boolean checkAdmin();
 }

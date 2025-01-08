@@ -1,0 +1,16 @@
+export class BasePath {
+    static readonly AUTH = "auth"
+    static readonly ACCOUNT = "accounts"
+    static readonly FOLLOW = "follows"
+    static readonly BLOG = "blogs"
+    static readonly BLOG_TAG= "blog-tags"
+    static readonly EXAM = "exams"
+    static readonly EXAM_RESULT = "exam-results"
+    static readonly EXAM_CATEGORY = "exam-categories"
+    static readonly COMMENT = "comments"
+    static readonly NOTIFICATION= "notifications"
+    static readonly ROLE = "roles"
+    static readonly PERMISSION = "permissions"
+    static readonly PERMISSION_GROUP = "permission-groups"
+    static readonly REPORT = "reports"
+}

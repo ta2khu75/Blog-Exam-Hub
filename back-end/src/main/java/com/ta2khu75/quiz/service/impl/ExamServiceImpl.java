@@ -20,7 +20,6 @@ import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.ExamDetailResponse;
 import com.ta2khu75.quiz.event.BlogExamEvent;
 import com.ta2khu75.quiz.exception.NotFoundException;
-import com.ta2khu75.quiz.exception.UnAuthorizedException;
 import com.ta2khu75.quiz.mapper.ExamMapper;
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.ExamStatus;
@@ -28,11 +27,9 @@ import com.ta2khu75.quiz.model.TargetType;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Exam;
 import com.ta2khu75.quiz.model.entity.ExamCategory;
-import com.ta2khu75.quiz.model.entity.ExamResult;
 import com.ta2khu75.quiz.model.entity.Quiz;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.ExamCategoryRepository;
-import com.ta2khu75.quiz.repository.ExamResultRepository;
 import com.ta2khu75.quiz.repository.ExamRepository;
 import com.ta2khu75.quiz.service.ExamService;
 import com.ta2khu75.quiz.service.QuizService;
@@ -43,7 +40,6 @@ import com.ta2khu75.quiz.util.FunctionUtil;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
 import java.io.IOException;
-import java.time.Instant;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -56,17 +52,15 @@ import java.util.stream.Collectors;
 public class ExamServiceImpl extends BaseFileService<ExamRepository, ExamMapper> implements ExamService {
 	private final AccountRepository accountRepository;
 	private final ExamCategoryRepository examCategoryRepository;
-	private final ExamResultRepository examHistoryRepository;
 	private final QuizService quizService;
 	private final ApplicationEventPublisher applicationEventPublisher;
 
 	public ExamServiceImpl(ExamRepository repository, ExamMapper mapper, AccountRepository accountRepository,
-			ExamCategoryRepository examCategoryRepository, ExamResultRepository examHistoryRepository,
-			QuizService quizService, FileUtil fileUtil, ApplicationEventPublisher applicationEventPublisher) {
+			ExamCategoryRepository examCategoryRepository, QuizService quizService, FileUtil fileUtil,
+			ApplicationEventPublisher applicationEventPublisher) {
 		super(repository, mapper, fileUtil);
 		this.accountRepository = accountRepository;
 		this.examCategoryRepository = examCategoryRepository;
-		this.examHistoryRepository = examHistoryRepository;
 		this.quizService = quizService;
 		this.applicationEventPublisher = applicationEventPublisher;
 	}
@@ -84,9 +78,8 @@ public class ExamServiceImpl extends BaseFileService<ExamRepository, ExamMapper>
 	@Transactional
 	@Validated(value = { Default.class })
 	public ExamResponse create(@Valid ExamRequest examRequest, MultipartFile file) throws IOException {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthorizedException("You must be login"));
-		Account account = FunctionUtil.findOrThrow(email, Account.class, accountRepository::findByEmail);
+		String accountId = SecurityUtil.getCurrentUserLogin();
+		Account account = FunctionUtil.findOrThrow(accountId, Account.class, accountRepository::findByEmail);
 		Exam exam = mapper.toEntity(examRequest);
 		fileUtil.saveFile(exam, file, Folder.EXAM_FOLDER, Exam::setImagePath);
 		exam.setExamCategory(this.findExamCategoryById(examRequest.getExamCategoryId()));
@@ -161,7 +154,7 @@ public class ExamServiceImpl extends BaseFileService<ExamRepository, ExamMapper>
 	public PageResponse<ExamResponse> searchExam(ExamSearchRequest examSearchRequest) {
 		Pageable pageable = Pageable.ofSize(examSearchRequest.getSize()).withPage(examSearchRequest.getPage() - 1);
 		return mapper.toPageResponse(repository.searchExam(examSearchRequest.getKeyword(),
-				examSearchRequest.getExamCategoryIds(), examSearchRequest.getAuthorEmail(),
+				examSearchRequest.getExamCategoryIds(), examSearchRequest.getAccountId(),
 				examSearchRequest.getAuthorId(), examSearchRequest.getExamLevels(), examSearchRequest.getMinDuration(),
 				examSearchRequest.getMaxDuration(), examSearchRequest.getAccessModifier(), pageable));
 	}
@@ -183,9 +176,8 @@ public class ExamServiceImpl extends BaseFileService<ExamRepository, ExamMapper>
 
 	@Override
 	public PageResponse<ExamResponse> mySearchExamNull(String keyword, Pageable pageable) {
-		String email = SecurityUtil.getCurrentUserLogin()
-				.orElseThrow(() -> new UnAuthorizedException("You must login first!"));
-		Page<Exam> response = repository.mySearchExamBlogNull(email, keyword, pageable);
+		String accountId = SecurityUtil.getCurrentUserLogin();
+		Page<Exam> response = repository.findByAuthorIdAndTitleContainingAndBlogIdIsNull(accountId, keyword, pageable);
 		return mapper.toPageResponse(response);
 	}
 }

@@ -12,7 +12,11 @@ import com.ta2khu75.quiz.model.entity.Account;
 
 public interface AccountRepository extends JpaRepository<Account, String> {
 	Optional<Account> findByEmail(String email);
+
+	boolean existsByIdAndRoleName(String accountId, String roleName);
+
 	boolean existsByEmail(String email);
+
 	Optional<Account> findByEmailAndRefreshToken(String email, String refreshToken);
 
 	Optional<Account> findByCodeVerify(String codeVerify);

@@ -1,8 +1,8 @@
 package com.ta2khu75.quiz.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ta2khu75.quiz.model.HTTPMethod;
+import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,8 +26,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ToString(exclude = {"permissionGroup"})
-@EqualsAndHashCode(exclude = {"permissionGroup"})
+@ToString(exclude = { "permissionGroup" })
+@EqualsAndHashCode(exclude = { "permissionGroup" })
 public class Permission {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,7 +39,7 @@ public class Permission {
 	String path;
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	HTTPMethod method;
+	RequestMethod httpMethod;
 	@ManyToOne
 	@JsonIgnore
 	PermissionGroup permissionGroup;

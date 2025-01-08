@@ -1,6 +1,7 @@
+import { BasePath } from "../env/BasePath";
 import instance from "../util/apiInstance";
 
-const basePath = "account";
+const basePath = BasePath.ACCOUNT;
 export default class AccountService {
   static readPage(search = "", page = 0, size = 10): Promise<ApiResponse<PageResponse<AccountAuthDetailsResponse>>> {
     return instance.get(`${basePath}`, { params: { search, page, size } });

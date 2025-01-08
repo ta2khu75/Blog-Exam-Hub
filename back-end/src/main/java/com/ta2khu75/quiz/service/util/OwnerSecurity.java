@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
-import com.ta2khu75.quiz.exception.UnAuthenticationException;
 import com.ta2khu75.quiz.repository.BlogRepository;
 import com.ta2khu75.quiz.repository.CommentRepository;
 import com.ta2khu75.quiz.repository.ExamRepository;
@@ -21,22 +20,23 @@ public class OwnerSecurity {
 	BlogRepository blogRepository;
 	ExamRepository examRepository;
 	CommentRepository commentRepository;
-	public boolean isBlogOwner (String blogId) {
-			String username= getUsername();
-		Optional<?> optional= blogRepository.findByIdAndAuthorEmail(blogId, username);
+
+	public boolean isBlogOwner(String blogId) {
+		Optional<?> optional = blogRepository.findByIdAndAuthorId(blogId, getId());
 		return optional.isPresent();
 	}
-	public boolean isExamOwner (String examId) {
-		String username= getUsername();
-		Optional<?> optional= examRepository.findByIdAndAuthorEmail(examId, username);
+
+	public boolean isExamOwner(String examId) {
+		Optional<?> optional = examRepository.findByIdAndAuthorId(examId, getId());
 		return optional.isPresent();
 	}
-	public boolean isCommentOwner (String commentId) {
-		String username= getUsername();
-		Optional<?> optional= commentRepository.findByIdAndAuthorEmail(commentId, username);
+
+	public boolean isCommentOwner(String commentId) {
+		Optional<?> optional = commentRepository.findByIdAndAuthorId(commentId, getId());
 		return optional.isPresent();
 	}
-	private String getUsername() {
-		return SecurityUtil.getCurrentUserLogin().orElseThrow(()->new UnAuthenticationException("You must be login"));
+
+	private String getId() {
+		return SecurityUtil.getCurrentUserLogin();
 	}
 }

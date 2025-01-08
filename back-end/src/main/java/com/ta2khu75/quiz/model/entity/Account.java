@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -58,14 +57,14 @@ public class Account extends EntityBase implements UserDetails {
 	@OneToMany(mappedBy = "follower")
 	@JsonIgnore
 	Set<Follow> following;
+
 	@JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(String.format("ROLE_%s", role.getName()))); // Add role as authority
-
 		authorities.addAll(role.getPermissions().stream()
-				.map(permission -> new SimpleGrantedAuthority(permission.getName())).collect(Collectors.toList()));
+				.map(permission -> new SimpleGrantedAuthority(permission.getName())).toList());
 		return authorities;
 	}
 

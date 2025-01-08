@@ -1,5 +1,6 @@
+import { BasePath } from "../env/BasePath";
 import instance from "../util/apiInstance";
-const basePath = "role";
+const basePath = BasePath.ROLE;
 export default class RoleService{
     static readAll():Promise<ApiResponse<RoleDetailsResponse[]>>{
         return instance.get(basePath);

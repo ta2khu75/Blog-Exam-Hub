@@ -1,5 +1,6 @@
+import { BasePath } from "../env/BasePath";
 import instance from "../util/apiInstance";
-const basePath = "follow"
+const basePath = BasePath.FOLLOW;
 export class FollowService {
     static follow(followingId: string): Promise<ApiResponse<FollowResponse>> {
         return instance.get(`${basePath}/account/${followingId}`);

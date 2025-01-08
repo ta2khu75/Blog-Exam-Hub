@@ -18,7 +18,7 @@ public class UpdateExamHistoryScheduling {
 	
 	@Scheduled(fixedRate = 15000)
 	public void updateEndTime() {
-		List<ExamResult> list = repository.findByEndTimeBeforeNow(Instant.now());
+		List<ExamResult> list = repository.findByEndTimeBeforeAndUpdatedAtIsNull(Instant.now());
 		repository.saveAll(list.stream().map(e->{e.setPoint(0f);return e;}).toList());
 	}
 	
