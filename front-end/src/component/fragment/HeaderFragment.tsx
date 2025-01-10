@@ -142,7 +142,7 @@ const HeaderFragment = () => {
                 aria-labelledby="account-action"
               >
                 <li>
-                  <NavLink className="dropdown-item" to={`/profile/${account.account?.id}`}>
+                  <NavLink className="dropdown-item" to={`/profile/${account.account?.info.id}`}>
                     Profile
                   </NavLink>
                 </li>

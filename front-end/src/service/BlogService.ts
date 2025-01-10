@@ -36,7 +36,7 @@ export class BlogService {
         return instance.get(`${basePath}/${id}`);
     }
     static readDetails(id: string): Promise<ApiResponse<BlogDetailsResponse>> {
-        return instance.get(`${basePath}/${id}/details`);
+        return instance.get(`${basePath}/${id}/detail`);
     }
     static countByAuthor(authorId: string): Promise<ApiResponse<CountResponse>> {
 

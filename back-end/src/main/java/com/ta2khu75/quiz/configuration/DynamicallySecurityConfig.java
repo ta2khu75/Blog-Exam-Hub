@@ -50,11 +50,14 @@ public class DynamicallySecurityConfig implements AuthorizationManager<HttpServl
 		String httpMethod = object.getMethod();
 		try {
 			String accountId = SecurityUtil.getCurrentUserLogin();
-			Account account = redisUtil.read(NameModel.ACCOUNT, accountId, Account.class);
+			Account account = null;
+			account = redisUtil.read(NameModel.ACCOUNT, accountId, Account.class);
 			if (account != null) {
 				throw new AccessDeniedException("Account locked");
 			}
 		} catch (UnAuthenticatedException e) {
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		String roleName = SecurityUtil.getCurrentRoleLogin();
 		if (isAdmin(roleName)) {

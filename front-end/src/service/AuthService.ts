@@ -16,6 +16,9 @@ export default class AuthService {
   static changePassword(account: AccountPasswordRequest): Promise<ApiResponse<AccountResponse>> {
     return instance.post(`${basePath}/change-password`, account);
   }
+  static checkAdmin(): Promise<ApiResponse<BooleanResponse>> {
+    return instance.get(`${basePath}/check-admin`);
+  }
   static refreshToken() {
     axiosRetry(axios, {
       retries: 3,

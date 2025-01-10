@@ -1,0 +1,4 @@
+
+interface BooleanResponse {
+    result: boolean
+}

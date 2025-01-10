@@ -11,6 +11,7 @@ import BlogUploadImage from './BlogUploadImage';
 import ModalElement from '../../element/ModalElement';
 import useDebounce from '../../../hook/useDebounce';
 import ExamService from '../../../service/ExamService';
+import { useAppSelector } from '../../../redux/hooks';
 const BlogPage = () => {
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -37,18 +38,17 @@ const BlogPage = () => {
     const [openImageContent, setOpenImageContent] = useState(false)
     const [form] = Form.useForm<BlogRequest>();
     const [image, setImage] = useState<File>()
-    // const [content, setContent] = useState("");
     const [keyword, setKeyword] = useState("")
     const search = useDebounce(keyword);
     const [examList, setExamList] = useState<ExamResponse[]>([])
-    // const [examSelected, setExamSelected] = useState<{ label: string, value: string }[]>([])
+    const accountAuth = useAppSelector(state => state.account.account)
     const onFinish: FormProps<BlogRequest>["onFinish"] = (values) => {
         console.log(values);
         if (blogId) {
             BlogService.update(blogId, values, image).then((data) => {
                 if (data.success) {
                     toast.success("Successfully");
-                    navigate(`/profile`)
+                    navigate(`/profile/${accountAuth?.info.id}`)
                 } else {
                     toast.error(data.message_error);
                 }

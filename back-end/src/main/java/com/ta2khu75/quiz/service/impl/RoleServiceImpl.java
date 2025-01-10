@@ -90,12 +90,21 @@ public class RoleServiceImpl extends BaseService<RoleRepository, RoleMapper> imp
 	@Override
 	@Transactional
 	public Role readByName(String roleName) {
-		Role role = redisUtil.read(NameModel.ROLE, roleName, Role.class);
+		Role role = null;
+		try {
+			role = redisUtil.read(NameModel.ROLE, roleName, Role.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		if (role == null) {
 			role = repository.findByName(roleName)
 					.orElseThrow(() -> new NotFoundException("Could not found role with name: " + roleName));
 			role.getPermissions().size();
-			redisUtil.create(NameModel.ROLE, roleName, role);
+			try {
+				redisUtil.create(NameModel.ROLE, roleName, role);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		System.out.println(role.toString());
 		return role;

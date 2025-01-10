@@ -15,6 +15,7 @@ import com.ta2khu75.quiz.model.request.update.AccountStatusRequest;
 import com.ta2khu75.quiz.model.response.AccountResponse;
 import com.ta2khu75.quiz.model.response.ManagedAccountResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
+import com.ta2khu75.quiz.model.response.details.AccountDetailResponse;
 import com.ta2khu75.quiz.service.AccountService;
 
 @RestController
@@ -39,9 +40,14 @@ public class AccountController extends BaseController<AccountService> {
 
 	@GetMapping("{id}")
 	@EndpointMapping(name = "Read account")
-	ResponseEntity<AccountResponse> read(@PathVariable String id) {
+	ResponseEntity<AccountDetailResponse> read(@PathVariable String id) {
 		return ResponseEntity.ok(service.read(id));
 	}
+//	@GetMapping("{id}/detail")
+//	@EndpointMapping(name = "Read account")
+//	ResponseEntity<AccountDetailResponse> readDetails(@PathVariable String id) {
+//		return ResponseEntity.ok(service.read(id));
+//	}
 
 	@GetMapping
 	@EndpointMapping(name = "Search account status")

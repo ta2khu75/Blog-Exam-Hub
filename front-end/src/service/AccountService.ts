@@ -18,7 +18,7 @@ export default class AccountService {
   static updatePermission(id: string, permissionIds: number[]): Promise<ApiResponse<AccountAuthDetailsResponse>> {
     return instance.put(`${basePath}/${id}/permission`, { permission_ids: permissionIds });
   }
-  static readById(id: string): Promise<ApiResponse<AccountResponse>> {
+  static readById(id: string): Promise<ApiResponse<AccountDetailsResponse>> {
     return instance.get(`${basePath}/${id}`);
   }
   static updateMyPassword(

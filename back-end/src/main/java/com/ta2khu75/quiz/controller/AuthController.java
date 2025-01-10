@@ -21,6 +21,7 @@ import com.ta2khu75.quiz.model.request.AuthRequest;
 import com.ta2khu75.quiz.model.request.update.AccountPasswordRequest;
 import com.ta2khu75.quiz.model.response.AccountResponse;
 import com.ta2khu75.quiz.model.response.AuthResponse;
+import com.ta2khu75.quiz.model.response.BooleanResponse;
 import com.ta2khu75.quiz.service.AuthService;
 
 import jakarta.mail.MessagingException;
@@ -59,7 +60,7 @@ public class AuthController extends BaseController<AuthService> {
 		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(response);
 	}
 
-	@PutMapping("/change-password")
+	@PutMapping("change-password")
 	@EndpointMapping(name = "Change password")
 	public ResponseEntity<AccountResponse> changePassword(@Valid @RequestBody AccountPasswordRequest request) {
 		return ResponseEntity.ok(service.changePassword(request));
@@ -75,13 +76,11 @@ public class AuthController extends BaseController<AuthService> {
 
 	@GetMapping("check-admin")
 	@EndpointMapping(name = "Check admin")
-	public ResponseEntity<Void> checkAdmin() {
-		service.logout();
-		ResponseCookie cookie = createRefreshTokenCookie(null, 0);
-		return ResponseEntity.noContent().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
+	public ResponseEntity<BooleanResponse> checkAdmin() {
+		return ResponseEntity.ok(new BooleanResponse(service.checkAdmin()));
 	}
 
-	@GetMapping("/verify")
+	@GetMapping("verify")
 	@EndpointMapping(name = "Verify account")
 	public RedirectView verify(@RequestParam String code) {
 		boolean isVerified = service.verify(code);

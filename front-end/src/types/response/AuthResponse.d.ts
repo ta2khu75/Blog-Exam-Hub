@@ -1,5 +1,5 @@
 interface AuthResponse{
-    account?:AccountAuthResponse;
+    account?:AccountResponse;
     access_token?:string;
     refresh_token?:string;
     authenticated:boolean;

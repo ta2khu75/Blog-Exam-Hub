@@ -24,14 +24,14 @@ const ProfilePage = () => {
         }
     }, [id])
     const fetchReadAuthor = (id: string) => {
-        AccountService.readDetailsById(id).then((data) => {
+        AccountService.readById(id).then((data) => {
             if (data.success) {
                 setAccount(data.data);
             }
         })
     }
     const fetchInit = (id: string) => {
-        if (accountAuth?.id !== id)
+        if (accountAuth?.info.id !== id)
             FollowService.checkFollowing(id).then((response) => {
                 if (response.success) {
                     setFollow(response.data)
@@ -40,7 +40,7 @@ const ProfilePage = () => {
     }
     const handleFollowClick = () => {
         if (id) {
-            if (accountAuth?.id) {
+            if (accountAuth?.info.id) {
                 if (!follow)
                     FollowService.follow(id).then((response) => {
                         if (response.success) {
@@ -111,11 +111,11 @@ const ProfilePage = () => {
                         </div>
                         <div className="col-lg-4 order-last">
                             <ul className="list-unstyled d-flex align-items-center justify-content-center justify-content-lg-start my-3 gap-3">
-                                {accountAuth?.id === id && <>
+                                {accountAuth?.info.id === id && <>
                                     <li><button className="btn btn-primary" onClick={() => setOpenChangeInfo(true)}>Change info</button></li>
                                     <li><button className="btn btn-primary" onClick={() => setOpenChangePassword(true)}>Change password</button></li>
                                 </>}
-                                {accountAuth?.id !== id &&
+                                {accountAuth?.info.id !== id &&
                                     <li><button className="btn btn-primary" onClick={() => handleFollowClick()}>{!follow ? "Follow" : "Un Follow"}</button></li>}
                             </ul>
                         </div>
