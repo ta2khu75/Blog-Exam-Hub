@@ -56,6 +56,7 @@ public class DynamicallySecurityConfig implements AuthorizationManager<HttpServl
 				throw new AccessDeniedException("Account locked");
 			}
 		} catch (UnAuthenticatedException e) {
+			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

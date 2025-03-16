@@ -1,6 +1,5 @@
 package com.ta2khu75.quiz.model.request;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.validation.constraints.NotBlank;
@@ -13,5 +12,5 @@ import lombok.experimental.FieldDefaults;
 public class RoleRequest {
 	@NotBlank
 	String name;
-	Set<Long> permissionIds=new HashSet<>();
+	Set<Long> permissionIds;
 }

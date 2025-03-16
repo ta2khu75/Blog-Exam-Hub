@@ -1,6 +1,8 @@
 package com.ta2khu75.quiz.controller;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,7 +34,7 @@ public class CommentController extends BaseController<CommentService>
 	public ResponseEntity<PageResponse<CommentResponse>> readPage(@PathVariable("blogId") String blogId,
 			@RequestParam(name = "size", required = false, defaultValue = "5") int size,
 			@RequestParam(name = "page", required = false, defaultValue = "1") int page) {
-		Pageable pageable = Pageable.ofSize(size).withPage(page - 1);
+		Pageable pageable = PageRequest.of(page-1, size, Sort.by("createdAt").descending());
 		return ResponseEntity.ok(service.readPageByBlogId(blogId, pageable));
 	}
 

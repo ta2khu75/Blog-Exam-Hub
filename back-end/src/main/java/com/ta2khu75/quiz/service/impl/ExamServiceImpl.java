@@ -14,12 +14,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ta2khu75.quiz.model.request.ExamRequest;
 import com.ta2khu75.quiz.model.request.QuizRequest;
-import com.ta2khu75.quiz.model.request.search.ExamSearchRequest;
+import com.ta2khu75.quiz.model.request.search.ExamSearch;
 import com.ta2khu75.quiz.model.response.ExamResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.ExamDetailResponse;
 import com.ta2khu75.quiz.event.BlogExamEvent;
 import com.ta2khu75.quiz.exception.NotFoundException;
+import com.ta2khu75.quiz.exception.UnAuthenticatedException;
 import com.ta2khu75.quiz.mapper.ExamMapper;
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.ExamStatus;
@@ -79,7 +80,7 @@ public class ExamServiceImpl extends BaseFileService<ExamRepository, ExamMapper>
 	@Validated(value = { Default.class })
 	public ExamResponse create(@Valid ExamRequest examRequest, MultipartFile file) throws IOException {
 		String accountId = SecurityUtil.getCurrentUserLogin();
-		Account account = FunctionUtil.findOrThrow(accountId, Account.class, accountRepository::findByEmail);
+		Account account = FunctionUtil.findOrThrow(accountId, Account.class, accountRepository::findById);
 		Exam exam = mapper.toEntity(examRequest);
 		fileUtil.saveFile(exam, file, Folder.EXAM_FOLDER, Exam::setImagePath);
 		exam.setExamCategory(this.findExamCategoryById(examRequest.getExamCategoryId()));
@@ -151,12 +152,13 @@ public class ExamServiceImpl extends BaseFileService<ExamRepository, ExamMapper>
 	}
 
 	@Override
-	public PageResponse<ExamResponse> searchExam(ExamSearchRequest examSearchRequest) {
-		Pageable pageable = Pageable.ofSize(examSearchRequest.getSize()).withPage(examSearchRequest.getPage() - 1);
-		return mapper.toPageResponse(repository.searchExam(examSearchRequest.getKeyword(),
-				examSearchRequest.getExamCategoryIds(), examSearchRequest.getAccountId(),
-				examSearchRequest.getAuthorId(), examSearchRequest.getExamLevels(), examSearchRequest.getMinDuration(),
-				examSearchRequest.getMaxDuration(), examSearchRequest.getAccessModifier(), pageable));
+	public PageResponse<ExamResponse> searchExam(ExamSearch examSearchRequest) {
+		if(SecurityUtil.isAuthor(examSearchRequest.getAuthorId())) examSearchRequest.setAccessModifier(AccessModifier.PUBLIC);
+			Pageable pageable = Pageable.ofSize(examSearchRequest.getSize()).withPage(examSearchRequest.getPage() - 1);
+			return mapper.toPageResponse(repository.searchExam(examSearchRequest.getKeyword(),
+					examSearchRequest.getExamCategoryIds(), examSearchRequest.getAuthorId(),
+					examSearchRequest.getExamLevels(), examSearchRequest.getMinDuration(),
+					examSearchRequest.getMaxDuration(), examSearchRequest.getAccessModifier(), pageable));
 	}
 
 	@Override

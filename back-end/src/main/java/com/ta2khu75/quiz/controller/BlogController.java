@@ -18,14 +18,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ta2khu75.quiz.anotation.EndpointMapping;
-import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.request.BlogRequest;
-import com.ta2khu75.quiz.model.request.search.BlogSearchRequest;
+import com.ta2khu75.quiz.model.request.search.BlogSearch;
 import com.ta2khu75.quiz.model.response.BlogResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.BlogDetailResponse;
 import com.ta2khu75.quiz.service.BlogService;
-import com.ta2khu75.quiz.util.SecurityUtil;
 
 @RestController
 @RequestMapping("${app.api-prefix}/blogs")
@@ -40,20 +38,8 @@ public class BlogController extends BaseController<BlogService> {
 
 	@GetMapping
 	@EndpointMapping(name = "Search blog")
-	public ResponseEntity<PageResponse<BlogResponse>> search(@ModelAttribute BlogSearchRequest blogSearchRequest) {
-		blogSearchRequest.setAccessModifier(AccessModifier.PUBLIC);
-		blogSearchRequest.setAccountId(null);
-		return ResponseEntity.ok(service.searchBlog(blogSearchRequest));
-	}
-
-	@GetMapping("mine")
-	@EndpointMapping(name="Search my blog")
-	public ResponseEntity<PageResponse<BlogResponse>> mySearch(
-			@ModelAttribute BlogSearchRequest blogSearchRequest) {
-		blogSearchRequest.setAccessModifier(null);
-		blogSearchRequest.setAuthorId(null);
-		blogSearchRequest.setAccountId(SecurityUtil.getCurrentUserLogin());
-		return ResponseEntity.ok(service.searchBlog(blogSearchRequest));
+	public ResponseEntity<PageResponse<BlogResponse>> search(@ModelAttribute BlogSearch blogSearch) {
+		return ResponseEntity.ok(service.search(blogSearch));
 	}
 
 	@GetMapping("/{id}")

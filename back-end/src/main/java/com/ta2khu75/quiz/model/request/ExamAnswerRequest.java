@@ -1,13 +1,13 @@
-package com.ta2khu75.quiz.model.base;
+package com.ta2khu75.quiz.model.request;
 
+import java.util.Set;
 
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public abstract class SearchRequestBase {
-	int page = 1;
-	int size = 10;
+public class ExamAnswerRequest {
+	Long quizId;
+	Set<Long> answerIds;
 }

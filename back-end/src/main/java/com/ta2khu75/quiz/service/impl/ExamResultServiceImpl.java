@@ -7,11 +7,15 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.ta2khu75.quiz.model.request.ExamResultRequest;
-import com.ta2khu75.quiz.model.request.UserAnswerRequest;
+import com.ta2khu75.quiz.model.request.search.ExamResultSearch;
+import com.ta2khu75.quiz.model.request.ExamAnswerRequest;
 import com.ta2khu75.quiz.model.response.ExamResultResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.ExamResultDetailResponse;
@@ -55,24 +59,24 @@ public class ExamResultServiceImpl extends BaseService<ExamResultRepository, Exa
 		this.accountRepository = accountRepository;
 	}
 
-	private void scoreExam(ExamResult examResult, Set<UserAnswerRequest> userAnswerRequests) {
+	private void scoreExam(ExamResult examResult, Set<ExamAnswerRequest> userAnswerRequests) {
 		float totalScore = 0;
 
 		// Truy xuất tất cả câu hỏi cho bài kiểm tra
 		List<Quiz> quizzes = quizRepository.findByExamId(examResult.getExam().getId());
-		Set<Long> quizIds = userAnswerRequests.stream().map(UserAnswerRequest::getQuizId).collect(Collectors.toSet());
+		Set<Long> quizIds = userAnswerRequests.stream().map(ExamAnswerRequest::getQuizId).collect(Collectors.toSet());
 
 		// Truy xuất tất cả các đáp án cho các quizId
 		Map<Long, List<Answer>> answerMap = answerRepository.findByQuizIdIn(quizIds).stream()
 				.collect(Collectors.groupingBy(answer -> answer.getQuiz().getId()));
 
 		// Tạo Map từ quizId đến UserAnswerRequest
-		Map<Long, UserAnswerRequest> answerUserRequestMap = userAnswerRequests.stream()
-				.collect(Collectors.toMap(UserAnswerRequest::getQuizId, ar -> ar));
+		Map<Long, ExamAnswerRequest> answerUserRequestMap = userAnswerRequests.stream()
+				.collect(Collectors.toMap(ExamAnswerRequest::getQuizId, ar -> ar));
 
 		// Tính điểm cho từng quiz
 		for (Quiz quiz : quizzes) {
-			UserAnswerRequest answerUserRequest = answerUserRequestMap.get(quiz.getId());
+			ExamAnswerRequest answerUserRequest = answerUserRequestMap.get(quiz.getId());
 			if (answerUserRequest != null) {
 				List<Answer> quizAnswers = answerMap.get(quiz.getId());
 
@@ -129,17 +133,17 @@ public class ExamResultServiceImpl extends BaseService<ExamResultRepository, Exa
 	public ExamResultDetailResponse scoreByExamId(String id, ExamResultRequest examResultRequest) {
 		ExamResult examHistory = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id));
-		if (!examResultRequest.getUserAnswers().isEmpty()) {
-			this.scoreExam(examHistory, examResultRequest.getUserAnswers());
+		if (!examResultRequest.getExamAnswer().isEmpty()) {
+			this.scoreExam(examHistory, examResultRequest.getExamAnswer());
 		}
 		return mapper.toDetailResponse(repository.save(examHistory));
 	}
 
-	@Override
-	public PageResponse<ExamResultResponse> readPage(Pageable pageable) {
-		String accountId = SecurityUtil.getCurrentUserLogin();
-		return mapper.toPageResponse(repository.findByAccountIdAndUpdatedAtIsNotNull(accountId, pageable));
-	}
+//	@Override
+//	public PageResponse<ExamResultResponse> readPage(Pageable pageable) {
+//		String accountId = SecurityUtil.getCurrentUserLogin();
+//		return mapper.toPageResponse(repository.findByAccountIdAndUpdatedAtIsNotNull(accountId, pageable));
+//	}
 
 	@Override
 	public ExamResultDetailResponse readDetails(String id) {
@@ -166,6 +170,17 @@ public class ExamResultServiceImpl extends BaseService<ExamResultRepository, Exa
 		ExamResult examResult = ExamResult.builder().account(account).exam(exam)
 				.endTime(Instant.now().plusSeconds(exam.getDuration() * 60L).plusSeconds(30)).build();
 		return mapper.toResponse(repository.save(examResult));
+	}
+
+	@Override
+	public PageResponse<ExamResultResponse> search(ExamResultSearch examResultSearch) {
+		Sort sort = Sort.by(Sort.Direction.DESC, "updatedAt");
+		Pageable pageable = PageRequest.of(examResultSearch.getPage()-1, examResultSearch.getSize(), sort);
+		String accountId = SecurityUtil.getCurrentUserLogin();
+		Page<ExamResult> page=repository.search(examResultSearch.getKeyword(),
+				examResultSearch.getExamCategoryIds(), accountId, examResultSearch.getFromDate(), examResultSearch.getToDate(), 
+				pageable);
+		return mapper.toPageResponse(page);
 	}
 
 }

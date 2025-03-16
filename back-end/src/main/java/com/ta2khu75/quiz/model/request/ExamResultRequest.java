@@ -7,5 +7,5 @@ import lombok.Data;
 
 @Data
 public class ExamResultRequest {
-	private Set<UserAnswerRequest> userAnswers=new HashSet<>();
+	private Set<ExamAnswerRequest> examAnswer=new HashSet<>();
 }

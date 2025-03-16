@@ -1,5 +1,6 @@
 package com.ta2khu75.quiz.service.impl;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +35,7 @@ public class CommentServiceImpl extends BaseService<CommentRepository, CommentMa
 	@Override
 	@Transactional
 	public CommentResponse create(CommentRequest request) {
-		Account account = FunctionUtil.findOrThrow(SecurityUtil.getCurrentRoleLogin(), Account.class,
+		Account account = FunctionUtil.findOrThrow(SecurityUtil.getCurrentUserLogin(), Account.class,
 				accountRepository::findById);
 		Comment comment = mapper.toEntity(request);
 		comment.setAuthor(account);
@@ -61,6 +62,7 @@ public class CommentServiceImpl extends BaseService<CommentRepository, CommentMa
 
 	@Override
 	public PageResponse<CommentResponse> readPageByBlogId(String blogId, Pageable pageable) {
+		Page<Comment> commentPage= repository.findByBlogId(blogId, pageable);
 		return mapper.toPageResponse(repository.findByBlogId(blogId, pageable));
 	}
 

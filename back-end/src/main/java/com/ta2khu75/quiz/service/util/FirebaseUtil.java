@@ -62,8 +62,7 @@ public class FirebaseUtil {
 		return fileName.substring(fileName.lastIndexOf("."));
 	}
 
-	public String upload(Folder folder, MultipartFile multipartFile) {
-		try {
+	public String upload(Folder folder, MultipartFile multipartFile) throws IOException {
 			String fileName = multipartFile.getOriginalFilename(); // to get original file name
 			fileName = String.format("%s_%s", folder.name(),
 					UUID.randomUUID().toString().concat(this.getExtension(fileName))); // to generated
@@ -74,10 +73,6 @@ public class FirebaseUtil {
 			String URL = this.uploadFile(file, fileName); // to get uploaded file										// link
 			file.delete();
 			return URL;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Image couldn't upload, Something went wrong";
-		}
 	}
 
 }

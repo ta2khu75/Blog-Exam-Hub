@@ -37,6 +37,14 @@ public final class SecurityUtil {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		return extractAuthorities(securityContext.getAuthentication());
 	}
+	public static boolean isAuthor(String id) {
+		try {
+			String accountId = getCurrentUserLogin();
+			return accountId.equals(id);
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
 	private static String extractAuthorities(Authentication authentication) {
 		return authentication.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");

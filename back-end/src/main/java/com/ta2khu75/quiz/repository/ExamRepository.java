@@ -19,14 +19,13 @@ public interface ExamRepository extends JpaRepository<Exam, String>, JpaSpecific
 	@Query("SELECT e FROM Exam e WHERE "
 			+ "(:keyword IS NULL OR e.title LIKE %:keyword% OR e.description LIKE %:keyword% OR e.author.displayName LIKE %:keyword% OR e.examCategory.name LIKE %:keyword%) "
 			+ "AND (:examCategoryIds IS NULL OR e.examCategory.id IN (:examCategoryIds)) "
-			+ "AND (:accountId IS NULL OR e.author.id= :accountId) "
 			+ "AND (:authorId IS NULL OR e.author.id= :authorId) "
 			+ "AND (:examLevels IS NULL OR e.examLevel IN (:examLevels))"
 			+ "AND (:minDuration IS NULL OR e.duration >= :minDuration) "
 			+ "AND (:maxDuration IS NULL OR e.duration <= :maxDuration) "
 			+ "AND (:accessModifier IS NULL OR :accessModifier = :accessModifier) ")
 	Page<Exam> searchExam(@Param("keyword") String keyword, @Param("examCategoryIds") List<Long> examCategoryIds,
-			@Param("accountId") String authorEmail, @Param("authorId") String authorId,
+			@Param("authorId") String authorId,
 			@Param("examLevels") List<ExamLevel> examLevel, @Param("minDuration") Integer minDuration,
 			@Param("maxDuration") Integer maxDuration, @Param("accessModifier") AccessModifier accessModifier,
 			Pageable pageable);

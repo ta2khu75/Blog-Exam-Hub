@@ -24,7 +24,7 @@ import com.ta2khu75.quiz.model.entity.Blog;
 import com.ta2khu75.quiz.model.entity.BlogTag;
 import com.ta2khu75.quiz.model.entity.Exam;
 import com.ta2khu75.quiz.model.request.BlogRequest;
-import com.ta2khu75.quiz.model.request.search.BlogSearchRequest;
+import com.ta2khu75.quiz.model.request.search.BlogSearch;
 import com.ta2khu75.quiz.model.response.BlogResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.BlogDetailResponse;
@@ -144,10 +144,11 @@ public class BlogServiceImpl extends BaseFileService<BlogRepository, BlogMapper>
 	}
 
 	@Override
-	public PageResponse<BlogResponse> searchBlog(BlogSearchRequest blogSearchRequest) {
+	public PageResponse<BlogResponse> search(BlogSearch blogSearchRequest) {
+		if(SecurityUtil.isAuthor(blogSearchRequest.getAuthorId())) blogSearchRequest.setAccessModifier(AccessModifier.PUBLIC);
 		Pageable pageable = Pageable.ofSize(blogSearchRequest.getSize()).withPage(blogSearchRequest.getPage() - 1);
 		return mapper.toPageResponse(repository.searchBlog(blogSearchRequest.getBlogTagNames(),
-				blogSearchRequest.getKeyword(), blogSearchRequest.getAccountId(), blogSearchRequest.getAuthorId(),
+				blogSearchRequest.getKeyword(), blogSearchRequest.getAuthorId(),
 				blogSearchRequest.getMinView(), blogSearchRequest.getMaxView(), blogSearchRequest.getAccessModifier(),
 				pageable));
 	}

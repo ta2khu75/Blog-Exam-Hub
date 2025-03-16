@@ -12,14 +12,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ta2khu75.quiz.anotation.EndpointMapping;
-import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.request.ExamRequest;
-import com.ta2khu75.quiz.model.request.search.ExamSearchRequest;
+import com.ta2khu75.quiz.model.request.search.ExamSearch;
 import com.ta2khu75.quiz.model.response.ExamResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.model.response.details.ExamDetailResponse;
 import com.ta2khu75.quiz.service.ExamService;
-import com.ta2khu75.quiz.util.SecurityUtil;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,20 +74,17 @@ public class ExamController extends BaseController<ExamService> {
 
 	@GetMapping
 	@EndpointMapping(name = "Search exam")
-	public ResponseEntity<PageResponse<ExamResponse>> searchExam(ExamSearchRequest examSearchRequest) {
-		examSearchRequest.setAccessModifier(AccessModifier.PUBLIC);
-		examSearchRequest.setAccountId(null);
+	public ResponseEntity<PageResponse<ExamResponse>> searchExam(ExamSearch examSearchRequest) {
 		return ResponseEntity.ok(service.searchExam(examSearchRequest));
 	}
 
-	@GetMapping("mine")
-	@EndpointMapping(name = "Search my exam")
-	public ResponseEntity<PageResponse<ExamResponse>> mySearch(ExamSearchRequest examSearchRequest) {
-		examSearchRequest.setAccountId(SecurityUtil.getCurrentUserLogin());
-		examSearchRequest.setAccessModifier(null);
-		examSearchRequest.setAuthorId(null);
-		return ResponseEntity.ok(service.searchExam(examSearchRequest));
-	}
+//	@GetMapping("mine")
+//	@EndpointMapping(name = "Search my exam")
+//	public ResponseEntity<PageResponse<ExamResponse>> mySearch(ExamSearchRequest examSearchRequest) {
+//		examSearchRequest.setAccessModifier(null);
+//		examSearchRequest.setAuthorId(null);
+//		return ResponseEntity.ok(service.searchExam(examSearchRequest));
+//	}
 
 //	@GetMapping("mine/ids")
 //	public ResponseEntity<List<ExamResponse>> myReadAllById(@RequestParam("ids") List<String> ids) {

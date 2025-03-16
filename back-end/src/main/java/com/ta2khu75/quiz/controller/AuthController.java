@@ -31,18 +31,24 @@ import jakarta.validation.Valid;
 @RequestMapping("${app.api-prefix}/auth")
 public class AuthController extends BaseController<AuthService> {
 	private long refreshTokenCookieExpiration;
+	private long accessTokenCookieExpiration;
+	private String refreshTokenCookieName = "refresh_token";
+	private String accessTokenCookieName = "access_token";
 
-	public AuthController(AuthService service, @Value("${jwt.refresh.expiration}") long refreshTokenCookieExpiration) {
+	public AuthController(AuthService service, @Value("${jwt.refresh.expiration}") long refreshTokenCookieExpiration, @Value("${jwt.expiration}") long accessTokenCookieExpiration) {
 		super(service);
 		this.refreshTokenCookieExpiration = refreshTokenCookieExpiration;
+		this.accessTokenCookieExpiration = accessTokenCookieExpiration;
 	}
 
 	@PostMapping("login")
 	@EndpointMapping(name = "Login")
 	public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest request) {
 		AuthResponse response = service.login(request);
-		ResponseCookie cookie = createRefreshTokenCookie(response.getRefreshToken(), refreshTokenCookieExpiration);
-		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(response);
+
+		ResponseCookie cookieRefresh = createCookie(refreshTokenCookieName,response.getRefreshToken(), refreshTokenCookieExpiration);
+		ResponseCookie cookieAccess = createCookie(accessTokenCookieName,response.getAccessToken(), accessTokenCookieExpiration);
+		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookieAccess.toString(), cookieRefresh.toString()).body(response);
 	}
 
 	@PostMapping("register")
@@ -56,7 +62,7 @@ public class AuthController extends BaseController<AuthService> {
 	@EndpointMapping(name = "Refresh token")
 	public ResponseEntity<AuthResponse> createRefreshToken(@CookieValue("refresh_token") String refreshToken) {
 		AuthResponse response = service.refreshToken(refreshToken);
-		ResponseCookie cookie = createRefreshTokenCookie(response.getRefreshToken(), refreshTokenCookieExpiration);
+		ResponseCookie cookie = createCookie(refreshTokenCookieName,response.getRefreshToken(), refreshTokenCookieExpiration);
 		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(response);
 	}
 
@@ -70,7 +76,7 @@ public class AuthController extends BaseController<AuthService> {
 	@EndpointMapping(name = "Logout")
 	public ResponseEntity<Void> logout() {
 		service.logout();
-		ResponseCookie cookie = createRefreshTokenCookie(null, 0);
+		ResponseCookie cookie = createCookie(refreshTokenCookieName,null, 0);
 		return ResponseEntity.noContent().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
 	}
 
@@ -93,8 +99,8 @@ public class AuthController extends BaseController<AuthService> {
 		return new RedirectView(clientRedirectUrl);
 	}
 
-	private ResponseCookie createRefreshTokenCookie(String refreshToken, long cookieExpiration) {
-		return ResponseCookie.from("refresh_token", refreshToken).httpOnly(true).secure(true).sameSite("None")
-				.maxAge(cookieExpiration).path("/").build();
+	private ResponseCookie createCookie(String name,String value, long expiration) {
+		return ResponseCookie.from(name, value).httpOnly(true).secure(true).sameSite("Strict")
+				.maxAge(expiration).path("/").build();
 	}
 }
