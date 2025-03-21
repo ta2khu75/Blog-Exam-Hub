@@ -4,12 +4,12 @@ import org.mapstruct.Mapper;
 
 import com.ta2khu75.quiz.model.request.RoleRequest;
 import com.ta2khu75.quiz.model.response.RoleResponse;
-import com.ta2khu75.quiz.model.response.details.RoleDetailResponse;
 import com.ta2khu75.quiz.model.entity.Permission;
 import com.ta2khu75.quiz.model.entity.Role;
 
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface RoleMapper {
@@ -17,9 +17,11 @@ public interface RoleMapper {
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "permissions", ignore = true)
 	Role toEntity(RoleRequest request);
+	@Named("toRoleResponse")
+	@Mapping(target = "permissionIds", ignore = true)
 	RoleResponse toResponse(Role role);
 	@Mapping(target = "permissionIds", source = "permissions")
-	RoleDetailResponse toDetailResponse(Role role);
+	RoleResponse toDetailResponse(Role role);
 	@Mapping(target = "accounts", ignore = true)
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "permissions", ignore = true)

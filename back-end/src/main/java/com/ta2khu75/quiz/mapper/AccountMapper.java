@@ -16,7 +16,7 @@ import com.ta2khu75.quiz.model.response.details.AccountDetailResponse;
 
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = InfoMapper.class)
+@Mapper(componentModel = "spring", uses = {InfoMapper.class, RoleMapper.class})
 public interface AccountMapper {
 	@Named("toAccountResponse")
 	@Mapping(target = "username", source = "displayName")
@@ -37,6 +37,7 @@ public interface AccountMapper {
 
 	@Mapping(target = "username", source = "displayName")
 	@Mapping(target = "info", source = "account", qualifiedByName = "toInfoResponse")
+	@Mapping(target = "role", source = "role", qualifiedByName = "toRoleResponse")
 	ManagedAccountResponse toManagedResponse(Account account);
 
 	@Mapping(target = "username", source = "displayName")

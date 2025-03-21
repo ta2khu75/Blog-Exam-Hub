@@ -1,5 +1,7 @@
 package com.ta2khu75.quiz.model.response;
 
+import java.util.List;
+
 import com.ta2khu75.quiz.model.base.ExamBase;
 
 import lombok.AccessLevel;
@@ -16,4 +18,5 @@ public class ExamResponse extends ExamBase {
 	ExamCategoryResponse examCategory;
 	InfoResponse info;
 	BlogResponse blog;
+	List<QuizResponse> quizzes;
 }

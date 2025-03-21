@@ -22,7 +22,6 @@ import com.ta2khu75.quiz.model.request.BlogRequest;
 import com.ta2khu75.quiz.model.request.search.BlogSearch;
 import com.ta2khu75.quiz.model.response.BlogResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.BlogDetailResponse;
 import com.ta2khu75.quiz.service.BlogService;
 
 @RestController
@@ -50,7 +49,7 @@ public class BlogController extends BaseController<BlogService> {
 
 	@GetMapping("/{id}/detail")
 	@EndpointMapping(name="Read blog detail")
-	public ResponseEntity<BlogDetailResponse> readDetail(@PathVariable String id) {
+	public ResponseEntity<BlogResponse> readDetail(@PathVariable String id) {
 		return ResponseEntity.ok(service.readDetail(id));
 	}
 

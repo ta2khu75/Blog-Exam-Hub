@@ -27,7 +27,6 @@ import com.ta2khu75.quiz.model.request.BlogRequest;
 import com.ta2khu75.quiz.model.request.search.BlogSearch;
 import com.ta2khu75.quiz.model.response.BlogResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.BlogDetailResponse;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.BlogRepository;
 import com.ta2khu75.quiz.repository.BlogTagRepository;
@@ -137,7 +136,7 @@ public class BlogServiceImpl extends BaseFileService<BlogRepository, BlogMapper>
 	}
 
 	@Override
-	public BlogDetailResponse readDetail(String id) {
+	public BlogResponse readDetail(String id) {
 		Blog blog = FunctionUtil.findOrThrow(id, Blog.class, repository::findById);
 		blog.setViewCount(blog.getViewCount() + 1);
 		return mapper.toDetailsResponse(repository.save(blog));

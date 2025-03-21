@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.ta2khu75.quiz.anotation.EndpointMapping;
 import com.ta2khu75.quiz.model.request.RoleRequest;
 import com.ta2khu75.quiz.model.response.RoleResponse;
-import com.ta2khu75.quiz.model.response.details.RoleDetailResponse;
 import com.ta2khu75.quiz.service.RoleService;
 
 import jakarta.validation.Valid;
@@ -30,7 +29,7 @@ public class RoleController extends BaseController<RoleService>
 
 	@GetMapping
 	@EndpointMapping(name="Read all role")
-	public ResponseEntity<List<RoleDetailResponse>> readAll() {
+	public ResponseEntity<List<RoleResponse>> readAll() {
 		return ResponseEntity.ok(service.readAll());
 	}
 

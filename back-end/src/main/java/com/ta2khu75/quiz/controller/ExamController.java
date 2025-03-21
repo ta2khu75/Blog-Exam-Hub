@@ -16,7 +16,6 @@ import com.ta2khu75.quiz.model.request.ExamRequest;
 import com.ta2khu75.quiz.model.request.search.ExamSearch;
 import com.ta2khu75.quiz.model.response.ExamResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.ExamDetailResponse;
 import com.ta2khu75.quiz.service.ExamService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,11 +47,11 @@ public class ExamController extends BaseController<ExamService> {
 		return ResponseEntity.ok(service.read(id));
 	}
 
-	@GetMapping("{id}/detail")
-	@EndpointMapping(name = "Read exam detail")
-	public ResponseEntity<ExamDetailResponse> readDetail(@PathVariable String id) {
-		return ResponseEntity.ok(service.readDetail(id));
-	}
+//	@GetMapping("{id}/detail")
+//	@EndpointMapping(name = "Read exam detail")
+//	public ResponseEntity<ExamResponse> readDetail(@PathVariable String id) {
+//		return ResponseEntity.ok(service.readDetail(id));
+//	}
 
 	@EndpointMapping(name = "Update exam")
 	@PutMapping(path = "{id}", consumes = "multipart/form-data")

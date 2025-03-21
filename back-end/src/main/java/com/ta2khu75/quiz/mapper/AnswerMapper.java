@@ -13,6 +13,7 @@ import com.ta2khu75.quiz.model.entity.Answer;
 public interface AnswerMapper {
 	@Named("toAnswerResponse")
 	@Mapping(target = "answer", source = "answerString")
+	@Mapping(target = "correct", ignore = true)
 	AnswerResponse toResponse(Answer answer);
 
 	@Mapping(target = "userAnswers", ignore = true)
@@ -25,4 +26,8 @@ public interface AnswerMapper {
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "quiz", ignore = true)
 	void update(AnswerRequest request, @MappingTarget Answer answer);
+
+	@Named("toAnswerDetailResponse")
+	@Mapping(target = "answer", source = "answerString")
+	AnswerResponse toDetailResponse(Answer answer);
 }

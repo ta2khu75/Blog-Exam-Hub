@@ -7,11 +7,12 @@ import org.mapstruct.Named;
 
 import com.ta2khu75.quiz.model.request.QuizRequest;
 import com.ta2khu75.quiz.model.response.QuizResponse;
-import com.ta2khu75.quiz.model.response.details.QuizDetailResponse;
 import com.ta2khu75.quiz.model.entity.Quiz;
 
 @Mapper(componentModel = "spring", uses = { AnswerMapper.class })
 public interface QuizMapper {
+	@Named("toQuizResponse")
+	@Mapping(target = "answers", ignore = true)
 	QuizResponse toResponse(Quiz quiz);
 
 	@Mapping(target = "filePath", ignore = true)
@@ -29,5 +30,9 @@ public interface QuizMapper {
 	
 	@Named("toQuizDetailsResponse")
 	@Mapping(target = "answers", source = "answers", qualifiedByName = "toAnswerResponse")
-	QuizDetailResponse toDetailResponse(Quiz quiz);
+	QuizResponse toDetailResponse(Quiz quiz);
+	
+	@Named("toQuizAnswerDetailResponse")
+	@Mapping(target = "answers", source = "answers", qualifiedByName = "toAnswerDetailResponse")
+	QuizResponse toAnswerDetailResponse(Quiz quiz);
 }

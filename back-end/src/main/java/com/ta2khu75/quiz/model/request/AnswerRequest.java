@@ -16,6 +16,7 @@ import lombok.experimental.FieldDefaults;
 public class AnswerRequest extends AnswerBase{
 	@NotNull(message = "Answer Id must not be null", groups = Update.class)
 	Long id;
+	boolean correct;
 	@NotNull(message = "Quiz must not be null", groups=Create.class)
 	Quiz quiz;
 }

@@ -1,5 +1,7 @@
 package com.ta2khu75.quiz.model.response;
 
+import java.util.List;
+
 import com.ta2khu75.quiz.model.base.BlogBase;
 
 import lombok.AccessLevel;
@@ -16,4 +18,6 @@ public class BlogResponse extends BlogBase {
 	String imagePath;
 	AccountResponse author;
 	InfoResponse info;
+	String content;
+	List<ExamResponse> exams;
 }

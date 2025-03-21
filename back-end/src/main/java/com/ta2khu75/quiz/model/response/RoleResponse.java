@@ -1,5 +1,7 @@
 package com.ta2khu75.quiz.model.response;
 
+import java.util.Set;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -9,4 +11,5 @@ import lombok.experimental.FieldDefaults;
 public class RoleResponse {
 	Long id;
 	String name;
+	Set<Long> permissionIds;
 }

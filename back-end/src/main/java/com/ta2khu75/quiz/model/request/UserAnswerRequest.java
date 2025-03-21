@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.experimental.FieldDefaults;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ExamAnswerRequest {
+public class UserAnswerRequest {
 	Long quizId;
 	Set<Long> answerIds;
 }

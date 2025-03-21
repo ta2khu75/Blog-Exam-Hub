@@ -15,10 +15,9 @@ import org.springframework.stereotype.Service;
 
 import com.ta2khu75.quiz.model.request.ExamResultRequest;
 import com.ta2khu75.quiz.model.request.search.ExamResultSearch;
-import com.ta2khu75.quiz.model.request.ExamAnswerRequest;
+import com.ta2khu75.quiz.model.request.UserAnswerRequest;
 import com.ta2khu75.quiz.model.response.ExamResultResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.ExamResultDetailResponse;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.ExamResultMapper;
 import com.ta2khu75.quiz.model.QuizType;
@@ -59,24 +58,24 @@ public class ExamResultServiceImpl extends BaseService<ExamResultRepository, Exa
 		this.accountRepository = accountRepository;
 	}
 
-	private void scoreExam(ExamResult examResult, Set<ExamAnswerRequest> userAnswerRequests) {
+	private void scoreExam(ExamResult examResult, Set<UserAnswerRequest> userAnswerRequests) {
 		float totalScore = 0;
 
 		// Truy xuất tất cả câu hỏi cho bài kiểm tra
 		List<Quiz> quizzes = quizRepository.findByExamId(examResult.getExam().getId());
-		Set<Long> quizIds = userAnswerRequests.stream().map(ExamAnswerRequest::getQuizId).collect(Collectors.toSet());
+		Set<Long> quizIds = userAnswerRequests.stream().map(UserAnswerRequest::getQuizId).collect(Collectors.toSet());
 
 		// Truy xuất tất cả các đáp án cho các quizId
 		Map<Long, List<Answer>> answerMap = answerRepository.findByQuizIdIn(quizIds).stream()
 				.collect(Collectors.groupingBy(answer -> answer.getQuiz().getId()));
 
 		// Tạo Map từ quizId đến UserAnswerRequest
-		Map<Long, ExamAnswerRequest> answerUserRequestMap = userAnswerRequests.stream()
-				.collect(Collectors.toMap(ExamAnswerRequest::getQuizId, ar -> ar));
+		Map<Long, UserAnswerRequest> answerUserRequestMap = userAnswerRequests.stream()
+				.collect(Collectors.toMap(UserAnswerRequest::getQuizId, ar -> ar));
 
 		// Tính điểm cho từng quiz
 		for (Quiz quiz : quizzes) {
-			ExamAnswerRequest answerUserRequest = answerUserRequestMap.get(quiz.getId());
+			UserAnswerRequest answerUserRequest = answerUserRequestMap.get(quiz.getId());
 			if (answerUserRequest != null) {
 				List<Answer> quizAnswers = answerMap.get(quiz.getId());
 
@@ -103,9 +102,9 @@ public class ExamResultServiceImpl extends BaseService<ExamResultRepository, Exa
 	private void saveUserAnswer(ExamResult examHistory, Quiz quiz, List<Answer> answers, Set<Long> answerIds) {
 		UserAnswer userAnswer = new UserAnswer();
 		userAnswer.setExamResult(examHistory);
+		List<Answer> answerList = answers.stream().filter(answer -> answerIds.contains(answer.getId())).toList();
+		userAnswer.setAnswers(answerList);
 		userAnswer.setQuiz(quiz);
-		List<Answer> answe = answers.stream().filter(answer -> answerIds.contains(answer.getId())).toList();
-		userAnswer.setAnswers(answe);
 		userAnswerRepository.save(userAnswer);
 	}
 
@@ -130,7 +129,7 @@ public class ExamResultServiceImpl extends BaseService<ExamResultRepository, Exa
 	}
 
 	@Override
-	public ExamResultDetailResponse scoreByExamId(String id, ExamResultRequest examResultRequest) {
+	public ExamResultResponse scoreByExamId(String id, ExamResultRequest examResultRequest) {
 		ExamResult examHistory = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id));
 		if (!examResultRequest.getExamAnswer().isEmpty()) {
@@ -146,7 +145,7 @@ public class ExamResultServiceImpl extends BaseService<ExamResultRepository, Exa
 //	}
 
 	@Override
-	public ExamResultDetailResponse readDetails(String id) {
+	public ExamResultResponse readDetails(String id) {
 		return mapper.toDetailResponse(repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found examHistory with id: " + id)));
 	}

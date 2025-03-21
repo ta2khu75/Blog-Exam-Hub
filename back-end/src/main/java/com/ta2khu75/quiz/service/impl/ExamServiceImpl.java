@@ -17,10 +17,8 @@ import com.ta2khu75.quiz.model.request.QuizRequest;
 import com.ta2khu75.quiz.model.request.search.ExamSearch;
 import com.ta2khu75.quiz.model.response.ExamResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.ExamDetailResponse;
 import com.ta2khu75.quiz.event.BlogExamEvent;
 import com.ta2khu75.quiz.exception.NotFoundException;
-import com.ta2khu75.quiz.exception.UnAuthenticatedException;
 import com.ta2khu75.quiz.mapper.ExamMapper;
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.ExamStatus;
@@ -129,7 +127,7 @@ public class ExamServiceImpl extends BaseFileService<ExamRepository, ExamMapper>
 	public ExamResponse read(String id) {
 		Exam exam = repository.findById(id)
 				.orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));
-		return mapper.toResponse(exam);
+		return mapper.toQuizDetailResponse(exam);
 	}
 
 	@Override
@@ -144,12 +142,12 @@ public class ExamServiceImpl extends BaseFileService<ExamRepository, ExamMapper>
 		}
 	}
 
-	@Override
-	public ExamDetailResponse readDetail(String id) {
-		Exam exam = repository.findById(id)
-				.orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));
-		return mapper.toDetailResponse(exam);
-	}
+//	@Override
+//	public ExamResponse readDetail(String id) {
+//		Exam exam = repository.findById(id)
+//				.orElseThrow(() -> new NotFoundException("Could not found exam with id: " + id));
+//		return mapper.toDetailResponse(exam);
+//	}
 
 	@Override
 	public PageResponse<ExamResponse> searchExam(ExamSearch examSearchRequest) {

@@ -1,6 +1,8 @@
 package com.ta2khu75.quiz.model.response;
 
 
+import java.util.List;
+
 import com.ta2khu75.quiz.model.base.QuizBase;
 
 import lombok.AccessLevel;
@@ -14,4 +16,5 @@ import lombok.experimental.FieldDefaults;
 public class QuizResponse extends QuizBase{
 	Long id;
 	String filePath;
+	List<AnswerResponse> answers;
 }

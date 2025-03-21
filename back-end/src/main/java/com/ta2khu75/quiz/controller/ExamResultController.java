@@ -14,7 +14,6 @@ import com.ta2khu75.quiz.model.request.ExamResultRequest;
 import com.ta2khu75.quiz.model.request.search.ExamResultSearch;
 import com.ta2khu75.quiz.model.response.ExamResultResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.model.response.details.ExamResultDetailResponse;
 import com.ta2khu75.quiz.service.ExamResultService;
 
 @RestController
@@ -36,7 +35,7 @@ public class ExamResultController extends BaseController<ExamResultService> {
 
 	@PutMapping("{id}")
 	@EndpointMapping(name="Submit exam")
-	public ResponseEntity<ExamResultDetailResponse> update(@PathVariable String id,
+	public ResponseEntity<ExamResultResponse> update(@PathVariable String id,
 			@RequestBody ExamResultRequest examResultRequest) {
 		return ResponseEntity.ok(service.scoreByExamId(id, examResultRequest));
 	}
@@ -49,7 +48,7 @@ public class ExamResultController extends BaseController<ExamResultService> {
 
 	@GetMapping("{id}")
 	@EndpointMapping(name="Read result exam result")
-	public ResponseEntity<ExamResultDetailResponse> readDetails(@PathVariable String id) {
+	public ResponseEntity<ExamResultResponse> readDetails(@PathVariable String id) {
 		return ResponseEntity.ok(service.readDetails(id));
 	}
 }
