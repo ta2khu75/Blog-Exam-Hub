@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 @Data
@@ -17,18 +18,20 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ExamResult extends EntityBase {
+@ToString(exclude = { "account", "quiz", "userAnswers"})
+@EqualsAndHashCode(callSuper = true, exclude = { "account", "quiz", "userAnswers"})
+public class QuizResult extends EntityBase {
 	Float point;
 	Integer correctCount;
+	@Column(nullable = false)
+	Instant endTime;
+
 	@ManyToOne
 	Account account;
 	@ManyToOne
 	@JoinColumn(nullable = false)
-	Exam exam;
-	@OneToMany(mappedBy = "examResult", cascade = CascadeType.REMOVE, orphanRemoval = true)
+	Quiz quiz;
+	@OneToMany(mappedBy = "quizResult", cascade = CascadeType.REMOVE, orphanRemoval = true)
 	List<UserAnswer> userAnswers;
-	@Column(nullable = false)
-	Instant endTime;
 }

@@ -8,6 +8,6 @@ import lombok.experimental.FieldDefaults;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserAnswerRequest {
-	Long quizId;
+	Long questionId;
 	Set<Long> answerIds;
 }

@@ -94,7 +94,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	private Account findById() {
-		return FunctionUtil.findOrThrow(SecurityUtil.getCurrentRoleLogin(), Account.class, repository::findById);
+		return FunctionUtil.findOrThrow(SecurityUtil.getCurrentUserLogin(), Account.class, repository::findById);
 	}
 
 	@Override

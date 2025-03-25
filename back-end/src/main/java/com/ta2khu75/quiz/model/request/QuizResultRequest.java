@@ -6,6 +6,6 @@ import java.util.Set;
 import lombok.Data;
 
 @Data
-public class ExamResultRequest {
-	private Set<UserAnswerRequest> examAnswer=new HashSet<>();
+public class QuizResultRequest {
+	private Set<UserAnswerRequest> userAnswers=new HashSet<>();
 }

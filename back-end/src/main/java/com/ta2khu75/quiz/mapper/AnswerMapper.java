@@ -16,15 +16,15 @@ public interface AnswerMapper {
 	@Mapping(target = "correct", ignore = true)
 	AnswerResponse toResponse(Answer answer);
 
+	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "userAnswers", ignore = true)
 	@Mapping(target = "answerString", source = "answer")
-	@Mapping(target = "id", ignore = true)
 	Answer toEntity(AnswerRequest request);
 
+	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "userAnswers", ignore = true)
 	@Mapping(target = "answerString", source = "answer")
-	@Mapping(target = "id", ignore = true)
-	@Mapping(target = "quiz", ignore = true)
+	@Mapping(target = "question", ignore = true)
 	void update(AnswerRequest request, @MappingTarget Answer answer);
 
 	@Named("toAnswerDetailResponse")

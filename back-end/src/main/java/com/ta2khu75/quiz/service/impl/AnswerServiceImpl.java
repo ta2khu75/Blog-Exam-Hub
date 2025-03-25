@@ -41,7 +41,8 @@ public class AnswerServiceImpl extends BaseService<AnswerRepository, AnswerMappe
 	}
 
 	private AnswerResponse save(Answer answer) {
-		return mapper.toResponse(repository.save(answer));
+		Answer saved= repository.save(answer);
+		return mapper.toResponse(saved);
 	}
 
 	@Override
@@ -64,11 +65,11 @@ public class AnswerServiceImpl extends BaseService<AnswerRepository, AnswerMappe
 
 	@Override
 	public List<AnswerResponse> readAllByQuizId(Long id) {
-		return repository.findByQuizId(id).stream().map(mapper::toResponse).toList();
+		return repository.findByQuestionId(id).stream().map(mapper::toResponse).toList();
 	}
 
 	@Override
 	public void deleteByQuizId(Long id) {
-		repository.deleteByQuizId(id);
+		repository.deleteByQuestionId(id);
 	}
 }

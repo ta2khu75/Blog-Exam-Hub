@@ -21,8 +21,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = { "role", "blogs", "exams", "followers", "following" })
-@EqualsAndHashCode(callSuper = true, exclude = { "role", "blogs", "exams", "followers", "following" })
+@ToString(exclude = { "role", "blogs", "quizzes", "followers", "following" })
+@EqualsAndHashCode(callSuper = true, exclude = { "role", "blogs", "quizzes", "followers", "following" })
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Account extends EntityBase implements UserDetails {
 	private static final long serialVersionUID = -6436446209727776976L;
@@ -50,7 +50,7 @@ public class Account extends EntityBase implements UserDetails {
 	List<Blog> blogs;
 	@OneToMany(mappedBy = "author")
 	@JsonIgnore
-	List<Exam> exams;
+	List<Quiz> quizzes;
 	@OneToMany(mappedBy = "following")
 	@JsonIgnore
 	Set<Follow> followers;

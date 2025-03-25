@@ -1,20 +1,15 @@
 package com.ta2khu75.quiz.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import com.ta2khu75.quiz.model.request.QuizRequest;
+import com.ta2khu75.quiz.model.request.search.QuizSearch;
 import com.ta2khu75.quiz.model.response.QuizResponse;
-import com.ta2khu75.quiz.service.base.CrudService;
+import com.ta2khu75.quiz.service.base.CrudFileService;
+import com.ta2khu75.quiz.service.base.SearchService;
 
-import java.util.List;
-
-public interface QuizService extends CrudService<QuizRequest, QuizResponse, Long> {
-	void deleteFile(Long id);
-
-	Page<QuizResponse> read(Pageable pageable);
-
-	QuizResponse read(Long id);
-
-	List<QuizResponse> readByExamId(String id);
+public interface QuizService extends CrudFileService<QuizRequest, QuizResponse, String>, SearchService<QuizResponse, QuizSearch> {
+	QuizResponse readDetail(String id);
+//	PageResponse<QuizResponse> mySearchQuizNull(String keyword, Pageable pageable);
+//	List<QuizResponse> myReadAllById(List<String> ids);
+//	Long countByAuthorEmail(String authorEmail);
+//	Long countByAuthorIdAndAccessModifier(String authorId, AccessModifier accessModifier);
 }

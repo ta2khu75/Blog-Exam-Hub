@@ -13,7 +13,7 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"quiz", "userAnswers"})
+@ToString(exclude = {"question", "userAnswers"})
 public class Answer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class Answer {
 	@Column(nullable = false)
 	Boolean correct;
 	@ManyToOne
-	Quiz quiz;
+	Question question;
 	@ManyToMany(mappedBy = "answers", cascade = CascadeType.ALL)
     List<UserAnswer> userAnswers = new ArrayList<>();
 }

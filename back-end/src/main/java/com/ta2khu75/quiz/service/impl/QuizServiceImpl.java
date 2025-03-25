@@ -1,135 +1,179 @@
 package com.ta2khu75.quiz.service.impl;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import jakarta.validation.Valid;
+import jakarta.validation.groups.Default;
+import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.data.domain.Page;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 
-import lombok.extern.slf4j.Slf4j;
-
-import com.ta2khu75.quiz.model.request.AnswerRequest;
 import com.ta2khu75.quiz.model.request.QuizRequest;
+import com.ta2khu75.quiz.model.request.QuestionRequest;
+import com.ta2khu75.quiz.model.request.search.QuizSearch;
 import com.ta2khu75.quiz.model.response.QuizResponse;
+import com.ta2khu75.quiz.model.response.PageResponse;
+import com.ta2khu75.quiz.event.BlogExamEvent;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.QuizMapper;
-import com.ta2khu75.quiz.model.entity.Answer;
+import com.ta2khu75.quiz.model.AccessModifier;
+import com.ta2khu75.quiz.model.TargetType;
+import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Quiz;
-import com.ta2khu75.quiz.model.group.Create;
-import com.ta2khu75.quiz.model.group.Update;
+import com.ta2khu75.quiz.model.entity.QuizCategory;
+import com.ta2khu75.quiz.model.entity.Question;
+import com.ta2khu75.quiz.repository.AccountRepository;
+import com.ta2khu75.quiz.repository.QuizCategoryRepository;
 import com.ta2khu75.quiz.repository.QuizRepository;
-import com.ta2khu75.quiz.repository.UserAnswerRepository;
-import com.ta2khu75.quiz.service.AnswerService;
 import com.ta2khu75.quiz.service.QuizService;
-import com.ta2khu75.quiz.service.base.BaseService;
+import com.ta2khu75.quiz.service.QuestionService;
+import com.ta2khu75.quiz.service.base.BaseFileService;
+import com.ta2khu75.quiz.service.util.FileUtil;
+import com.ta2khu75.quiz.service.util.FileUtil.Folder;
+import com.ta2khu75.quiz.util.FunctionUtil;
+import com.ta2khu75.quiz.util.SecurityUtil;
 
-import jakarta.validation.groups.Default;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @Validated
-public class QuizServiceImpl extends BaseService<QuizRepository, QuizMapper> implements QuizService {
-	private final AnswerService answerService;
-	private final UserAnswerRepository userAnswerRepository;
+public class QuizServiceImpl extends BaseFileService<QuizRepository, QuizMapper> implements QuizService {
+	private final AccountRepository accountRepository;
+	private final QuizCategoryRepository quizCategoryRepository;
+	private final QuestionService questionService;
+	private final ApplicationEventPublisher applicationEventPublisher;
 
-	public QuizServiceImpl(QuizRepository repository, QuizMapper mapper, AnswerService answerService,
-			UserAnswerRepository userAnswerRepository) {
-		super(repository, mapper);
-		this.answerService = answerService;
-		this.userAnswerRepository = userAnswerRepository;
+	public QuizServiceImpl(QuizRepository repository, QuizMapper mapper, AccountRepository accountRepository,
+			QuizCategoryRepository quizCategoryRepository, QuestionService questionService, FileUtil fileUtil,
+			ApplicationEventPublisher applicationEventPublisher) {
+		super(repository, mapper, fileUtil);
+		this.accountRepository = accountRepository;
+		this.quizCategoryRepository = quizCategoryRepository;
+		this.questionService= questionService;
+		this.applicationEventPublisher = applicationEventPublisher;
 	}
 
-	private Quiz findById(Long id) {
-		return repository.findById(id).orElseThrow(() -> new NotFoundException("Could not found quiz with id " + id));
+	private QuizCategory findExamCategoryById(Long id) {
+		return quizCategoryRepository.findById(id)
+				.orElseThrow(() -> new NotFoundException("Could not found quiz category with id: " + id));
 	}
 
-	private QuizResponse save(Quiz quiz) {
+	private Quiz findById(String id) {
+		return repository.findById(id).orElseThrow(() -> new NotFoundException("Could not found quiz with id: " + id));
+	}
+
+	@Override @Transactional
+	@Validated(value = { Default.class })
+	public QuizResponse create(@Valid QuizRequest quizRequest, MultipartFile file) throws IOException {
+		String accountId = SecurityUtil.getCurrentUserLogin();
+		Account account = FunctionUtil.findOrThrow(accountId, Account.class, accountRepository::findById);
+		Quiz quiz = mapper.toEntity(quizRequest);
+		fileUtil.saveFile(quiz, file, Folder.EXAM_FOLDER, Quiz::setImagePath);
+		quiz.setQuizCategory(this.findExamCategoryById(quizRequest.getQuizCategoryId()));
+		quiz.setAuthor(account);
+		Quiz quizSaved = repository.save(quiz);
+		quizRequest.getQuestions().forEach(question-> {
+			question.setQuiz(quizSaved);
+			questionService.create(question);
+		});
+		applicationEventPublisher.publishEvent(new BlogExamEvent(this, quizSaved.getId(), TargetType.EXAM));
+		return mapper.toResponse(repository.save(quizSaved));
+	}
+
+	@Override
+	@Transactional
+	@Validated(value = { Default.class })
+	public QuizResponse update(String id, @Valid QuizRequest quizRequest, MultipartFile file) throws IOException {
+		Quiz quiz = this.findById(id);
+		Map<Long, QuestionRequest> requestQuestionMap = quizRequest.getQuestions().stream().filter(question -> question.getId() != null)
+				.collect(Collectors.toMap(QuestionRequest::getId, Function.identity()));
+		if (!quiz.isCompleted()) {
+			Iterator<Question> questionIterable = quiz.getQuestions().iterator();
+			while (questionIterable.hasNext()) {
+				Question existingQuestion = questionIterable.next();
+				QuestionRequest questionRequest= requestQuestionMap.get(existingQuestion.getId());
+				if (questionRequest!= null) {
+					questionService.update(questionRequest.getId(), questionRequest);
+				} else {
+					questionIterable.remove();
+					questionService.delete(existingQuestion.getId());
+				}
+			}
+			quizRequest.getQuestions().stream().filter(question -> question.getId() == null).forEach(question-> {
+				question.setQuiz(quiz);
+				questionService.create(question);
+			});
+		}
+		mapper.update(quizRequest, quiz);
+		fileUtil.saveFile(quiz, file, Folder.EXAM_FOLDER, Quiz::setImagePath);
+		if (quiz.getQuizCategory().getId().equals(quizRequest.getQuizCategoryId()))
+			quiz.setQuizCategory(this.findExamCategoryById(quizRequest.getQuizCategoryId()));
 		return mapper.toResponse(repository.save(quiz));
 	}
 
-	private void checkCorrectAnswer(List<AnswerRequest> answers) {
-		if (!answers.stream().anyMatch(answer -> answer.isCorrect())) {
-			throw new IllegalArgumentException("There is at least one correct answer");
-		}
+	@Override
+	public QuizResponse read(String id) {
+		Quiz quiz = repository.findById(id)
+				.orElseThrow(() -> new NotFoundException("Could not found quiz with id: " + id));
+		return mapper.toDetailResponse(quiz);
 	}
 
 	@Override
 	@Transactional
-	@Validated({ Create.class, Default.class }) // khi dung validated group thi nen valid tang method
-	public QuizResponse create(QuizRequest request) {
-		this.checkCorrectAnswer(request.getAnswers());
-		Quiz quiz = mapper.toEntity(request);
-//		saveFile(quiz, file);
-		Quiz savedQuiz = repository.save(quiz);
-		request.getAnswers().forEach(answer -> {
-			answer.setQuiz(savedQuiz);
-			answerService.create(answer);
-		});
-		return this.save(savedQuiz);
-	}
-
-	@Override
-	@Transactional
-	@Validated({ Default.class, Update.class })
-	public QuizResponse update(Long id, QuizRequest request) {
-		this.checkCorrectAnswer(request.getAnswers());
-		Quiz quiz = findById(id);
-		Map<Long, AnswerRequest> requestAnswerMap = request.getAnswers().stream()
-				.filter(answer -> answer.getId() != null)
-				.collect(Collectors.toMap(AnswerRequest::getId, Function.identity()));
-		Iterator<Answer> answerIterator = quiz.getAnswers().iterator();
-		while (answerIterator.hasNext()) {
-			Answer existingAnswer = answerIterator.next();
-			AnswerRequest answerRequest = requestAnswerMap.get(existingAnswer.getId());
-			if (answerRequest != null) {
-				answerService.update(existingAnswer.getId(), answerRequest);
-			} else {
-				answerIterator.remove();
-				answerService.delete(existingAnswer.getId());
-			}
+	public void delete(String id) {
+		Quiz quiz = this.findById(id);
+		if (quiz.isCompleted()) {
+			quiz.setDeleted(true);
+			repository.save(quiz);
+		} else {
+			repository.delete(quiz);
 		}
-		request.getAnswers().stream().filter(answer -> answer.getId() == null).forEach(answer -> {
-			answer.setQuiz(quiz);
-			answerService.create(answer);
-		});
-		mapper.update(request, quiz);
-//		saveFile(quiz, file);
-		return this.save(quiz);
 	}
 
 	@Override
-	public void delete(Long id) {
-		userAnswerRepository.deleteByQuizId(id);
-		answerService.deleteByQuizId(id);
-		repository.deleteById(id);
+	public QuizResponse readDetail(String id) {
+		Quiz quiz = repository.findById(id)
+				.orElseThrow(() -> new NotFoundException("Could not found quiz with id: " + id));
+		return mapper.toQuizQuestionDetailResponse(quiz);
 	}
 
 	@Override
-	public Page<QuizResponse> read(Pageable pageable) {
-		return repository.findAll(pageable).map((quiz) -> mapper.toResponse(quiz));
+	public PageResponse<QuizResponse> search(QuizSearch search) {
+		if(!SecurityUtil.isAuthor(search.getAuthorId())) search.setAccessModifier(AccessModifier.PUBLIC);
+			Pageable pageable = Pageable.ofSize(search.getSize()).withPage(search.getPage() - 1);
+			return mapper.toPageResponse(repository.searchExam(search.getKeyword(),
+					search.getExamCategoryIds(), search.getAuthorId(),
+					search.getExamLevels(), search.getMinDuration(),
+					search.getMaxDuration(), search.getAccessModifier(), pageable));
 	}
 
-	@Override
-	public QuizResponse read(Long id) {
-		return mapper.toResponse(findById(id));
-	}
-
-	@Override
-	public List<QuizResponse> readByExamId(String id) {
-		return repository.findByExamId(id).stream().map((exam) -> mapper.toResponse(exam)).toList();
-	}
-
-	@Override
-	public void deleteFile(Long id) {
-		Quiz quiz = findById(id);
-		quiz.setFilePath(null);
-		repository.save(quiz);
-	}
-
+//	@Override
+//	public Long countByAuthorEmail(String authorEmail) {
+//		return repository.countByAuthorEmail(authorEmail);
+//	}
+//
+//	@Override
+//	public Long countByAuthorIdAndAccessModifier(String authorId, AccessModifier accessModifier) {
+//		return repository.countByAuthorIdAndAccessModifier(authorId, accessModifier);
+//	}
+//
+//	@Override
+//	public List<QuizResponse> myReadAllById(List<String> ids) {
+//		return repository.findAllById(ids).stream().map(mapper::toResponse).collect(Collectors.toList());
+//	}
+//
+//	@Override
+//	public PageResponse<QuizResponse> mySearchExamNull(String keyword, Pageable pageable) {
+//		String accountId = SecurityUtil.getCurrentUserLogin();
+//		Page<Quiz> response = repository.findByAuthorIdAndTitleContainingAndBlogIdIsNull(accountId, keyword, pageable);
+//		return mapper.toPageResponse(response);
+//	}
 }

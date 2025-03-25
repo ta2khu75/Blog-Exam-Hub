@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ExamResultSearch extends Search {
+public class QuizResultSearch extends Search {
 	private Instant fromDate;
 	private Instant toDate;
     private List<Long> examCategoryIds;

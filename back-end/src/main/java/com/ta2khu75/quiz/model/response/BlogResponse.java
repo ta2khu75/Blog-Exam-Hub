@@ -19,5 +19,5 @@ public class BlogResponse extends BlogBase {
 	AccountResponse author;
 	InfoResponse info;
 	String content;
-	List<ExamResponse> exams;
+	List<QuizResponse> quizzes;
 }

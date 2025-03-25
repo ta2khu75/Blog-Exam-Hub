@@ -6,14 +6,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ta2khu75.quiz.mapper.ReportTargetMapper;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Blog;
-import com.ta2khu75.quiz.model.entity.Exam;
+import com.ta2khu75.quiz.model.entity.Quiz;
 import com.ta2khu75.quiz.model.entity.ReportTarget;
 import com.ta2khu75.quiz.model.entity.id.ReportTargetId;
 import com.ta2khu75.quiz.model.request.ReportTargetRequest;
 import com.ta2khu75.quiz.model.response.ReportTargetResponse;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.BlogRepository;
-import com.ta2khu75.quiz.repository.ExamRepository;
+import com.ta2khu75.quiz.repository.QuizRepository;
 import com.ta2khu75.quiz.repository.ReportTargetRepository;
 import com.ta2khu75.quiz.service.ReportTargetService;
 import com.ta2khu75.quiz.util.FunctionUtil;
@@ -31,7 +31,7 @@ public class ReportTargetServiceImpl implements ReportTargetService {
 	ReportTargetMapper mapper;
 	AccountRepository accountRepository;
 	BlogRepository blogRepository;
-	ExamRepository examRepository;
+	QuizRepository examRepository;
 
 	@Override
 	@Transactional
@@ -44,7 +44,7 @@ public class ReportTargetServiceImpl implements ReportTargetService {
 			break;
 		}
 		case EXAM: {
-			FunctionUtil.findOrThrow(request.getTargetId(), Exam.class, examRepository::findById);
+			FunctionUtil.findOrThrow(request.getTargetId(), Quiz.class, examRepository::findById);
 			break;
 		}
 		default:

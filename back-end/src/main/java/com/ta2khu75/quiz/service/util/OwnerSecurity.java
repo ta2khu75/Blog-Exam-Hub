@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.ta2khu75.quiz.repository.BlogRepository;
 import com.ta2khu75.quiz.repository.CommentRepository;
-import com.ta2khu75.quiz.repository.ExamRepository;
+import com.ta2khu75.quiz.repository.QuizRepository;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
 import lombok.AccessLevel;
@@ -18,7 +18,7 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 public class OwnerSecurity {
 	BlogRepository blogRepository;
-	ExamRepository examRepository;
+	QuizRepository examRepository;
 	CommentRepository commentRepository;
 
 	public boolean isBlogOwner(String blogId) {

@@ -27,7 +27,7 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = true, exclude = { "author", "exams", "comments", "blogTags" })
+@EqualsAndHashCode(callSuper = true, exclude = { "author", "quizzes", "comments", "blogTags" })
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EntityListeners(AuditingEntityListener.class)
 public class Blog extends EntityBase {
@@ -42,7 +42,7 @@ public class Blog extends EntityBase {
 	@Enumerated(EnumType.STRING)
 	AccessModifier accessModifier;
 	@OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
-	Set<Exam> exams;
+	Set<Quiz> quizzes;
 	@ManyToOne
 	Account author;
 	@OneToMany(mappedBy = "blog", orphanRemoval = true, cascade = CascadeType.REMOVE)
@@ -50,13 +50,13 @@ public class Blog extends EntityBase {
 	@ManyToMany
 	List<BlogTag> blogTags;
 
-	public void addExam(Exam exam) {
-		exams.add(exam);
-		exam.setBlog(this);
+	public void addQuiz(Quiz quiz) {
+		quizzes.add(quiz);
+		quiz.setBlog(this);
 	}
 
-	public void removeExam(Exam exam) {
-		exams.remove(exam);
-		exam.setBlog(null);
+	public void removeQuiz(Quiz quiz) {
+		quizzes.remove(quiz);
+		quiz.setBlog(null);
 	}
 }

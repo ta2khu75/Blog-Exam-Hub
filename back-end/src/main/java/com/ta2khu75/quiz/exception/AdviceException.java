@@ -59,7 +59,7 @@ public class AdviceException implements ResponseBodyAdvice<Object> {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionResponse(ex.getMessage()));
 	}
 
-	@ExceptionHandler(value = { NotMatchesException.class, ExistingException.class, InValidDataException.class,
+	@ExceptionHandler(value = { NotMatchesException.class, ExistingException.class, InvalidDataException.class,
 			MissingRequestCookieException.class })
 	public ResponseEntity<ExceptionResponse> handleNotMatchesException(Exception ex) {
 		return ResponseEntity.badRequest().body(new ExceptionResponse(ex.getMessage()));

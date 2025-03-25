@@ -12,7 +12,7 @@ import com.ta2khu75.quiz.model.response.NotificationResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.repository.NotificationRepository;
 import com.ta2khu75.quiz.service.BlogService;
-import com.ta2khu75.quiz.service.ExamService;
+import com.ta2khu75.quiz.service.QuizService;
 import com.ta2khu75.quiz.service.NotificationService;
 import com.ta2khu75.quiz.service.base.BaseService;
 
@@ -22,11 +22,11 @@ public class NotificationServiceImpl extends BaseService<NotificationRepository,
 		implements NotificationService {
 
 	private final BlogService blogService;
-	private final ExamService examService;
+	private final QuizService examService;
 	private final PageMapper pageMapper;
 
 	public NotificationServiceImpl(NotificationRepository repository, NotificationMapper mapper,
-			BlogService blogService, ExamService examService, PageMapper pageMapper) {
+			BlogService blogService, QuizService examService, PageMapper pageMapper) {
 		super(repository, mapper);
 		this.blogService = blogService;
 		this.examService = examService;

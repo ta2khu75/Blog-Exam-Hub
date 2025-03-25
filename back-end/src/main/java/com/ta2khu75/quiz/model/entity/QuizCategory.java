@@ -22,12 +22,12 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ToString(exclude = {"exams"})
-public class ExamCategory{
+@ToString(exclude = {"quizzes"})
+public class QuizCategory{
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 	@Column(nullable = false)
 	String name;
-	@OneToMany(mappedBy = "examCategory")
-	List<Exam> exams;
+	@OneToMany(mappedBy = "quizCategory")
+	List<Quiz> quizzes;
 }

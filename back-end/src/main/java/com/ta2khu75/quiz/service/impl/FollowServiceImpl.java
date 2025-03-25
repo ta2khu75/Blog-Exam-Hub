@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ta2khu75.quiz.exception.ExistingException;
+import com.ta2khu75.quiz.exception.InvalidDataException;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.FollowMapper;
 import com.ta2khu75.quiz.model.entity.Account;
@@ -35,6 +36,9 @@ public class FollowServiceImpl extends BaseService<FollowRepository, FollowMappe
 	@Transactional
 	public FollowResponse create(String followingId) {
 		String followerId = SecurityUtil.getCurrentUserLogin();
+		if(followingId.equals(followerId)) {
+			throw new InvalidDataException("Cannot follow yourself");
+		}
 		Optional<Follow> existingFollow = repository.findById(new FollowId(followerId, followingId));
 		if (existingFollow.isPresent()) {
 			throw new ExistingException("Already following this user");
@@ -59,9 +63,8 @@ public class FollowServiceImpl extends BaseService<FollowRepository, FollowMappe
 	@Override
 	public FollowResponse read(String followingId) {
 		String followerId = SecurityUtil.getCurrentUserLogin();
-		Follow follow = repository.findById(new FollowId(followerId, followingId))
-				.orElseThrow(() -> new NotFoundException("Can't find follow"));
-		return mapper.toResponse(follow);
+		Follow follow = repository.findById(new FollowId(followerId, followingId)).orElse(null);
+		return follow == null ? null : mapper.toResponse(follow);
 	}
 
 	@Override

@@ -11,6 +11,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AccountDetailResponse extends AccountResponse{
 	int blogCount;
-	int examCount;
+	int quizCount;
 	int followCount;
 }

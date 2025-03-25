@@ -9,10 +9,10 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ExamResultResponse {
+public class QuizResultResponse {
 	double point;
 	int correctCount;
-	ExamResponse exam;
+	QuizResponse quiz;
 	AccountResponse account;
 	Instant endTime;
 	InfoResponse info;

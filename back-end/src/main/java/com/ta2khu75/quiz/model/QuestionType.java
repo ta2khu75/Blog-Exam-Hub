@@ -1,4 +1,4 @@
 package com.ta2khu75.quiz.model;
-public enum QuizType {
+public enum QuestionType {
     SINGLE_CHOICE, MULTIPLE_CHOICE
 }

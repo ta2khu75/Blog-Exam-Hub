@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ta2khu75.quiz.anotation.EndpointMapping;
 import com.ta2khu75.quiz.model.request.ExamCategoryRequest;
-import com.ta2khu75.quiz.model.response.ExamCategoryResponse;
-import com.ta2khu75.quiz.service.ExamCategoryService;
+import com.ta2khu75.quiz.model.response.QuizCategoryResponse;
+import com.ta2khu75.quiz.service.QuizCategoryService;
 
 import jakarta.validation.Valid;
 
@@ -18,42 +18,42 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("${app.api-prefix}/exam-categories")
-public class ExamCategoryController extends BaseController<ExamCategoryService>
-		implements CrudController<ExamCategoryRequest, ExamCategoryResponse, Long> {
+@RequestMapping("${app.api-prefix}/quiz-categories")
+public class QuizCategoryController extends BaseController<QuizCategoryService>
+		implements CrudController<ExamCategoryRequest, QuizCategoryResponse, Long> {
 
-	public ExamCategoryController(ExamCategoryService service) {
+	public QuizCategoryController(QuizCategoryService service) {
 		super(service);
 	}
 
 	@GetMapping
-	@EndpointMapping(name = "Read all exam category")
-	public ResponseEntity<List<ExamCategoryResponse>> readAllExamCategory() {
+	@EndpointMapping(name = "Read all quiz category")
+	public ResponseEntity<List<QuizCategoryResponse>> readAll() {
 		return ResponseEntity.ok(service.readAll());
 	}
 
 	@Override
-	@EndpointMapping(name = "Create exam category")
-	public ResponseEntity<ExamCategoryResponse> create(@Valid @RequestBody ExamCategoryRequest request) {
+	@EndpointMapping(name = "Create quiz category")
+	public ResponseEntity<QuizCategoryResponse> create(@Valid @RequestBody ExamCategoryRequest request) {
 		return ResponseEntity.ok(service.create(request));
 	}
 
 	@Override
-	@EndpointMapping(name = "Update exam category")
-	public ResponseEntity<ExamCategoryResponse> update(@PathVariable Long id,
+	@EndpointMapping(name = "Update quiz category")
+	public ResponseEntity<QuizCategoryResponse> update(@PathVariable Long id,
 			@Valid @RequestBody ExamCategoryRequest request) {
 		return ResponseEntity.ok(service.update(id, request));
 	}
 
 	@Override
-	@EndpointMapping(name = "Delete exam category")
+	@EndpointMapping(name = "Delete quiz category")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@Override
-	public ResponseEntity<ExamCategoryResponse> read(@PathVariable Long id) {
+	public ResponseEntity<QuizCategoryResponse> read(@PathVariable Long id) {
 		return ResponseEntity.ok(service.read(id));
 	}
 

@@ -12,7 +12,7 @@ import com.ta2khu75.quiz.model.response.PageResponse;
 
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = { InfoMapper.class, ExamMapper.class, AccountMapper.class })
+@Mapper(componentModel = "spring", uses = { InfoMapper.class, QuizMapper.class, AccountMapper.class })
 public interface BlogMapper {
 
 	@Named("toBlogResponse")
@@ -20,14 +20,14 @@ public interface BlogMapper {
 	@Mapping(target = "info", source = "blog", qualifiedByName = "toInfoResponse")
 	@Mapping(target = "author", source = "author", qualifiedByName = "toAccountResponse")
 	@Mapping(target = "content",ignore = true)
-	@Mapping(target = "exams",ignore = true)
+	@Mapping(target = "quizzes",ignore = true)
 	BlogResponse toResponse(Blog blog);
 	
 	@Named("toBlogDetailsResponse")
 	@Mapping(target = "commentCount", source = "comments")
 	@Mapping(target = "info", source = "blog", qualifiedByName = "toInfoResponse")
 	@Mapping(target = "author", source = "author", qualifiedByName = "toAccountResponse")
-	@Mapping(target = "exams", source = "exams", qualifiedByName = "toExamResponse")
+	@Mapping(target = "quizzes", source = "quizzes", qualifiedByName = "toQuizResponse")
 	BlogResponse toDetailsResponse(Blog blog);
 
 	@Mapping(target = "blogTags", ignore = true)
@@ -37,7 +37,7 @@ public interface BlogMapper {
 	@Mapping(target = "author", ignore = true)
 	@Mapping(target = "comments", ignore = true)
 	@Mapping(target = "deleted", ignore = true)
-	@Mapping(target = "exams", ignore = true)
+	@Mapping(target = "quizzes", ignore = true)
 	@Mapping(target = "imagePath", ignore = true)
 	@Mapping(target = "viewCount", ignore = true)
 	Blog toEntity(BlogRequest blogResponse);
@@ -49,7 +49,7 @@ public interface BlogMapper {
 	@Mapping(target = "author", ignore = true)
 	@Mapping(target = "comments", ignore = true)
 	@Mapping(target = "deleted", ignore = true)
-	@Mapping(target = "exams", ignore = true)
+	@Mapping(target = "quizzes", ignore = true)
 	@Mapping(target = "imagePath", ignore = true)
 	@Mapping(target = "viewCount", ignore = true)
 	void update(BlogRequest blogResponse, @MappingTarget Blog blog);

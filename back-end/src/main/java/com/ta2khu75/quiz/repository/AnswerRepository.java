@@ -7,8 +7,8 @@ import com.ta2khu75.quiz.model.entity.Answer;
 import java.util.List;
 import java.util.Set;
 public interface AnswerRepository extends JpaRepository<Answer, Long> {
-    List<Answer> findByQuizId(Long id);
-    List<Answer> findByQuizIdIn(Set<Long> quizIds);
-    List<Answer> findByQuizIdAndCorrectTrue(Long id);
-    void deleteByQuizId(Long id);
+    List<Answer> findByQuestionId(Long questionId);
+    List<Answer> findByQuestionIdIn(Set<Long> quizIds);
+    void deleteByQuestionId(Long questionId);
+//    List<Answer> findByQuestionIdAndCorrectTrue(Long id);
 }

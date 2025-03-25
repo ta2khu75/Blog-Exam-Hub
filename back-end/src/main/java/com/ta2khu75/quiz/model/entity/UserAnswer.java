@@ -25,9 +25,9 @@ public class UserAnswer {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
 	@ManyToOne
-	ExamResult examResult;
+	QuizResult quizResult;
 	@ManyToOne
-	Quiz quiz;
+	Question question;
 	@ManyToMany
 	List<Answer> answers;
 }

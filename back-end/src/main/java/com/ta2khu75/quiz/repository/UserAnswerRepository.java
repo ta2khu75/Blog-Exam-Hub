@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.ta2khu75.quiz.model.entity.UserAnswer;
 
 public interface UserAnswerRepository extends JpaRepository<UserAnswer, Long> {
-	void deleteByQuizId(Long id);
+	void deleteByQuestionId(Long questionId);
 }

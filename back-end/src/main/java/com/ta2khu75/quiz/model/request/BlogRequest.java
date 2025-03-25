@@ -16,5 +16,5 @@ import lombok.experimental.FieldDefaults;
 public class BlogRequest extends BlogBase {
 	@NotNull(message = "Content must not be null")
 	String content;
-	List<String> examIds;
+	List<String> quizIds;
 }

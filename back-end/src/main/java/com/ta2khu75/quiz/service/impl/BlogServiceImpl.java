@@ -22,7 +22,7 @@ import com.ta2khu75.quiz.model.TargetType;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Blog;
 import com.ta2khu75.quiz.model.entity.BlogTag;
-import com.ta2khu75.quiz.model.entity.Exam;
+import com.ta2khu75.quiz.model.entity.Quiz;
 import com.ta2khu75.quiz.model.request.BlogRequest;
 import com.ta2khu75.quiz.model.request.search.BlogSearch;
 import com.ta2khu75.quiz.model.response.BlogResponse;
@@ -30,7 +30,7 @@ import com.ta2khu75.quiz.model.response.PageResponse;
 import com.ta2khu75.quiz.repository.AccountRepository;
 import com.ta2khu75.quiz.repository.BlogRepository;
 import com.ta2khu75.quiz.repository.BlogTagRepository;
-import com.ta2khu75.quiz.repository.ExamRepository;
+import com.ta2khu75.quiz.repository.QuizRepository;
 import com.ta2khu75.quiz.service.BlogService;
 import com.ta2khu75.quiz.service.base.BaseFileService;
 import com.ta2khu75.quiz.service.util.FileUtil;
@@ -46,11 +46,11 @@ import jakarta.validation.groups.Default;
 public class BlogServiceImpl extends BaseFileService<BlogRepository, BlogMapper> implements BlogService {
 	private final AccountRepository accountRepository;
 	private final BlogTagRepository blogTagRepository;
-	private final ExamRepository examRepository;
+	private final QuizRepository examRepository;
 	private final ApplicationEventPublisher applicationEventPublisher;
 
 	public BlogServiceImpl(BlogRepository repository, BlogMapper mapper, FileUtil fileUtil,
-			AccountRepository accountRepository, BlogTagRepository blogTagRepository, ExamRepository examRepository,
+			AccountRepository accountRepository, BlogTagRepository blogTagRepository, QuizRepository examRepository,
 			ApplicationEventPublisher applicationEventPublisher) {
 		super(repository, mapper, fileUtil);
 		this.accountRepository = accountRepository;
@@ -59,20 +59,6 @@ public class BlogServiceImpl extends BaseFileService<BlogRepository, BlogMapper>
 		this.examRepository = examRepository;
 	}
 
-	private List<BlogTag> saveAll(List<String> blogTags) {
-		Set<BlogTag> existingBlogTags = new HashSet<>(blogTagRepository.findAllByNameIn(blogTags));
-		Map<String, BlogTag> existingBlogTagMap = existingBlogTags.stream()
-				.collect(Collectors.toMap(BlogTag::getName, blogTag -> blogTag));
-		List<BlogTag> newBlogTags = blogTagRepository
-				.saveAll(blogTags.stream().map(blogTagName -> existingBlogTagMap.computeIfAbsent(blogTagName, n -> {
-					BlogTag blogTag = new BlogTag();
-					blogTag.setName(blogTag.getName());
-					blogTag.setName(blogTagName);
-					return blogTag;
-				})).toList());
-		existingBlogTags.addAll(blogTagRepository.saveAll(newBlogTags));
-		return new ArrayList<>(existingBlogTags);
-	}
 
 	@Override
 	@Validated({ Default.class })
@@ -85,23 +71,8 @@ public class BlogServiceImpl extends BaseFileService<BlogRepository, BlogMapper>
 		fileUtil.saveFile(blog, file, Folder.BLOG_FOLDER, Blog::setImagePath);
 		List<BlogTag> blogTags = this.saveAll(request.getBlogTags());
 		blog.setBlogTags(blogTags);
-		if (request.getExamIds() != null && !request.getExamIds().isEmpty()) {
-			List<Exam> exams = examRepository.findAllById(request.getExamIds());
-			for (Exam exam : exams) {
-				blog.addExam(exam); // Đồng bộ hai chiều
-			}
-		}
-		if (request.getExamIds() != null && !request.getExamIds().isEmpty()) {
-			List<Exam> exams = examRepository.findAllById(request.getExamIds());
-			blog.setExams(new HashSet<>(exams));
-		}
-		blog = repository.save(blog);
-		applicationEventPublisher.publishEvent(new BlogExamEvent(this, blog.getId(), TargetType.BLOG));
-		return save(blog);
-	}
-
-	private BlogResponse save(Blog blog) {
-		return mapper.toResponse(blog);
+		this.addQuizzes(blog, request);
+		return this.save(blog);
 	}
 
 	@Override
@@ -114,14 +85,9 @@ public class BlogServiceImpl extends BaseFileService<BlogRepository, BlogMapper>
 		List<BlogTag> blogTags = saveAll(request.getBlogTags());
 		blog.setBlogTags(blogTags);
 		// Xóa các Exams cũ
-		blog.getExams().forEach(exam -> exam.setBlog(null));
-		blog.getExams().clear();
-		if (request.getExamIds() != null && !request.getExamIds().isEmpty()) {
-			List<Exam> exams = examRepository.findAllById(request.getExamIds());
-			for (Exam exam : exams) {
-				blog.addExam(exam); // Đồng bộ hai chiều
-			}
-		}
+		blog.getQuizzes().forEach(exam -> exam.setBlog(null));
+		blog.getQuizzes().clear();
+		this.addQuizzes(blog, request);
 		return save(repository.save(blog));
 	}
 
@@ -144,7 +110,7 @@ public class BlogServiceImpl extends BaseFileService<BlogRepository, BlogMapper>
 
 	@Override
 	public PageResponse<BlogResponse> search(BlogSearch blogSearchRequest) {
-		if(SecurityUtil.isAuthor(blogSearchRequest.getAuthorId())) blogSearchRequest.setAccessModifier(AccessModifier.PUBLIC);
+		if(!SecurityUtil.isAuthor(blogSearchRequest.getAuthorId())) blogSearchRequest.setAccessModifier(AccessModifier.PUBLIC);
 		Pageable pageable = Pageable.ofSize(blogSearchRequest.getSize()).withPage(blogSearchRequest.getPage() - 1);
 		return mapper.toPageResponse(repository.searchBlog(blogSearchRequest.getBlogTagNames(),
 				blogSearchRequest.getKeyword(), blogSearchRequest.getAuthorId(),
@@ -161,5 +127,34 @@ public class BlogServiceImpl extends BaseFileService<BlogRepository, BlogMapper>
 	public Long countByAuthorIdAndAccessModifier(String authorId, AccessModifier accessModifier) {
 		return repository.countByAuthorIdAndAccessModifier(authorId, accessModifier);
 	}
+	private List<BlogTag> saveAll(List<String> blogTags) {
+		Set<BlogTag> existingBlogTags = new HashSet<>(blogTagRepository.findAllByNameIn(blogTags));
+		Map<String, BlogTag> existingBlogTagMap = existingBlogTags.stream()
+				.collect(Collectors.toMap(BlogTag::getName, blogTag -> blogTag));
+		List<BlogTag> newBlogTags = blogTagRepository
+				.saveAll(blogTags.stream().map(blogTagName -> existingBlogTagMap.computeIfAbsent(blogTagName, n -> {
+					BlogTag blogTag = new BlogTag();
+					blogTag.setName(blogTag.getName());
+					blogTag.setName(blogTagName);
+					return blogTag;
+				})).toList());
+		existingBlogTags.addAll(blogTagRepository.saveAll(newBlogTags));
+		return new ArrayList<>(existingBlogTags);
+	}
+	private void addQuizzes( Blog blog, BlogRequest request) {
+		List<String> quizIds=request.getQuizIds();
+		if (quizIds != null && !quizIds.isEmpty()) {
+			List<Quiz> quizzes= examRepository.findAllById(quizIds);
+			for (Quiz quiz: quizzes) {
+				blog.addQuiz(quiz); // Đồng bộ hai chiều
+			}
+		}
+		
+	}
 
+	private BlogResponse save(Blog blog) {
+		Blog blogSaved=repository.save(blog);
+		applicationEventPublisher.publishEvent(new BlogExamEvent(this, blog.getId(), TargetType.BLOG));
+		return mapper.toResponse(blogSaved);
+	}
 }

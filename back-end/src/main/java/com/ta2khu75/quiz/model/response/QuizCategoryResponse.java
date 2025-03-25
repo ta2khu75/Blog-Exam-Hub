@@ -6,7 +6,7 @@ import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ExamCategoryResponse{
+public class QuizCategoryResponse{
 	Long id;
 	String name;
 }

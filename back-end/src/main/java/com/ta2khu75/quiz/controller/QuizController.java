@@ -12,11 +12,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ta2khu75.quiz.anotation.EndpointMapping;
-import com.ta2khu75.quiz.model.request.ExamRequest;
-import com.ta2khu75.quiz.model.request.search.ExamSearch;
-import com.ta2khu75.quiz.model.response.ExamResponse;
+import com.ta2khu75.quiz.model.request.QuizRequest;
+import com.ta2khu75.quiz.model.request.search.QuizSearch;
+import com.ta2khu75.quiz.model.response.QuizResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.service.ExamService;
+import com.ta2khu75.quiz.service.QuizService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,47 +24,47 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
-@RequestMapping("${app.api-prefix}/exams")
-public class ExamController extends BaseController<ExamService> {
+@RequestMapping("${app.api-prefix}/quizzes")
+public class QuizController extends BaseController<QuizService> {
 	private final ObjectMapper objectMapper;
 
-	public ExamController(ExamService service, ObjectMapper objectMapper) {
+	public QuizController(QuizService service, ObjectMapper objectMapper) {
 		super(service);
 		this.objectMapper = objectMapper;
 	}
 
-	@EndpointMapping(name = "Create exam")
+	@EndpointMapping(name = "Create quiz")
 	@PostMapping(consumes = "multipart/form-data")
-	public ResponseEntity<ExamResponse> create(@RequestPart("exam_request") String examRequestString,
+	public ResponseEntity<QuizResponse> create(@RequestPart("quiz") String quizString,
 			@RequestPart(name = "image", required = true) MultipartFile image) throws IOException {
-		ExamRequest examRequest = objectMapper.readValue(examRequestString, ExamRequest.class);
-		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(examRequest, image));
+		QuizRequest quiz= objectMapper.readValue(quizString, QuizRequest.class);
+		return ResponseEntity.status(HttpStatus.CREATED).body(service.create(quiz, image));
 	}
 
 	@GetMapping("{id}")
-	@EndpointMapping(name = "Read exam")
-	public ResponseEntity<ExamResponse> read(@PathVariable String id) {
+	@EndpointMapping(name = "Read quiz")
+	public ResponseEntity<QuizResponse> read(@PathVariable String id) {
 		return ResponseEntity.ok(service.read(id));
 	}
 
-//	@GetMapping("{id}/detail")
-//	@EndpointMapping(name = "Read exam detail")
-//	public ResponseEntity<ExamResponse> readDetail(@PathVariable String id) {
-//		return ResponseEntity.ok(service.readDetail(id));
-//	}
+	@GetMapping("{id}/detail")
+	@EndpointMapping(name = "Read quiz detail")
+	public ResponseEntity<QuizResponse> readDetail(@PathVariable String id) {
+		return ResponseEntity.ok(service.readDetail(id));
+	}
 
-	@EndpointMapping(name = "Update exam")
+	@EndpointMapping(name = "Update quiz")
 	@PutMapping(path = "{id}", consumes = "multipart/form-data")
 	@PreAuthorize("@ownerSecurity.isExamOwner(#id)")
-	public ResponseEntity<ExamResponse> update(@PathVariable String id,
-			@RequestPart("exam_request") String examRequestString,
+	public ResponseEntity<QuizResponse> update(@PathVariable String id,
+			@RequestPart("quiz") String quizString,
 			@RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
-		ExamRequest examRequest = objectMapper.readValue(examRequestString, ExamRequest.class);
-		return ResponseEntity.ok(service.update(id, examRequest, image));
+		QuizRequest quiz = objectMapper.readValue(quizString, QuizRequest.class);
+		return ResponseEntity.ok(service.update(id, quiz, image));
 	}
 
 	@DeleteMapping("{id}")
-	@EndpointMapping(name = "Delete exam")
+	@EndpointMapping(name = "Delete quiz")
 	@PreAuthorize("@ownerSecurity.isExamOwner(#id) or hasRole('ROOT')")
 	public ResponseEntity<Void> delete(@PathVariable String id) {
 		service.delete(id);
@@ -72,9 +72,9 @@ public class ExamController extends BaseController<ExamService> {
 	}
 
 	@GetMapping
-	@EndpointMapping(name = "Search exam")
-	public ResponseEntity<PageResponse<ExamResponse>> searchExam(ExamSearch examSearchRequest) {
-		return ResponseEntity.ok(service.searchExam(examSearchRequest));
+	@EndpointMapping(name = "Search quiz")
+	public ResponseEntity<PageResponse<QuizResponse>> search(QuizSearch search) {
+		return ResponseEntity.ok(service.search(search));
 	}
 
 //	@GetMapping("mine")
@@ -110,3 +110,4 @@ public class ExamController extends BaseController<ExamService> {
 //				.ok(new CountResponse(service.countByAuthorIdAndAccessModifier(id, AccessModifier.PUBLIC)));
 //	}
 }
+	

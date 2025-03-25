@@ -6,9 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
 
-public interface CrudFileService <Request, Response, Id> {
-    Response create(@Valid Request request, MultipartFile file)throws IOException;
-    Response update(Id id,@Valid Request request, MultipartFile file)throws IOException;
-    Response read(Id id);
+public interface CrudFileService <REQ, RES, Id> {
+    RES create(@Valid REQ request, MultipartFile file)throws IOException;
+    RES update(Id id,@Valid REQ request, MultipartFile file)throws IOException;
+    RES read(Id id);
 	void delete(Id id);
 }
