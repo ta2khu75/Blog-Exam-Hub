@@ -24,6 +24,7 @@ import lombok.experimental.FieldDefaults;
 public class UserAnswer {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
+	boolean correct;
 	@ManyToOne
 	QuizResult quizResult;
 	@ManyToOne

@@ -54,9 +54,8 @@ public class RedisUtil {
 	public void delete(NameModel nameModel, String key) {
 		redisTemplate.opsForHash().delete(nameModel.getValue(), key);
 	}
-
 	public enum NameModel {
-		ROLE("ROLE"), ACCOUNT("ACCOUNT");
+		ROLE("ROLE"), ACCOUNT("ACCOUNT"), QUIZ_RESULT_RESPONSE("QUIZ_RESULT_RESPONSE");
 
 		private final String value;
 

@@ -12,5 +12,12 @@ public interface UserAnswerMapper {
 	@Named("toUserAnswerResponse")
 	@Mapping(target = "answers", source = "answers", qualifiedByName = "toAnswerResponse")
 	@Mapping(target = "question", source = "question", qualifiedByName = "toQuestionResponse")
+	@Mapping(target = "correct", ignore = true)
 	UserAnswerResponse toResponse(UserAnswer userAnswer);
+
+	@Named("toUserAnswerDetailResponse")
+	@Mapping(target = "answers", source = "answers", qualifiedByName = "toAnswerResponse")
+	@Mapping(target = "question", source = "question", qualifiedByName = "toQuestionResponse")
+	UserAnswerResponse toDetailResponse(UserAnswer userAnswer);
+	
 }

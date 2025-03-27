@@ -24,6 +24,7 @@ public class Question {
     @Column(nullable = false, columnDefinition = "NVARCHAR(255)")
     String questionString;
     String filePath;
+	boolean shuffleAnswer;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     QuestionType questionType;

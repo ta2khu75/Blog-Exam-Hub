@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 public abstract class QuestionBase {
 	@NotBlank(message = "Question must not be blank")
 	String question;
-
+	boolean shuffleAnswer;
 	@NotNull(message = "Quiz type must not be null")
 	QuestionType questionType;
 }

@@ -47,8 +47,8 @@ public class QuizResultController extends BaseController<QuizResultService> {
 	}
 
 	@GetMapping("{id}")
-	@EndpointMapping(name="Read result exam result")
-	public ResponseEntity<QuizResultResponse> readDetails(@PathVariable String id) {
+	@EndpointMapping(name="Read exam result")
+	public ResponseEntity<QuizResultResponse> readDetail(@PathVariable String id) {
 		return ResponseEntity.ok(service.readDetail(id));
 	}
 }

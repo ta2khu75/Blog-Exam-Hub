@@ -24,6 +24,6 @@ public abstract class QuizBase {
 	AccessModifier accessModifier;
 	boolean showResult=true;
 	boolean showAnswer=true;
-	boolean isShuffle=true; 
+	boolean shuffleQuestion=true;
 	boolean isCompleted;
 }

@@ -21,7 +21,7 @@ public class Answer {
     @Column(nullable = false, columnDefinition = "NVARCHAR(255)")
 	String answerString;
 	@Column(nullable = false)
-	Boolean correct;
+	boolean correct;
 	@ManyToOne
 	Question question;
 	@ManyToMany(mappedBy = "answers", cascade = CascadeType.ALL)

@@ -31,9 +31,9 @@ public class Quiz extends EntityBase {
 	String imagePath;
 	boolean showResult=true;
 	boolean showAnswer=true;
-	boolean isShuffle=true; 
-	boolean isDeleted;
-	boolean isCompleted;
+	boolean shuffleQuestion=true;
+	boolean deleted;
+	boolean completed;
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	QuizLevel quizLevel;

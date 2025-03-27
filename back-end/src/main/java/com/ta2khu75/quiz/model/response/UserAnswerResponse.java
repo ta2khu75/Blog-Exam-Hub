@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserAnswerResponse {
 	Long id;
+	boolean correct;
 	QuestionResponse question;
 	List<AnswerResponse> answers;
 }

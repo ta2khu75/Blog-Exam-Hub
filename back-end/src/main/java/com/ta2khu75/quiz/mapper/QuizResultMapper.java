@@ -22,6 +22,18 @@ public interface QuizResultMapper {
 	@Mapping(target = "account", source = "account", qualifiedByName = "toAccountResponse")
 	@Mapping(target = "quiz", source = "quiz", qualifiedByName = "toQuizQuestionDetailResponse")
 	@Mapping(target = "userAnswers", source = "userAnswers", qualifiedByName = "toUserAnswerResponse")
+	QuizResultResponse toResultResponse(QuizResult quizResult);
+
+//	@Mapping(target = "info", source = "quizResult", qualifiedByName = "toInfoResponse")
+//	@Mapping(target = "account", source = "account", qualifiedByName = "toAccountResponse")
+//	@Mapping(target = "quiz", source = "quiz", qualifiedByName = "toQuizQuestionDetailResponse")
+//	@Mapping(target = "userAnswers", source = "userAnswers", qualifiedByName = "toUserAnswerDetailResponse")
+//	QuizResultResponse toAnswerResponse(QuizResult quizResult);
+
+	@Mapping(target = "info", source = "quizResult", qualifiedByName = "toInfoResponse")
+	@Mapping(target = "account", source = "account", qualifiedByName = "toAccountResponse")
+	@Mapping(target = "quiz", source = "quiz", qualifiedByName = "toQuizQuestionDetailResponse")
+	@Mapping(target = "userAnswers", source = "userAnswers", qualifiedByName = "toUserAnswerDetailResponse")
 	QuizResultResponse toDetailResponse(QuizResult quizResult);
 
 	@Mapping(target = "content", qualifiedByName = "toQuizResultResponse")

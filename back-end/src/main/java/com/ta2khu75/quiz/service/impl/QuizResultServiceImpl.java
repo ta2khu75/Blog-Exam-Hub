@@ -1,9 +1,10 @@
 package com.ta2khu75.quiz.service.impl;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,8 +18,10 @@ import com.ta2khu75.quiz.model.request.QuizResultRequest;
 import com.ta2khu75.quiz.model.request.search.QuizResultSearch;
 import com.ta2khu75.quiz.model.request.UserAnswerRequest;
 import com.ta2khu75.quiz.model.response.QuizResultResponse;
+import com.ta2khu75.quiz.model.response.AnswerResponse;
 import com.ta2khu75.quiz.model.response.PageResponse;
-import com.ta2khu75.quiz.exception.NotFoundException;
+import com.ta2khu75.quiz.model.response.QuestionResponse;
+import com.ta2khu75.quiz.model.response.QuizResponse;
 import com.ta2khu75.quiz.mapper.QuizResultMapper;
 import com.ta2khu75.quiz.model.QuestionType;
 import com.ta2khu75.quiz.model.entity.Account;
@@ -35,6 +38,8 @@ import com.ta2khu75.quiz.repository.QuestionRepository;
 import com.ta2khu75.quiz.repository.UserAnswerRepository;
 import com.ta2khu75.quiz.service.QuizResultService;
 import com.ta2khu75.quiz.service.base.BaseService;
+import com.ta2khu75.quiz.service.util.RedisUtil;
+import com.ta2khu75.quiz.service.util.RedisUtil.NameModel;
 import com.ta2khu75.quiz.util.FunctionUtil;
 import com.ta2khu75.quiz.util.SecurityUtil;
 
@@ -46,16 +51,18 @@ public class QuizResultServiceImpl extends BaseService<QuizResultRepository, Qui
 	private final AnswerRepository answerRepository;
 	private final UserAnswerRepository userAnswerRepository;
 	private final AccountRepository accountRepository;
+	private final RedisUtil redisUtil;
 
 	public QuizResultServiceImpl(QuizResultRepository repository, QuizResultMapper mapper,
 			QuizRepository examRepository, QuestionRepository questionRepository, AnswerRepository answerRepository,
-			UserAnswerRepository userAnswerRepository, AccountRepository accountRepository) {
+			UserAnswerRepository userAnswerRepository, AccountRepository accountRepository, RedisUtil redisUtil) {
 		super(repository, mapper);
 		this.examRepository = examRepository;
 		this.questionRepository= questionRepository;
 		this.answerRepository = answerRepository;
 		this.userAnswerRepository = userAnswerRepository;
 		this.accountRepository = accountRepository;
+		this.redisUtil = redisUtil;
 	}
 
 	private void scoreExam(QuizResult quizResult, Set<UserAnswerRequest> userAnswerRequests) {
@@ -82,12 +89,14 @@ public class QuizResultServiceImpl extends BaseService<QuizResultRepository, Qui
 				// Bỏ qua nếu không có đáp án cho câu hỏi
 				if (questionAnswers == null)
 					continue;
-
-				saveUserAnswer(quizResult, question, questionAnswers, answerUserRequest.getAnswerIds());
-
-				totalScore += (question.getQuestionType().equals(QuestionType.SINGLE_CHOICE) )
-						? caculateScoreQuizSingleChoice(questionAnswers, answerUserRequest.getAnswerIds())
-						: caculateScoreQuizMultiChoice(questionAnswers, answerUserRequest.getAnswerIds());
+				boolean isCorrect;
+				if(question.getQuestionType().equals(QuestionType.SINGLE_CHOICE)) {
+					isCorrect = checkSingleChoice(questionAnswers, answerUserRequest.getAnswerIds());
+				}else {
+					isCorrect = checkMultiChoice(questionAnswers, answerUserRequest.getAnswerIds());
+				}
+				saveUserAnswer(quizResult, question,isCorrect, questionAnswers, answerUserRequest.getAnswerIds());
+				totalScore += isCorrect ? 1 : 0;
 			}
 		}
 
@@ -99,36 +108,37 @@ public class QuizResultServiceImpl extends BaseService<QuizResultRepository, Qui
 		quizResult.setPoint((float) Math.round(averageScore * 10)); // Đã thay đổi để đơn giản hóa
 	}
 
-	private void saveUserAnswer(QuizResult quizResult, Question question, List<Answer> answers, Set<Long> answerIds) {
+	private void saveUserAnswer(QuizResult quizResult, Question question, boolean isCorrect, List<Answer> answers, Set<Long> answerIds) {
 		UserAnswer userAnswer = new UserAnswer();
 		userAnswer.setQuizResult(quizResult);
+		userAnswer.setQuestion(question);
+		userAnswer.setCorrect(isCorrect);
 		List<Answer> answerList = answers.stream().filter(answer -> answerIds.contains(answer.getId())).toList();
 		userAnswer.setAnswers(answerList);
-		userAnswer.setQuestion(question);
 		userAnswerRepository.save(userAnswer);
 	}
 
-	private double caculateScoreQuizSingleChoice(List<Answer> answers, Set<Long> answerIds) {
+	private boolean checkSingleChoice (List<Answer> answers, Set<Long> answerIds) {
 		Long answerId = answerIds.iterator().next();
-		return answers.stream().filter(answer -> answer.getId().equals(answerId) && answer.getCorrect()).findFirst()
-				.map(answer -> 1.0).orElse(0.0);
+		return answers.stream().filter(answer -> answer.getId().equals(answerId) && answer.isCorrect()).findFirst()
+				.map(answer -> true).orElse(false);
 	}
 
-	private double caculateScoreQuizMultiChoice(List<Answer> answers, Set<Long> answerIds) {
-		Set<Long> correctAnswers = answers.stream().filter(Answer::getCorrect).map(Answer::getId)
+	private boolean checkMultiChoice(List<Answer> answers, Set<Long> answerIds) {
+		Set<Long> correctAnswers = answers.stream().filter(Answer::isCorrect).map(Answer::getId)
 				.collect(Collectors.toSet());
 
 		long correctSelected = answerIds.stream().filter(correctAnswers::contains).count();
 		long incorrectSelected = answerIds.stream().filter(answerId -> !correctAnswers.contains(answerId)).count();
 
 		if (correctSelected == correctAnswers.size() && incorrectSelected == 0) {
-			return 1;
+			return true;
 		} else {
-			return 0;
+			return false;
 		}
 	}
 	private QuizResult find(String id) {
-	return FunctionUtil.findOrThrow(id, QuizResult.class, repository::findById);	
+		return FunctionUtil.findOrThrow(id, QuizResult.class, repository::findById);	
 	}
 
 	@Override
@@ -137,33 +147,57 @@ public class QuizResultServiceImpl extends BaseService<QuizResultRepository, Qui
 		if (!quizResultRequest.getUserAnswers().isEmpty()) {
 			this.scoreExam(quizResult, quizResultRequest.getUserAnswers());
 		}
+		redisUtil.delete(NameModel.QUIZ_RESULT_RESPONSE, quizResult.getAccount().getId()+quizResult.getQuiz().getId());
 		return mapper.toDetailResponse(repository.save(quizResult));
 	}
 
 	@Override
 	public QuizResultResponse readDetail(String id) {
-		return mapper.toDetailResponse(this.find(id));
+		QuizResult quizResult = this.find(id);
+		if(quizResult.getQuiz().isShowAnswer()) {
+			return mapper.toDetailResponse(quizResult);
+		}else if(quizResult.getQuiz().isShowResult()) {
+			return mapper.toResultResponse(quizResult);
+		}
+		return mapper.toResultResponse(quizResult);
 	}
 
 	@Override
 	public QuizResultResponse read(String quizId) {
 		String accountId = SecurityUtil.getCurrentUserLogin();
-		Optional<QuizResult> quizResult = repository
-				.findByAccountIdAndQuizIdAndEndTimeAfterAndUpdatedAtIsNull(accountId, quizId, Instant.now());
-		if (quizResult.isPresent()) {
-			return mapper.toResponse(quizResult.get());
+		QuizResultResponse response= redisUtil.read(NameModel.QUIZ_RESULT_RESPONSE, accountId+quizId, QuizResultResponse.class);
+//		Optional<QuizResult> quizResult = repository
+//				.findByAccountIdAndQuizIdAndEndTimeAfterAndUpdatedAtIsNull(accountId, quizId, Instant.now());
+		if (response != null) {
+			return response; 
 		}
 		return null;
 	}
 
 	@Override
 	public QuizResultResponse create(String quizId) {
-		Account account = FunctionUtil.findOrThrow(SecurityUtil.getCurrentUserLogin(), Account.class,
+		String accountId= SecurityUtil.getCurrentUserLogin();
+		Account account = FunctionUtil.findOrThrow(accountId, Account.class,
 				accountRepository::findById);
 		Quiz quiz= FunctionUtil.findOrThrow(quizId, Quiz.class, examRepository::findById);
 		QuizResult quizResult = QuizResult.builder().account(account).quiz(quiz)
 				.endTime(Instant.now().plusSeconds(quiz.getDuration() * 60L).plusSeconds(30)).build();
-		return mapper.toResponse(repository.save(quizResult));
+		QuizResultResponse response=mapper.toResponse(repository.save(quizResult));
+		if(quiz.isShuffleQuestion()) {
+			QuizResponse quizResponse = response.getQuiz();
+			List<QuestionResponse> questions = new ArrayList<>(quizResponse.getQuestions());
+			questions.stream().forEach(question->{
+				if(question.isShuffleAnswer()) {
+					List<AnswerResponse> answers = question.getAnswers();
+					Collections.shuffle(answers);
+					question.setAnswers(answers);
+				}
+			});
+			Collections.shuffle(questions);
+			quizResponse.setQuestions(questions);
+		}
+		redisUtil.create(NameModel.QUIZ_RESULT_RESPONSE, accountId+quizId, response);
+		return response;
 	}
 
 	@Override
