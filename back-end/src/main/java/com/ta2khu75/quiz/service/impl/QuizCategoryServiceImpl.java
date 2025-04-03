@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ta2khu75.quiz.exception.NotFoundException;
 import com.ta2khu75.quiz.mapper.QuizCategoryMapper;
 import com.ta2khu75.quiz.model.entity.QuizCategory;
-import com.ta2khu75.quiz.model.request.ExamCategoryRequest;
+import com.ta2khu75.quiz.model.request.QuizCategoryRequest;
 import com.ta2khu75.quiz.model.response.QuizCategoryResponse;
 import com.ta2khu75.quiz.repository.QuizCategoryRepository;
 import com.ta2khu75.quiz.service.QuizCategoryService;
@@ -27,7 +27,7 @@ private QuizCategoryResponse save(QuizCategory quizCategory) {
 }
 	@Override
 	@Transactional
-	public QuizCategoryResponse create(ExamCategoryRequest request) {
+	public QuizCategoryResponse create(QuizCategoryRequest request) {
 		QuizCategory quizCategory = mapper.toEntity(request);
 		quizCategory.setName(StringUtil.convertCamelCaseToReadable(quizCategory.getName()));
 		return this.save(quizCategory);
@@ -35,7 +35,7 @@ private QuizCategoryResponse save(QuizCategory quizCategory) {
 
 	@Override
 	@Transactional
-	public QuizCategoryResponse update(Long id, ExamCategoryRequest request) {
+	public QuizCategoryResponse update(Long id, QuizCategoryRequest request) {
 		QuizCategory quizCategory = this.findById(id);
 		mapper.update(request, quizCategory);
 		quizCategory.setName(StringUtil.convertCamelCaseToReadable(quizCategory.getName()));

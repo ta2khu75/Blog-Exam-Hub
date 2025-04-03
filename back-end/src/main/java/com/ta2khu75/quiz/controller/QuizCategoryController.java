@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ta2khu75.quiz.anotation.EndpointMapping;
-import com.ta2khu75.quiz.model.request.ExamCategoryRequest;
+import com.ta2khu75.quiz.model.request.QuizCategoryRequest;
 import com.ta2khu75.quiz.model.response.QuizCategoryResponse;
 import com.ta2khu75.quiz.service.QuizCategoryService;
 
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("${app.api-prefix}/quiz-categories")
 public class QuizCategoryController extends BaseController<QuizCategoryService>
-		implements CrudController<ExamCategoryRequest, QuizCategoryResponse, Long> {
+		implements CrudController<QuizCategoryRequest, QuizCategoryResponse, Long> {
 
 	public QuizCategoryController(QuizCategoryService service) {
 		super(service);
@@ -34,14 +34,14 @@ public class QuizCategoryController extends BaseController<QuizCategoryService>
 
 	@Override
 	@EndpointMapping(name = "Create quiz category")
-	public ResponseEntity<QuizCategoryResponse> create(@Valid @RequestBody ExamCategoryRequest request) {
+	public ResponseEntity<QuizCategoryResponse> create(@Valid @RequestBody QuizCategoryRequest request) {
 		return ResponseEntity.ok(service.create(request));
 	}
 
 	@Override
 	@EndpointMapping(name = "Update quiz category")
 	public ResponseEntity<QuizCategoryResponse> update(@PathVariable Long id,
-			@Valid @RequestBody ExamCategoryRequest request) {
+			@Valid @RequestBody QuizCategoryRequest request) {
 		return ResponseEntity.ok(service.update(id, request));
 	}
 

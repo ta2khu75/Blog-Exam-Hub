@@ -1,25 +1,18 @@
 package com.ta2khu75.quiz.service.util;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.net.URI;
+import java.util.Collections;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.auth.Credentials;
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.storage.BlobId;
-import com.google.cloud.storage.BlobInfo;
+import com.google.cloud.storage.*;
+import com.google.cloud.storage.Blob;
+import com.google.cloud.storage.Bucket;
 import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
 import com.ta2khu75.quiz.service.util.FileUtil.Folder;
 
 import lombok.RequiredArgsConstructor;
@@ -27,52 +20,37 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class FirebaseUtil {
-	@Value("${firebase.bucket-name}")
-	private String bucketName;
-	@Value("${firebase.file-url}")
-	private String fileUrl;
-	@Value("${firebase.key-file}")
-	private String keyFile;
-
-	private String uploadFile(File file, String fileName) throws IOException {
-		Path filePath = file.toPath();
-		// Lấy MIME type của tệp
-		String mimeType = Files.probeContentType(filePath);
-		BlobId blobId = BlobId.of(bucketName, fileName); // Replace with your bucker name
-		BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(mimeType).build();
-		InputStream inputStream = FirebaseUtil.class.getClassLoader().getResourceAsStream(keyFile); // change the file
-																									// name with your
-																									// one
-		Credentials credentials = GoogleCredentials.fromStream(inputStream);
-		Storage storage = StorageOptions.newBuilder().setCredentials(credentials).build().getService();
-		storage.create(blobInfo, Files.readAllBytes(file.toPath()));
-		return String.format(fileUrl, URLEncoder.encode(fileName, StandardCharsets.UTF_8));
-	}
-
-	private File convertToFile(MultipartFile multipartFile, String fileName) throws IOException {
-		File tempFile = new File(fileName);
-		try (FileOutputStream fos = new FileOutputStream(tempFile)) {
-			fos.write(multipartFile.getBytes());
-			fos.close();
-		}
-		return tempFile;
-	}
-
-	private String getExtension(String fileName) {
+	 private final Storage storage;
+	 @Value("${firebase.storage-bucket}")
+	private String storageBucket;
+	private String getExtension(MultipartFile file) {
+		String fileName=file.getOriginalFilename();
 		return fileName.substring(fileName.lastIndexOf("."));
 	}
+	private String getFileNameFromMediaLink(String mediaLink) {
+        URI uri = URI.create(mediaLink);
+        String path = uri.getPath(); // Lấy phần đường dẫn của URL
+        return path.substring(path.indexOf('/') + 1); // Bỏ dấu "/" ở đầu
+    }
 
-	public String upload(Folder folder, MultipartFile multipartFile) throws IOException {
-			String fileName = multipartFile.getOriginalFilename(); // to get original file name
-			fileName = String.format("%s_%s", folder.name(),
-					UUID.randomUUID().toString().concat(this.getExtension(fileName))); // to generated
-			// random
-			// string
-			// values for file name.
-			File file = this.convertToFile(multipartFile, fileName); // to convert multipartFile to File
-			String URL = this.uploadFile(file, fileName); // to get uploaded file										// link
-			file.delete();
-			return URL;
-	}
+	public String upload(Folder folder,MultipartFile file) throws IOException {
+			String fileName=UUID.randomUUID().toString().concat(this.getExtension(file));
+			String filePath= String.format("BACKEND/%s/%s", folder.name(),fileName); // to generated
+        Bucket bucket = storage.get(storageBucket);
+        Blob blob = bucket.create(filePath, file.getInputStream(), file.getContentType());
+        blob.toBuilder().setAcl(Collections.singletonList(Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER))).build().update();
+        return String.format("https://storage.googleapis.com/%s/%s", storageBucket, filePath);
+    }
+	public boolean delete(String fileLink) {
+        try {
+            String fileName = getFileNameFromMediaLink(fileLink);
+            boolean deleted = storage.delete(storageBucket, fileName);
+            return deleted;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+	
 
 }

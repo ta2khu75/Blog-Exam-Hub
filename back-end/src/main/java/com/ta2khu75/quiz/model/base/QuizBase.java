@@ -2,6 +2,7 @@ package com.ta2khu75.quiz.model.base;
 
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.QuizLevel;
+import com.ta2khu75.quiz.model.QuizResultMode;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,10 +21,9 @@ public abstract class QuizBase {
 	String description;
 	@NotNull(message = "Exam level must not be null")
 	QuizLevel quizLevel;
-	@NotNull(message = "Access modifier must not be null")
-	AccessModifier accessModifier;
-	boolean showResult=true;
-	boolean showAnswer=true;
+	AccessModifier accessModifier=AccessModifier.PRIVATE;
+	QuizResultMode quizResultMode=QuizResultMode.ANSWER_VISIBLE;
 	boolean shuffleQuestion=true;
 	boolean isCompleted;
+	
 }

@@ -76,7 +76,7 @@ public class QuizServiceImpl extends BaseFileService<QuizRepository, QuizMapper>
 		String accountId = SecurityUtil.getCurrentUserLogin();
 		Account account = FunctionUtil.findOrThrow(accountId, Account.class, accountRepository::findById);
 		Quiz quiz = mapper.toEntity(quizRequest);
-		fileUtil.saveFile(quiz, file, Folder.EXAM_FOLDER, Quiz::setImagePath);
+		fileUtil.saveFile(quiz, file, Folder.QUIZ_FOLDER, Quiz::setImagePath);
 		quiz.setQuizCategory(this.findExamCategoryById(quizRequest.getQuizCategoryId()));
 		quiz.setAuthor(account);
 		Quiz quizSaved = repository.save(quiz);
@@ -113,7 +113,7 @@ public class QuizServiceImpl extends BaseFileService<QuizRepository, QuizMapper>
 			});
 		}
 		mapper.update(quizRequest, quiz);
-		fileUtil.saveFile(quiz, file, Folder.EXAM_FOLDER, Quiz::setImagePath);
+		fileUtil.saveFile(quiz, file, Folder.QUIZ_FOLDER, Quiz::setImagePath);
 		if (quiz.getQuizCategory().getId().equals(quizRequest.getQuizCategoryId()))
 			quiz.setQuizCategory(this.findExamCategoryById(quizRequest.getQuizCategoryId()));
 		return mapper.toResponse(repository.save(quiz));

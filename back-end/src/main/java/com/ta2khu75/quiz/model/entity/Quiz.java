@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 import java.util.List;
 import com.ta2khu75.quiz.model.AccessModifier;
 import com.ta2khu75.quiz.model.QuizLevel;
+import com.ta2khu75.quiz.model.QuizResultMode;
 
 @Entity
 @Data
@@ -29,8 +30,6 @@ public class Quiz extends EntityBase {
 	String description;
 	@Column(nullable = false)
 	String imagePath;
-	boolean showResult=true;
-	boolean showAnswer=true;
 	boolean shuffleQuestion=true;
 	boolean deleted;
 	boolean completed;
@@ -39,7 +38,10 @@ public class Quiz extends EntityBase {
 	QuizLevel quizLevel;
 	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
-	AccessModifier accessModifier;
+	AccessModifier accessModifier=AccessModifier.PRIVATE;
+//	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	QuizResultMode quizResultMode=QuizResultMode.ANSWER_VISIBLE;
 	@ManyToOne
 	Account author;
 	@ManyToOne

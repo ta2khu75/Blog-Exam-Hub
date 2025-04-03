@@ -24,6 +24,7 @@ import com.ta2khu75.quiz.model.response.QuestionResponse;
 import com.ta2khu75.quiz.model.response.QuizResponse;
 import com.ta2khu75.quiz.mapper.QuizResultMapper;
 import com.ta2khu75.quiz.model.QuestionType;
+import com.ta2khu75.quiz.model.QuizResultMode;
 import com.ta2khu75.quiz.model.entity.Account;
 import com.ta2khu75.quiz.model.entity.Answer;
 import com.ta2khu75.quiz.model.entity.Quiz;
@@ -154,9 +155,9 @@ public class QuizResultServiceImpl extends BaseService<QuizResultRepository, Qui
 	@Override
 	public QuizResultResponse readDetail(String id) {
 		QuizResult quizResult = this.find(id);
-		if(quizResult.getQuiz().isShowAnswer()) {
+		if(quizResult.getQuiz().getQuizResultMode().equals(QuizResultMode.ANSWER_VISIBLE)) {
 			return mapper.toDetailResponse(quizResult);
-		}else if(quizResult.getQuiz().isShowResult()) {
+		}else if(quizResult.getQuiz().getQuizResultMode().equals(QuizResultMode.QUESTION_RESULT_VISIBLE)) {
 			return mapper.toResultResponse(quizResult);
 		}
 		return mapper.toResultResponse(quizResult);

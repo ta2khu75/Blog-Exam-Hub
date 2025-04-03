@@ -23,31 +23,31 @@ public class QuizResultController extends BaseController<QuizResultService> {
 		super(service);
 	}
 
-	@GetMapping("exam/{examId}")
-	@EndpointMapping(name="Take exam")
-	public ResponseEntity<QuizResultResponse> create(@PathVariable String examId) {
-		QuizResultResponse response = service.read(examId);
+	@GetMapping("quiz/{quizId}")
+	@EndpointMapping(name="Take quiz")
+	public ResponseEntity<QuizResultResponse> create(@PathVariable String quizId) {
+		QuizResultResponse response = service.read(quizId);
 		if (response == null) {
-			return ResponseEntity.status(HttpStatus.CREATED).body(service.create(examId));
+			return ResponseEntity.status(HttpStatus.CREATED).body(service.create(quizId));
 		}
 		return ResponseEntity.ok(response);
 	}
 
 	@PutMapping("{id}")
-	@EndpointMapping(name="Submit exam")
+	@EndpointMapping(name="Submit quiz")
 	public ResponseEntity<QuizResultResponse> update(@PathVariable String id,
-			@RequestBody QuizResultRequest examResultRequest) {
-		return ResponseEntity.ok(service.update(id, examResultRequest));
+			@RequestBody QuizResultRequest quizResultRequest) {
+		return ResponseEntity.ok(service.update(id, quizResultRequest));
 	}
 
 	@GetMapping
-	@EndpointMapping(name="Search exam result")
+	@EndpointMapping(name="Search quiz result")
 	public ResponseEntity<PageResponse<QuizResultResponse>> readPage(QuizResultSearch searchRequest ) {
 		return ResponseEntity.ok(service.search(searchRequest));
 	}
 
 	@GetMapping("{id}")
-	@EndpointMapping(name="Read exam result")
+	@EndpointMapping(name="Read quiz result")
 	public ResponseEntity<QuizResultResponse> readDetail(@PathVariable String id) {
 		return ResponseEntity.ok(service.readDetail(id));
 	}
